@@ -1,0 +1,29 @@
+CACHE MANIFEST
+
+CACHE:
+/index.html
+
+#CSS
+/static/css/style.css
+/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css
+
+#JAVASCRIPT
+/static/js/jquery-1.7.1.min.js
+/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js
+/static/js/sugar-0.9.4.min.js
+/static/js/jquery.qrcode.js
+/static/js/qrcode.js
+/static/js/phonegap-1.4.1.js
+/static/js/pg-plugin-fb-connect.js
+/static/js/facebook_js_sdk.js
+/static/js/master.js
+
+#MODIFIER
+modified?=124
+
+NETWORK:
+*
+
+FALLBACK:
+#/static/images/ /static/images/offline.png
+#*.html /offline.html

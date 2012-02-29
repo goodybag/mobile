@@ -1,0 +1,104 @@
+<html manifest="cache.mf">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+
+    <script src="/static/js/jquery-1.7.1.min.js"></script>
+    <script src="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
+    <script src="/static/js/sugar-0.9.4.min.js"></script>
+    <script src="/static/js/jquery.qrcode.js"></script>
+    <script src="/static/js/qrcode.js"></script>
+    <script src="http://www.goodybag.com/static/js/api-client.js"></script>
+    <script src="http://www.goodybag.com/static/js/api-sync-client.js"></script>
+    <script>
+      // Check if a new cache is available on page load.
+      window.addEventListener('load', function(e) {
+        console.log("going to check if cache is available");
+      }, false);
+    </script>
+  </head>
+  <body>
+    <!-- phonegap -->
+    <script src="/static/js/phonegap-1.4.1.js"></script>
+    <!--phonegap facebook plugin -->
+    <script src = "/static/js/pg-plugin-fb-connect.js"></script>
+    <!-- facebook js sdk -->
+    <script src="/static/js/facebook_js_sdk.js"></script>
+
+    <div id="login-page" data-role="page" class="page">
+      <div data-role="header" data-theme="b" class="ui-header ui-bar-b" role="banner">
+        <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Goodybag - Hosted</h1>
+      </div><!-- /header -->
+
+      <div data-role="content">
+        <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Goodybag - ATX</h1>
+        <a id="login-facebook" href="#" data-role="button" data-icon="star" data-theme="a">Login With Facebook</a>
+        <a id="login-email"href="#" data-role="button" data-icon="star" data-theme="b">Login With Email</a>
+      </div><!-- /content -->
+    </div><!-- /page -->
+
+    <div id="barcode-page" data-role="page" class="page">
+      <div data-role="header" data-theme="b" class="ui-header ui-bar-b" role="banner">
+          <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Goodybag</h1>
+      </div><!-- /header -->
+
+      <div data-role="content">
+          <div style="text-align:center;">
+            <div id="qrcode"></div>
+          </div>
+      </div><!-- /content -->
+    </div><!-- /page -->
+
+    <script src= "/static/js/master.js"></script>
+    <script>
+      $("#login-facebook").click(function(){
+        login();
+      });
+      document.addEventListener('deviceready', function() {
+        var appCache = window.applicationCache;
+
+        var state = "";
+        switch (appCache.status) {
+          case appCache.UNCACHED: // UNCACHED == 0
+            state = 'UNCACHED';
+            break;
+          case appCache.IDLE: // IDLE == 1
+            state = 'IDLE';
+            break;
+          case appCache.CHECKING: // CHECKING == 2
+            state = 'CHECKING';
+            break;
+          case appCache.DOWNLOADING: // DOWNLOADING == 3
+            state = 'DOWNLOADING';
+            break;
+          case appCache.UPDATEREADY:  // UPDATEREADY == 4
+            state = 'UPDATEREADY';
+            break;
+          case appCache.OBSOLETE: // OBSOLETE == 5
+            state = 'OBSOLETE';
+            break;
+          default:
+            state = 'UKNOWN CACHE STATUS';
+            break;
+        };
+
+        console.log("APPLICATION CACHE - STATE: " + state);
+
+
+        try {
+          console.log("Initializing Facebook");
+          //alert('Device is ready! Make sure you set your app_id below this alert.');
+          FB.init({
+            appId: "152282721508707",
+            nativeInterface: PG.FB
+          });
+          console.log("Facebook Initialized");
+        } catch (e) {
+          alert(e);
+        }
+      }, false);
+    </script>
+  </body>
+</html>
