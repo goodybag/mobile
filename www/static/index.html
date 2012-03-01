@@ -58,9 +58,12 @@
       </div><!-- /header -->
 
       <div data-role="content">
-          <div style="text-align:center;">
-            <div id="qrcode"></div>
-          </div>
+        <div style="text-align:center;">
+            <h2>TapIn!</h2>
+        </div>
+        <div style="text-align:center;">
+          <div id="qrcode"></div>
+        </div>
       </div><!-- /content -->
     </div><!-- /page -->
 
@@ -72,6 +75,7 @@
       $("#login-tapIn").click(function(){
         $.mobile.changePage("#barcode-page");
         console.log("localStorage: " + window.localStorage.barcodeId);
+        $("#qrcode").html("");
         $("#qrcode").qrcode({text:storage.barcodeId, render:"table", width:200, height:200 });
       });
       document.addEventListener('deviceready', function() {
