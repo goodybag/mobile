@@ -19,7 +19,7 @@ CACHE:
 /static/js/master.js
 
 #MODIFIER
-modified?i=17
+modified?i=18
 
 NETWORK:
 *
