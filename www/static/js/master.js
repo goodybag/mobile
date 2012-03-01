@@ -15,9 +15,11 @@ api.auth.session = function (update, callback){ //update param triggers session 
 };
 */
 
-if (typeof PhoneGap == 'undefined') console.log('PhoneGap variable does not exist. Check that you have included phonegap.js correctly');
-if (typeof PG == 'undefined') console.log('PG variable does not exist. Check that you have included pg-plugin-fb-connect.js correctly');
-if (typeof FB == 'undefined') console.log('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
+var storage = window.localStorage;
+
+if (typeof PhoneGap == 'undefined') console.error('PhoneGap variable does not exist. Check that you have included phonegap.js correctly');
+if (typeof PG == 'undefined') console.error('PG variable does not exist. Check that you have included pg-plugin-fb-connect.js correctly');
+if (typeof FB == 'undefined') console.error('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
 
 FB.Event.subscribe('auth.login', function(response) {
   console.log('auth.login event');
@@ -86,8 +88,13 @@ function login() {
           } else {
             console.log("logged in to goodybag");
             api.auth.session(function(error, data){
-              $("#qrcode").qrcode({text:data.barcodeId, render:"table", width:200, height:200 });
-              document.location.href="#barcode-page";
+              if (error != null){
+                console.error(error);
+                return;
+              }
+              storage.barcodeId = data.barcodeId;
+              $("#qrcode").qrcode({text:storage.barcodeId, render:"table", width:200, height:200 });
+              document.location.href = "#barcode-page";
             });
           }
         })

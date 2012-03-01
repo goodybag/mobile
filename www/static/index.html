@@ -1,4 +1,5 @@
 <html manifest="cache.mf">
+<!-- <html> -->
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -13,9 +14,19 @@
     <script src="http://www.goodybag.com/static/js/api-client.js"></script>
     <script src="http://www.goodybag.com/static/js/api-sync-client.js"></script>
     <script>
-      // Check if a new cache is available on page load.
-      window.addEventListener('load', function(e) {
-        console.log("going to check if cache is available");
+      window.applicationCache.addEventListener('updateready', function(e) {
+        if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+          // Browser downloaded a new app cache.
+          // Swap it in and reload the page to get the new hotness.
+          // console.log("CACHE MANIFEST - CHANGES FOUND RELOADING");
+          // console.log(location);
+          window.applicationCache.swapCache();
+          if (confirm('A new version of this site is available. Load it?')) {
+            window.location.reload();
+          }
+        } else {
+          //console.log("CACHE MANIFEST - NO CHANGES");
+        }
       }, false);
     </script>
   </head>
@@ -29,13 +40,14 @@
 
     <div id="login-page" data-role="page" class="page">
       <div data-role="header" data-theme="b" class="ui-header ui-bar-b" role="banner">
-        <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Goodybag - Hosted</h1>
+        <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Goodybag!</h1>
       </div><!-- /header -->
 
       <div data-role="content">
         <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Goodybag - ATX</h1>
         <a id="login-facebook" href="#" data-role="button" data-icon="star" data-theme="a">Login With Facebook</a>
-        <a id="login-email"href="#" data-role="button" data-icon="star" data-theme="b">Login With Email</a>
+        <!-- <a id="login-email"href="#" data-role="button" data-icon="star" data-theme="b">Login With Email</a> -->
+        <a id="login-tapIn"href="#" data-role="button" data-icon="star" data-theme="b">TapIn</a>
       </div><!-- /content -->
     </div><!-- /page -->
 
@@ -55,6 +67,11 @@
     <script>
       $("#login-facebook").click(function(){
         login();
+      });
+      $("#login-tapIn").click(function(){
+        $.mobile.changePage("#barcode-page");
+        console.log("localStorage: " + window.localStorage.barcodeId);
+        $("#qrcode").qrcode({text:storage.barcodeId, render:"table", width:200, height:200 });
       });
       document.addEventListener('deviceready', function() {
         var appCache = window.applicationCache;
@@ -85,7 +102,6 @@
         };
 
         console.log("APPLICATION CACHE - STATE: " + state);
-
 
         try {
           console.log("Initializing Facebook");
