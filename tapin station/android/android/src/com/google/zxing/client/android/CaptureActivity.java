@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+/*
+ * Modified by Goodybag, Inc. 2012
+ */
+
 package com.google.zxing.client.android;
 
 import com.google.zxing.BarcodeFormat;
@@ -21,6 +25,8 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
+import com.google.zxing.client.android.common.BuildInfo;
+import com.google.zxing.client.android.common.GPSInfo;
 import com.google.zxing.client.android.common.rest.RequestMethod;
 import com.google.zxing.client.android.common.rest.RestClient;
 import com.google.zxing.client.android.history.HistoryActivity;
@@ -33,6 +39,7 @@ import com.google.zxing.client.android.result.supplement.SupplementalInfoRetriev
 import com.google.zxing.client.android.share.ShareActivity;
 import com.google.zxing.client.android.tapin.ChangeImageAndEnableCaptureThread;
 import com.google.zxing.client.android.tapin.Constants;
+import com.google.zxing.client.android.tapin.activities.ScanActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -52,6 +59,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -81,6 +90,8 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -139,6 +150,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private InactivityTimer inactivityTimer;
   private BeepManager beepManager;
 
+  
+  
+  private HashMap<String, String> heartbeatDataMap = new HashMap<String, String>();
+  
+  
+  
   private final DialogInterface.OnClickListener aboutListener = new DialogInterface.OnClickListener() {
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
@@ -171,6 +188,19 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // growth till 10 minutes of gap between sends if data sends
     // successfully then gradually decrement this value until 10 seconds
     submitPendingCodes();
+    
+    BuildInfo build = BuildInfo.getInstance(this, icicle);
+ 
+    WifiManager wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+
+//    Log.i("device-info", build.toString());
+//    Log.i("network-info", wifiManager.getConnectionInfo().toString());
+           
+    // the device sends periodic updates about itself to a remote server
+    
+    heartbeatDataMap.put("build", build.toString());
+    heartbeatDataMap.put("network", wifiManager.getConnectionInfo().toString());
+    submitHeartbeat(heartbeatDataMap);
 
     Window window = getWindow();
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -185,6 +215,65 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
     showHelpOnFirstLaunch();
+  }
+  
+  public void submitHeartbeat(HashMap<String, String> data) {
+    class SendHeartBeat implements Runnable {
+      
+      HashMap<String, String> data;
+      
+      public SendHeartBeat(HashMap<String, String> data){
+        this.data = data;
+      }
+
+      @Override
+      public void run() {
+        try {
+          while (true){
+            SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
+            String businessId = preference.getString(Constants.KEY_BUSINESS_ID, null);
+            String registerId = preference.getString(Constants.KEY_REGISTER_ID, null);
+            String locationId = preference.getString(Constants.KEY_LOCATION_ID, null);
+            
+            RestClient restClient = new RestClient(Constants.URL_HEARTBEAT);
+
+            restClient.addParam("businessId", businessId);
+            restClient.addParam("locationId", locationId);
+            restClient.addParam("registerId", registerId);
+            restClient.addParam("timestamp", new Date().toString());
+            
+            
+            for(String key: data.keySet()){
+              restClient.addParam(key, data.get(key));
+            }
+            try {
+              restClient.execute(RequestMethod.POST);
+              int responseCode = restClient.getResponseCode();
+              Log.i("tapin-heartbeat-post", "RESPONSE CODE: " + responseCode);
+              if (responseCode == 200) {
+                String response = restClient.getResponse();
+                Log.i("tapin-heartbeat-post", response);
+              } else {
+                Log.i("tapin-heartbeat-post", "unable to successfully post heartbeat data to server");
+              }
+            } catch (Exception e) {
+              e.printStackTrace();
+              Log.e("tapin-heartbeat-post", "error submitting heartbeat data to server");
+              // TODO: implement save
+              // saveCode(code);
+            }
+            
+            Thread.sleep(Constants.SUBMIT_HEARTBEAT_DELAY_MS);
+          }
+        } catch (InterruptedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }
+    };
+    
+    Thread submitHeartBeatThread = new Thread(new SendHeartBeat(data));
+    submitHeartBeatThread.start();
   }
 
   public void submitPendingCodes() {
@@ -328,6 +417,20 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   protected void onResume() {
     super.onResume();
 
+    /*
+    // this will require root
+    Process proc;
+    try {
+      proc = Runtime.getRuntime().exec(new String[]{"su","-c","service call activity 79 s16 com.android.systemui"});
+      proc.waitFor();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    */
     // CameraManager must be initialized here, not in onCreate(). This is
     // necessary because we don't
     // want to open the camera driver and measure the screen size if we're
@@ -624,14 +727,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       } else {
         // TODO: implement save
         if (save) {
-          Log.w("tapin-post", "unable to POST data to server. Saving to local database. Will retry again later");
+          Log.w("tapin-post", "unable to POST tapIn data to server. Saving to local database. Will retry again later");
           saveCode(businessId, locationId, registerId, code, timestamp);
         }
         return false;
       }
     } catch (Exception e) {
       e.printStackTrace();
-      Log.e("tapin-post", "error submitting data to server");
+      Log.e("tapin-post", "error submitting tapIn data to server");
       // TODO: implement save
       // saveCode(code);
     }

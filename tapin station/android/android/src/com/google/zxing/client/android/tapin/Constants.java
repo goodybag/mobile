@@ -15,8 +15,9 @@ public interface Constants {
 	
 	public static final int SUBMIT_PENDING_DELAY_MS_MIN = 5000; //5 seconds
 	public static final int SUBMIT_PENDING_DELAY_MS_MAX = 600000; //10 minutes
+	public static final int SUBMIT_HEARTBEAT_DELAY_MS = 600000; //10 minutes
 	
-	public static String URL_HEART_BEAT = "http://biz.goodybag.com/api/clients/registers/heartbeat";
+	public static String URL_HEARTBEAT = "http://biz.goodybag.com/api/clients/registers/heartbeat";
 	public static String URL_TRANSACTIONS = "http://biz.goodybag.com/api/clients/transactions";
 	
 }

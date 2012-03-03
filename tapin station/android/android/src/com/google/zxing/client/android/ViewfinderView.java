@@ -80,6 +80,7 @@ public final class ViewfinderView extends View {
 
   @Override
   public void onDraw(Canvas canvas) {
+    /*
     Rect frame = cameraManager.getFramingRect();
     if (frame == null) {
       return;
@@ -158,6 +159,7 @@ public final class ViewfinderView extends View {
                             frame.right + POINT_SIZE,
                             frame.bottom + POINT_SIZE);
     }
+    */
   }
 
   public void drawViewfinder() {

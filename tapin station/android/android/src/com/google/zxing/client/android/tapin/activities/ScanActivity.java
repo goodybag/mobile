@@ -47,7 +47,7 @@ public class ScanActivity extends BaseActivity implements OnClickListener {
 		new Thread(new Runnable() {
 			public void run() {
 				Log.i("tapin-heartbeat", "Attempting to submit heartbeat2");
-				RestClient client = new RestClient(Constants.URL_HEART_BEAT);
+				RestClient client = new RestClient(Constants.URL_HEARTBEAT);
 				BuildInfo build = BuildInfo.getInstance(ScanActivity.this, savedInstanceState);
 				GPSInfo gpsInfo = GPSInfo.getInstance(ScanActivity.this, savedInstanceState);
 				SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
@@ -83,7 +83,7 @@ public class ScanActivity extends BaseActivity implements OnClickListener {
 	private void sendTransaction(final String barcode) {
 		new Thread(new Runnable() {
 			public void run() {
-				RestClient client = new RestClient(Constants.URL_HEART_BEAT);
+				RestClient client = new RestClient(Constants.URL_HEARTBEAT);
 				SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
 				String businessId = preference.getString(Constants.KEY_BUSINESS_ID, null);
 				String registerId = preference.getString(Constants.KEY_REGISTER_ID, null);

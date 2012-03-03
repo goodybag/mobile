@@ -224,6 +224,8 @@ public final class R {
         public static final int msg_default_format=0x7f090035;
         public static final int msg_default_meta=0x7f090036;
         public static final int msg_default_mms_subject=0x7f090037;
+        /**  Place a barcode inside the viewfinder rectangle to scan it.
+         */
         public static final int msg_default_status=0x7f090038;
         public static final int msg_default_time=0x7f090039;
         public static final int msg_default_type=0x7f09003a;
