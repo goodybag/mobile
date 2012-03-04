@@ -35,7 +35,7 @@ final class BeepManager {
 
   private static final String TAG = BeepManager.class.getSimpleName();
 
-  private static final float BEEP_VOLUME = 0.10f;
+  private static final float BEEP_VOLUME = 1.0f;
   private static final long VIBRATE_DURATION = 200L;
 
   private final Activity activity;
@@ -56,19 +56,24 @@ final class BeepManager {
     if (playBeep && mediaPlayer == null) {
       // The volume on STREAM_SYSTEM is not adjustable, and users found it too loud,
       // so we now play on the music stream.
-      activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+      activity.setVolumeControlStream(AudioManager.STREAM_NOTIFICATION);
       mediaPlayer = buildMediaPlayer(activity);
     }
   }
 
   void playBeepSoundAndVibrate() {
     if (playBeep && mediaPlayer != null) {
+      Log.i("zxing-beep-manager-media-player", "Playing Beep");
+      mediaPlayer.seekTo(0);
+      mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
       mediaPlayer.start();
+      
     }
-    if (vibrate) {
-      Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-      vibrator.vibrate(VIBRATE_DURATION);
-    }
+    
+//    if (vibrate) {
+//      Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+//      vibrator.vibrate(VIBRATE_DURATION);
+//    }
   }
 
   private static boolean shouldBeep(SharedPreferences prefs, Context activity) {
@@ -85,14 +90,15 @@ final class BeepManager {
 
   private static MediaPlayer buildMediaPlayer(Context activity) {
     MediaPlayer mediaPlayer = new MediaPlayer();
-    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+    mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
     // When the beep has finished playing, rewind to queue up another one.
-    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+    /*mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
       @Override
       public void onCompletion(MediaPlayer player) {
+        Log.i("zxing-beep-manager-media-player", "Rewinding");
         player.seekTo(0);
       }
-    });
+    });*/
 
     AssetFileDescriptor file = activity.getResources().openRawResourceFd(R.raw.beep);
     try {

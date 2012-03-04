@@ -13,16 +13,10 @@
         android:paddingTop="20dip"
         android:weightSum="1.0">
         <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:background="@null"/>
-        <TextView
             style="@style/label_style"
-            android:layout_width="0dip"
-            android:layout_gravity="right"
-            android:layout_weight="0.4"
-            android:text="@string/store_id_label"/>
+            android:layout_marginLeft="590dip"
+            android:layout_width="300dip"
+            android:text="Business ID:"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="fill_parent"
@@ -31,18 +25,11 @@
         android:paddingLeft="20dip"
         android:paddingRight="20dip"
         android:weightSum="1.0">
-        <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:background="@null"/>
         <EditText
-            android:id="@+settings/storeIdEditBox"
+            android:id="@+settings/businessIdEditBox"
             style="@style/field_style"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:hint="@string/store_id_hint_text"
+            android:layout_marginLeft="590dip"
+            android:layout_width="390dip"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLength="25"/>
@@ -56,16 +43,10 @@
         android:paddingTop="20dip"
         android:weightSum="1.0">
         <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:background="@null"/>
-        <TextView
             style="@style/label_style"
-            android:layout_width="0dip"
-            android:layout_gravity="right"
-            android:layout_weight="0.4"
-            android:text="@string/location_id_label"/>
+            android:layout_marginLeft="590dip"
+            android:layout_width="300dip"
+            android:text="Location ID:"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="fill_parent"
@@ -74,18 +55,11 @@
         android:paddingLeft="20dip"
         android:paddingRight="20dip"
         android:weightSum="1.0">
-        <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:background="@null"/>
         <EditText
             android:id="@+settings/locationIdEditBox"
             style="@style/field_style"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:hint="@string/location_id_hint_text"
+            android:layout_marginLeft="590dip"
+            android:layout_width="390dip"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLength="25"/>
@@ -99,16 +73,10 @@
         android:paddingTop="20dip"
         android:weightSum="1.0">
         <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:background="@null"/>
-        <TextView
             style="@style/label_style"
-            android:layout_width="0dip"
-            android:layout_gravity="right"
-            android:layout_weight="0.4"
-            android:text="@string/registered_id_label"/>
+            android:layout_marginLeft="590dip"
+            android:layout_width="300dip"
+            android:text="Register ID"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="fill_parent"
@@ -117,18 +85,11 @@
         android:paddingLeft="20dip"
         android:paddingRight="20dip"
         android:weightSum="1.0">
-        <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:background="@null"/>
         <EditText
-            android:id="@+settings/registeredIdEditBox"
+            android:id="@+settings/registerIdEditBox"
             style="@style/field_style"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:hint="@string/registered_id_hint_text"
+            android:layout_marginLeft="590dip"
+            android:layout_width="390dip"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLength="25"/>
@@ -141,54 +102,13 @@
         android:paddingRight="20dip"
         android:paddingTop="30dip"
         android:weightSum="1.0">
-        <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:background="@null"/>
-        <LinearLayout
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:gravity="center">
-            <Button
-                android:id="@+settings/submitButton"
-                style="@style/blue_button_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="5dip"
-                android:text="@string/submit_button_text"/>
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+settings/changePasscodeLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="20dip"
-        android:paddingRight="20dip"
-        android:paddingTop="20dip"
-        android:visibility="gone"
-        android:weightSum="1.0">
-        <TextView
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:background="@null"/>
-        <LinearLayout
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:gravity="right">
-            <TextView
-                android:id="@+settings/changePasscode"
-                style="@style/link_style"
-                android:gravity="right"
-                android:padding="5dip"
-                android:text="@string/change_passcode_text"
-                android:textColor="@color/blue"
-                android:textColorLink="@color/blue"/>
-        </LinearLayout>
+
+        <Button
+            android:id="@+settings/submitButton"
+            style="@style/green_button_style"
+            android:layout_marginLeft="590dip"
+            android:layout_width="390dip"
+            android:text="Save" />
+
     </LinearLayout>
 </LinearLayout>

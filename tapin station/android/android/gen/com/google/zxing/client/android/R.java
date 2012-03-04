@@ -11,17 +11,7 @@ public final class R {
     public static final class array {
         public static final int country_codes=0x7f060000;
     }
-    public static final class ask_passcode {
-        public static final int currentPasscode=0x7f0b0000;
-        public static final int submitButton=0x7f0b0001;
-    }
     public static final class attr {
-    }
-    public static final class change_passcode {
-        public static final int confirmPasscode=0x7f0c0002;
-        public static final int currentPasscode=0x7f0c0000;
-        public static final int newPasscode=0x7f0c0001;
-        public static final int submitButton=0x7f0c0003;
     }
     public static final class color {
         public static final int black=0x7f07001d;
@@ -59,21 +49,17 @@ public final class R {
     }
     public static final class drawable {
         public static final int backbround=0x7f020000;
-        public static final int blue_gradient=0x7f020001;
-        public static final int green_gradient=0x7f020002;
-        public static final int grey_gradient=0x7f020003;
-        public static final int launcher_icon=0x7f020004;
-        public static final int rounded_blue_gradient=0x7f020005;
-        public static final int rounded_rect=0x7f020006;
-        public static final int rounded_textbox=0x7f020007;
-        public static final int scan_bg=0x7f020008;
-        public static final int scan_default=0x7f020009;
-        public static final int scan_fail=0x7f02000a;
-        public static final int scan_success=0x7f02000b;
-        public static final int settings=0x7f02000c;
-        public static final int share_via_barcode=0x7f02000d;
-        public static final int shopper_icon=0x7f02000e;
-        public static final int splash=0x7f02000f;
+        public static final int green_gradient=0x7f020001;
+        public static final int grey_gradient=0x7f020002;
+        public static final int launcher_icon=0x7f020003;
+        public static final int scan_bg=0x7f020004;
+        public static final int scan_default=0x7f020005;
+        public static final int scan_fail=0x7f020006;
+        public static final int scan_success=0x7f020007;
+        public static final int settings=0x7f020008;
+        public static final int share_via_barcode=0x7f020009;
+        public static final int shopper_icon=0x7f02000a;
+        public static final int splash=0x7f02000b;
     }
     public static final class id {
         /**  Messages IDs 
@@ -127,37 +113,25 @@ public final class R {
         public static final int viewfinder_view=0x7f08000d;
     }
     public static final class layout {
-        public static final int ask_passcode=0x7f030000;
-        public static final int bookmark_picker_list_item=0x7f030001;
-        public static final int capture=0x7f030002;
-        public static final int change_passcode=0x7f030003;
-        public static final int encode=0x7f030004;
-        public static final int help=0x7f030005;
-        public static final int history_list_item=0x7f030006;
-        public static final int scan=0x7f030007;
-        public static final int search_book_contents=0x7f030008;
-        public static final int search_book_contents_header=0x7f030009;
-        public static final int search_book_contents_list_item=0x7f03000a;
-        public static final int settings=0x7f03000b;
-        public static final int share=0x7f03000c;
-        public static final int splash=0x7f03000d;
+        public static final int bookmark_picker_list_item=0x7f030000;
+        public static final int capture=0x7f030001;
+        public static final int encode=0x7f030002;
+        public static final int help=0x7f030003;
+        public static final int history_list_item=0x7f030004;
+        public static final int search_book_contents=0x7f030005;
+        public static final int search_book_contents_header=0x7f030006;
+        public static final int search_book_contents_list_item=0x7f030007;
+        public static final int settings=0x7f030008;
+        public static final int share=0x7f030009;
     }
     public static final class raw {
         public static final int beep=0x7f050000;
     }
-    public static final class scan {
-        public static final int settingButton=0x7f0d0000;
-    }
     public static final class settings {
-        public static final int changePasscode=0x7f0e0005;
-        public static final int changePasscodeLayout=0x7f0e0004;
-        public static final int locationIdEditBox=0x7f0e0001;
-        public static final int registeredIdEditBox=0x7f0e0002;
-        public static final int storeIdEditBox=0x7f0e0000;
-        public static final int submitButton=0x7f0e0003;
-    }
-    public static final class splash {
-        public static final int layout=0x7f0f0000;
+        public static final int businessIdEditBox=0x7f0b0000;
+        public static final int locationIdEditBox=0x7f0b0001;
+        public static final int registerIdEditBox=0x7f0b0002;
+        public static final int submitButton=0x7f0b0003;
     }
     public static final class string {
         public static final int app_name=0x7f090000;
@@ -190,18 +164,12 @@ public final class R {
         public static final int button_sms=0x7f09001b;
         public static final int button_web_search=0x7f09001c;
         public static final int button_wifi=0x7f09001d;
-        public static final int change_passcode_text=0x7f090086;
-        public static final int click_method_name=0x7f09007f;
-        public static final int confirm_passcode_hint_text=0x7f090078;
-        public static final int confirm_passcode_label=0x7f090079;
         public static final int contents_contact=0x7f09001e;
         public static final int contents_email=0x7f09001f;
         public static final int contents_location=0x7f090020;
         public static final int contents_phone=0x7f090021;
         public static final int contents_sms=0x7f090022;
         public static final int contents_text=0x7f090023;
-        public static final int current_passcode_hint_text=0x7f09007c;
-        public static final int current_passcode_label=0x7f09007d;
         public static final int history_clear_one_history_text=0x7f090025;
         public static final int history_clear_text=0x7f090024;
         public static final int history_email_title=0x7f090026;
@@ -209,8 +177,6 @@ public final class R {
         public static final int history_empty_detail=0x7f090028;
         public static final int history_send=0x7f090029;
         public static final int history_title=0x7f09002a;
-        public static final int location_id_hint_text=0x7f090080;
-        public static final int location_id_label=0x7f090081;
         public static final int menu_about=0x7f09002b;
         public static final int menu_encode_mecard=0x7f09002c;
         public static final int menu_encode_vcard=0x7f09002d;
@@ -248,8 +214,6 @@ public final class R {
         public static final int msg_share_text=0x7f09004b;
         public static final int msg_sure=0x7f09004c;
         public static final int msg_unmount_usb=0x7f09004d;
-        public static final int new_passcode_hint_text=0x7f09007a;
-        public static final int new_passcode_label=0x7f09007b;
         public static final int preferences_actions_title=0x7f09004e;
         public static final int preferences_bulk_mode_summary=0x7f09004f;
         public static final int preferences_bulk_mode_title=0x7f090050;
@@ -274,8 +238,6 @@ public final class R {
         public static final int preferences_supplemental_summary=0x7f090063;
         public static final int preferences_supplemental_title=0x7f090064;
         public static final int preferences_vibrate_title=0x7f090065;
-        public static final int registered_id_hint_text=0x7f090084;
-        public static final int registered_id_label=0x7f090085;
         public static final int result_address_book=0x7f090066;
         public static final int result_calendar=0x7f090067;
         public static final int result_email_address=0x7f090068;
@@ -289,9 +251,6 @@ public final class R {
         public static final int result_wifi=0x7f090070;
         public static final int sbc_name=0x7f090071;
         public static final int share_name=0x7f090072;
-        public static final int store_id_hint_text=0x7f090082;
-        public static final int store_id_label=0x7f090083;
-        public static final int submit_button_text=0x7f09007e;
         public static final int title_about=0x7f090073;
         public static final int wifi_changing_network=0x7f090074;
         public static final int wifi_ssid_label=0x7f090075;
@@ -299,13 +258,9 @@ public final class R {
         public static final int zxing_url=0x7f090077;
     }
     public static final class style {
-        public static final int blue_button_style=0x7f0a0005;
-        public static final int field_style=0x7f0a0003;
-        public static final int green_button_style=0x7f0a0006;
-        public static final int label_style=0x7f0a0002;
-        public static final int link_style=0x7f0a0004;
-        public static final int title_blue_button_style=0x7f0a0001;
-        public static final int title_text_style=0x7f0a0000;
+        public static final int field_style=0x7f0a0001;
+        public static final int green_button_style=0x7f0a0002;
+        public static final int label_style=0x7f0a0000;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;

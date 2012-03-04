@@ -29,20 +29,18 @@ import com.google.zxing.client.android.common.BuildInfo;
 import com.google.zxing.client.android.common.GPSInfo;
 import com.google.zxing.client.android.common.rest.RequestMethod;
 import com.google.zxing.client.android.common.rest.RestClient;
-import com.google.zxing.client.android.history.HistoryActivity;
 import com.google.zxing.client.android.history.HistoryItem;
 import com.google.zxing.client.android.history.HistoryManager;
 import com.google.zxing.client.android.result.ResultButtonListener;
 import com.google.zxing.client.android.result.ResultHandler;
 import com.google.zxing.client.android.result.ResultHandlerFactory;
 import com.google.zxing.client.android.result.supplement.SupplementalInfoRetriever;
-import com.google.zxing.client.android.share.ShareActivity;
 import com.google.zxing.client.android.tapin.ChangeImageAndEnableCaptureThread;
 import com.google.zxing.client.android.tapin.Constants;
-import com.google.zxing.client.android.tapin.activities.ScanActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -50,14 +48,18 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnPreparedListener;
+import android.media.RingtoneManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -68,7 +70,6 @@ import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -80,22 +81,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
-import org.json.JSONObject;
 
 /**
  * This activity opens the camera and does the actual scanning on a background
@@ -105,6 +99,8 @@ import org.json.JSONObject;
  * 
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
+ * @author Lalit Kapoor (I Made customizations to the awesome work of the
+ *         authors above)
  */
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
@@ -150,12 +146,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private InactivityTimer inactivityTimer;
   private BeepManager beepManager;
 
-  
-  
   private HashMap<String, String> heartbeatDataMap = new HashMap<String, String>();
-  
-  
-  
+
   private final DialogInterface.OnClickListener aboutListener = new DialogInterface.OnClickListener() {
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
@@ -178,8 +170,35 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   @Override
+  public void onWindowFocusChanged(boolean hasFocus) {
+    super.onWindowFocusChanged(hasFocus);
+
+    // This will prvent the app from ever closing (it relaunches it)
+    if (!hasFocus) {
+      Log.w("SYSTEM-WIDE", "FOCUS HAS BEEN LOST");
+      Log.w("SYSTEM-WIDE", "RE-LAUNCING APPLICATION");
+      Intent intent = new Intent("android.intent.action.MAIN");
+      intent.setComponent(ComponentName.unflattenFromString("com.google.zxing.client.android/.CaptureActivity"));
+      intent.addCategory("android.intent.category.LAUNCHER");
+      startActivity(intent);
+    } else {
+      Log.w("SYSTEM-WIDE", "FOCUS HAS BEEN RESTORED");
+    }
+  }
+  
+  public boolean isOnline() {
+    ConnectivityManager cm =
+        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    return cm.getActiveNetworkInfo().isConnectedOrConnecting();
+}
+
+  @Override
   public void onCreate(Bundle icicle) {
+    Log.i("SYSTEM-WIDE", "CREATE");
     super.onCreate(icicle);
+
+    // onStart();
 
     // setup databases and tables if non-existent
     setupDB();
@@ -188,18 +207,19 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // growth till 10 minutes of gap between sends if data sends
     // successfully then gradually decrement this value until 10 seconds
     submitPendingCodes();
-    
-    BuildInfo build = BuildInfo.getInstance(this, icicle);
- 
-    WifiManager wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
 
-//    Log.i("device-info", build.toString());
-//    Log.i("network-info", wifiManager.getConnectionInfo().toString());
-           
-    // the device sends periodic updates about itself to a remote server
+    BuildInfo build = BuildInfo.getInstance(this, icicle);
+
     
+    Log.i("device-info", build.toString());
+    //Log.i("network-info", wifiManager.getConnectionInfo().toString());
+
+    // the device sends periodic updates about itself to a remote server
+
     heartbeatDataMap.put("build", build.toString());
-    heartbeatDataMap.put("network", wifiManager.getConnectionInfo().toString());
+    // heartbeatDataMap.put("network",
+    // wifiManager.getConnectionInfo().toString());
+
     submitHeartbeat(heartbeatDataMap);
 
     Window window = getWindow();
@@ -214,27 +234,27 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-    showHelpOnFirstLaunch();
+    // showHelpOnFirstLaunch();
   }
-  
+
   public void submitHeartbeat(HashMap<String, String> data) {
     class SendHeartBeat implements Runnable {
-      
+
       HashMap<String, String> data;
-      
-      public SendHeartBeat(HashMap<String, String> data){
+
+      public SendHeartBeat(HashMap<String, String> data) {
         this.data = data;
       }
 
       @Override
       public void run() {
         try {
-          while (true){
+          while (true) {
             SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
             String businessId = preference.getString(Constants.KEY_BUSINESS_ID, null);
             String registerId = preference.getString(Constants.KEY_REGISTER_ID, null);
             String locationId = preference.getString(Constants.KEY_LOCATION_ID, null);
-            
+
             RestClient restClient = new RestClient(Constants.URL_HEARTBEAT);
 
             restClient.addParam("businessId", businessId);
@@ -243,7 +263,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             restClient.addParam("timestamp", new Date().toString());
             
             
-            for(String key: data.keySet()){
+
+            for (String key : data.keySet()) {
               restClient.addParam(key, data.get(key));
             }
             try {
@@ -262,7 +283,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
               // TODO: implement save
               // saveCode(code);
             }
-            
+
             Thread.sleep(Constants.SUBMIT_HEARTBEAT_DELAY_MS);
           }
         } catch (InterruptedException e) {
@@ -270,8 +291,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           e.printStackTrace();
         }
       }
-    };
-    
+    }
+    ;
+
     Thread submitHeartBeatThread = new Thread(new SendHeartBeat(data));
     submitHeartBeatThread.start();
   }
@@ -301,7 +323,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
         editor.putInt(Constants.KEY_SUBMIT_PENDING_DELAY, delay);
         editor.commit();
-        
+
         return delay;
 
       }
@@ -325,14 +347,16 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
         editor.putInt(Constants.KEY_SUBMIT_PENDING_DELAY, delay);
         editor.commit();
-        
+
         return delay;
       }
 
       @Override
       public void run() {
         int id = -1;
-        int newDelay = Constants.SUBMIT_PENDING_DELAY_MS_MAX; //just for logging purposes below
+        int newDelay = Constants.SUBMIT_PENDING_DELAY_MS_MAX; // just for
+                                                              // logging
+                                                              // purposes below
 
         while (true) {
           SQLiteDatabase db = captureActivity.openOrCreateDatabase(Constants.DB_GOODYBAG, Context.MODE_PRIVATE, null);
@@ -347,7 +371,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           try {
             Thread.sleep(delay);
             String findSinglePendingSQL = "SELECT * FROM " + Constants.DB_PENDING_CODES_TABLE + " ORDER BY ID DESC LIMIT 1";
-            if (id > -1) 
+            if (id > -1)
               findSinglePendingSQL = "SELECT * FROM " + Constants.DB_PENDING_CODES_TABLE + " WHERE ID<" + id + " ORDER BY ID DESC LIMIT 1";
             Cursor cursor = db.rawQuery(findSinglePendingSQL, null);
             if (cursor.moveToFirst() != false) {
@@ -356,10 +380,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
               registerId = cursor.getString(3);
               code = cursor.getString(4);
               timestamp = cursor.getString(5);
-              
+
               id = cursor.getInt(0);
               Log.i("tapin-submit-pending-codes", "index of item being submitted: " + id);
-              
+
               Log.i("tapin-submit-pending-codes", "attempting to resubmit a pending tapIn with code: " + code);
             } else {
               id = -1;
@@ -371,28 +395,29 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           } finally {
             db.close();
           }
-          
-          //if there was anything then submit
+
+          // if there was anything then submit
           if (id > -1) {
             boolean success = submitCode(businessId, locationId, registerId, code, timestamp, false);
             if (success) {
               deleteCode(id);
               newDelay = decrementDelay();
-              Log.i("tapin-submit-pending-codes", "successful submitting, delay decremented to (ms): "+ newDelay);
+              Log.i("tapin-submit-pending-codes", "successful submitting, delay decremented to (ms): " + newDelay);
             } else {
               newDelay = incrementDelay();
-              Log.i("tapin-submit-pending-codes", "unsuccessful submitting, delay incremented to (ms): "+ newDelay);
+              Log.i("tapin-submit-pending-codes", "unsuccessful submitting, delay incremented to (ms): " + newDelay);
             }
           } else {
             Log.i("tapin-submit-pending-codes", "nothing to submit :)");
             if (delay > Constants.SUBMIT_PENDING_DELAY_MS_MIN) {
               newDelay = decrementDelay();
-              Log.i("tapin-submit-pending-codes", "delay decremented to (ms): "+ newDelay);
+              Log.i("tapin-submit-pending-codes", "delay decremented to (ms): " + newDelay);
             }
           }
-        }//while loop
-      }//run method
-    }; //runnable class
+        }// while loop
+      }// run method
+    }
+    ; // runnable class
 
     Thread resubmit = new Thread(new ReSubmit(this));
     resubmit.start();
@@ -415,22 +440,18 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   @Override
   protected void onResume() {
+    Log.i("SYSTEM-WIDE", "RESUME");
     super.onResume();
 
+    // onStart();
     /*
-    // this will require root
-    Process proc;
-    try {
-      proc = Runtime.getRuntime().exec(new String[]{"su","-c","service call activity 79 s16 com.android.systemui"});
-      proc.waitFor();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    */
+     * // this will require root Process proc; try { proc =
+     * Runtime.getRuntime().exec(new
+     * String[]{"su","-c","service call activity 79 s16 com.android.systemui"});
+     * proc.waitFor(); } catch (IOException e) { // TODO Auto-generated catch
+     * block e.printStackTrace(); } catch (InterruptedException e) { // TODO
+     * Auto-generated catch block e.printStackTrace(); }
+     */
     // CameraManager must be initialized here, not in onCreate(). This is
     // necessary because we don't
     // want to open the camera driver and measure the screen size if we're
@@ -555,6 +576,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   @Override
   protected void onPause() {
+    Log.i("SYSTEM-WIDE", "PAUSE");
     if (handler != null) {
       handler.quitSynchronously();
       handler = null;
@@ -565,8 +587,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
       surfaceHolder.removeCallback(this);
+      // onW
     }
+
     super.onPause();
+    // onResume();
+    // onStart();
   }
 
   @Override
@@ -696,14 +722,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     String locationId = preference.getString(Constants.KEY_LOCATION_ID, null);
 
     String timestamp = new Date().toString();
-    
+
     return submitCode(businessId, locationId, registerId, code, timestamp, true);
 
-    
   }
-  
-  public boolean submitCode(String businessId, String locationId, String registerId, String code, String timestamp, boolean save){
- // Sent to server
+
+  public boolean submitCode(String businessId, String locationId, String registerId, String code, String timestamp, boolean save) {
+    // Sent to server
     RestClient restClient = new RestClient(Constants.URL_TRANSACTIONS);
 
     restClient.addParam("barcodeId", code);
@@ -721,7 +746,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       Log.i("tapin-post", "RESPONSE CODE: " + responseCode);
       if (responseCode == 200) {
         String response = restClient.getResponse();
-        // JSONObject jsonObject = new JSONObject();
         Log.i("tapin-post", response);
         return true;
       } else {
@@ -740,15 +764,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
     return false;
   }
-  
-  public boolean deleteCode(int id){
+
+  public boolean deleteCode(int id) {
     SQLiteDatabase db = this.openOrCreateDatabase(Constants.DB_GOODYBAG, Context.MODE_PRIVATE, null);
     try {
-      String deleteSQL = "DELETE FROM " + Constants.DB_PENDING_CODES_TABLE+ " WHERE ID=" + id;
+      String deleteSQL = "DELETE FROM " + Constants.DB_PENDING_CODES_TABLE + " WHERE ID=" + id;
       db.execSQL(deleteSQL);
-      Log.i("tapin-delete-code", "Deleted pending tapIn from the database with id: "+ id);
+      Log.i("tapin-delete-code", "Deleted pending tapIn from the database with id: " + id);
       return true;
-    } catch (Exception e){
+    } catch (Exception e) {
       e.printStackTrace();
       Log.e("tapin-delete-code", "There was an error removing the pending tapIn from the database");
     } finally {
@@ -791,12 +815,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public void handleDecode(Result rawResult, Bitmap barcode) {
     inactivityTimer.onActivity();
     lastResult = rawResult;
-    ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
-    historyManager.addHistoryItem(rawResult, resultHandler);
+    // ResultHandler resultHandler =
+    // ResultHandlerFactory.makeResultHandler(this, rawResult);
+    // historyManager.addHistoryItem(rawResult, resultHandler);
 
     Log.i("tapin", "got barcode: rawResult " + rawResult.getText());
-    beepManager.playBeepSoundAndVibrate();
-    // TODO: implement the stuffs
+    // beepManager.playBeepSoundAndVibrate();
 
     // submit data to server. if fail then store to database to be set later
     String code = rawResult.getText();
@@ -846,11 +870,64 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public void showSuccessScreen() {
     ImageView imageOverlay = (ImageView) findViewById(R.id.image_overlay);
     imageOverlay.setImageResource(R.drawable.scan_success);
+    // beepManager.playBeepSoundAndVibrate();
+    playSound();
   }
 
   public void showFailScreen() {
     ImageView imageOverlay = (ImageView) findViewById(R.id.image_overlay);
     imageOverlay.setImageResource(R.drawable.scan_fail);
+  }
+
+  public void playSound() {
+    Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+    /*
+     * MediaPlayer mp = MediaPlayer.create(getApplicationContext(), soundUri);
+     * 
+     * mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+     * 
+     * @Override public void onCompletion(MediaPlayer mp) { mp.stop();
+     * mp.release(); } }); mp.start();
+     */
+
+    try {
+      MediaPlayer mp = new MediaPlayer();
+      mp.setDataSource(getApplicationContext(), soundUri);
+      mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+      mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+          mp.stop();
+          mp.release();
+        }
+      });
+      mp.prepare();
+      mp.start();
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.e("tapin-sound", "unable to play sound");
+    }
+
+    /*
+     * mp.setLooping(false); mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+     * mp.setVolume(1.0f, 1.0f); //mp.start(); //mp.prepare();
+     * 
+     * mp.setOnPreparedListener(new OnPreparedListener() {
+     * 
+     * @Override public void onPrepared(MediaPlayer mp) { mp.start();
+     * while(mp.isPlaying()){}; } });
+     */
+
+    /*
+     * MediaPlayer mMediaPlayer = new MediaPlayer();
+     * mMediaPlayer.setDataSource(context, soundUri); final AudioManager
+     * audioManager = (AudioManager)
+     * context.getSystemService(Context.AUDIO_SERVICE); if
+     * (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) != 0) {
+     * mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+     * mMediaPlayer.setVolume(1.0f, 1.0f); mMediaPlayer.setLooping(true);
+     * mMediaPlayer.prepare(); mMediaPlayer.seekTo(0); mMediaPlayer.start(); }
+     */
   }
 
   /**
@@ -1127,4 +1204,21 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public void drawViewfinder() {
     viewfinderView.drawViewfinder();
   }
+
+  /**
+   * Check the network state
+   * 
+   * @param context
+   *          context of application
+   * @return true if the phone is connected
+   */
+  public static boolean isConnected(Context context) {
+    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+    if (netInfo != null && netInfo.isConnected()) {
+      return true;
+    }
+    return false;
+  }
+
 }

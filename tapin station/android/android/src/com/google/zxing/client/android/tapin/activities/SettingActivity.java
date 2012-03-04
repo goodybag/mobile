@@ -1,14 +1,18 @@
 package com.google.zxing.client.android.tapin.activities;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -16,10 +20,9 @@ import android.util.Log;
 
 import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.tapin.BaseActivity;
 import com.google.zxing.client.android.tapin.Constants;
 
-public class SettingActivity extends BaseActivity implements OnClickListener {
+public class SettingActivity extends Activity implements OnClickListener {
 	private EditText businessIdEditText;
 	private EditText registerIdEditText;
 	private EditText locationIdEditText;
@@ -32,24 +35,25 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		String registerId = preference.getString(Constants.KEY_REGISTER_ID, null);
 		String locationId = preference.getString(Constants.KEY_LOCATION_ID, null);
 
-		boolean fromAsk = getIntent().getBooleanExtra("from_ask", false);
+		boolean fromAsk = getIntent().getBooleanExtra("settingsCompleted", false);
 		if (!fromAsk) {
 			if (businessId == null || registerId == null || locationId == null) {
 				setContentView(R.layout.settings);
-				findViewById(R.settings.changePasscodeLayout).setVisibility(View.GONE);
 			} else {
-				changeActivity(CaptureActivity.class, true);
+		    Intent intent = new Intent();
+		    intent.setClass(this, CaptureActivity.class);
+		    startActivity(intent);
+		    finish();
 				return;
 			}
 		} else {
-			findViewById(R.settings.changePasscodeLayout).setVisibility(View.VISIBLE);
 		}
 		
-		businessIdEditText = (EditText) findViewById(R.settings.storeIdEditBox);
+		businessIdEditText = (EditText) findViewById(R.settings.businessIdEditBox);
 		businessIdEditText.setText(businessId);
 		locationIdEditText = (EditText) findViewById(R.settings.locationIdEditBox);
 		locationIdEditText.setText(locationId);
-		registerIdEditText = (EditText) findViewById(R.settings.registeredIdEditBox);
+		registerIdEditText = (EditText) findViewById(R.settings.registerIdEditBox);
 		registerIdEditText.setText(registerId);
 		registerIdEditText.setOnEditorActionListener(new OnEditorActionListener() {
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -63,32 +67,27 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	}
 
 	public void onClick(View view) {
-		switch (view.getId()) {
-		case R.settings.changePasscode:
-			changeActivity(ChangePasscodeActivity.class, false);
-			break;
-		case R.settings.submitButton:
-			saveRequest(view);
-			break;
-		}
+		saveRequest(view);
 	}
 
 	private void saveRequest(View v) {
-		closeSoftKeyBoard(v, SettingActivity.this);
+	  //http://stackoverflow.com/questions/1109022/how-to-close-hide-the-android-soft-keyboard
+	  InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+	  imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
 		final String storeId = businessIdEditText.getText().toString().trim();
 		final String registerId = registerIdEditText.getText().toString().trim();
 		final String locationId = locationIdEditText.getText().toString().trim();
 		if (0 == storeId.length()) {
-			showAlertMessage("Error", "Please enter a Business Id", null, null, null);
+			blankFieldError("Please enter a Business Id");
 			return;
 		}
 		if (0 == locationId.length()) {
-			showAlertMessage("Error", "Please enter Location Id", null, null, null);
+			blankFieldError("Please enter Location Id");
 			return;
 		}
 		if (0 == registerId.length()) {
-			showAlertMessage("Error", "Please enter Registered Id", null, null, null);
+			blankFieldError("Please enter Registered Id");
 			return;
 		}
 		SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
@@ -97,6 +96,22 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		editor.putString(Constants.KEY_REGISTER_ID, registerId);
 		editor.putString(Constants.KEY_LOCATION_ID, locationId);
 		editor.commit();
-		changeActivity(CaptureActivity.class);
+		Intent intent = new Intent();
+    intent.setClass(this, CaptureActivity.class);
+    startActivity(intent);
+    finish();
 	}
+	
+	  //http://www.wikihow.com/Show-Alert-Dialog-in-Android
+	  public final void blankFieldError(String message) {
+	    AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+	    alertDialog.setTitle("Blank Field");
+	    alertDialog.setMessage(message);
+	    alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+	       public void onClick(DialogInterface dialog, int which) {
+	          // here you can add functions
+	       }
+	    });
+	    alertDialog.show();
+	  }
 }

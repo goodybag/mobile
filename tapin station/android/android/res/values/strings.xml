@@ -120,19 +120,4 @@
     <string name="wifi_ssid_label">Network Name</string>
     <string name="wifi_type_label">Type</string>
     <string name="zxing_url">http://code.google.com/p/zxing</string>
-    <string name="confirm_passcode_hint_text">Enter Confirm Passcode</string>
-    <string name="confirm_passcode_label">Confirm Passcode: </string>
-    <string name="new_passcode_hint_text">Enter New Passcode</string>
-    <string name="new_passcode_label">New Passcode: </string>
-    <string name="current_passcode_hint_text">Enter Current Passcode</string>
-    <string name="current_passcode_label">Current Passcode: </string>
-    <string name="submit_button_text"> Submit </string>
-    <string name="click_method_name">onClick</string>
-    <string name="location_id_hint_text">Enter Location ID</string>
-    <string name="location_id_label">Location ID: </string>
-    <string name="store_id_hint_text">Enter Store ID</string>
-    <string name="store_id_label">Store ID: </string>
-    <string name="registered_id_hint_text">Enter Register ID</string>
-    <string name="registered_id_label">Register ID: </string>
-    <string name="change_passcode_text"> Change Passcode </string>
 </resources>
