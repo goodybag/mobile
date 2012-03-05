@@ -189,8 +189,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public boolean isOnline() {
     ConnectivityManager cm =
         (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-    return cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+    if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+        return true;
+    }
+    return false;
 }
 
   @Override
@@ -208,9 +211,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // successfully then gradually decrement this value until 10 seconds
     submitPendingCodes();
 
-    BuildInfo build = BuildInfo.getInstance(this, icicle);
-
-    
+    BuildInfo build = BuildInfo.getInstance(this, icicle);    
     Log.i("device-info", build.toString());
     //Log.i("network-info", wifiManager.getConnectionInfo().toString());
 
@@ -263,6 +264,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             restClient.addParam("timestamp", new Date().toString());
             
             
+            if(isOnline()){
+              
+            }
+              /*WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+              wifiManager.getConnectionInfo().toString()*/
 
             for (String key : data.keySet()) {
               restClient.addParam(key, data.get(key));
