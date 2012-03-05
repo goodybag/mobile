@@ -1,4 +1,4 @@
-package com.google.zxing.client.android.tapin;
+package com.goodybag.tapin.station;
 
 import com.google.zxing.client.android.CaptureActivity;
 import android.util.Log;

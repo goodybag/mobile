@@ -1,4 +1,4 @@
-package com.google.zxing.client.android.tapin;
+package com.goodybag.tapin.station;
 
 /*
  *

@@ -20,6 +20,8 @@
 
 package com.google.zxing.client.android;
 
+import com.goodybag.tapin.station.ChangeImageAndEnableCaptureThread;
+import com.goodybag.tapin.station.Constants;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
@@ -35,8 +37,6 @@ import com.google.zxing.client.android.result.ResultButtonListener;
 import com.google.zxing.client.android.result.ResultHandler;
 import com.google.zxing.client.android.result.ResultHandlerFactory;
 import com.google.zxing.client.android.result.supplement.SupplementalInfoRetriever;
-import com.google.zxing.client.android.tapin.ChangeImageAndEnableCaptureThread;
-import com.google.zxing.client.android.tapin.Constants;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -279,6 +279,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
               Log.i("tapin-heartbeat-post", "RESPONSE CODE: " + responseCode);
               if (responseCode == 200) {
                 String response = restClient.getResponse();
+                //support commands in response here
                 Log.i("tapin-heartbeat-post", response);
               } else {
                 Log.i("tapin-heartbeat-post", "unable to successfully post heartbeat data to server");

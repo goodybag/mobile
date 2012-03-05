@@ -1,4 +1,4 @@
-package com.google.zxing.client.android.tapin.activities;
+package com.goodybag.tapin.station.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,9 +18,9 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.util.Log;
 
+import com.goodybag.tapin.station.Constants;
 import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.tapin.Constants;
 
 public class SettingActivity extends Activity implements OnClickListener {
 	private EditText businessIdEditText;

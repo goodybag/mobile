@@ -1,4 +1,4 @@
-package com.google.zxing.client.android.tapin;
+package com.goodybag.tapin.station;
 
 public interface Constants {
 	public static final String SETTING_PREF_NAME = "com.goodybag.tapin.station.settings";

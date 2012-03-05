@@ -1,6 +1,6 @@
-package com.google.zxing.client.android.tapin;
+package com.goodybag.tapin.station;
 
-import com.google.zxing.client.android.tapin.activities.SettingActivity;
+import com.goodybag.tapin.station.activities.SettingActivity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

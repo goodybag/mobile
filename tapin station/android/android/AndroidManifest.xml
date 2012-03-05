@@ -64,7 +64,7 @@
         android:label="@string/app_name" >
         
         <receiver
-            android:name=".tapin.BootUpReceiver"
+            android:name="com.goodybag.tapin.station.BootUpReceiver"
             android:enabled="true"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
             <intent-filter>
@@ -232,7 +232,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".tapin.activities.SettingActivity"
+            android:name="com.goodybag.tapin.station.activities.SettingActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
             <intent-filter>
@@ -240,21 +240,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".tapin.activities.ChangePasscodeActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
-            android:name=".tapin.activities.ScanActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
-            android:name=".tapin.activities.AskPasscodeActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
         </activity>
     </application>
 
