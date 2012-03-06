@@ -144,7 +144,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private String versionName;
   private HistoryManager historyManager;
   private InactivityTimer inactivityTimer;
-  private BeepManager beepManager;
+//  private BeepManager beepManager;
+
+  private boolean heartbeatSet = false;
 
   private HashMap<String, String> heartbeatDataMap = new HashMap<String, String>();
 
@@ -185,16 +187,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       Log.w("SYSTEM-WIDE", "FOCUS HAS BEEN RESTORED");
     }
   }
-  
+
   public boolean isOnline() {
-    ConnectivityManager cm =
-        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
     NetworkInfo netInfo = cm.getActiveNetworkInfo();
     if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-        return true;
+      return true;
     }
     return false;
-}
+  }
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -211,9 +212,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // successfully then gradually decrement this value until 10 seconds
     submitPendingCodes();
 
-    BuildInfo build = BuildInfo.getInstance(this, icicle);    
+    BuildInfo build = BuildInfo.getInstance(this, icicle);
     Log.i("device-info", build.toString());
-    //Log.i("network-info", wifiManager.getConnectionInfo().toString());
+    // Log.i("network-info", wifiManager.getConnectionInfo().toString());
 
     // the device sends periodic updates about itself to a remote server
 
@@ -231,7 +232,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     historyManager = new HistoryManager(this);
     historyManager.trimHistory();
     inactivityTimer = new InactivityTimer(this);
-    beepManager = new BeepManager(this);
+//    beepManager = new BeepManager(this);
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -239,11 +240,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   public void submitHeartbeat(HashMap<String, String> data) {
-    class SendHeartBeat implements Runnable {
+    class SendHeartbeat implements Runnable {
 
       HashMap<String, String> data;
 
-      public SendHeartBeat(HashMap<String, String> data) {
+      public SendHeartbeat(HashMap<String, String> data) {
         this.data = data;
       }
 
@@ -262,13 +263,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             restClient.addParam("locationId", locationId);
             restClient.addParam("registerId", registerId);
             restClient.addParam("timestamp", new Date().toString());
-            
-            
-            if(isOnline()){
-              
+
+            if (isOnline()) {
+
             }
-              /*WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-              wifiManager.getConnectionInfo().toString()*/
+            /*
+             * WifiManager wifiManager = (WifiManager)
+             * getSystemService(Context.WIFI_SERVICE);
+             * wifiManager.getConnectionInfo().toString()
+             */
 
             for (String key : data.keySet()) {
               restClient.addParam(key, data.get(key));
@@ -279,7 +282,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
               Log.i("tapin-heartbeat-post", "RESPONSE CODE: " + responseCode);
               if (responseCode == 200) {
                 String response = restClient.getResponse();
-                //support commands in response here
+                // support commands in response here
                 Log.i("tapin-heartbeat-post", response);
               } else {
                 Log.i("tapin-heartbeat-post", "unable to successfully post heartbeat data to server");
@@ -291,6 +294,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
               // saveCode(code);
             }
 
+            CaptureActivity.this.heartbeatSet = true;
             Thread.sleep(Constants.SUBMIT_HEARTBEAT_DELAY_MS);
           }
         } catch (InterruptedException e) {
@@ -301,8 +305,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
     ;
 
-    Thread submitHeartBeatThread = new Thread(new SendHeartBeat(data));
-    submitHeartBeatThread.start();
+    if (heartbeatSet == false) {
+      Thread submitHeartbeatThread = new Thread(new SendHeartbeat(data));
+      submitHeartbeatThread.start();
+    } else {
+      Log.w("tapin-heartbeat", "There is already a thread that is sending a heartbeat, not going to initiate another one.");
+      return;
+    }
   }
 
   public void submitPendingCodes() {
@@ -365,9 +374,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                                                               // logging
                                                               // purposes below
 
+        SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
         while (true) {
           SQLiteDatabase db = captureActivity.openOrCreateDatabase(Constants.DB_GOODYBAG, Context.MODE_PRIVATE, null);
-          SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
           int delay = preference.getInt(Constants.KEY_SUBMIT_PENDING_DELAY, Constants.SUBMIT_PENDING_DELAY_MS_MIN);
           String businessId = null;
           String locationId = null;
@@ -376,7 +385,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           String timestamp = null;
 
           try {
-            Thread.sleep(delay);
             String findSinglePendingSQL = "SELECT * FROM " + Constants.DB_PENDING_CODES_TABLE + " ORDER BY ID DESC LIMIT 1";
             if (id > -1)
               findSinglePendingSQL = "SELECT * FROM " + Constants.DB_PENDING_CODES_TABLE + " WHERE ID<" + id + " ORDER BY ID DESC LIMIT 1";
@@ -395,31 +403,42 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             } else {
               id = -1;
             }
+            cursor.close();
+            // if there was anything then submit
+            if (id > -1) {
+              boolean success = submitCode(businessId, locationId, registerId, code, timestamp, false);
+              if (success) {
+                deleteCode(id);
+                newDelay = decrementDelay();
+                Log.i("tapin-submit-pending-codes", "successful submitting, delay decremented to (ms): " + newDelay);
+              } else {
+                newDelay = incrementDelay();
+                Log.i("tapin-submit-pending-codes", "unsuccessful submitting, delay incremented to (ms): " + newDelay);
+              }
+            } else {
+              Cursor countCursor = db.rawQuery("SELECT COUNT(*) FROM "+ Constants.DB_PENDING_CODES_TABLE, null);
+              long count = 0;
+              if(countCursor.moveToFirst() != false){
+                count = countCursor.getLong(0);
+              }
+              countCursor.close();
+              if(count == 0){
+                Log.i("tapin-submit-pending-codes", "nothing to submit :)");
+                if (delay > Constants.SUBMIT_PENDING_DELAY_MS_MIN) {
+                  newDelay = decrementDelay();
+                  Log.i("tapin-submit-pending-codes", "delay decremented to (ms): " + newDelay);
+                }
+              } else {
+                Log.i("tapin-submit-pending-codes", "There are "+ count + " pending tapins to submit. Retrying from end to beginning again");
+              }
+            }
+            Thread.sleep(delay);
           } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             Log.e("tapin-submit-pending-codes", "Unable to get information from database.");
           } finally {
             db.close();
-          }
-
-          // if there was anything then submit
-          if (id > -1) {
-            boolean success = submitCode(businessId, locationId, registerId, code, timestamp, false);
-            if (success) {
-              deleteCode(id);
-              newDelay = decrementDelay();
-              Log.i("tapin-submit-pending-codes", "successful submitting, delay decremented to (ms): " + newDelay);
-            } else {
-              newDelay = incrementDelay();
-              Log.i("tapin-submit-pending-codes", "unsuccessful submitting, delay incremented to (ms): " + newDelay);
-            }
-          } else {
-            Log.i("tapin-submit-pending-codes", "nothing to submit :)");
-            if (delay > Constants.SUBMIT_PENDING_DELAY_MS_MIN) {
-              newDelay = decrementDelay();
-              Log.i("tapin-submit-pending-codes", "delay decremented to (ms): " + newDelay);
-            }
           }
         }// while loop
       }// run method
@@ -503,7 +522,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
-    beepManager.updatePrefs();
+//    beepManager.updatePrefs();
 
     inactivityTimer.onResume();
 
@@ -584,6 +603,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   protected void onPause() {
     Log.i("SYSTEM-WIDE", "PAUSE");
+    
     if (handler != null) {
       handler.quitSynchronously();
       handler = null;
@@ -596,8 +616,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       surfaceHolder.removeCallback(this);
       // onW
     }
-
+    
     super.onPause();
+    
     // onResume();
     // onStart();
   }
@@ -790,7 +811,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   public boolean saveCode(String businessId, String locationId, String registerId, String code, String timestamp) {
     Log.i("tapin-save-code", "Attempting to save code: " + code + " to database");
-    SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
 
     SQLiteDatabase db = this.openOrCreateDatabase(Constants.DB_GOODYBAG, Context.MODE_PRIVATE, null);
     try {
@@ -946,117 +966,102 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    * @param rawResult
    *          The decoded results which contains the points to draw.
    */
-  private void drawResultPoints(Bitmap barcode, Result rawResult) {
-    ResultPoint[] points = rawResult.getResultPoints();
-    if (points != null && points.length > 0) {
-      Canvas canvas = new Canvas(barcode);
-      Paint paint = new Paint();
-      paint.setColor(getResources().getColor(R.color.result_image_border));
-      paint.setStrokeWidth(3.0f);
-      paint.setStyle(Paint.Style.STROKE);
-      Rect border = new Rect(2, 2, barcode.getWidth() - 2, barcode.getHeight() - 2);
-      canvas.drawRect(border, paint);
-
-      paint.setColor(getResources().getColor(R.color.result_points));
-      if (points.length == 2) {
-        paint.setStrokeWidth(4.0f);
-        drawLine(canvas, paint, points[0], points[1]);
-      } else if (points.length == 4
-          && (rawResult.getBarcodeFormat() == BarcodeFormat.UPC_A || rawResult.getBarcodeFormat() == BarcodeFormat.EAN_13)) {
-        // Hacky special case -- draw two lines, for the barcode and
-        // metadata
-        drawLine(canvas, paint, points[0], points[1]);
-        drawLine(canvas, paint, points[2], points[3]);
-      } else {
-        paint.setStrokeWidth(10.0f);
-        for (ResultPoint point : points) {
-          canvas.drawPoint(point.getX(), point.getY(), paint);
-        }
-      }
-    }
-  }
+  /*
+   * private void drawResultPoints(Bitmap barcode, Result rawResult) {
+   * ResultPoint[] points = rawResult.getResultPoints(); if (points != null &&
+   * points.length > 0) { Canvas canvas = new Canvas(barcode); Paint paint = new
+   * Paint();
+   * paint.setColor(getResources().getColor(R.color.result_image_border));
+   * paint.setStrokeWidth(3.0f); paint.setStyle(Paint.Style.STROKE); Rect border
+   * = new Rect(2, 2, barcode.getWidth() - 2, barcode.getHeight() - 2);
+   * canvas.drawRect(border, paint);
+   * 
+   * paint.setColor(getResources().getColor(R.color.result_points)); if
+   * (points.length == 2) { paint.setStrokeWidth(4.0f); drawLine(canvas, paint,
+   * points[0], points[1]); } else if (points.length == 4 &&
+   * (rawResult.getBarcodeFormat() == BarcodeFormat.UPC_A ||
+   * rawResult.getBarcodeFormat() == BarcodeFormat.EAN_13)) { // Hacky special
+   * case -- draw two lines, for the barcode and // metadata drawLine(canvas,
+   * paint, points[0], points[1]); drawLine(canvas, paint, points[2],
+   * points[3]); } else { paint.setStrokeWidth(10.0f); for (ResultPoint point :
+   * points) { canvas.drawPoint(point.getX(), point.getY(), paint); } } } }
+   */
 
   private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b) {
     canvas.drawLine(a.getX(), a.getY(), b.getX(), b.getY(), paint);
   }
 
-  // Put up our own UI for how to handle the decoded contents.
-  private void handleDecodeInternally(Result rawResult, ResultHandler resultHandler, Bitmap barcode) {
-    statusView.setVisibility(View.GONE);
-    viewfinderView.setVisibility(View.GONE);
-    resultView.setVisibility(View.VISIBLE);
-
-    ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
-    if (barcode == null) {
-      barcodeImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.launcher_icon));
-    } else {
-      barcodeImageView.setImageBitmap(barcode);
-    }
-
-    TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
-    formatTextView.setText(rawResult.getBarcodeFormat().toString());
-
-    TextView typeTextView = (TextView) findViewById(R.id.type_text_view);
-    typeTextView.setText(resultHandler.getType().toString());
-
-    DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-    String formattedTime = formatter.format(new Date(rawResult.getTimestamp()));
-    TextView timeTextView = (TextView) findViewById(R.id.time_text_view);
-    timeTextView.setText(formattedTime);
-
-    TextView metaTextView = (TextView) findViewById(R.id.meta_text_view);
-    View metaTextViewLabel = findViewById(R.id.meta_text_view_label);
-    metaTextView.setVisibility(View.GONE);
-    metaTextViewLabel.setVisibility(View.GONE);
-    Map<ResultMetadataType, Object> metadata = rawResult.getResultMetadata();
-    if (metadata != null) {
-      StringBuilder metadataText = new StringBuilder(20);
-      for (Map.Entry<ResultMetadataType, Object> entry : metadata.entrySet()) {
-        if (DISPLAYABLE_METADATA_TYPES.contains(entry.getKey())) {
-          metadataText.append(entry.getValue()).append('\n');
-        }
-      }
-      if (metadataText.length() > 0) {
-        metadataText.setLength(metadataText.length() - 1);
-        metaTextView.setText(metadataText);
-        metaTextView.setVisibility(View.VISIBLE);
-        metaTextViewLabel.setVisibility(View.VISIBLE);
-      }
-    }
-
-    TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
-    CharSequence displayContents = resultHandler.getDisplayContents();
-    contentsTextView.setText(displayContents);
-    // Crudely scale betweeen 22 and 32 -- bigger font for shorter text
-    int scaledSize = Math.max(22, 32 - displayContents.length() / 4);
-    contentsTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, scaledSize);
-
-    TextView supplementTextView = (TextView) findViewById(R.id.contents_supplement_text_view);
-    supplementTextView.setText("");
-    supplementTextView.setOnClickListener(null);
-    if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PreferencesActivity.KEY_SUPPLEMENTAL, true)) {
-      SupplementalInfoRetriever.maybeInvokeRetrieval(supplementTextView, resultHandler.getResult(), handler, historyManager, this);
-    }
-
-    int buttonCount = resultHandler.getButtonCount();
-    ViewGroup buttonView = (ViewGroup) findViewById(R.id.result_button_view);
-    buttonView.requestFocus();
-    for (int x = 0; x < ResultHandler.MAX_BUTTON_COUNT; x++) {
-      TextView button = (TextView) buttonView.getChildAt(x);
-      if (x < buttonCount) {
-        button.setVisibility(View.VISIBLE);
-        button.setText(resultHandler.getButtonText(x));
-        button.setOnClickListener(new ResultButtonListener(resultHandler, x));
-      } else {
-        button.setVisibility(View.GONE);
-      }
-    }
-
-    if (copyToClipboard && !resultHandler.areContentsSecure()) {
-      ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-      clipboard.setText(displayContents);
-    }
-  }
+  /*
+   * // Put up our own UI for how to handle the decoded contents. private void
+   * handleDecodeInternally(Result rawResult, ResultHandler resultHandler,
+   * Bitmap barcode) { statusView.setVisibility(View.GONE);
+   * viewfinderView.setVisibility(View.GONE);
+   * resultView.setVisibility(View.VISIBLE);
+   * 
+   * ImageView barcodeImageView = (ImageView)
+   * findViewById(R.id.barcode_image_view); if (barcode == null) {
+   * barcodeImageView
+   * .setImageBitmap(BitmapFactory.decodeResource(getResources(),
+   * R.drawable.launcher_icon)); } else {
+   * barcodeImageView.setImageBitmap(barcode); }
+   * 
+   * TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
+   * formatTextView.setText(rawResult.getBarcodeFormat().toString());
+   * 
+   * TextView typeTextView = (TextView) findViewById(R.id.type_text_view);
+   * typeTextView.setText(resultHandler.getType().toString());
+   * 
+   * DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+   * DateFormat.SHORT); String formattedTime = formatter.format(new
+   * Date(rawResult.getTimestamp())); TextView timeTextView = (TextView)
+   * findViewById(R.id.time_text_view); timeTextView.setText(formattedTime);
+   * 
+   * TextView metaTextView = (TextView) findViewById(R.id.meta_text_view); View
+   * metaTextViewLabel = findViewById(R.id.meta_text_view_label);
+   * metaTextView.setVisibility(View.GONE);
+   * metaTextViewLabel.setVisibility(View.GONE); Map<ResultMetadataType, Object>
+   * metadata = rawResult.getResultMetadata(); if (metadata != null) {
+   * StringBuilder metadataText = new StringBuilder(20); for
+   * (Map.Entry<ResultMetadataType, Object> entry : metadata.entrySet()) { if
+   * (DISPLAYABLE_METADATA_TYPES.contains(entry.getKey())) {
+   * metadataText.append(entry.getValue()).append('\n'); } } if
+   * (metadataText.length() > 0) { metadataText.setLength(metadataText.length()
+   * - 1); metaTextView.setText(metadataText);
+   * metaTextView.setVisibility(View.VISIBLE);
+   * metaTextViewLabel.setVisibility(View.VISIBLE); } }
+   * 
+   * TextView contentsTextView = (TextView)
+   * findViewById(R.id.contents_text_view); CharSequence displayContents =
+   * resultHandler.getDisplayContents();
+   * contentsTextView.setText(displayContents); // Crudely scale betweeen 22 and
+   * 32 -- bigger font for shorter text int scaledSize = Math.max(22, 32 -
+   * displayContents.length() / 4);
+   * contentsTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, scaledSize);
+   * 
+   * TextView supplementTextView = (TextView)
+   * findViewById(R.id.contents_supplement_text_view);
+   * supplementTextView.setText("");
+   * supplementTextView.setOnClickListener(null); if
+   * (PreferenceManager.getDefaultSharedPreferences
+   * (this).getBoolean(PreferencesActivity.KEY_SUPPLEMENTAL, true)) {
+   * SupplementalInfoRetriever.maybeInvokeRetrieval(supplementTextView,
+   * resultHandler.getResult(), handler, historyManager, this); }
+   * 
+   * int buttonCount = resultHandler.getButtonCount(); ViewGroup buttonView =
+   * (ViewGroup) findViewById(R.id.result_button_view);
+   * buttonView.requestFocus(); for (int x = 0; x <
+   * ResultHandler.MAX_BUTTON_COUNT; x++) { TextView button = (TextView)
+   * buttonView.getChildAt(x); if (x < buttonCount) {
+   * button.setVisibility(View.VISIBLE);
+   * button.setText(resultHandler.getButtonText(x));
+   * button.setOnClickListener(new ResultButtonListener(resultHandler, x)); }
+   * else { button.setVisibility(View.GONE); } }
+   * 
+   * if (copyToClipboard && !resultHandler.areContentsSecure()) {
+   * ClipboardManager clipboard = (ClipboardManager)
+   * getSystemService(CLIPBOARD_SERVICE); clipboard.setText(displayContents); }
+   * }
+   */
 
   /*
    * // Briefly show the contents of the barcode, then handle the result outside
@@ -1121,48 +1126,41 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    * } }
    */
 
-  private void sendReplyMessage(int id, Object arg) {
-    Message message = Message.obtain(handler, id, arg);
-    long resultDurationMS = getIntent().getLongExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS, DEFAULT_INTENT_RESULT_DURATION_MS);
-    if (resultDurationMS > 0L) {
-      handler.sendMessageDelayed(message, resultDurationMS);
-    } else {
-      handler.sendMessage(message);
-    }
-  }
-
+  /*
+   * private void sendReplyMessage(int id, Object arg) { Message message =
+   * Message.obtain(handler, id, arg); long resultDurationMS =
+   * getIntent().getLongExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS,
+   * DEFAULT_INTENT_RESULT_DURATION_MS); if (resultDurationMS > 0L) {
+   * handler.sendMessageDelayed(message, resultDurationMS); } else {
+   * handler.sendMessage(message); } }
+   */
   /**
    * We want the help screen to be shown automatically the first time a new
    * version of the app is run. The easiest way to do this is to check
    * android:versionCode from the manifest, and compare it to a value stored as
    * a preference.
    */
-  private boolean showHelpOnFirstLaunch() {
-    try {
-      PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
-      int currentVersion = info.versionCode;
-      // Since we're paying to talk to the PackageManager anyway, it makes
-      // sense to cache the app
-      // version name here for display in the about box later.
-      this.versionName = info.versionName;
-      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-      int lastVersion = prefs.getInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, 0);
-      if (currentVersion > lastVersion) {
-        prefs.edit().putInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, currentVersion).commit();
-        Intent intent = new Intent(this, HelpActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        // Show the default page on a clean install, and the what's new
-        // page on an upgrade.
-        String page = lastVersion == 0 ? HelpActivity.DEFAULT_PAGE : HelpActivity.WHATS_NEW_PAGE;
-        intent.putExtra(HelpActivity.REQUESTED_PAGE_KEY, page);
-        startActivity(intent);
-        return true;
-      }
-    } catch (PackageManager.NameNotFoundException e) {
-      Log.w(TAG, e);
-    }
-    return false;
-  }
+  /*
+   * private boolean showHelpOnFirstLaunch() { try { PackageInfo info =
+   * getPackageManager().getPackageInfo(PACKAGE_NAME, 0); int currentVersion =
+   * info.versionCode; // Since we're paying to talk to the PackageManager
+   * anyway, it makes // sense to cache the app // version name here for display
+   * in the about box later. this.versionName = info.versionName;
+   * SharedPreferences prefs =
+   * PreferenceManager.getDefaultSharedPreferences(this); int lastVersion =
+   * prefs.getInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, 0); if
+   * (currentVersion > lastVersion) {
+   * prefs.edit().putInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN,
+   * currentVersion).commit(); Intent intent = new Intent(this,
+   * HelpActivity.class);
+   * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET); // Show the
+   * default page on a clean install, and the what's new // page on an upgrade.
+   * String page = lastVersion == 0 ? HelpActivity.DEFAULT_PAGE :
+   * HelpActivity.WHATS_NEW_PAGE;
+   * intent.putExtra(HelpActivity.REQUESTED_PAGE_KEY, page);
+   * startActivity(intent); return true; } } catch
+   * (PackageManager.NameNotFoundException e) { Log.w(TAG, e); } return false; }
+   */
 
   private void initCamera(SurfaceHolder surfaceHolder) {
     try {
