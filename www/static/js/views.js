@@ -51,7 +51,27 @@
       $(this.el).html(app.templates.login());
       return this;
     }
-  })
+  });
+
+  views.Button = Backbone.View.extend({
+    tagname: 'a',
+    events: {
+      'click': 'onClick'
+    },
+    defaults: {
+      href: "#",
+      "data-role": "button",
+      "data-theme": "b"
+    },
+    initialize: function(options){
+      this.options = options;
+      _.defaults(this.options, this.defaults);
+      _.extend(this.attributes, this.options);
+    },
+    onClick: function(){
+      this.options.click();
+    }
+  });
 
   // Export
   for (var name in views){

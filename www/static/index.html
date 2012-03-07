@@ -32,10 +32,27 @@
     <!-- facebook js sdk -->
     <script src="/static/3/facebook_js_sdk.js"></script>
 
-    <div id="container"></div>
+    <div data-role="page" id="activities">
+      <div data-role="header">
+        <h1>Activities</h1>
+        <a href="#test" data-role="button" data-icon="add" id="add-button" class="ui-btn-right">To Test</a>
+      </div>
+      <div data-role="content">
+          <!-- the contents of the list view will be rendered via the backbone view -->
+      </div>
+    </div>
+
+    <div data-role="page" id="test">
+      <div data-role="header">
+        <h1>Test</h1>
+        <a href="#activities" data-role="button" data-icon="add" id="add-button" class="ui-btn-right">Back to Activities</a>
+      </div>
+      <div data-role="content">
+          <!-- the contents of the list view will be rendered via the backbone view -->
+      </div>
+    </div>
 
     <script src="/static/3/jquery-1.7.1.min.js"></script>
-    <script src="/static/js/jqm-config.js"></script> <!-- Needs to be before jqm -->
     <script src="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
     <script src="/static/3/underscore.js"></script>
     <script src="/static/3/backbone.js"></script>

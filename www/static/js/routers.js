@@ -4,7 +4,7 @@
   var router = Backbone.Router.extend({
     routes: {
       "": "landing",
-      "/#!/test": "test"
+      "test": "test"
     },
     initialize: function(){
       console.log('test1');
