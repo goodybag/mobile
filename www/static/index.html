@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <html manifest="cache.mf">
 <!-- <html> -->
   <head>
@@ -6,11 +7,13 @@
     <link rel="stylesheet" href="/static/css/style.css" />
     <link rel="stylesheet" href="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
 
-    <script src="/static/js/jquery-1.7.1.min.js"></script>
+    <script src="/static/3/backbone.js"></script>
+    <script src="/static/3/jquery-1.7.1.min.js"></script>
     <script src="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
-    <script src="/static/js/sugar-0.9.4.min.js"></script>
-    <script src="/static/js/jquery.qrcode.js"></script>
-    <script src="/static/js/qrcode.js"></script>
+    <script src="/static/3/sugar-0.9.4.min.js"></script>
+    <script src="/static/3/handlebars-1.0.0.beta.4.js"></script>
+    <script src="/static/3/jquery.qrcode.js"></script>
+    <script src="/static/3/qrcode.js"></script>
     <script src="http://www.goodybag.com/static/js/api-client.js"></script>
     <script src="http://www.goodybag.com/static/js/api-sync-client.js"></script>
     <script>
@@ -32,11 +35,11 @@
   </head>
   <body>
     <!-- phonegap -->
-    <script src="/static/js/phonegap-1.4.1.js"></script>
+    <script src="/static/3/phonegap-1.4.1.js"></script>
     <!--phonegap facebook plugin -->
-    <script src = "/static/js/pg-plugin-fb-connect.js"></script>
+    <script src = "/static/3/pg-plugin-fb-connect.js"></script>
     <!-- facebook js sdk -->
-    <script src="/static/js/facebook_js_sdk.js"></script>
+    <script src="/static/3/facebook_js_sdk.js"></script>
 
     <div id="login-page" data-role="page" class="page">
       <div data-role="header" data-theme="b" class="ui-header ui-bar-b" role="banner">
@@ -68,9 +71,9 @@
       </div><!-- /content -->
     </div><!-- /page -->
 
-    <script src= "/static/js/master.js"></script>
+    <script src= "/static/js/app.js"></script>
     <script>
-      $("#login-facebook").click(function(){
+      /*$("#login-facebook").click(function(){
         $("#qrcode").html("");
         login();
       });
@@ -121,7 +124,7 @@
         } catch (e) {
           alert(e);
         }
-      }, false);
+      }, false);*/
     </script>
   </body>
 </html>
