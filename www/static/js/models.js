@@ -1,8 +1,9 @@
 (function(){
   this.app = window.app || {};
   this.app.Models = window.app.Models || {};
+  var models = {};
 
-  var Auth = Backbone.Models.extend({
+  models.Auth = Backbone.Model.extend({
     defaults: {
 
     },
@@ -20,5 +21,8 @@
     }
   });
 
-  this.app.Models.Auth = Auth;
+  // Export
+  for (var name in models){
+    this.app.Models[name] = models[name];
+  }
 }).call(this);

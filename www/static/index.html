@@ -1,21 +1,12 @@
 <!DOCTYPE HTML>
-<html manifest="cache.mf">
-<!-- <html> -->
+<!--<html manifest="cache.mf">-->
+<html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="/static/css/style.css" />
     <link rel="stylesheet" href="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
 
-    <script src="/static/3/backbone.js"></script>
-    <script src="/static/3/jquery-1.7.1.min.js"></script>
-    <script src="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
-    <script src="/static/3/sugar-0.9.4.min.js"></script>
-    <script src="/static/3/handlebars-1.0.0.beta.4.js"></script>
-    <script src="/static/3/jquery.qrcode.js"></script>
-    <script src="/static/3/qrcode.js"></script>
-    <script src="http://www.goodybag.com/static/js/api-client.js"></script>
-    <script src="http://www.goodybag.com/static/js/api-sync-client.js"></script>
     <script>
       window.applicationCache.addEventListener('updateready', function(e) {
         if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
@@ -41,36 +32,26 @@
     <!-- facebook js sdk -->
     <script src="/static/3/facebook_js_sdk.js"></script>
 
-    <div id="login-page" data-role="page" class="page">
-      <div data-role="header" data-theme="b" class="ui-header ui-bar-b" role="banner">
-        <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Goodybag</h1>
-      </div><!-- /header -->
+    <div id="container"></div>
 
-      <div data-role="content">
-        <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Goodybag - ATX</h1>
-        <a id="login-facebook" href="#" data-role="button" data-icon="star" data-theme="a">Login With Facebook</a>
-        <!-- <a id="login-email"href="#" data-role="button" data-icon="star" data-theme="b">Login With Email</a> -->
-        <a id="login-tapIn"href="#" data-role="button" data-icon="star" data-theme="b">TapIn</a>
-      </div><!-- /content -->
-    </div><!-- /page -->
+    <script src="/static/3/jquery-1.7.1.min.js"></script>
+    <script src="/static/js/jqm-config.js"></script> <!-- Needs to be before jqm -->
+    <script src="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
+    <script src="/static/3/underscore.js"></script>
+    <script src="/static/3/backbone.js"></script>
+    <script src="/static/3/sugar-0.9.4.min.js"></script>
+    <script src="/static/3/handlebars-1.0.0.beta.4.js"></script>
+    <script src="/static/3/jquery.qrcode.js"></script>
+    <script src="/static/3/qrcode.js"></script>
+    <script src="http://www.goodybag.com/static/js/api-client.js"></script>
+    <script src="http://www.goodybag.com/static/js/api-sync-client.js"></script>
 
-    <div id="barcode-page" data-role="page" class="page">
-      <div data-role="header" data-theme="b" class="ui-header ui-bar-b" role="banner">
-          <a href="#login-page" data-icon="arrow-l" class="ui-btn-left" data-theme="b">Back</a>
-          <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Goodybag</h1>
-      </div><!-- /header -->
-
-      <div data-role="content">
-        <div style="text-align:center;">
-            <h2>TapIn</h2>
-        </div>
-        <div style="text-align:center;">
-
-          <div id="qrcode" style="display: inline-block; margin: 0 auto;"></div>
-        </div>
-      </div><!-- /content -->
-    </div><!-- /page -->
-
+    <script src= "/static/js/templates.js"></script>
+    <script src= "/static/js/models.js"></script>
+    <script src= "/static/js/collections.js"></script>
+    <script src= "/static/js/views.js"></script>
+    <script src= "/static/js/routes.js"></script>
+    <script src= "/static/js/routers.js"></script>
     <script src= "/static/js/app.js"></script>
     <script>
       /*$("#login-facebook").click(function(){
