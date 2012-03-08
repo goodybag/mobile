@@ -48,7 +48,7 @@ public final class CameraManager {
 
   private final Context context;
   private final CameraConfigurationManager configManager;
-  private Camera camera;
+  public Camera camera;
   private Rect framingRect;
   private Rect framingRectInPreview;
   private boolean initialized;

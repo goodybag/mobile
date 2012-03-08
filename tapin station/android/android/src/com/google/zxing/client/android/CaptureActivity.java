@@ -39,7 +39,9 @@ import com.google.zxing.client.android.result.ResultHandlerFactory;
 import com.google.zxing.client.android.result.supplement.SupplementalInfoRetriever;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -147,7 +149,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 //  private BeepManager beepManager;
 
   private boolean heartbeatSet = false;
-
+  private boolean alreadyStarted = false;
+  
   private HashMap<String, String> heartbeatDataMap = new HashMap<String, String>();
 
   private final DialogInterface.OnClickListener aboutListener = new DialogInterface.OnClickListener() {
@@ -171,23 +174,80 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     return cameraManager;
   }
 
+  
+  
   @Override
   public void onWindowFocusChanged(boolean hasFocus) {
     super.onWindowFocusChanged(hasFocus);
 
-    // This will prvent the app from ever closing (it relaunches it)
+    // This will prevent the app from ever closing (it relaunches it)
     if (!hasFocus) {
       Log.w("SYSTEM-WIDE", "FOCUS HAS BEEN LOST");
-      Log.w("SYSTEM-WIDE", "RE-LAUNCING APPLICATION");
+      //Log.w("SYSTEM-WIDE", "RE-LAUNCING APPLICATION");
+      try {
+        if (handler != null) {
+          handler.quitSynchronously();
+          handler = null;
+        }
+        cameraManager.closeDriver();
+        if (!hasSurface) {
+          SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+          SurfaceHolder surfaceHolder = surfaceView.getHolder();
+          surfaceHolder.removeCallback(this);
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+
+      //restartApp();
+      //return;
+      
+      /*
+      Intent i = new Intent();
+      i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      i.setAction("android.intent.action.VIEW");
+      i.setComponent(ComponentName.unflattenFromString("com.google.zxing.client.android/.CaptureActivity"));
+      startActivity(i);
+       */
+      
+      /*
       Intent intent = new Intent("android.intent.action.MAIN");
       intent.setComponent(ComponentName.unflattenFromString("com.google.zxing.client.android/.CaptureActivity"));
       intent.addCategory("android.intent.category.LAUNCHER");
       startActivity(intent);
+      */
+      
     } else {
       Log.w("SYSTEM-WIDE", "FOCUS HAS BEEN RESTORED");
     }
   }
 
+  // This kills the current process and sets an alarm to launch a new screen
+  public void restartApp() {
+    // This waits one seconds before re launcing the app
+    AlarmManager alm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+    alm.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, PendingIntent.getActivity(this, 0, new Intent(this, this.getClass()), 0));
+
+    try {
+      if (handler != null) {
+        handler.quitSynchronously();
+        handler = null;
+      }
+      cameraManager.closeDriver();
+      if (!hasSurface) {
+        SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+        SurfaceHolder surfaceHolder = surfaceView.getHolder();
+        surfaceHolder.removeCallback(this);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+    Log.i("SYSTEM-WIDE", "RESTARTING APP - KILLING PID");
+    int myPid = android.os.Process.myPid();
+    android.os.Process.killProcess(myPid);
+  }
+  
   public boolean isOnline() {
     ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
     NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -198,10 +258,25 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   @Override
+  public void onNewIntent(Intent i){
+    Log.i("SYSTEM-WIDE", "NEW INTENT: "+ i.toString());
+  }
+  
+  @Override
   public void onCreate(Bundle icicle) {
     Log.i("SYSTEM-WIDE", "CREATE");
     super.onCreate(icicle);
 
+    /*if(!isTaskRoot()){
+      //finish();
+      Log.i("tapin-create", "Task is not root. Already running, so not going to create again");
+      return;
+    }*/
+    
+    if(alreadyStarted){
+      Log.i("tapin-create", "Already running, so not going to create again");
+      return;
+    }
     // onStart();
 
     // setup databases and tables if non-existent
@@ -464,20 +539,22 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
   }
 
+  
   @Override
   protected void onResume() {
     Log.i("SYSTEM-WIDE", "RESUME");
+    
+    if (alreadyStarted){
+      Log.i("tapin-resume", "application is already running");
+    }
+    
     super.onResume();
-
-    // onStart();
-    /*
-     * // this will require root Process proc; try { proc =
-     * Runtime.getRuntime().exec(new
-     * String[]{"su","-c","service call activity 79 s16 com.android.systemui"});
-     * proc.waitFor(); } catch (IOException e) { // TODO Auto-generated catch
-     * block e.printStackTrace(); } catch (InterruptedException e) { // TODO
-     * Auto-generated catch block e.printStackTrace(); }
-     */
+    resumeApplication();
+    
+    alreadyStarted = true;
+  }
+  
+  private void resumeApplication(){
     // CameraManager must be initialized here, not in onCreate(). This is
     // necessary because we don't
     // want to open the camera driver and measure the screen size if we're
@@ -485,7 +562,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // first launch. That led to bugs where the scanning rectangle was the
     // wrong size and partially
     // off screen.
-    cameraManager = new CameraManager(getApplication());
+    if(cameraManager == null){ //If the camera is already set then don't create a new one, re-attach
+      cameraManager = new CameraManager(getApplication());
+    }
 
     viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
     viewfinderView.setCameraManager(cameraManager);
@@ -604,6 +683,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   protected void onPause() {
     Log.i("SYSTEM-WIDE", "PAUSE");
     
+    //cameraManager.stopPreview();
+    
+    /*
     if (handler != null) {
       handler.quitSynchronously();
       handler = null;
@@ -614,13 +696,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
       surfaceHolder.removeCallback(this);
-      // onW
     }
+    */
     
     super.onPause();
-    
-    // onResume();
-    // onStart();
   }
 
   @Override
@@ -755,6 +834,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   }
 
+  //TODO: PUT THIS IN A THREAD
   public boolean submitCode(String businessId, String locationId, String registerId, String code, String timestamp, boolean save) {
     // Sent to server
     RestClient restClient = new RestClient(Constants.URL_TRANSACTIONS);
