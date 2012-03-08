@@ -81,6 +81,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -145,7 +146,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private String characterSet;
   private String versionName;
   private HistoryManager historyManager;
-  private InactivityTimer inactivityTimer;
+//  private InactivityTimer inactivityTimer;
 //  private BeepManager beepManager;
 
   private boolean heartbeatSet = false;
@@ -266,6 +267,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public void onCreate(Bundle icicle) {
     Log.i("SYSTEM-WIDE", "CREATE");
     
+    getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+    
     //default uncaught exception handler
     PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, this.getClass()), 0);
     Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(pi, this));
@@ -311,7 +314,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     hasSurface = false;
     historyManager = new HistoryManager(this);
     historyManager.trimHistory();
-    inactivityTimer = new InactivityTimer(this);
+//    inactivityTimer = new InactivityTimer(this);
 //    beepManager = new BeepManager(this);
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -505,7 +508,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                   Log.i("tapin-submit-pending-codes", "delay decremented to (ms): " + newDelay);
                 }
               } else {
-                Log.i("tapin-submit-pending-codes", "There are "+ count + " pending tapins to submit. Retrying from end to beginning again");
+                Log.i("tapin-submit-pending-codes", "There are "+ count + " pending tapins to submit. Retrying from end to beginning again after some time");
               }
             }
             Thread.sleep(delay);
@@ -566,6 +569,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     if(cameraManager == null){ //If the camera is already set then don't create a new one, re-attach
       Log.i("tapin-resume-application", "attempting to create the camera");
       cameraManager = new CameraManager(getApplication());
+    } else {
+      try {
+        Log.i("tapin-resume-application", "attempting to reconnect the camera");
+        //cameraManager.camera.reconnect();
+      } catch (Exception e) {
+        Log.i("tapin-resume-application", "unable to reconnect with the camera");
+        e.printStackTrace();
+      }
     }
 
     viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
@@ -580,16 +591,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     resetStatusView();
 
     SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
-    // surfaceView.layout(100,100,300,300);
-
-    /*
-     * android.widget.FrameLayout.LayoutParams params = new
-     * android.widget.FrameLayout.LayoutParams(800, 480); params.leftMargin =
-     * (800-300)/2; params.topMargin = (-480+300)/2;
-     * 
-     * // params.leftMargin = 800-300; // params.topMargin = -480+300;
-     * surfaceView.setLayoutParams(params);
-     */
+    
     SurfaceHolder surfaceHolder = surfaceView.getHolder();
     if (hasSurface) {
       // The activity was paused but not stopped, so the surface still
@@ -599,13 +601,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     } else {
       // Install the callback and wait for surfaceCreated() to init the
       // camera.
+      Log.i("tapin-resume", "surface doesn't exist");
       surfaceHolder.addCallback(this);
       surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
 //    beepManager.updatePrefs();
 
-    inactivityTimer.onResume();
+//    inactivityTimer.onResume();
 
     Intent intent = getIntent();
 
@@ -687,20 +690,22 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     
     //cameraManager.stopPreview();
     
-    /*
-    if (handler != null) {
-      handler.quitSynchronously();
-      handler = null;
+    try{
+      if (handler != null) {
+        handler.quitSynchronously();
+        handler = null;
+      }
+      cameraManager.closeDriver();
+      if (!hasSurface) {
+        SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+        SurfaceHolder surfaceHolder = surfaceView.getHolder();
+        surfaceHolder.removeCallback(this);
+      }
+    }catch(Exception e){
+      Log.e("tapin-pause", "error when pausing");
+      e.printStackTrace();
     }
-    inactivityTimer.onPause();
-    cameraManager.closeDriver();
-    if (!hasSurface) {
-      SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
-      SurfaceHolder surfaceHolder = surfaceView.getHolder();
-      surfaceHolder.removeCallback(this);
-    }
-    */
-    
+
     super.onPause();
   }
 
@@ -908,9 +913,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             // TODO: implement save
             if (save) {
               Log.w("tapin-post", "unable to POST tapIn data to server. Saving to local database. Will retry again later");
-              if(id>-1){ //if there is an id then that means it's already in the list, so don't save it again.
-                saveCode(businessId, locationId, registerId, code, timestamp);
-              }
+              saveCode(businessId, locationId, registerId, code, timestamp);
             }
           }
         } catch (Exception e) {
@@ -921,7 +924,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         }
         
         if (success) {
-          if (id>-1){//if is is a new code then there is nothing to delete
+          if (id>-1){//if is is a new code then there is nothing to delete, if it was a re-submit then delete it
             deleteCode(id);
           }
           int newDelay = decrementDelay();
@@ -984,7 +987,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    *          A greyscale bitmap of the camera data which was decoded.
    */
   public void handleDecode(Result rawResult, Bitmap barcode) {
-    inactivityTimer.onActivity();
+//    inactivityTimer.onActivity();
     lastResult = rawResult;
     // ResultHandler resultHandler =
     // ResultHandlerFactory.makeResultHandler(this, rawResult);
