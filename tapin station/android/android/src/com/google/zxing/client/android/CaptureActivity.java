@@ -563,6 +563,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // wrong size and partially
     // off screen.
     if(cameraManager == null){ //If the camera is already set then don't create a new one, re-attach
+      Log.i("tapin-resume-application", "attempting to create the camera");
       cameraManager = new CameraManager(getApplication());
     }
 
@@ -704,8 +705,21 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   @Override
   protected void onDestroy() {
-    inactivityTimer.shutdown();
-    super.onDestroy();
+    Log.e("SYSTEM-WIDE", "DESTROYING APPLICATION!!!");
+    if (handler != null) {
+      handler.quitSynchronously();
+      handler = null;
+    }
+    inactivityTimer.onPause();
+    //inactivityTimer.shutdown();
+    cameraManager.closeDriver();
+    if (!hasSurface) {
+      SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+      SurfaceHolder surfaceHolder = surfaceView.getHolder();
+      surfaceHolder.removeCallback(this);
+    }
+
+   super.onDestroy();
   }
 
   @Override
