@@ -41,6 +41,45 @@
     }
   });
 
+  /*views.TestPage = Backbone.View.extend({
+    events: {
+      'pagehide': 'onPageHide'
+    },
+    attributes: {
+      "data-role" : "page",
+      "class"     : "page"
+    },
+    render: function(){
+      $(this.el).html(app.templates.test());
+      $('body').append($(this.el));
+      $(this.el).page();
+      return this;
+    },
+    onPageHide: function(){
+      $(this.el).remove()
+    }
+  });*/
+
+  views.TestPage = Backbone.View.extend({
+    events: {
+      'pagehide': 'onPageHide'
+    },
+    attributes: {
+      "data-role" : "page",
+      "class"     : "page",
+      "data-transition": "turn"
+    },
+    render: function(){
+      $(this.el).html(app.templates.test());
+      $('body').append($(this.el));
+      $(this.el).page();
+      return this;
+    },
+    onPageHide: function(){
+      $(this.el).remove()
+    }
+  });
+
   views.LoginPage = Backbone.View.extend({
     attributes: {
       "data-role" : "page",

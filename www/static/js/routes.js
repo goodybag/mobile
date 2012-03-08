@@ -14,7 +14,20 @@
   };
 
   routes.test = function(){
-    console.log("Test success!");
+    console.log("Test Success!");
+    var page = new app.Views.TestPage();
+    page.render();
+    console.log("woot!");
+    $.mobile.changePage($(page.el), {changeHash: false, transition: "flip"});
+  };
+
+  routes.login = function(){
+    console.log("Login Page!");
+    var page = new app.Views.LoginPage();
+    page.render();
+    $('body').append($(page.el));
+    $(page.el).page();
+    $.mobile.changePage($(page.el), {changeHash: false, transition: "flip"});
   };
 
   this.app = window.app || {};

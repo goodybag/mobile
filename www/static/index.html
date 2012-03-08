@@ -7,6 +7,41 @@
     <link rel="stylesheet" href="/static/css/style.css" />
     <link rel="stylesheet" href="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
 
+    <!-- phonegap -->
+    <script src="/static/3/phonegap-1.4.1.js"></script>
+    <!--phonegap facebook plugin -->
+    <script src = "/static/3/pg-plugin-fb-connect.js"></script>
+    <!-- facebook js sdk -->
+    <script src="/static/3/facebook_js_sdk.js"></script>
+
+    <script src="/static/3/jquery-1.7.1.min.js"></script>
+    <script>
+    /*$(document).bind("mobileinit", function () {
+      $.mobile.ajaxEnabled = false;
+      $.mobile.linkBindingEnabled = false;
+      $.mobile.hashListeningEnabled = false;
+      $.mobile.pushStateEnabled = false;
+    });*/
+    </script>
+    <script src="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
+    <script src="/static/3/underscore.js"></script>
+    <script src="/static/3/backbone.js"></script>
+    <script src="/static/3/sugar-0.9.4.min.js"></script>
+    <script src="/static/3/handlebars-1.0.0.beta.4.js"></script>
+    <script src="/static/3/jquery.qrcode.js"></script>
+    <script src="/static/3/qrcode.js"></script>
+    <script src="http://www.goodybag.com/static/js/api-client.js"></script>
+    <script src="http://www.goodybag.com/static/js/api-sync-client.js"></script>
+
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/templates.js"></script>
+    <script src="/static/js/models.js"></script>
+    <script src="/static/js/collections.js"></script>
+    <script src="/static/js/views.js"></script>
+    <script src="/static/js/routes.js"></script>
+    <script src="/static/js/routers.js"></script>
+    <script src="/static/js/app.js"></script>
+
     <script>
       window.applicationCache.addEventListener('updateready', function(e) {
         if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
@@ -25,51 +60,7 @@
     </script>
   </head>
   <body>
-    <!-- phonegap -->
-    <script src="/static/3/phonegap-1.4.1.js"></script>
-    <!--phonegap facebook plugin -->
-    <script src = "/static/3/pg-plugin-fb-connect.js"></script>
-    <!-- facebook js sdk -->
-    <script src="/static/3/facebook_js_sdk.js"></script>
 
-    <div data-role="page" id="activities">
-      <div data-role="header">
-        <h1>Activities</h1>
-        <a href="#test" data-role="button" data-icon="add" id="add-button" class="ui-btn-right">To Test</a>
-      </div>
-      <div data-role="content">
-          <!-- the contents of the list view will be rendered via the backbone view -->
-      </div>
-    </div>
-
-    <div data-role="page" id="test">
-      <div data-role="header">
-        <h1>Test</h1>
-        <a href="#activities" data-role="button" data-icon="add" id="add-button" class="ui-btn-right">Back to Activities</a>
-      </div>
-      <div data-role="content">
-          <!-- the contents of the list view will be rendered via the backbone view -->
-      </div>
-    </div>
-
-    <script src="/static/3/jquery-1.7.1.min.js"></script>
-    <script src="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
-    <script src="/static/3/underscore.js"></script>
-    <script src="/static/3/backbone.js"></script>
-    <script src="/static/3/sugar-0.9.4.min.js"></script>
-    <script src="/static/3/handlebars-1.0.0.beta.4.js"></script>
-    <script src="/static/3/jquery.qrcode.js"></script>
-    <script src="/static/3/qrcode.js"></script>
-    <script src="http://www.goodybag.com/static/js/api-client.js"></script>
-    <script src="http://www.goodybag.com/static/js/api-sync-client.js"></script>
-
-    <script src= "/static/js/templates.js"></script>
-    <script src= "/static/js/models.js"></script>
-    <script src= "/static/js/collections.js"></script>
-    <script src= "/static/js/views.js"></script>
-    <script src= "/static/js/routes.js"></script>
-    <script src= "/static/js/routers.js"></script>
-    <script src= "/static/js/app.js"></script>
     <script>
       /*$("#login-facebook").click(function(){
         $("#qrcode").html("");

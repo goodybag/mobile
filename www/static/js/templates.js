@@ -10,15 +10,16 @@
 
   templates.login    = "login-tmpl";
   templates.barcode  = "barcode-tmpl";
+  templates.test     = "test-tmpl";
 
 
   this.app.compileTemplates = function(callback){
-    $.get('/partials.html', function(content, status){
+    $.get('/partials.html?rand='+ Math.floor(Math.random()*1000), function(content, status){
       $('body').append(content);
       var compile = function(obj){
         var compiled = {};
         for (var key in obj){
-          if (Object.isObject(obj[key])){
+          if (typeof obj[key] !== "string"){
             compiled[key] = compile(obj[key]);
           }else {
             compiled[key] = Handlebars.compile($("#" + obj[key]).html());

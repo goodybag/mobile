@@ -3,22 +3,14 @@
 
   var router = Backbone.Router.extend({
     routes: {
-      "": "landing",
-      "test": "test"
-    },
-    initialize: function(){
-      console.log('test1');
-      // Load templates and Fragments
-      app.compileTemplates(function(){
-        console.log("compiled templates");
-        // Authenticate and generate appropriate view
-        var view = new app.Views.LoggedOut();
-        view.render();
-      });
+      "login": "login",
+      "test": "test",
+      "test/:blah/poop": "test"
     },
 
     landing: this.app.routes.landing,
-    test: this.app.routes.test
+    test: this.app.routes.test,
+    login: this.app.routes.login
   });
 
   this.app.GbMobileRouter = router;
