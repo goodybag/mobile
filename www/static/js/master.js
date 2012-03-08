@@ -73,20 +73,20 @@ function logout() {
 }
 
 function login() {
-  console.log("Attempting to login with facebook");
+  alert("Attempting to login with facebook");
   FB.login(function(response) {
     if (response.session) {
-      console.log("LOGGED IN");
-      console.log(JSON.stringify(response));
+      alert("LOGGED IN");
+      alert(JSON.stringify(response));
       var accessToken = response.session.access_token;
-      console.log(accessToken);
+      alert(accessToken);
       FB.api('/me', function(response) {
         api.auth.facebook(accessToken,function(error,consumer){
           if(error != null){
             alert(error.message);
             return;
           } else {
-            console.log("logged in to goodybag");
+            alert("logged in to goodybag");
             api.auth.session(function(error, data){
               if (error != null){
                 console.error(error);
@@ -100,7 +100,7 @@ function login() {
         })
       });
     } else {
-      console.log('not logged in');
+      alert('not logged in');
     }
   }, {
     perms: "email"

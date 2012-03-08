@@ -6,5 +6,8 @@
     pushState: false
   };
 
-  this.app.config = config;
+  // Export
+  for (var key in config){
+    this.app.config[key] = config[key];
+  }
 }).call(this);

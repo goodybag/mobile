@@ -86,9 +86,22 @@
       "class"     : "page",
       "id"        : "login-page"
     },
+    events: {
+      'tap #login-facebook': 'facebookLogin'
+    },
     render: function(){
       $(this.el).html(app.templates.login());
       return this;
+    },
+    facebookLogin: function(){
+      app.user.facebookLogin(function(error){
+        if (utils.exists(error)){
+          alert("Facebook Login error");
+        }else{
+          alert("Facebook Login success!");
+          app.router.navigate(app.cache.previousRoute || '');
+        }
+      });
     }
   });
 
