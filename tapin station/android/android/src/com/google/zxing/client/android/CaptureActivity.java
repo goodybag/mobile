@@ -265,6 +265,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public void onCreate(Bundle icicle) {
     Log.i("SYSTEM-WIDE", "CREATE");
+    
+    //default uncaught exception handler
+    PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, this.getClass()), 0);
+    Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(pi, this));
+    
     super.onCreate(icicle);
 
     /*if(!isTaskRoot()){
@@ -373,7 +378,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             Thread.sleep(Constants.SUBMIT_HEARTBEAT_DELAY_MS);
           }
         } catch (InterruptedException e) {
-          // TODO Auto-generated catch block
+          Log.e("tapin-post", "error submitting tapIn heartbeat data to server [SLEEP]");
+          e.printStackTrace();
+        } catch(Exception e){
+          Log.e("tapin-post", "error submitting tapIn heartbeat data to server");
           e.printStackTrace();
         }
       }
@@ -389,6 +397,47 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
   }
 
+  
+  public int incrementDelay() {
+    SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = preference.edit();
+
+    int delay = preference.getInt(Constants.KEY_SUBMIT_PENDING_DELAY, Constants.SUBMIT_PENDING_DELAY_MS_MIN);
+    delay = delay * 2;
+    if (delay > Constants.SUBMIT_PENDING_DELAY_MS_MAX) {
+      delay = Constants.SUBMIT_PENDING_DELAY_MS_MAX;
+    }
+
+    editor.putInt(Constants.KEY_SUBMIT_PENDING_DELAY, delay);
+    editor.commit();
+
+    return delay;
+
+  }
+
+  public int decrementDelay() {
+    SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = preference.edit();
+
+    int delay = preference.getInt(Constants.KEY_SUBMIT_PENDING_DELAY, Constants.SUBMIT_PENDING_DELAY_MS_MIN);
+    if (delay > 0) {
+      delay = delay / 2;
+      if (delay < Constants.SUBMIT_PENDING_DELAY_MS_MIN) {
+        delay = Constants.SUBMIT_PENDING_DELAY_MS_MIN;
+      }
+      if (delay > Constants.SUBMIT_PENDING_DELAY_MS_MAX) {
+        delay = Constants.SUBMIT_PENDING_DELAY_MS_MAX;
+      }
+    } else {
+      delay = Constants.SUBMIT_PENDING_DELAY_MS_MIN;
+    }
+
+    editor.putInt(Constants.KEY_SUBMIT_PENDING_DELAY, delay);
+    editor.commit();
+
+    return delay;
+  }
+  
   public void submitPendingCodes() {
     // we start by looking for a code who's id is greater than -1 and we
     // submit that then we replace this with the id of the recently
@@ -400,46 +449,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
       public ReSubmit(CaptureActivity captureActivity) {
         this.captureActivity = captureActivity;
-      }
-
-      public int incrementDelay() {
-        SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preference.edit();
-
-        int delay = preference.getInt(Constants.KEY_SUBMIT_PENDING_DELAY, Constants.SUBMIT_PENDING_DELAY_MS_MIN);
-        delay = delay * 2;
-        if (delay > Constants.SUBMIT_PENDING_DELAY_MS_MAX) {
-          delay = Constants.SUBMIT_PENDING_DELAY_MS_MAX;
-        }
-
-        editor.putInt(Constants.KEY_SUBMIT_PENDING_DELAY, delay);
-        editor.commit();
-
-        return delay;
-
-      }
-
-      public int decrementDelay() {
-        SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preference.edit();
-
-        int delay = preference.getInt(Constants.KEY_SUBMIT_PENDING_DELAY, Constants.SUBMIT_PENDING_DELAY_MS_MIN);
-        if (delay > 0) {
-          delay = delay / 2;
-          if (delay < Constants.SUBMIT_PENDING_DELAY_MS_MIN) {
-            delay = Constants.SUBMIT_PENDING_DELAY_MS_MIN;
-          }
-          if (delay > Constants.SUBMIT_PENDING_DELAY_MS_MAX) {
-            delay = Constants.SUBMIT_PENDING_DELAY_MS_MAX;
-          }
-        } else {
-          delay = Constants.SUBMIT_PENDING_DELAY_MS_MIN;
-        }
-
-        editor.putInt(Constants.KEY_SUBMIT_PENDING_DELAY, delay);
-        editor.commit();
-
-        return delay;
       }
 
       @Override
@@ -481,15 +490,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             cursor.close();
             // if there was anything then submit
             if (id > -1) {
-              boolean success = submitCode(businessId, locationId, registerId, code, timestamp, false);
-              if (success) {
-                deleteCode(id);
-                newDelay = decrementDelay();
-                Log.i("tapin-submit-pending-codes", "successful submitting, delay decremented to (ms): " + newDelay);
-              } else {
-                newDelay = incrementDelay();
-                Log.i("tapin-submit-pending-codes", "unsuccessful submitting, delay incremented to (ms): " + newDelay);
-              }
+              submitCode(id, businessId, locationId, registerId, code, timestamp, false);
             } else {
               Cursor countCursor = db.rawQuery("SELECT COUNT(*) FROM "+ Constants.DB_PENDING_CODES_TABLE, null);
               long count = 0;
@@ -706,6 +707,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   protected void onDestroy() {
     Log.e("SYSTEM-WIDE", "DESTROYING APPLICATION!!!");
+    
+    /*
     if (handler != null) {
       handler.quitSynchronously();
       handler = null;
@@ -718,7 +721,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
       surfaceHolder.removeCallback(this);
     }
-
+    
+    //Attempt to restart app if being destroyed
+    Intent intent = new Intent("android.intent.action.MAIN");
+    intent.setComponent(ComponentName.unflattenFromString("com.google.zxing.client.android/.CaptureActivity"));
+    intent.addCategory("android.intent.category.LAUNCHER");
+    startActivity(intent);
+    */
+   restartApp();
    super.onDestroy();
   }
 
@@ -740,64 +750,64 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     return super.onKeyDown(keyCode, event);
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    super.onCreateOptionsMenu(menu);
-    menu.add(Menu.NONE, SHARE_ID, Menu.NONE, R.string.menu_share).setIcon(android.R.drawable.ic_menu_share);
-    menu.add(Menu.NONE, HISTORY_ID, Menu.NONE, R.string.menu_history).setIcon(android.R.drawable.ic_menu_recent_history);
-    menu.add(Menu.NONE, SETTINGS_ID, Menu.NONE, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_preferences);
-    menu.add(Menu.NONE, HELP_ID, Menu.NONE, R.string.menu_help).setIcon(android.R.drawable.ic_menu_help);
-    menu.add(Menu.NONE, ABOUT_ID, Menu.NONE, R.string.menu_about).setIcon(android.R.drawable.ic_menu_info_details);
-    return true;
-  }
-
-  // Don't display the share menu item if the result overlay is showing.
-  @Override
-  public boolean onPrepareOptionsMenu(Menu menu) {
-    super.onPrepareOptionsMenu(menu);
-    menu.findItem(SHARE_ID).setVisible(lastResult == null);
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    /*
-     * Intent intent = new Intent(Intent.ACTION_VIEW);
-     * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET); switch
-     * (item.getItemId()) { case SHARE_ID: intent.setClassName(this,
-     * ShareActivity.class.getName()); startActivity(intent); break; case
-     * HISTORY_ID: intent = new Intent(Intent.ACTION_VIEW);
-     * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-     * intent.setClassName(this, HistoryActivity.class.getName());
-     * startActivityForResult(intent, HISTORY_REQUEST_CODE); break; case
-     * SETTINGS_ID: intent.setClassName(this,
-     * PreferencesActivity.class.getName()); startActivity(intent); break; case
-     * HELP_ID: intent.setClassName(this, HelpActivity.class.getName());
-     * startActivity(intent); break; case ABOUT_ID: AlertDialog.Builder builder
-     * = new AlertDialog.Builder(this);
-     * builder.setTitle(getString(R.string.title_about) + versionName);
-     * builder.setMessage(getString(R.string.msg_about) + "\n\n" +
-     * getString(R.string.zxing_url));
-     * builder.setIcon(R.drawable.launcher_icon);
-     * builder.setPositiveButton(R.string.button_open_browser, aboutListener);
-     * builder.setNegativeButton(R.string.button_cancel, null); builder.show();
-     * break; default: return super.onOptionsItemSelected(item); }
-     */
-    return true;
-  }
-
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-    if (resultCode == RESULT_OK) {
-      if (requestCode == HISTORY_REQUEST_CODE) {
-        int itemNumber = intent.getIntExtra(Intents.History.ITEM_NUMBER, -1);
-        if (itemNumber >= 0) {
-          HistoryItem historyItem = historyManager.buildHistoryItem(itemNumber);
-          decodeOrStoreSavedBitmap(null, historyItem.getResult());
-        }
-      }
-    }
-  }
+//  @Override
+//  public boolean onCreateOptionsMenu(Menu menu) {
+//    super.onCreateOptionsMenu(menu);
+////    menu.add(Menu.NONE, SHARE_ID, Menu.NONE, R.string.menu_share).setIcon(android.R.drawable.ic_menu_share);
+////    menu.add(Menu.NONE, HISTORY_ID, Menu.NONE, R.string.menu_history).setIcon(android.R.drawable.ic_menu_recent_history);
+////    menu.add(Menu.NONE, SETTINGS_ID, Menu.NONE, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_preferences);
+////    menu.add(Menu.NONE, HELP_ID, Menu.NONE, R.string.menu_help).setIcon(android.R.drawable.ic_menu_help);
+////    menu.add(Menu.NONE, ABOUT_ID, Menu.NONE, R.string.menu_about).setIcon(android.R.drawable.ic_menu_info_details);
+//    return true;
+//  }
+//
+//  // Don't display the share menu item if the result overlay is showing.
+//  @Override
+//  public boolean onPrepareOptionsMenu(Menu menu) {
+//    super.onPrepareOptionsMenu(menu);
+//    menu.findItem(SHARE_ID).setVisible(lastResult == null);
+//    return true;
+//  }
+//
+//  @Override
+//  public boolean onOptionsItemSelected(MenuItem item) {
+//    /*
+//     * Intent intent = new Intent(Intent.ACTION_VIEW);
+//     * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET); switch
+//     * (item.getItemId()) { case SHARE_ID: intent.setClassName(this,
+//     * ShareActivity.class.getName()); startActivity(intent); break; case
+//     * HISTORY_ID: intent = new Intent(Intent.ACTION_VIEW);
+//     * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+//     * intent.setClassName(this, HistoryActivity.class.getName());
+//     * startActivityForResult(intent, HISTORY_REQUEST_CODE); break; case
+//     * SETTINGS_ID: intent.setClassName(this,
+//     * PreferencesActivity.class.getName()); startActivity(intent); break; case
+//     * HELP_ID: intent.setClassName(this, HelpActivity.class.getName());
+//     * startActivity(intent); break; case ABOUT_ID: AlertDialog.Builder builder
+//     * = new AlertDialog.Builder(this);
+//     * builder.setTitle(getString(R.string.title_about) + versionName);
+//     * builder.setMessage(getString(R.string.msg_about) + "\n\n" +
+//     * getString(R.string.zxing_url));
+//     * builder.setIcon(R.drawable.launcher_icon);
+//     * builder.setPositiveButton(R.string.button_open_browser, aboutListener);
+//     * builder.setNegativeButton(R.string.button_cancel, null); builder.show();
+//     * break; default: return super.onOptionsItemSelected(item); }
+//     */
+//    return true;
+//  }
+//
+//  @Override
+//  public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+//    if (resultCode == RESULT_OK) {
+//      if (requestCode == HISTORY_REQUEST_CODE) {
+//        int itemNumber = intent.getIntExtra(Intents.History.ITEM_NUMBER, -1);
+//        if (itemNumber >= 0) {
+//          HistoryItem historyItem = historyManager.buildHistoryItem(itemNumber);
+//          decodeOrStoreSavedBitmap(null, historyItem.getResult());
+//        }
+//      }
+//    }
+//  }
 
   private void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result) {
     // Bitmap isn't used yet -- will be used soon
@@ -836,7 +846,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   }
 
-  public boolean processCode(String code, boolean save) {
+  public void processCode(String code, boolean save) {
     SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
     String businessId = preference.getString(Constants.KEY_BUSINESS_ID, null);
     String registerId = preference.getString(Constants.KEY_REGISTER_ID, null);
@@ -844,47 +854,87 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     String timestamp = new Date().toString();
 
-    return submitCode(businessId, locationId, registerId, code, timestamp, true);
+    submitCode(-1, businessId, locationId, registerId, code, timestamp, true);
 
   }
 
   //TODO: PUT THIS IN A THREAD
-  public boolean submitCode(String businessId, String locationId, String registerId, String code, String timestamp, boolean save) {
+  public void submitCode(int id, String businessId, String locationId, String registerId, String code, String timestamp, boolean save) {
     // Sent to server
-    RestClient restClient = new RestClient(Constants.URL_TRANSACTIONS);
-
-    restClient.addParam("barcodeId", code);
-    restClient.addParam("businessId", businessId);
-    restClient.addParam("locationId", locationId);
-    restClient.addParam("registerId", registerId);
-    restClient.addParam("timestamp", timestamp);
-    Log.i("tapin-post-data", "timestamp: " + timestamp);
-
-    // TODO: Do this in a Thread? Yes (just run this entire function in a
-    // thread)
-    try {
-      restClient.execute(RequestMethod.POST);
-      int responseCode = restClient.getResponseCode();
-      Log.i("tapin-post", "RESPONSE CODE: " + responseCode);
-      if (responseCode == 200) {
-        String response = restClient.getResponse();
-        Log.i("tapin-post", response);
-        return true;
-      } else {
-        // TODO: implement save
-        if (save) {
-          Log.w("tapin-post", "unable to POST tapIn data to server. Saving to local database. Will retry again later");
-          saveCode(businessId, locationId, registerId, code, timestamp);
-        }
-        return false;
+    class SubmitCode implements Runnable{
+      private int id;
+      private String businessId;
+      private String locationId;
+      private String registerId;
+      private String code;
+      private String timestamp;
+      boolean save;
+      
+      private boolean success = false;
+      
+      public SubmitCode(int id, String businessId, String locationId, String registerId, String code, String timestamp, boolean save){
+        this.id = id;
+        this.businessId = businessId;
+        this.locationId = locationId;
+        this.registerId = registerId;
+        this.code = code;
+        this.timestamp = timestamp;
+        this.save = save;
       }
-    } catch (Exception e) {
-      e.printStackTrace();
-      Log.e("tapin-post", "error submitting tapIn data to server");
-      // TODO: implement save
-      // saveCode(code);
+
+      @Override
+      public void run() {
+        RestClient restClient = new RestClient(Constants.URL_TRANSACTIONS);
+
+        restClient.addParam("barcodeId", code);
+        restClient.addParam("businessId", businessId);
+        restClient.addParam("locationId", locationId);
+        restClient.addParam("registerId", registerId);
+        restClient.addParam("timestamp", timestamp);
+        Log.i("tapin-post-data", "timestamp: " + timestamp);
+
+        // TODO: Do this in a Thread? Yes (just run this entire function in a
+        // thread)
+        try {
+          restClient.execute(RequestMethod.POST);
+          int responseCode = restClient.getResponseCode();
+          Log.i("tapin-post", "RESPONSE CODE: " + responseCode);
+          if (responseCode == 200) {
+            success = true;
+            String response = restClient.getResponse();
+            Log.i("tapin-post", response);
+          } else {
+            success=false;
+            // TODO: implement save
+            if (save) {
+              Log.w("tapin-post", "unable to POST tapIn data to server. Saving to local database. Will retry again later");
+              if(id>-1){ //if there is an id then that means it's already in the list, so don't save it again.
+                saveCode(businessId, locationId, registerId, code, timestamp);
+              }
+            }
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+          Log.e("tapin-post", "error submitting tapIn data to server");
+          // TODO: implement save
+          // saveCode(code);
+        }
+        
+        if (success) {
+          if (id>-1){//if is is a new code then there is nothing to delete
+            deleteCode(id);
+          }
+          int newDelay = decrementDelay();
+          Log.i("tapin-submit-pending-codes", "successful submitting, delay decremented to (ms): " + newDelay);
+        } else {
+          int newDelay = incrementDelay();
+          Log.i("tapin-submit-pending-codes", "unsuccessful submitting, delay incremented to (ms): " + newDelay);
+        }
+      }
     }
-    return false;
+
+    Thread submitCodeThread = new Thread(new SubmitCode(id, businessId, locationId, registerId, code, timestamp, save));
+    submitCodeThread.start();
   }
 
   public boolean deleteCode(int id) {
@@ -946,9 +996,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // submit data to server. if fail then store to database to be set later
     String code = rawResult.getText();
 
+    showSuccessScreen();
+    
     processCode(code, true);
 
-    showSuccessScreen();
     Runnable r = new ChangeImageAndEnableCaptureThread(this);
     getHandler().postDelayed(r, 2000);
     // restartPreviewAfterDelay(BULK_MODE_SCAN_DELAY_MS);
