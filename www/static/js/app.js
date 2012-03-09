@@ -41,7 +41,7 @@
         app.router.navigate(url);
       }*/
     //});
-  });
+  //});
 
   // Prevent jqm from handling routes
   $(document).on('pagebeforechange', function(e, data){
