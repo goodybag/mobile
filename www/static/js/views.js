@@ -80,18 +80,35 @@
     }
   });
 
-  views.LoginPage = Backbone.View.extend({
+  views.Page = Backbone.View.extend({
+    events: {
+      'pagehide': 'onPageHide'
+    },
+    attributes: {
+      "data-role" : "page",
+      "class"     : "page"
+    },
+    render: function(){
+      $(this.el).html(this.template());
+      return this;
+    },
+    onPageHide: function(){
+      $(this.el).remove();
+    }
+  });
+
+  views.LoginPage = views.Page.extend({
     attributes: {
       "data-role" : "page",
       "class"     : "page",
       "id"        : "login-page"
     },
     events: {
-      'tap #login-facebook': 'facebookLogin'
+      'tap #login-facebook': 'facebookLogin',
+      'pagehide': 'onPageHide'
     },
-    render: function(){
-      $(this.el).html(app.templates.login());
-      return this;
+    initialize: function(){
+      this.template = app.templates.login;
     },
     facebookLogin: function(){
       app.user.facebookLogin(function(error){
@@ -102,6 +119,55 @@
           app.router.navigate(app.cache.previousRoute || '');
         }
       });
+    }
+  });
+
+  views.EmailLoginPage = views.Page.extend({
+    attributes: {
+      "id": "email-login-page"
+    },
+    events: {
+      'submit #email-login-form': 'emailLogin',
+      'pagehide': 'onPageHide'
+    },
+    initialize: function(){
+      var self = this;
+      this.template = app.templates.emailLogin;
+      this.model.on('login:success', this.loginSuccess);
+      this.model.on('login:failure', this.loginFailure);
+    },
+    loginSuccess: function(){
+      console.log('LOGIN SUCCESS');
+    },
+    loginFailure: function(error){
+      var error = new app.Models.Error();
+      for (var key in error){
+        error.set(key, error[key]);
+      }
+      var errorMsg = new app.Views.ErrorNotification({
+        model: error
+      });
+      $(this.el).before($(errorMsg.el));
+    },
+    emailLogin: function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      this.model.set('email', $('#email-login-username').val());
+      this.model.set('password', $('#email-login-password').val());
+      this.model.emailLogin();
+      return false;
+    }
+  });
+
+  views.ErrorNotification = Backbone.View.extend({
+    events: {
+      'tap': 'hide'
+    },
+    initialize: function(){
+      this.template = app.fragments.errorNotification;
+    },
+    render: function(){
+      $(this.el).html(this.template(this.model.toJSON()));
     }
   });
 

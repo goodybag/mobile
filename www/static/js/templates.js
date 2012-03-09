@@ -8,9 +8,10 @@
   ;
 
 
-  templates.login    = "login-tmpl";
-  templates.barcode  = "barcode-tmpl";
-  templates.test     = "test-tmpl";
+  templates.login       = "login-tmpl";
+  templates.emailLogin  = "email-login-tmpl";
+  templates.barcode     = "barcode-tmpl";
+  templates.test        = "test-tmpl";
 
 
   this.app.compileTemplates = function(callback){
@@ -30,7 +31,9 @@
       // Export
       app.templates = compile(templates);
       app.fragments = compile(fragments);
-      callback();
+
+      app.events.trigger("templates-compiled");
+      if (utils.exists(callback)) callback();
     });
   };
 }).call(this);

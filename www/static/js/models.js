@@ -8,10 +8,22 @@
 
     },
     intialize: function(){
-
+      _.extend(this, Backbone.Events);
     },
     emailLogin: function(callback){
-
+      var self = this;
+      var creds = {
+        email: this.get('email'),
+        password: this.get('password')
+      };
+      api.auth.login(creds, function(error, data){
+        if (utils.exists(error)){
+          self.trigger('login:failure');
+        }else{
+          self.setSession(data);
+          self.trigger('login:success');
+        }
+      });
     },
     facebookLogin: function(callback){
       var self = this;
@@ -52,12 +64,27 @@
       });
     },
     logout: function(){
-
+      var self = this;
+      api.auth.logout(function(error){
+        if (utils.exists(error)){
+          // whyyy?
+          self.trigger('logout:failure');
+          return;
+        }
+        self.trigger('logout:success');
+      });
     },
     isLoggedIn: function(){
 
     },
+    setSession: function(obj){
+      // Update the model
+      for (var key in data){
+        this.set(key, data[key]);
+      }
+    },
     updateSession: function(callback){
+      var self = this;
       api.auth.session(function(error, data){
         if (utils.exists(error)){
           callback(error);
@@ -66,11 +93,18 @@
         if (utils.exists(data)){
           // Update the model
           for (var key in data){
-            this.set(key, data[key]);
+            self.set(key, data[key]);
           }
         }
         callback(error, data);
       });
+    }
+  });
+
+  models.Error = Backbone.Model.extend({
+    defaults: {
+      type: "Error",
+      friendlyMessage: "An unknown error occurred"
     }
   });
 

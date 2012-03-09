@@ -3,7 +3,13 @@
   this.app.config = this.app.config || {};
 
   var config = {
-    pushState: false
+    backbone: {
+      pushState: false
+    },
+    changePage: {
+      transition: "flip",
+      changeHash: false
+    }
   };
 
   // Export

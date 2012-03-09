@@ -30,84 +30,6 @@
         }
       }, false);
     </script>
-  </head>
-  <body>
-
-    <script>
-      /*$("#login-facebook").click(function(){
-        $("#qrcode").html("");
-        login();
-      });
-      $("#login-tapIn").click(function(){
-        $.mobile.changePage("#barcode-page");
-        console.log("localStorage: " + window.localStorage.barcodeId);
-        $("#qrcode").html("");
-        $("#qrcode").qrcode({text:storage.barcodeId, render:"table", width:200, height:200 });
-      });*/
-      document.addEventListener('deviceready', function() {
-        var appCache = window.applicationCache;
-
-        var state = "";
-        switch (appCache.status) {
-          case appCache.UNCACHED: // UNCACHED == 0
-            state = 'UNCACHED';
-            break;
-          case appCache.IDLE: // IDLE == 1
-            state = 'IDLE';
-            break;
-          case appCache.CHECKING: // CHECKING == 2
-            state = 'CHECKING';
-            break;
-          case appCache.DOWNLOADING: // DOWNLOADING == 3
-            state = 'DOWNLOADING';
-            break;
-          case appCache.UPDATEREADY:  // UPDATEREADY == 4
-            state = 'UPDATEREADY';
-            break;
-          case appCache.OBSOLETE: // OBSOLETE == 5
-            state = 'OBSOLETE';
-            break;
-          default:
-            state = 'UKNOWN CACHE STATUS';
-            break;
-        };
-
-        console.log("APPLICATION CACHE - STATE: " + state);
-
-        try {
-          alert("Initializing Facebook");
-          //alert('Device is ready! Make sure you set your app_id below this alert.');
-          FB.init({
-            appId: "152282721508707",
-            nativeInterface: PG.FB
-          });
-          alert("Facebook Initialized");
-
-          // Get session and navigate to appropriate route
-          /*app.user.updateSession(function(error, data){
-            if (utils.exists(error) || !utils.exists(data)){
-              if (app.config.pushState)
-                app.cache.previousRoute = $('<a/>').attr('href', location.path)[0].pathname;
-              else
-                app.cache.previousRoute = location.hash.split('#')[1];
-
-              console.log("navigate to login");
-              app.router.navigate('login', {trigger: true});
-            }else{
-              // Navigate to previous state or home
-              var url = app.config.pushState
-                        ? $('<a/>').attr('href', location.path)[0].pathname
-                        : location.hash.split('#')[1];
-              if (url == "login") url = "";
-              app.router.navigate(url);
-            }
-          });*/
-        } catch (e) {
-          alert('poop');
-          alert(e);
-        }
-      }, false);
-    </script>
     <script src="/static/3/jquery-1.7.1.min.js"></script>
     <script src="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
     <script src="/static/3/underscore.js"></script>
@@ -120,7 +42,9 @@
     <script src="http://www.goodybag.com/static/js/api-sync-client.js"></script>
 
     <script src="/static/js/utils.js"></script>
+    <!--Realized this is in backbone <script src="/static/js/events.js"></script>-->
     <script src="/static/js/config.js"></script>
+    <script src="/static/js/defaults.js"></script>
     <script src="/static/js/templates.js"></script>
     <script src="/static/js/models.js"></script>
     <script src="/static/js/collections.js"></script>
@@ -128,5 +52,7 @@
     <script src="/static/js/routes.js"></script>
     <script src="/static/js/routers.js"></script>
     <script src="/static/js/app.js"></script>
+  </head>
+  <body>
   </body>
 </html>

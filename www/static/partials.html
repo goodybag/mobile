@@ -9,7 +9,7 @@
 <div data-role="content">
   <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Goodybag - ATX</h1>
   <a id="login-facebook" data-role="button" data-icon="star" data-theme="a">Login With Facebook</a>
-  <!-- <a id="login-email" href="#" data-role="button" data-icon="star" data-theme="b">Login With Email</a> -->
+  <a id="login-email" href="#email-login" data-role="button" data-icon="star" data-theme="a">Login With Email</a>
   <a id="login-tapIn" href="#" data-role="button" data-icon="star" data-theme="b">TapIn</a>
 </div><!-- /content -->
 </script>
@@ -46,4 +46,40 @@
 
 <div data-role="content">
 </div><!-- /content -->
+</script>
+
+<!-- ##################### -->
+<!-- EMAIL LOGIN TEMPLATE -->
+<!-- ##################### -->
+<script id="email-login-tmpl" type="text/x-handlebars-fragment">
+<div data-role="header" data-theme="b" class="ui-header ui-bar-b" role="banner">
+  <a href="#login" data-icon="arrow-l" class="ui-btn-left" data-theme="b">Back</a>
+  <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Enter your Email and Password</h1>
+</div><!-- /header -->
+
+<div data-role="content">
+  <form method="post" action="#email-login-submit" id="email-login-form">
+    <fieldset>
+      <div data-role="fieldcontain" class="ui-field-contain ui-body ui-br">
+        <label for="email-login-username" class="ui-hidden-accessible">Username:</label>
+        <input type="text" name="username" id="email-login-username" placeholder="Username"/>
+      </div>
+      <div data-role="fieldcontain" class="ui-field-contain ui-body ui-br">
+        <label for="email-login-password" class="ui-hidden-accessible">Password:</label>
+        <input type="password" name="username" id="email-login-password" placeholder="Password"/>
+      </div>
+      <div data-role="fieldcontain" class="ui-field-contain ui-body ui-br">
+        <button type="submit" data-theme="b" name="submit" value="submit-value" class="ui-btn-hidden" aria-disabled="false">Submit</button>
+      </div>
+    </fieldset>
+  </form>
+</div><!-- /content -->
+</script>
+
+<!-- ################## -->
+<!-- ERROR NOTIFICATION -->
+<!-- ################## -->
+<script id="error-notification-fragment" type="text/x-handlebars-fragment">
+<strong>{{type}}: </strong>
+<span class="message">{{friendlyMessage}}</span>
 </script>
