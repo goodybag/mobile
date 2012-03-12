@@ -9,7 +9,8 @@
     changePage: {
       transition: "flip",
       changeHash: false
-    }
+    },
+    theme: 'b'
   };
 
   // Export

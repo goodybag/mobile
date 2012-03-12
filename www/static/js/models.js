@@ -108,6 +108,10 @@
     }
   });
 
+  models.Loyalty = Backbone.Model.extend({
+
+  });
+
   // Export
   for (var key in models){
     this.app.Models[key] = models[key];

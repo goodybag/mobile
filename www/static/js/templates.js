@@ -32,7 +32,7 @@
       app.templates = compile(templates);
       app.fragments = compile(fragments);
 
-      app.events.trigger("templates-compiled");
+      app.trigger("templates-compiled");
       if (utils.exists(callback)) callback();
     });
   };

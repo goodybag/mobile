@@ -2,6 +2,9 @@
   this.app.cache = this.app.cache || {};
   this.app.user = this.app.user || new this.app.Models.Auth();
   _.extend(this.app, Backbone.Events);
+  // For the api to use - Eventually, we'll stop using the consumer api
+  // And just use backbone collections
+  window.exists = utils.exists;
 
   app.compileTemplates(function(){
     this.app.router = new this.app.GbMobileRouter();

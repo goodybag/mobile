@@ -97,6 +97,61 @@
     }
   });
 
+  // Default Header view - Extend from this to make your headers
+  views.Header = Backbone.View.exend({
+    attributes: {
+      'data-role': 'header',
+      'data-theme': app.config.theme,
+      'class': 'ui-header ui-bar-' + app.config.theme,
+      'role': 'banner'
+    },
+    initialize: function(){
+      // Provide a template
+    },
+    render: function(){
+      if (utils.exists(this.model)){
+        $(this.el).html(this.template(this.model.toJSON()));
+      }else{
+        $(this.el).html(this.template());
+      }
+      return this;
+    }
+  });
+
+  views.Footer = Backbone.View.exend({
+    attributes: {
+      'data-role': 'footer',
+      'data-theme': app.config.theme,
+      'class': 'ui-footer ui-bar-' + app.config.theme,
+      'role': 'banner'
+    },
+    initialize: function(){
+      // Provide a template
+    },
+    render: function(){
+      if (utils.exists(this.model)){
+        $(this.el).html(this.template(this.model.toJSON()));
+      }else{
+        $(this.el).html(this.template());
+      }
+      return this;
+    }
+  });
+
+  views.PageContent = Backbone.View.exend({
+    attributes: {
+      'data-role': 'content'
+    },
+    render: function(){
+      if (utils.exists(this.model)){
+        $(this.el).html(this.template(this.model.toJSON()));
+      }else{
+        $(this.el).html(this.template());
+      }
+      return this;
+    }
+  });
+
   views.LoginPage = views.Page.extend({
     attributes: {
       "data-role" : "page",
@@ -138,6 +193,7 @@
     },
     loginSuccess: function(){
       console.log('LOGIN SUCCESS');
+      utils.changePage(new app.Views.Dashboard());
     },
     loginFailure: function(error){
       var error = new app.Models.Error();
@@ -188,6 +244,89 @@
     },
     onClick: function(){
       this.options.click();
+    }
+  });
+
+  views.UserHeader = views.Header.extend({
+    attributes: {
+      id: "user-header"
+    },
+    events: {
+      'tap .tapin-link': 'toTapinPage'
+    },
+    template: app.fragments.userHeader,
+
+    toTapinPage: function(){
+      console.log("Go to TapIn Page");
+    }
+  });
+
+  views.UserFooter = views.Footer.extend({
+    attributes: {
+      id: "user-footer"
+    },
+    template: app.fragments.userFooter
+  });
+
+  views.Dashboard = views.Page.extend({
+    events: {
+      'pagehide': 'onPageHide'
+    },
+    attributes: {
+      'id': 'dashboard-page',
+      'class': 'page dashboard'
+    },
+    initialize: function(){
+      this.subviews = {
+        header:   new views.UserHeader(),
+        content:  new views.DashboardContent(),
+        footer:   new views.UserFooter()
+      };
+      app.user.on('change', function(){
+        // Check if appropriate fields have changed
+        // if so, renderHeader
+      });
+    },
+    render: function(){
+      $(this.el).append(
+        $(this.subviews.header.render().el),
+        $(this.subviews.content.render().el),
+        $(this.subviews.footer.render().el)
+      );
+    },
+    renderHeader: function(){
+      var $header = $('#user-header');
+      if ($header.length > 0){
+        $header.replace($(this.subviews.header.render().el));
+      }else{
+        $(this.el).prepend($(this.subviews.header.render().el));
+      }
+    }
+  });
+
+  views.DashboardContent = views.PageContent.extend({
+    attributes: {
+      id: "dashboard-content"
+    },
+    events: {
+      'tap .places': 'toPlaces',
+      'tap .activity-feed': 'toActivityFeed',
+      'tap .goodies': 'toGoodies',
+      'tap .settings': 'toSettings'
+    },
+    template: app.fragments.dashboardContent,
+
+    toPlaces: function(e){
+      console.log("Go to Places");
+    },
+    toActivityFeed: function(e){
+      console.log("Go to Activity Feed");
+    },
+    toGoodies: function(e){
+      console.log("Go to Goodies");
+    },
+    toSettings: function(e){
+      console.log("Go to Settings");
     }
   });
 

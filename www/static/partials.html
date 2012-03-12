@@ -1,7 +1,7 @@
 <!-- ################### -->
 <!-- LOGIN PAGE TEMPLATE -->
 <!-- ################### -->
-<script id="login-tmpl" type="text/x-handlebars-fragment">
+<script id="login-tmpl" type="text/x-handlebars-template">
 <div data-role="header" data-theme="b" class="ui-header ui-bar-b" role="banner">
   <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Goodybag</h1>
 </div><!-- /header -->
@@ -16,7 +16,7 @@
 <!-- ##################### -->
 <!-- BARCODE PAGE TEMPLATE -->
 <!-- ##################### -->
-<script id="barcode-tmpl" type="text/x-handlebars-fragment">
+<script id="barcode-tmpl" type="text/x-handlebars-template">
 <div id="barcode-page" data-role="page" class="page">
   <div data-role="header" data-theme="b" class="ui-header ui-bar-b" role="banner">
       <a href="#login-page" data-icon="arrow-l" class="ui-btn-left" data-theme="b">Back</a>
@@ -38,7 +38,7 @@
 <!-- ##################### -->
 <!-- TEST PAGE TEMPLATE -->
 <!-- ##################### -->
-<script id="test-tmpl" type="text/x-handlebars-fragment">
+<script id="test-tmpl" type="text/x-handlebars-template">
 <div data-role="header" data-theme="b" class="ui-header ui-bar-b" role="banner">
     <a href="#login" data-icon="arrow-l" class="ui-btn-left" data-theme="b">Back</a>
     <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Tessssst!!!!</h1>
@@ -51,7 +51,7 @@
 <!-- ##################### -->
 <!-- EMAIL LOGIN TEMPLATE -->
 <!-- ##################### -->
-<script id="email-login-tmpl" type="text/x-handlebars-fragment">
+<script id="email-login-tmpl" type="text/x-handlebars-template">
 <div data-role="header" data-theme="b" class="ui-header ui-bar-b" role="banner">
   <a href="#login" data-icon="arrow-l" class="ui-btn-left" data-theme="b">Back</a>
   <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Enter your Email and Password</h1>
@@ -82,4 +82,47 @@
 <script id="error-notification-fragment" type="text/x-handlebars-fragment">
 <strong>{{type}}: </strong>
 <span class="message">{{friendlyMessage}}</span>
+</script>
+
+<!-- #################### -->
+<!-- USER HEADER FRAGMENT -->
+<!-- #################### -->
+<script id="user-header-fragment" type="text/x-handlebars-fragment">
+<div class="inline-columns">
+  <div class="column picture">
+    {{#if media}}
+      <img src="{{media.url}}" />
+    {{else}}
+      <img src="/static/images/generic-logo.jpg" />
+    {{/if}}
+  </div>
+  <div class="column info">
+    <h2 class="name">{{firstName}} {{lastName}}</h2>
+    <h4 class="total-donated-title">Total Donated</h4>
+    <h4 class="total-donated-amount">{{totalDonated}}</h4>
+  </div>
+  <div class="column pledge">
+
+  </div>
+</div>
+</script>
+
+<!-- #################### -->
+<!-- USER FOOTER FRAGMENT -->
+<!-- #################### -->
+<script id="user-footer-fragment" type="text/x-handlebars-fragment">
+  <a class="tapin-link">TapIn</a>
+  <h3 class="title">Goodybag</h3>
+</script>
+
+<!-- ########################## -->
+<!-- DASHBOARD CONTENT FRAGMENT -->
+<!-- ########################## -->
+<script id="dashboard-content-fragment" type="text/x-handlebars-fragment">
+<nav>
+  <a class="places-link">Places</a>
+  <a class="activity-feed-link">Activity Feed</a>
+  <a class="goodies-link">Goodies</a>
+  <a class="settings-link">Settings</a>
+</nav>
 </script>
