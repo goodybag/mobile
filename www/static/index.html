@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="/static/css/style.css" />
-    <link rel="stylesheet" href="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
 
     <!-- phonegap -->
     <script src="/static/3/phonegap-1.4.1.js"></script>
@@ -31,29 +30,27 @@
       }, false);
     </script>
     <script src="/static/3/jquery-1.7.1.min.js"></script>
-    <script src="/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
-    <script src="/static/3/sugar-0.9.4.min.js"></script>
+    <script src="/static/3/serializeObject.js"></script>
+    <script src="/static/3/sammy-latest.min.js"></script>
+    <script src="/static/3/sugar-1.2.3.min.js"></script>
     <script src="/static/3/handlebars-1.0.0.beta.4.js"></script>
     <script src="/static/3/jquery.qrcode.js"></script>
     <script src="/static/3/qrcode.js"></script>
+    <script src="/static/3/sprintf-0.7-beta1.js"></script>
     <script src="http://www.goodybag.com/static/js/api-client.js"></script>
     <script src="http://www.goodybag.com/static/js/api-sync-client.js"></script>
 
     <script src="/static/js/utils.js"></script>
-    <!--Realized this is in backbone <script src="/static/js/events.js"></script>-->
+    <!--<script src="/static/js/events.js"></script>-->
     <script src="/static/js/config.js"></script>
     <script src="/static/js/templates.js"></script>
     <script src="/static/js/models.js"></script>
-    <script src="/static/js/collections.js"></script>
     <script src="/static/js/views.js"></script>
     <script src="/static/js/routes.js"></script>
     <script src="/static/js/routers.js"></script>
     <script src="/static/js/app.js"></script>
   </head>
-  <body>
-    <div id="loading" data-role="page">
-      <h1>Loading</h1>
-    </div>
-    <div id="login" data-role="page"></div>
+  <body id="body">
+    <div id="container"></div>
   </body>
 </html>

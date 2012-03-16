@@ -7,12 +7,13 @@
     , fragments = {}
   ;
 
-
   templates.login       = "login-tmpl";
   templates.emailLogin  = "email-login-tmpl";
-  templates.barcode     = "barcode-tmpl";
-  templates.test        = "test-tmpl";
+  templates.dashboard   = "dashboard-tmpl";
 
+  // Goodies
+  templates.goodies     = "goodies-tmpl";
+  fragments.goody       = "goody-fragment";
 
   this.app.compileTemplates = function(callback){
     $.get('/partials.html?rand='+ Math.floor(Math.random()*1000), function(content, status){
@@ -32,7 +33,7 @@
       app.templates = compile(templates);
       app.fragments = compile(fragments);
 
-      app.trigger("templates-compiled");
+      app.trigger("templates:compiled");
       if (utils.exists(callback)) callback();
     });
   };
