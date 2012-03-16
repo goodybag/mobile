@@ -1,6 +1,7 @@
 (function(){
   this.app.cache = this.app.cache || {};
   this.app.cached = this.app.cached || {};
+  // Give our app events
   Object.merge(this.app, utils.Events);
   // For the api to use
   window.exists = utils.exists;

@@ -40,6 +40,21 @@
     });
   };
 
+  /* Finish implementation
+  routes.logout = function(){
+    var self = this;
+    app.user = {}; //clean up anything left behind in the cache
+    api.auth.logout(function(error,data){
+      if(exists(error))
+        notify.error(error.message);
+      //redirect regardless of error.
+      removeGbModals();
+      //_kmq.push(['clearIdentity']); //kissmetrics - clear ident
+      _kmqRecord('', 'Signed Out');
+      self.redirect('#!/');
+    });
+  };*
+
   routes.dashboard = function(){
     $('#container').html(app.templates.dashboard());
   };
