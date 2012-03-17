@@ -10,8 +10,20 @@
   };
 
   routes.landing = function(){
-    console.log("Hello World!");
+    console.log("[routes] - landing");
+    var landingView  = new app.Views.Landing({
+      authModel: new app.Models.EmailAuth()
+    });
+    $("#container").html(landingView.render().el);
   };
+
+  routes.register = function(){
+    console.log("[routes] - register");
+    var landingView  = new app.Views.Landing({});
+    $("#container").html(landingView.render().el);
+    landingView.registerView();
+  };
+
 
   routes.test = function(){
     console.log("Test Success!");
@@ -22,7 +34,10 @@
   };
 
   routes.login = function(){
-    $('#container').html(app.templates.login());
+    console.log("[routes] - register");
+    var landingView  = new app.Views.Landing({});
+    $("#container").html(landingView.render().el);
+    landingView.login();
   };
 
   routes.emailLogin = function(){
@@ -53,7 +68,7 @@
       _kmqRecord('', 'Signed Out');
       self.redirect('#!/');
     });
-  };*
+  };*/
 
   routes.dashboard = function(){
     $('#container').html(app.templates.dashboard());

@@ -52,4 +52,15 @@
   <body id="body">
     <div id="container"></div>
   </body>
+  <script>
+  document.addEventListener('deviceready', function() {
+    console.log("device is ready");
+    FB.init({
+      appId: "152282721508707",
+      nativeInterface: PG.FB
+    });
+
+    console.log("facebookInitialized");
+  });
+  </script>
 </html>

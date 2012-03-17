@@ -1,21 +1,46 @@
-<!-- ################### -->
-<!-- LOGIN PAGE TEMPLATE -->
-<!-- ################### -->
-<script id="login-tmpl" type="text/x-handlebars-template">
-  <a id="login-facebook" data-role="button" data-icon="star" data-theme="a">Login With Facebook</a>
-  <a id="login-email" href="#!/email-login" data-role="button" data-icon="star" data-theme="a">Login With Email</a>
-  <a id="login-tapIn" href="#" data-role="button" data-icon="star" data-theme="b">TapIn</a>
+<!-- ##################### -->
+<!-- LANDING PAGE TEMPLATE -->
+<!-- ##################### -->
+<script id="landing-tmpl" type="text/x-handlebars-template">
+  <div>
+    <a id="landing-login-facebook-button" data-role="button" href="#" data-icon="star" data-theme="a">Login With Facebook</a>
+    <a id="landing-register-button" href="#" data-role="button" data-icon="star" data-theme="b">Register</a>
+
+    <form id="landing-login-form">
+      <input type="email" name="email" id="landing-login-email" />
+      <input type="password" name="password" id="landing-login-password" />
+      <button>Beam me up, Scotty!</button>
+    </form>
+  </div>
 </script>
 
-<!-- ######################### -->
-<!-- EMAIL LOGIN PAGE TEMPLATE -->
-<!-- ######################### -->
-<script id="email-login-tmpl" type="text/x-handlebars-template">
-  <form method="post" action="/#!/email-login" id="email-login-form">
-    <input type="email" name="email" id="email-login-email" />
-    <input type="password" name="password" id="email-login-password" />
-    <button>Beam me up, Scotty!</button>
-  </form>
+<script id="register-tmpl" type="text/x-handlebars-template">
+  <div>
+    <a id="register-facebook" data-role="button" data-icon="star" data-theme="a">Register With Facebook</a>
+    <form id="register-form">
+      <label for="register-first-name">
+        <span>First Name</span>
+        <input type="text" id="register-first-name" />
+      </label>
+      <label for="register-last-name">
+        <span>Last Name</span>
+        <input type="text" id="register-last-name" />
+      </label>
+      <label for="register-email-address">
+        <span>Email Address</span>
+        <input type="text" id="register-email-address" />
+      </label>
+      <label for="register-password">
+        <span>Password</span>
+        <input type="password" id="register-password" />
+      </label>
+      <label for="register-password-repeat">
+        <span>Password Again</span>
+        <input type="password" id="register-password-repeat" />
+      </label>
+      <input type="submit" value="Join Goodybag :)" />
+    </form>
+  </div>
 </script>
 
 <!-- ################## -->
@@ -36,6 +61,7 @@
     <!--/* Goody Fragment */-->
   </div>
 </script>
+
 <!-- ############## -->
 <!-- GOODY FRAGMENT -->
 <!-- ############## -->

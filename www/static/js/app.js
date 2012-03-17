@@ -8,7 +8,7 @@
 
   $(document).ready(function(){
     app.compileTemplates(function(){
-      app.router.run('#!/login');
+      app.router.run('#!/');
     });
   });
 }).call(this);

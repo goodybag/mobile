@@ -7,7 +7,8 @@
     , fragments = {}
   ;
 
-  templates.login       = "login-tmpl";
+  templates.landing     = "landing-tmpl";
+  templates.register    = "register-tmpl";
   templates.emailLogin  = "email-login-tmpl";
   templates.dashboard   = "dashboard-tmpl";
 
