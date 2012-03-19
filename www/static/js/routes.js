@@ -19,12 +19,31 @@
 
   routes.register = function(){
     console.log("[routes] - register");
-    var landingView  = new app.Views.Landing({});
+    var landingView  = new app.Views.Landing({
+      authModel: new app.Models.EmailAuth()
+    });
     $("#container").html(landingView.render().el);
     landingView.registerView();
   };
 
+  routes.globalStream = function(){
+    var streamsView = new app.Views.Streams({});
+    $("#container").html(streamsView.render().el);
+    app.router.replaceHash("/#!/streams/global");
+    streamsView.loadGlobalActivity();
+  }
 
+  routes.myStream = function(){
+    var streamsView = new app.Views.Streams({});
+    $("#container").html(streamsView.render().el);
+    streamsView.loadMyActivity();
+  }
+
+  routes.places = function() {
+    var placesView = new app.Views.Places({});
+    $("#container").html(placesView.render().el);
+    placesView.loadPlaces();
+  }
   routes.test = function(){
     console.log("Test Success!");
     var page = new app.Views.TestPage();

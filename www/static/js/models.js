@@ -38,6 +38,9 @@
       var options = {email: this.get("email"), password: this.get("password")};
       api.auth.login(options, function(error, consumer){
         self.unset("password", {silent: true}); //clear for safety
+        if(!utils.exists(error)){
+          self.trigger("authenticated");
+        };
       });
       return this;
     }
@@ -59,6 +62,12 @@
     }
   });
 
+  models.Activity = utils.Model.extend({
+    //who.id
+    //who.name
+    //action
+    //timestamp
+  })
   // Export
   for (var key in models){
     this.app.Models[key] = models[key];

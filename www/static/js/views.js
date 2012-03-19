@@ -3,6 +3,37 @@
   this.app.Views = window.app.Views || {};
   var views = {};
 
+  views.Main = utils.View.extend({
+    className: 'main'
+    , events : { //for Backbone Views these events are binded to the DOM object, not the view object
+    }
+    , initialize: function (){
+      this.currentFrame = "landingFrame";
+      return this;
+    }
+    , authenticatedFrame: function(callback){
+      console.log("[change-frame] authenticated");
+      if(this.currentFrame == "authenticatedFrame") return;
+      this.currentFrame = "authenticatedFrame";
+
+      if(utils.exists(callback)){
+        callback();
+      }
+      return this;
+    }
+    , landingFrame: function(callback){
+      console.log("[change-frame] landing");
+      if(this.currentFrame == "landingFrame") return;
+      this.currentFrame = "landingFrame";
+
+
+      if(utils.exists(callback)){
+        callback();
+      }
+      return this;
+    }
+  })
+
   views.Goody = utils.View.extend({
     className: 'goody',
     events: {
@@ -49,6 +80,7 @@
       return this;
     }
     , facebookLoginHandler: function(){
+      var self = this;
       FB.login(function(response){
         if(response.session){
           var accessToken = response.session.access_token;
@@ -59,6 +91,9 @@
                 return;
               }
               console.log("[facebook] authenticated");
+              app.Views.Main.authenticatedFrame(function(){
+                self.authenticatedHandler();
+              });
             });
           });
         } else{
@@ -70,6 +105,7 @@
       });
     }
     , emailLoginHandler: function(){
+      console.log("[handler] landing-email-login");
       var options = {
         email: $("#landing-login-email", this.el).val()
         , password: $("#landing-login-password", this.el).val()
@@ -78,12 +114,13 @@
       this.authModel.set(options);
       this.authModel.login();
 
-      event.preventDefault();
       return false;
     }
     , authenticatedHandler: function(){
+      console.log("[handler] landing-authenticated");
       var streamsView = new app.Views.Streams({});
       $("#container").html(streamsView.render().el);
+      streamsView.loadGlobalActivity();
       return this;
     }
   });
@@ -123,6 +160,7 @@
     , authenticatedHandler: function(){
       var streamsView = new app.Views.Streams({});
       $("#container").html(streamsView.render().el);
+      streamsView.loadGlobalActivity();
       return this;
     }
   });
@@ -130,9 +168,129 @@
   views.Streams = utils.View.extend({
     className: 'streams'
     , events: {
+      "click #streams-all-button": 'loadGlobalActivity'
+      , "click #streams-my-button": 'loadMyActivity'
+    }
+    , initialize: function(){
+    }
+    , render: function(){
+      $(this.el).html(app.templates.streams());
+      return this;
+    }
+    , loadGlobalActivity: function(){
+      app.router.changeHash("/#!/streams/global");
+      var self = this;
+      api.streams.global(function(error, stream){
+        if(exists(error)){
+          notify.error(error.message);
+          return;
+        };
 
+        var $activitiesContainer = $("#streams-activities", self.el);
+
+        $activitiesContainer.html("");
+
+        var sentences = "";
+        for(var i=0; i<stream.length; i++){
+          sentences += streamParser.render(stream[i]);
+          //$(sentence).css("opacity", "0").appendTo($dashboardActivityFeed).delay(100*i).animate({opacity:1}, 250, "swing");
+        }
+        var $sentences = $(sentences);
+        $activitiesContainer.append($sentences);
+        $newImages = $("img.picture",$sentences);
+        $newImages.error(function(){
+          //since profile pictures are assumed to be s3/<id...>.png
+          //if the picture is not found we will replace it with the default goodybag pic
+          $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
+        });
+      });
+    }
+    , loadMyActivity: function(){
+      var self = this;
+      app.router.changeHash("/#!/streams/me");
+      api.streams.self(function(error, stream){
+        if(exists(error)){
+          notify.error(error.message);
+          return;
+        };
+
+        var $activitiesContainer = $("#streams-activities", self.el);
+
+        $activitiesContainer.html("");
+
+        var sentences = "";
+        for(var i=0; i<stream.length; i++){
+          sentences += streamParser.render(stream[i]);
+          //$(sentence).css("opacity", "0").appendTo($dashboardActivityFeed).delay(100*i).animate({opacity:1}, 250, "swing");
+        }
+        var $sentences = $(sentences);
+        $activitiesContainer.append($sentences);
+        $newImages = $("img.picture",$sentences);
+        $newImages.error(function(){
+          //since profile pictures are assumed to be s3/<id...>.png
+          //if the picture is not found we will replace it with the default goodybag pic
+          $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
+        });
+      });
     }
   });
+
+  views.Places = utils.View.extend({
+    className: 'places'
+    , events: {
+
+    }
+    , initialize: function(){
+    }
+    , render: function(){
+      //$(this.el).html(app.templates.places());
+      return this;
+    }
+    , loadPlaces: function(){
+      var self = this;
+      api.businesses.listEquipped(function(error, businesses){
+        //ideally we would want to create a model for each business
+        for (var i=0, length=businesses.length; i<length; i++){
+          var placeView = new app.Views.Place({
+            model: new utils.Model(businesses[i])
+          })
+          $(self.el).append(placeView.render().el);
+        }
+      });
+    }
+  });
+
+  view.Place = utils.View.extend({
+    className: 'place'
+    , events: {
+      'click .view-details': 'viewDetails'
+    }
+    , initialize: function(){
+    }
+    , render: function() {
+      $(this.el).html(app.fragments.place(this.model.toJSON()));
+      return this;
+    }
+    , viewDetails: function(){
+      /* display business details */
+      var placeDetailsView = new app.Views.Place({
+        model: this.model
+      });
+      app.router.changeHash("#!/places/"+this.model._id);
+    }
+  });
+
+  views.PlaceDetails = utils.View.extend({
+    className: 'place-details'
+    , events: {
+    }
+    , initialize: function(){
+    }
+    , render: function() {
+      $(this.el).html(app.templates.placeDetails(this.model.toJSON()));
+      return this;
+    }
+  })
 
   // Export
   for (var name in views){
