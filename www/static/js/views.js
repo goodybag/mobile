@@ -260,7 +260,7 @@
     }
   });
 
-  view.Place = utils.View.extend({
+  views.Place = utils.View.extend({
     className: 'place'
     , events: {
       'click .view-details': 'viewDetails'
