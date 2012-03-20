@@ -69,7 +69,7 @@
   {{#if media}}
     <img id="account-basic-image-preview-img" src="{{media.url}}" {{#if media.rotateDegrees}}class="rotate{{media.rotateDegrees}}"{{/if}} />
   {{else}}
-    <img id="account-basic-image-preview-img" src="https://goodybag.com.s3.amazonaws.com/default-85.jpg" />
+    <img id="account-basic-image-preview-img" src="https://s3.amazonaws.com/goodybag.com/default-85.jpg" />
   {{/if}}
   {{org.name}}/
   {{name}}/
@@ -88,6 +88,7 @@
     <div class="heading actions">
       <button id="streams-all-button">All Activity</button>
       <button id="streams-my-button">My Activity</button>
+      <a href="#!/places">Places</a>
     </div>
     <div id="streams-activities">
       <!-- activity fragments -->
@@ -139,7 +140,7 @@
 <!-- PLACE  -->
 <!-- #####  -->
 <script id="place-fragment" type="text/x-handlebars-template">
-  <div class="business">
+  <div class="place">
     <div class="left">
       {{#if media.thumb}}
         <img src="{{media.thumb}}" />
@@ -159,6 +160,27 @@
     </div>
     <div class="right">
       <button class="view-details"> > </button>
+    </div>
+  </div>
+</script>
+
+<script id="place-details-tmpl" type="text/x-handlebars-template">
+  <div class="place">
+    <div class="name">{{publicName}}</div>
+    <div class="url">{{url}}</div>
+    <div class="email">{{email}}</div>
+    <div class="locations">
+    {{#each locations}}
+      <div class="location">
+        <div class="name">{{name}}</div>
+        <div class="street1">{{street1}}</div>
+        <div class="city">{{city}}</div>
+        <div class="state">{{state}}</div>
+        <div class="zip">{{zip}}</div>
+        <div class="phone">{{phone}}</div>
+        <button class="save">Save As Contact</button>
+      </div>
+    {{/each}}
     </div>
   </div>
 </script>

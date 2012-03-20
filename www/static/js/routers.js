@@ -12,6 +12,7 @@
     this.get ('#!/streams/global',      app.routes.globalStream);
     this.get ('#!/streams/me',          app.routes.myStream);
     this.get ('#!/places',              app.routes.places);
+    this.get ('#!/places/:id',          app.routes.placeDetails);
     this.get ('#!/goodies',             app.routes.goodies);
   });
 

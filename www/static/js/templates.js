@@ -25,7 +25,9 @@
   fragments.activityBtTapped      = "activity-action-btTapped-fragment"
   fragments.activityFundsDonated  = "activity-action-fundsDonated-fragment"
 
-  fragments.place  = "place-fragment"
+  //Places
+  fragments.place         = "place-fragment"
+  templates.placeDetails  = "place-details-tmpl"
 
   this.app.compileTemplates = function(callback){
     $.get('/partials.html?rand='+ Math.floor(Math.random()*1000), function(content, status){

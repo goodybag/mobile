@@ -43,7 +43,24 @@
     var placesView = new app.Views.Places({});
     $("#container").html(placesView.render().el);
     placesView.loadPlaces();
-  }
+  };
+
+  routes.placeDetails = function() {
+    api.businesses.getOneEquipped = function(bid, callback){
+      api._get('/api/consumers/businesses/' + bid, callback);
+    };
+    api.businesses.getOneEquipped(this.params.id, function(error, business){
+      if(utils.exists(error)){
+        console.log(error);
+        return;
+      };
+      var placeDetailsView = new app.Views.PlaceDetails({
+        model: new utils.Model(business)
+      });
+      $("#container").html(placeDetailsView.render().el);
+    });
+  };
+
   routes.test = function(){
     console.log("Test Success!");
     var page = new app.Views.TestPage();

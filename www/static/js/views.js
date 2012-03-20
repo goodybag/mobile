@@ -273,16 +273,29 @@
     }
     , viewDetails: function(){
       /* display business details */
-      var placeDetailsView = new app.Views.Place({
-        model: this.model
+      var self = this;
+      api.businesses.getOneEquipped = function(bid, callback){
+        api._get('/api/consumers/businesses/' + bid, callback);
+      };
+      api.businesses.getOneEquipped(this.model.get("_id"), function(error, business){
+        if(utils.exists(error)){
+          console.log(error);
+          return;
+        }
+
+        var placeDetailsView = new app.Views.PlaceDetails({
+          model: new utils.Model(business)
+        });
+        $("#container").html(placeDetailsView.render().el);
+        app.router.changeHash("#!/places/"+self.model.get("_id"));
       });
-      app.router.changeHash("#!/places/"+this.model._id);
     }
   });
 
   views.PlaceDetails = utils.View.extend({
     className: 'place-details'
     , events: {
+      "click .save" : "createContact"
     }
     , initialize: function(){
     }
@@ -290,7 +303,34 @@
       $(this.el).html(app.templates.placeDetails(this.model.toJSON()));
       return this;
     }
-  })
+    , createContact: function(event) {
+      console.log("[handler] save contact");
+      var $location = $(event.currentTarget).parent();
+
+      var name = new ContactName();
+      name.formatted = this.model.get("publicName")+" - "+$(".name", $location).text();
+      name.givenName = this.model.get("publicName")+" - "+$(".name", $location).text();;
+
+      var address = new ContactAddress();
+      address.pref = true;
+      address.streetAddress = $(".street1", $location).text();
+      address.type = "work";
+      address.streetAddress = $(".street1", $location).text();
+      address.locality = $(".city", $location).text();
+      address.region = $(".state", $location).text();
+      address.postalCode = $(".zip", $location).text();
+      address.country = "USA";
+
+      var phoneNumber = new ContactField('work', $(".phone", $location).text(), true);
+
+      var contact = navigator.contacts.create();
+      contact.name = name;
+      contact.phoneNumbers = [phoneNumber];
+      contact.addresses = [address];
+
+      contact.save(function(){alert('Contact Saved');}, function(){alert('Error Saving Contact');});
+    }
+  });
 
   // Export
   for (var name in views){
