@@ -1,0 +1,338 @@
+// Variables
+
+def-font-size = 12px
+def-font-family = Helvetica Neue, sans-serif
+def-font-color = #333
+
+// End Variables
+
+// Mixins
+
+// Returns our default font setup
+fonts(size = def-font-size)
+  font-family Helvetica Neue, sans-serif
+  font-size size
+  color #333
+
+// cross-browser gradients
+bg-linear-gradient(startPoint, startColor, startInterval, endColor, endInterval, deprecatedWebkitStartPoint = false, deprecatedWebkitEndPoint = false)
+  background-color startColor
+  if deprecatedWebkitStartPoint && deprecatedWebkitEndPoint
+    background-image -webkit-gradient(linear, deprecatedWebkitStartPoint, deprecatedWebkitEndPoint, color-stop(startInterval, startColor), color-stop(endInterval, endColor))
+  background-image -webkit-linear-gradient(startPoint, startColor startInterval, endColor endInterval)
+  background-image -moz-linear-gradient(startPoint, startColor startInterval, endColor endInterval)
+  background-image -ms-linear-gradient(startPoint, startColor startInterval, endColor endInterval)
+  background-image -o-linear-gradient(startPoint, startColor startInterval, endColor endInterval)
+  background-image linear-gradient(startPoint, startColor startInterval, endColor endInterval)
+
+
+bg-white-stripe()
+  background-image url('/static/images/white-stripe-vertical.png')
+
+bg-white-stripe-diagonal()
+  background-image url('/static/images/white-stripe-diagonal.png')
+
+main-sprite(x = 0, y = 0)
+  background-image url('/static/images/main-sprite.png')
+  background-position x y
+
+// End Mixins
+
+body, html
+  fonts()
+  background-color #364d72
+  bg-white-stripe()
+
+.outer-container
+  padding-top 58px
+
+.header-nav
+  position fixed
+  z-index: 100
+  top 0
+  height 58px
+  padding: 0 12px;
+  width 100%
+  box-sizing border-box
+  bg-linear-gradient(top, #4871a3, 0%, #273d57, 100%)
+  box-shadow inset 0 1px 0 rgba(255,255,255, 0.4), 0 3px 6px rgba(0,0,0, 0.35)
+  border-bottom solid #000 1px
+
+.header-nav > .flex-columns
+  position:relative
+  z-index 2
+.header-nav > .flex-columns > .column
+  padding-top: 12px
+.header-nav > .flex-columns > .middle
+  text-align center
+  padding-top: 2px
+.header-nav > .flex-columns > .right
+  text-align right
+
+
+.header-nav button {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400;
+  text-shadow: 0 1px 1px rgba(0,0,0, 0.2);
+  padding: 8px 16px;
+  border: solid 1px #21252a;
+  border-top: solid #47494f 1px;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 #7ca7ca, inset 0 -2px 2px rgba(0,0,0, 0.1), 0 1px 0 rgba(255,255,255, 0.25);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4C90D0), color-stop(100%,#2D476F));
+  background: -webkit-linear-gradient(top, #4C90D0 0%, #2D476F 100%);
+  background: linear-gradient(top, #4C90D0 0%, #2D476F 100%);
+}
+.header-nav button:active
+  box-shadow: 0 1px 0 rgba(255,255,255, 0.25);
+
+.header-nav .graphic-wrapper
+  position: relative;
+.header-nav .graphic-wrapper > .graphic
+  position absolute
+  left: 50%;
+.header-nav .graphic-wrapper > .accent
+  margin-left: -215px;
+  width 430px
+  height 58px
+  main-sprite(-100px, 0)
+.header-nav .logo
+  display: inline-block
+  margin-top 4px
+  width: 85px
+  height 46px
+  main-sprite(-4px, -177px)
+
+.sub-header
+  box-sizing border-box
+  background-color #1d2b41
+  bg-white-stripe()
+  border-bottom solid #000 1px
+  box-shadow  0 1px 0 rgba(255,255,255, 0.2)
+  padding: 14px 3%
+  color: #99a1ae;
+
+.sub-header.profile > .left
+  width: 56%
+.sub-header.profile > .right {
+  text-align: right;
+  width: 44%;
+}
+.sub-header.profile .user-info > .item {
+  display: inline-block
+  vertical-align: middle
+}
+.sub-header.profile .user-info .picture {
+  width: 45px;
+  border: solid 4px #e9ebed;
+  margin-right: 6px;
+}
+.sub-header.profile .user-info .name {
+  font-size 1.2rem
+  font-weight 500
+  color #fff
+}
+.sub-header.profile .user-info .donated
+  margin-top: 4px
+  color #99a1ae
+
+.sub-header.profile .pledge-bank
+  display inline-block
+  text-align center
+.sub-header.profile .pledge-bank > .title {
+  color: #99a0ad
+  font-size 0.8rem
+  margin-bottom: 4px
+  text-transform uppercase
+}
+.sub-header.profile .pledge-bank > .pledge-wrapper
+  padding 3px
+  border: solid 1px #000
+  border-top solid 1px #1a1a1a
+  border-radius 7px
+  box-shadow inset 0 1px 1px rgba(255,255,255, 0.1), 0 1px 0 rgba(255,255,255, 0.15)
+  bg-linear-gradient(top, #333, 0%, #000, 100%)
+
+.sub-header.profile .pledge-bank > .pledge-wrapper > .pledge
+  position: relative
+  font-size: 0;
+  border: solid #000 1px
+  border-radius 5px
+  box-shadow: inset 0 4px 6px rgba(0,0,0, 0.9)
+  background: #fff
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(34%,rgba(204,204,204,1)), color-stop(59%,rgba(211,211,211,1)), color-stop(100%,rgba(255,255,255,1)));
+  background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(204,204,204,1) 34%,rgba(211,211,211,1) 59%,rgba(255,255,255,1) 100%);
+  background: linear-gradient(top, rgba(255,255,255,1) 0%,rgba(204,204,204,1) 34%,rgba(211,211,211,1) 59%,rgba(255,255,255,1) 100%);
+
+.sub-header.profile .pledge-bank > .pledge-wrapper > .pledge > .separator
+  position absolute
+  height 100%
+  width: 1px;
+  background: -webkit-linear-gradient(top, rgba(32,32,32,1) 0%,rgba(188,188,188,1) 60%)
+  background: linear-gradient(top, rgba(32,32,32,1) 0%,rgba(188,188,188,1) 60%)
+
+.sub-header.profile .pledge-bank > .pledge-wrapper > .pledge > .digit
+  font-size 1.4rem
+  font-weight: 700
+  color #222
+  display: inline-block
+  padding: 4px 8px 4px 9px
+  vertical-align: bottom
+
+.sub-header.profile .pledge-bank > .pledge-wrapper > .pledge > .digit:last-child
+  border-right none
+  padding 4px 8px
+
+.sub-header.profile .pledge-bank > .pledge-wrapper > .pledge > .decimal
+  padding: 4px 6px
+
+.content
+  margin: 12px 3%
+
+.content > .page {
+  min-height 420px
+  background-color: #fff
+  border: solid 1px #000
+  border-radius 4px
+}
+
+.columns
+  display table
+  width 100%
+.columns > .column
+  float left
+  width 50%
+
+.inline-columns
+  font-size 0
+.inline-columns > .column
+  font-size def-font-size
+  display: inline-block
+  vertical-align middle
+  width 50%
+
+.flex-columns
+  display: -webkit-box
+.flex-columns > .column
+  -webkit-box-flex 1
+
+
+
+@media screen and (max-width: 320px) {
+  .sub-header.profile .user-info .picture {
+    width: 25px
+    border: solid 2px #e9ebed;
+  }
+  .sub-header.profile .pledge-bank > .pledge-wrapper > .pledge > .digit {
+    padding: 4px 7px 4px 8px
+  }
+}
+
+
+
+
+
+.circle {
+  margin-left: -6px;
+  width: 48px;
+  height: 48px;
+  border-radius: 25px 25px 25px 24px;
+  border: solid rgba(178,181,188, 0.8) 1px;
+  box-shadow: inset 1px 2px 0 #fff, inset 1px -2px 0 #fff, inset -2px 0 0 #fff, inset -2px -2px 0 #fff, inset 0 3px 0 rgba(255,255,255,0.35), -20px -20px 0 #fff, 20px  -20px 0 #fff, 20px  20px  0 #fff, -20px 20px  0 #fff;
+}
+.circle-wrap {
+  overflow: hidden;
+  width: 48px;
+  height: 51px;
+  position: absolute;
+  right: 0;
+}
+.wrap {
+  display: -webkit-box;
+  width: 100%;
+  position: relative;
+  height: 51px;
+  overflow: hidden;
+}
+.progress {
+  position: absolute;
+  z-index: 0;
+  height: 100%;
+  width: 70%;
+  background: url("/static/images/white-stripe-diagonal.png"), -webkit-linear-gradient(top, rgba(183,237,21,1) 0%,rgba(140,186,24,1) 28%,rgba(78,126,11,1) 65%,rgba(59,86,0,1) 99%);
+}
+.meter.complete .progress {
+  width: 100%;
+  -webkit-animation: progress-slide 0.6s linear infinite;
+  -webkit-transform: translate3d(0,0,0);
+}
+@-webkit-keyframes progress-slide {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 25px 25px;
+  }
+}
+.progress-cover {
+  position: absolute;
+  top: 19px;
+  width: 70%;
+  height: 12px;
+  border-radius: 9px 0 0 9px;
+  border: solid #70901b 1px;
+  border-right: 0;
+  z-index: 2;
+}
+.top-mask {
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  height: 18px;
+  padding-left: 45px;
+  margin-left: -45px;
+  background: white;
+  border-bottom: solid #b2b5bc 1px;
+  border-radius: 0 0 33px 0;
+  box-shadow: 1px 2px 0 #fff, 0 3px 0 rgba(255,255,255,0.35);
+}
+.bottom-mask {
+  position: absolute;
+  bottom: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 17px;
+  padding-left: 45px;
+  margin-left: -45px;
+  background: white;
+  border-top: solid #b2b5bc 1px;
+  border-radius: 0 19px 0 0;
+  box-shadow: 1px -2px 0 #fff;
+}
+.inner {
+  position: absolute;
+  top: 0;
+  left: 4px;
+  width: 3px;
+  height:10px;
+  border: solid 3px #fff;
+  border-right: none;
+  border-radius: 5px 0 0 5px;
+}
+.meter {
+  position: relative;
+  margin: 20px 0 0 20px;
+}
+
+.left-border
+  position: absolute;
+  top: 17px;
+  left: -6px;
+  width: 10px;
+  height: 16px;
+  border-radius: 12px 0 0 12px;
+  border: solid 1px #b2b5bc;
+  border-right: none;
+  z-index: 3;
