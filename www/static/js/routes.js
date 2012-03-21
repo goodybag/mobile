@@ -28,20 +28,20 @@
 
   routes.globalStream = function(){
     var streamsView = new app.Views.Streams({});
-    $("#container").html(streamsView.render().el);
+    $("#content").html(streamsView.render().el);
     app.router.replaceHash("/#!/streams/global");
     streamsView.loadGlobalActivity();
   }
 
   routes.myStream = function(){
     var streamsView = new app.Views.Streams({});
-    $("#container").html(streamsView.render().el);
+    $("#content").html(streamsView.render().el);
     streamsView.loadMyActivity();
   }
 
   routes.places = function() {
     var placesView = new app.Views.Places({});
-    $("#container").html(placesView.render().el);
+    $("#content").html(placesView.render().el);
     placesView.loadPlaces();
   };
 
@@ -54,7 +54,7 @@
       var placeDetailsView = new app.Views.PlaceDetails({
         model: new utils.Model(business)
       });
-      $("#container").html(placeDetailsView.render().el);
+      $("#content").html(placeDetailsView.render().el);
     });
   };
 
@@ -72,7 +72,7 @@
       var tapInView = new app.Views.TapIn({
         model: model
       });
-    $("#container").html(tapInView.render().el);
+    $("#content").html(tapInView.render().el);
     });
   };
 

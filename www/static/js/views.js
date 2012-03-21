@@ -117,7 +117,7 @@
     , authenticatedHandler: function(){
       console.log("[handler] landing-authenticated");
       var streamsView = new app.Views.Streams({});
-      $("#container").html(streamsView.render().el);
+      $("#content").html(streamsView.render().el);
       streamsView.loadGlobalActivity();
       return this;
     }
@@ -157,7 +157,7 @@
     }
     , authenticatedHandler: function(){
       var streamsView = new app.Views.Streams({});
-      $("#container").html(streamsView.render().el);
+      $("#content").html(streamsView.render().el);
       streamsView.loadGlobalActivity();
       return this;
     }
@@ -281,7 +281,7 @@
         var placeDetailsView = new app.Views.PlaceDetails({
           model: new utils.Model(business)
         });
-        $("#container").html(placeDetailsView.render().el);
+        $("#content").html(placeDetailsView.render().el);
         app.router.changeHash("#!/places/"+self.model.get("_id"));
       });
     }
@@ -350,7 +350,7 @@
         };
         if(data === true){
           self.model.set("barcodeId", barcodeId);
-          $("#container").html(self.render().el);
+          $("#content").html(self.render().el);
         } else {
           alert("There was an error linking your barcode");
         }
@@ -364,7 +364,7 @@
           return;
         };
         self.model.set("barcodeId", barcode.barcodeId);
-        $("#container").html(self.render().el);
+        $("#content").html(self.render().el);
       });
     }
   })
