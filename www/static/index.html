@@ -34,6 +34,7 @@
     <script src="/static/3/sammy-latest.min.js"></script>
     <script src="/static/3/sugar-1.2.3.min.js"></script>
     <script src="/static/3/handlebars-1.0.0.beta.4.js"></script>
+    <script src="/static/3/moment-1.3.0.min.js"></script>
     <script src="/static/3/jquery.qrcode.js"></script>
     <script src="/static/3/qrcode.js"></script>
     <script src="/static/3/sprintf-0.7-beta1.js"></script>
@@ -48,8 +49,22 @@
     <script src="/static/js/routes.js"></script>
     <script src="/static/js/routers.js"></script>
     <script src="/static/js/app.js"></script>
+
+    <script src="/static/js/handlebar-helpers.js"></script>
+    <script src="/static/js/streamParser.js"></script>
   </head>
   <body id="body">
     <div id="container"></div>
   </body>
+  <script>
+  document.addEventListener('deviceready', function() {
+    console.log("device is ready");
+    FB.init({
+      appId: "159340790837933",
+      nativeInterface: PG.FB
+    });
+
+    console.log("facebookInitialized");
+  });
+  </script>
 </html>

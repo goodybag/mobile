@@ -10,7 +10,55 @@
   };
 
   routes.landing = function(){
-    console.log("Hello World!");
+    console.log("[routes] - landing");
+    var landingView  = new app.Views.Landing({
+      authModel: new app.Models.EmailAuth()
+    });
+    $("#container").html(landingView.render().el);
+  };
+
+  routes.register = function(){
+    console.log("[routes] - register");
+    var landingView  = new app.Views.Landing({
+      authModel: new app.Models.EmailAuth()
+    });
+    $("#container").html(landingView.render().el);
+    landingView.registerView();
+  };
+
+  routes.globalStream = function(){
+    var streamsView = new app.Views.Streams({});
+    $("#container").html(streamsView.render().el);
+    app.router.replaceHash("/#!/streams/global");
+    streamsView.loadGlobalActivity();
+  }
+
+  routes.myStream = function(){
+    var streamsView = new app.Views.Streams({});
+    $("#container").html(streamsView.render().el);
+    streamsView.loadMyActivity();
+  }
+
+  routes.places = function() {
+    var placesView = new app.Views.Places({});
+    $("#container").html(placesView.render().el);
+    placesView.loadPlaces();
+  };
+
+  routes.placeDetails = function() {
+    api.businesses.getOneEquipped = function(bid, callback){
+      api._get('/api/consumers/businesses/' + bid, callback);
+    };
+    api.businesses.getOneEquipped(this.params.id, function(error, business){
+      if(utils.exists(error)){
+        console.log(error);
+        return;
+      };
+      var placeDetailsView = new app.Views.PlaceDetails({
+        model: new utils.Model(business)
+      });
+      $("#container").html(placeDetailsView.render().el);
+    });
   };
 
   routes.test = function(){
@@ -22,7 +70,10 @@
   };
 
   routes.login = function(){
-    $('#container').html(app.templates.login());
+    console.log("[routes] - register");
+    var landingView  = new app.Views.Landing({});
+    $("#container").html(landingView.render().el);
+    landingView.login();
   };
 
   routes.emailLogin = function(){
@@ -53,7 +104,7 @@
       _kmqRecord('', 'Signed Out');
       self.redirect('#!/');
     });
-  };*
+  };*/
 
   routes.dashboard = function(){
     $('#container').html(app.templates.dashboard());

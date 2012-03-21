@@ -1,6 +1,18 @@
 (function(){
   this.utils = window.utils || {};
+
+  var slice = Array.prototype.slice;
+  var splice = Array.prototype.splice;
+
+
   var _utils = {}; // Private utils
+
+  _utils.exists = function(variable){
+    if (typeof x !== "undefined" && x !== null) {
+      return true;
+    }
+    return false;
+  };
 
   // Helper function to get a value from a Backbone object as a property or as a function.
   _utils.getValue = function(object, prop) {
@@ -161,11 +173,6 @@
       this.initialize.apply(this, arguments);
     };
     Object.merge(_model.prototype, _utils.Events);
-    console.log(_model.prototype);
-    console.log("utils");
-    console.log(_utils);
-    console.log("utils.Events");
-    console.log(_utils.Events);
     Object.merge(_model.prototype, {
       idAttribute: 'id',
       initialize: function(){},

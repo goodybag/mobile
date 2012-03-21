@@ -29,6 +29,45 @@
 
   });
 
+  models.EmailAuth = utils.Model.extend({
+    defaults: {
+      authenticated: false
+    }
+    , login: function() {
+      var self = this;
+      var options = {email: this.get("email"), password: this.get("password")};
+      api.auth.login(options, function(error, consumer){
+        self.unset("password", {silent: true}); //clear for safety
+        if(!utils.exists(error)){
+          self.trigger("authenticated");
+        };
+      });
+      return this;
+    }
+    , register: function(){
+      var self = this;
+      var options = {
+        firstName: this.get("firstName")
+        , lastName: this.get("lastName")
+        , email: this.get("email")
+        , password: this.get("password")
+      };
+      api.auth.register(options, function(error, consumer){
+        self.unset("password", {silent: true}); //clear for safety
+        if(!utils.exists(error)){
+          self.trigger("authenticated");
+        };
+      });
+      return this;
+    }
+  });
+
+  models.Activity = utils.Model.extend({
+    //who.id
+    //who.name
+    //action
+    //timestamp
+  })
   // Export
   for (var key in models){
     this.app.Models[key] = models[key];

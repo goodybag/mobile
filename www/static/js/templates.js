@@ -7,13 +7,27 @@
     , fragments = {}
   ;
 
-  templates.login       = "login-tmpl";
+  templates.landing     = "landing-tmpl";
+  templates.register    = "register-tmpl";
   templates.emailLogin  = "email-login-tmpl";
   templates.dashboard   = "dashboard-tmpl";
 
   // Goodies
   templates.goodies     = "goodies-tmpl";
   fragments.goody       = "goody-fragment";
+
+  //Streams
+  templates.streams               = "streams-tmpl"
+  fragments.activity              = "activity-fragment"
+  fragments.activityEventRsvped   = "activity-action-eventRsvped-fragment"
+  fragments.activityPollCreated   = "activity-action-pollCreated-fragment"
+  fragments.activityPollAnswered  = "activity-action-pollAnswered-fragment"
+  fragments.activityBtTapped      = "activity-action-btTapped-fragment"
+  fragments.activityFundsDonated  = "activity-action-fundsDonated-fragment"
+
+  //Places
+  fragments.place         = "place-fragment"
+  templates.placeDetails  = "place-details-tmpl"
 
   this.app.compileTemplates = function(callback){
     $.get('/partials.html?rand='+ Math.floor(Math.random()*1000), function(content, status){
