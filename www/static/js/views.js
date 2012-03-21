@@ -332,6 +332,23 @@
     }
   });
 
+  views.TapIn = utils.View.extend({
+    className: 'tap-in'
+    , events: {
+
+    }
+    , initialize: function(){
+    }
+    , render: function(){
+      $(this.el).html(app.templates.tapIn({}));
+      return this;
+    }
+    , saveCode: function(){
+    }
+    , createCode: function(){
+    }
+  })
+
   // Export
   for (var name in views){
     this.app.Views[name] = views[name];

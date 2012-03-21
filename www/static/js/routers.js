@@ -8,6 +8,7 @@
     this.get ('#!/login',               app.routes.login);
     this.get ('#!/register',            app.routes.register);
     this.get ('#!/logout',              app.routes.logout);
+    this.get ('#!/tapin',               app.routes.tapIn);
     this.get ('#!/streams',             app.routes.globalStream);
     this.get ('#!/streams/global',      app.routes.globalStream);
     this.get ('#!/streams/me',          app.routes.myStream);

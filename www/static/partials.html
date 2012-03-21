@@ -89,6 +89,7 @@
       <button id="streams-all-button">All Activity</button>
       <button id="streams-my-button">My Activity</button>
       <a href="#!/places">Places</a>
+      <a href="#!/tapin">TapIn</a>
     </div>
     <div id="streams-activities">
       <!-- activity fragments -->
@@ -136,9 +137,9 @@
   donated {{dollars data.amount}} to charity.<!--<a href=""></a>-->
 </script>
 
-<!-- #####  -->
-<!-- PLACE  -->
-<!-- #####  -->
+<!-- ##### -->
+<!-- PLACE -->
+<!-- ##### -->
 <script id="place-fragment" type="text/x-handlebars-template">
   <div class="place">
     <div class="left">
@@ -164,6 +165,9 @@
   </div>
 </script>
 
+<!-- ############# -->
+<!-- PLACE DETAILS -->
+<!-- ############# -->
 <script id="place-details-tmpl" type="text/x-handlebars-template">
   <div class="place">
     <div class="name">{{publicName}}</div>
@@ -182,5 +186,20 @@
       </div>
     {{/each}}
     </div>
+  </div>
+</script>
+
+<script id="tap-in-tmpl" type="text/x-handlebars-template">
+  <div class="tap-in">
+    {{#if barcodeId}}
+      <div class="barcode"></div>
+    {{else}}
+      <div>Already have a goodybag qr code?</div>
+      <input type="text" name="barcodeId" />
+      <button class="save">save</button>
+      <div>----or----</div>
+      <div>Make me one</div>
+      <button class="create">make it!</button>
+    {{/if}}
   </div>
 </script>

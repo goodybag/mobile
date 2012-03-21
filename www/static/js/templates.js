@@ -17,17 +17,20 @@
   fragments.goody       = "goody-fragment";
 
   //Streams
-  templates.streams               = "streams-tmpl"
-  fragments.activity              = "activity-fragment"
-  fragments.activityEventRsvped   = "activity-action-eventRsvped-fragment"
-  fragments.activityPollCreated   = "activity-action-pollCreated-fragment"
-  fragments.activityPollAnswered  = "activity-action-pollAnswered-fragment"
-  fragments.activityBtTapped      = "activity-action-btTapped-fragment"
-  fragments.activityFundsDonated  = "activity-action-fundsDonated-fragment"
+  templates.streams               = "streams-tmpl";
+  fragments.activity              = "activity-fragment";
+  fragments.activityEventRsvped   = "activity-action-eventRsvped-fragment";
+  fragments.activityPollCreated   = "activity-action-pollCreated-fragment";
+  fragments.activityPollAnswered  = "activity-action-pollAnswered-fragment";
+  fragments.activityBtTapped      = "activity-action-btTapped-fragment";
+  fragments.activityFundsDonated  = "activity-action-fundsDonated-fragment";
 
   //Places
-  fragments.place         = "place-fragment"
-  templates.placeDetails  = "place-details-tmpl"
+  fragments.place         = "place-fragment";
+  templates.placeDetails  = "place-details-tmpl";
+
+  //TapIn
+  templates.tapIn = "tap-in-tmpl";
 
   this.app.compileTemplates = function(callback){
     $.get('/partials.html?rand='+ Math.floor(Math.random()*1000), function(content, status){

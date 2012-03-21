@@ -61,6 +61,11 @@
     });
   };
 
+  routes.tapIn = function() {
+    var tapInView = new app.Views.TapIn({});
+    $("#container").html(tapInView.render().el);
+  };
+
   routes.test = function(){
     console.log("Test Success!");
     var page = new app.Views.TestPage();
