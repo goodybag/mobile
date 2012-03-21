@@ -8,6 +8,9 @@
   ;
 
   templates.mainFrame   = "main-frame-tmpl";
+  fragments.headerNav   = "header-nav-fragment";
+  fragments.userHeader  = "user-header-fragment";
+  fragments.pageNav     = "page-nav-fragment";
   templates.landing     = "landing-tmpl";
   templates.register    = "register-tmpl";
   templates.emailLogin  = "email-login-tmpl";

@@ -10,10 +10,19 @@
     }
     , initialize: function (){
       this.currentFrame = "landingFrame";
+      // Setup sub-views
+      this.subViews = {
+        userHeader: new app.Views.UserHeader(),
+        headerNav: new app.Views.HeaderNav({model: app.previousRoutes})
+      };
       return this;
     }
     , render: function(){
       $(this.el).html(app.templates.mainFrame());
+      $('#header', this.el).append(this.subViews.headerNav.render().el);
+      //if (this.currentFrame == "authenticatedFrame"){
+        $('#header', this.el).append(this.subViews.userHeader.render().el);
+      //}
       return this;
     }
     , authenticatedFrame: function(callback){
@@ -123,6 +132,70 @@
     }
   });
 
+  views.HeaderNav = utils.View.extend({
+    className: 'header-nav'
+    , events: {
+      'tap .back': 'backHandler',
+      'click .back': 'backHandler'
+    }
+    , initialize: function(){
+      this.model.on("change:routes", this.render, this);
+    }
+    , render: function(){
+      console.log('[render] - HeaderNav');
+      $(this.el).html(app.fragments.headerNav(this.model.toJSON()));
+      return this;
+    }
+    , backHandler: function(){
+      this.model.pop();
+      this.model.set('goingBack', true);
+      return this;
+    }
+  });
+
+  views.UserHeader = utils.View.extend({
+    className: 'sub-header profile inline-columns',
+    id: "user-header",
+    initialize: function(){
+      return this;
+    },
+    render: function(){
+      $(this.el).html(app.fragments.userHeader());
+      return this;
+    }
+  });
+
+  views.PageNav = utils.View.extend({
+    className: 'sub-nav columns',
+    events: {
+      'click .left button': 'leftHandler',
+      'click .right button': 'rightHandler',
+      'tap .left button': 'leftHandler',
+      'tap .right button': 'rightHandler'
+    },
+    initialize: function(options){
+      this.buttons = {};
+      this.buttons.leftButton = options.leftButton || false;
+      this.buttons.rightButton = options.rightButton || false;
+    },
+    render: function(){
+      $(this.el).html(app.fragments.pageNav(this.buttons));
+      return this;
+    },
+    leftHandler: function(){
+      if (utils.exists(this.buttons.leftButton.handler)){
+        this.buttons.leftButton.handler.call(this);
+      }
+      return this;
+    },
+    rightHandler: function(){
+      if (utils.exists(this.buttons.rightButton.handler)){
+        this.buttons.rightButton.handler.call(this);
+      }
+      return this;
+    }
+  });
+
   views.Register = utils.View.extend({
     className: 'page register'
     , events: {
@@ -190,12 +263,29 @@
   });
 
   views.Streams = utils.View.extend({
-    className: 'streams'
+    className: 'page streams'
     , events: {
       "click #streams-all-button": 'loadGlobalActivity'
       , "click #streams-my-button": 'loadMyActivity'
     }
     , initialize: function(){
+      this.pageHeader = new app.Views.PageNav({
+        leftButton: {
+          id: "streams-all-button",
+          text: "All Activity",
+          classes: "",
+          handler: this.loadGlobalActivity
+        },
+        rightButton: {
+          id: "streams-my-button",
+          text: "My Activity",
+          classes: "",
+          handler: this.loadMyActivity
+        }
+      });
+    }
+    , headerRender: function(){
+      return this.pageHeader.render();
     }
     , render: function(){
       $(this.el).html(app.templates.streams());

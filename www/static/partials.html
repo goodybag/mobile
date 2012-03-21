@@ -2,13 +2,8 @@
 <!-- MAIN FRAME TEMPLATE -->
 <!-- ################### -->
 <script id="main-frame-tmpl" type="text/x-handlebars-template">
-<header>
-  <div class="header-nav">
-    <div class="graphic-wrapper">
-      <div class="accent graphic"></div>
-      <div class="logo"></div>
-    </div>
-  </div>
+<header id="header">
+
 </header>
 <div class="content" id="content">
 </div>
@@ -45,6 +40,73 @@
   </nav>
 </footer>
 </div>
+</script>
+<!-- #################### -->
+<!-- USER HEADER FRAGMENT -->
+<!-- #################### -->
+<script id="user-header-fragment" type="text/x-handlebars-fragment">
+  <div class="column left user-info">
+    <img src="/static/images/profile-placeholder.jpg" class="picture item" />
+    <div class="item">
+      <div class="name">Corey Haggard</div>
+      <div class="donated">
+        Total Donated:
+        <span class="amount">$21.92</span>
+      </div>
+    </div>
+  </div>
+  <div class="column right">
+    <div class="pledge-bank">
+      <div class="title">Pledge Bank Total</div>
+      <div class="pledge-wrapper">
+        <div class="pledge">
+          <span class="digit dollar-sign">$</span>
+          <span class="separator"></span>
+          <span class="digit">0</span>
+          <span class="separator"></span>
+          <span class="digit decimal">.</span>
+          <span class="separator"></span>
+          <span class="digit">5</span>
+          <span class="separator"></span>
+          <span class="digit">1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<!-- ###################### -->
+<!-- HEADER NAV FRAGMENT -->
+<!-- ###################### -->
+<script id="header-nav-fragment" type="text/x-handlebars-fragment">
+  <div class="graphic-wrapper">
+    <div class="accent graphic"></div>
+  </div>
+  <div class="flex-columns">
+    <div class="left column">
+      {{#if last}}
+        <a href="{{last}}" class="btn back">Back</a>
+      {{/if}}
+    </div>
+    <div class="middle column">
+      <div class="logo graphic"></div>
+    </div>
+    <div class="right column"></div>
+  </div>
+</script>
+<!-- ################# -->
+<!-- PAGE NAV FRAGMENT -->
+<!-- ################# -->
+<script id="page-nav-fragment" type="text/x-handlebars-fragment">
+  <div class="column left">
+    {{#if leftButton}}
+      <button id="{{leftButton.id}}" class="{{leftButton.classes}}">{{leftButton.text}}</button>
+    {{/if}}
+  </div>
+  <div class="column right">
+    {{#if rightButton}}
+      <button id="{{rightButton.id}}" class="{{rightButton.classes}}">{{rightButton.text}}</button>
+    {{/if}}
+  </div>
 </script>
 
 <!-- ##################### -->
@@ -165,12 +227,6 @@
 <!-- ####### -->
 <script id="streams-tmpl" type="text/x-handlebars-template">
   <section id="streams">
-    <div class="heading actions">
-      <button id="streams-all-button">All Activity</button>
-      <button id="streams-my-button">My Activity</button>
-      <a href="#!/places">Places</a>
-      <a href="#!/tapin">TapIn</a>
-    </div>
     <div id="streams-activities">
       <!-- activity fragments -->
     </div>
