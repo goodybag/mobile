@@ -3,6 +3,7 @@
 
   app.router = $.sammy("#body", function(){
     this.before(/#!\/.*/, app.routes.everything);
+    this.after(app.routes.afterAll);
 
     this.get ('#!/',                    app.routes.landing);
     this.get ('#!/login',               app.routes.login);
@@ -26,6 +27,7 @@
     }
     app.router.last_location = ["get", hash];
     window.location.href = hash;
+    app.previousRoutes.add(hash);
   };
 
   app.router.replaceHash = function(hash){
@@ -37,5 +39,6 @@
     }
     app.router.last_location = ["get", hash];
     window.location.replace(hash);
+    app.previousRoutes.add(hash);
   };
 }).call(this);

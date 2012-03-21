@@ -8,7 +8,7 @@
   // For the api to use
   window.exists = utils.exists;
 
-  //replace app.Views.Main with an instance of itself
+  this.app.previousRoutes = new this.app.Models.PreviousRoutes();
   this.app.Views.Main = new this.app.Views.Main();
 
   $(document).ready(function(){

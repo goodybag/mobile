@@ -69,6 +69,30 @@
     //timestamp
   });
 
+  models.PreviousRoutes = utils.Model.extend({
+    defaults: {
+      routes: [],
+      maxLength: 5,
+      last: false,
+      goingBack: false
+    },
+    add: function(route){
+      this.attributes.routes.push(route);
+      if (this.get('routes').length > this.get('maxLength')){
+        this.set('routes', this.get('routes').slice(1));
+      }
+      if (this.get('routes').length > 1){
+        this.set('last', this.get('routes')[this.get('routes').length - 2]);
+        this.trigger('change:routes');
+      }
+    },
+    pop: function(route){
+      var r = this.attributes.routes.pop();
+      if (this.get('routes').length == 1) this.set('last', false);
+      this.trigger('change:routes');
+    }
+  });
+
   // Export
   for (var key in models){
     this.app.Models[key] = models[key];

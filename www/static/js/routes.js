@@ -9,6 +9,15 @@
     // Probably ensure we're logged in and redirect if we're not
   };
 
+  routes.afterAll = function(){
+    // Add to our previous routes model unless we clicked the back button
+    if (app.previousRoutes.get('goingBack')){
+      app.previousRoutes.set('goingBack', false);
+    }else{
+      app.previousRoutes.add(this.path);
+    }
+  };
+
   routes.landing = function(){
     console.log("[routes] - landing");
     var landingView  = new app.Views.Landing({
@@ -28,16 +37,18 @@
 
   routes.globalStream = function(){
     var streamsView = new app.Views.Streams({});
-    $("#content").html(streamsView.render().el);
+    $("#content").html(streamsView.headerRender().el);
+    $("#content").append(streamsView.render().el);
     app.router.replaceHash("/#!/streams/global");
     streamsView.loadGlobalActivity();
-  }
+  };
 
   routes.myStream = function(){
     var streamsView = new app.Views.Streams({});
-    $("#content").html(streamsView.render().el);
+    $("#content").html(streamsView.headerRender().el);
+    $('#content').append(streamsView.render().el);
     streamsView.loadMyActivity();
-  }
+  };
 
   routes.places = function() {
     var placesView = new app.Views.Places({});
