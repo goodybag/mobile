@@ -7,6 +7,7 @@
     , fragments = {}
   ;
 
+  templates.mainFrame   = "main-frame-tmpl";
   templates.landing     = "landing-tmpl";
   templates.register    = "register-tmpl";
   templates.emailLogin  = "email-login-tmpl";
@@ -14,6 +15,7 @@
 
   // Goodies
   templates.goodies     = "goodies-tmpl";
+  templates.noGoodies   = "no-goodies-tmpl";
   fragments.goody       = "goody-fragment";
 
   //Streams
