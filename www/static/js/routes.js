@@ -14,7 +14,7 @@
     var landingView  = new app.Views.Landing({
       authModel: new app.Models.EmailAuth()
     });
-    $("#container").html(landingView.render().el);
+    $("#content").html(landingView.render().el);
   };
 
   routes.register = function(){
@@ -22,7 +22,7 @@
     var landingView  = new app.Views.Landing({
       authModel: new app.Models.EmailAuth()
     });
-    $("#container").html(landingView.render().el);
+    $("#content").html(landingView.render().el);
     landingView.registerView();
   };
 
@@ -72,7 +72,7 @@
   routes.login = function(){
     console.log("[routes] - register");
     var landingView  = new app.Views.Landing({});
-    $("#container").html(landingView.render().el);
+    $("#content").html(landingView.render().el);
     landingView.login();
   };
 
@@ -111,7 +111,8 @@
   };
 
   routes.goodies = function(){
-    $('#container').html(app.templates.goodies());
+    console.log('[routes] - goodies');
+    $('#content').html(app.templates.goodies());
     var options = {
       media: 1,
       progress: 1
@@ -125,14 +126,18 @@
         , $goodies  = $()
         , goody
       ;
-      for (var i = 0; i < goodies.length; i++){
-        goody = new app.Views.Goody({
-          model: new app.Models.Goody(goodies[i])
-        });
-        goody.render();
-        $goodies = $goodies.add($(goody.el));
+      if (goodies.length == 0){
+        $('#content').html(app.templates.noGoodies());
+      }else{
+        for (var i = 0; i < goodies.length; i++){
+          goody = new app.Views.Goody({
+            model: new app.Models.Goody(goodies[i])
+          });
+          goody.render();
+          $goodies = $goodies.add($(goody.el));
+        }
+        $('#goodies-list').html($goodies);
       }
-      $('#goodies-list').html($goodies);
     });
   };
 

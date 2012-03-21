@@ -251,7 +251,6 @@ html {
 }
 .content > .page {
   padding: 4px 2%;
-  min-height: 420px;
   background-color: #fff;
   border: solid 1px #000;
   border-radius: 4px;
@@ -261,6 +260,9 @@ html {
 }
 .sub-nav > .right {
   text-align: right;
+}
+.page.goodies {
+  padding: 0;
 }
 .goodies-list > .goody {
   display: -webkit-box;
@@ -407,6 +409,27 @@ html {
   border-right: none;
   z-index: 3;
 }
+.field-row {
+  margin-bottom: 8px;
+}
+.field-row > button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 16px;
+}
+.field-row > label {
+  display: block;
+  margin-bottom: 4px;
+}
+.field-row > input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px;
+  border: solid #aaa 1px;
+  border-radius: 16px;
+}
 h1 {
   font-size: 2rem;
   font-weight: 300;
@@ -417,7 +440,7 @@ h2 {
 .row-link {
   position: relative;
   display: block;
-  padding: 8px 6px;
+  padding: 6px 8px;
   border: solid #aaa 1px;
   border-radius: 16px;
   color: #4c90d0;

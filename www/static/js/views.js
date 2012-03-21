@@ -4,11 +4,16 @@
   var views = {};
 
   views.Main = utils.View.extend({
-    className: 'main'
+    className: 'outer-container'
+    , id: "container"
     , events : { //for Backbone Views these events are binded to the DOM object, not the view object
     }
     , initialize: function (){
       this.currentFrame = "landingFrame";
+      return this;
+    }
+    , render: function(){
+      $(this.el).html(app.templates.mainFrame());
       return this;
     }
     , authenticatedFrame: function(callback){
@@ -32,28 +37,21 @@
       }
       return this;
     }
-  })
+  });
 
   views.Goody = utils.View.extend({
     className: 'goody',
-    events: {
-      'click': 'goodyClick'
-    },
     initialize: function(){
       return this;
     },
     render: function(){
       $(this.el).html(app.fragments.goody(this.model.toJSON()));
       return this;
-    },
-    goodyClick: function(e){
-      console.log("GOODY CLICKED!!!!!!!!");
-      return this;
     }
   });
 
   views.Landing = utils.View.extend({
-    className: 'landing'
+    className: 'page landing'
     , events: {
       'click #landing-register-button': 'registerView'
       , 'click #landing-login-facebook-button': 'facebookLoginHandler'
@@ -76,7 +74,7 @@
       var registerView = new app.Views.Register({
         authModel: new app.Models.EmailAuth()
       });
-      $("#container").html(registerView.render().el);
+      $("#content").html(registerView.render().el);
       return this;
     }
     , facebookLoginHandler: function(){
@@ -126,7 +124,7 @@
   });
 
   views.Register = utils.View.extend({
-    className: 'register'
+    className: 'page register'
     , events: {
       'submit #register-form': 'registerHandler'
     }
