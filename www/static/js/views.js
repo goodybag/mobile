@@ -274,14 +274,11 @@
     , viewDetails: function(){
       /* display business details */
       var self = this;
-      api.businesses.getOneEquipped = function(bid, callback){
-        api._get('/api/consumers/businesses/' + bid, callback);
-      };
       api.businesses.getOneEquipped(this.model.get("_id"), function(error, business){
         if(utils.exists(error)){
           console.log(error);
           return;
-        }
+        };
 
         var placeDetailsView = new app.Views.PlaceDetails({
           model: new utils.Model(business)
@@ -335,17 +332,42 @@
   views.TapIn = utils.View.extend({
     className: 'tap-in'
     , events: {
-
+      "click .save" : "saveCode"
+      , "click .create" : "createCode"
     }
     , initialize: function(){
     }
     , render: function(){
-      $(this.el).html(app.templates.tapIn({}));
+      $(this.el).html(app.templates.tapIn({barcodeId: this.model.get("barcodeId")}));
+      $(".qrcode", this.el).qrcode({width: 200,height: 200,text: this.model.get("barcodeId")});
       return this;
     }
     , saveCode: function(){
+      var self = this;
+      var barcodeId = $("#tap-in-existing-barcodeId", this.el).val();
+      api.auth.updateBarcodeId({barcodeId: barcodeId}, function(error, data){
+        if(utils.exists(error)){
+          alert(error.message);
+          return;
+        };
+        if(data === true){
+          self.model.set("barcodeId", barcodeId);
+          $("#container").html(self.render().el);
+        } else {
+          alert("There was an error linking your barcode");
+        }
+      })
     }
     , createCode: function(){
+      var self = this;
+      api.barcodes.create(function(error, barcode){
+        if(utils.exists(error)){
+          console.log(error);
+          return;
+        };
+        self.model.set("barcodeId", barcode.barcodeId);
+        $("#container").html(self.render().el);
+      });
     }
   })
 

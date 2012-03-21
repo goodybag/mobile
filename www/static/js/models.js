@@ -67,7 +67,8 @@
     //who.name
     //action
     //timestamp
-  })
+  });
+
   // Export
   for (var key in models){
     this.app.Models[key] = models[key];

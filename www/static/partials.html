@@ -141,27 +141,25 @@
 <!-- PLACE -->
 <!-- ##### -->
 <script id="place-fragment" type="text/x-handlebars-template">
-  <div class="place">
-    <div class="left">
-      {{#if media.thumb}}
-        <img src="{{media.thumb}}" />
-      {{else}}
-        <img src="https://goodybag.com.s3.amazonaws.com/default-85.jpg" />
-      {{/if}}
+  <div class="left">
+    {{#if media.thumb}}
+      <img src="{{media.thumb}}" />
+    {{else}}
+      <img src="https://goodybag.com.s3.amazonaws.com/default-85.jpg" />
+    {{/if}}
+  </div>
+  <div class="middle">
+    <h2 class="name"><a href="{{url}}" target="_blank">{{publicName}}</a></h2>
+    <div class="tags">
+      {{#each type}}
+      <span class="tag">
+        <a href="#">{{this}}</a>
+      </span>
+      {{/each}}
     </div>
-    <div class="middle">
-      <h2 class="name"><a href="{{url}}" target="_blank">{{publicName}}</a></h2>
-      <div class="tags">
-        {{#each type}}
-        <span class="tag">
-          <a href="#">{{this}}</a>
-        </span>
-        {{/each}}
-      </div>
-    </div>
-    <div class="right">
-      <button class="view-details"> > </button>
-    </div>
+  </div>
+  <div class="right">
+    <button class="view-details"> > </button>
   </div>
 </script>
 
@@ -169,37 +167,38 @@
 <!-- PLACE DETAILS -->
 <!-- ############# -->
 <script id="place-details-tmpl" type="text/x-handlebars-template">
-  <div class="place">
-    <div class="name">{{publicName}}</div>
-    <div class="url">{{url}}</div>
-    <div class="email">{{email}}</div>
-    <div class="locations">
-    {{#each locations}}
-      <div class="location">
-        <div class="name">{{name}}</div>
-        <div class="street1">{{street1}}</div>
-        <div class="city">{{city}}</div>
-        <div class="state">{{state}}</div>
-        <div class="zip">{{zip}}</div>
-        <div class="phone">{{phone}}</div>
-        <button class="save">Save As Contact</button>
-      </div>
-    {{/each}}
+  <div class="name">{{publicName}}</div>
+  <div class="url">{{url}}</div>
+  <div class="email">{{email}}</div>
+  <div class="locations">
+  {{#each locations}}
+    <div class="location">
+      <div class="name">{{name}}</div>
+      <div class="street1">{{street1}}</div>
+      <div class="city">{{city}}</div>
+      <div class="state">{{state}}</div>
+      <div class="zip">{{zip}}</div>
+      <div class="phone">{{phone}}</div>
+      <button class="save">Save As Contact</button>
     </div>
+  {{/each}}
   </div>
 </script>
 
+
+<!-- ###### -->
+<!-- TAP IN -->
+<!-- ###### -->
 <script id="tap-in-tmpl" type="text/x-handlebars-template">
-  <div class="tap-in">
-    {{#if barcodeId}}
-      <div class="barcode"></div>
-    {{else}}
-      <div>Already have a goodybag qr code?</div>
-      <input type="text" name="barcodeId" />
-      <button class="save">save</button>
-      <div>----or----</div>
-      <div>Make me one</div>
-      <button class="create">make it!</button>
-    {{/if}}
-  </div>
+  {{#if barcodeId}}
+    <div class="qrcode"></div>
+    <div class="barcodeId">{{barcodeId}}</div>
+  {{else}}
+    <div>Already have a goodybag qr code?</div>
+    <input type="text" name="barcodeId" id="tap-in-existing-barcodeId" />
+    <button class="save">save</button>
+    <div>----or----</div>
+    <div>Make me one</div>
+    <button class="create">make it!</button>
+  {{/if}}
 </script>

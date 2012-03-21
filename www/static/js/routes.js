@@ -46,9 +46,6 @@
   };
 
   routes.placeDetails = function() {
-    api.businesses.getOneEquipped = function(bid, callback){
-      api._get('/api/consumers/businesses/' + bid, callback);
-    };
     api.businesses.getOneEquipped(this.params.id, function(error, business){
       if(utils.exists(error)){
         console.log(error);
@@ -62,8 +59,21 @@
   };
 
   routes.tapIn = function() {
-    var tapInView = new app.Views.TapIn({});
+    //consider not using true
+    api.auth.session(true, function(error, data){
+      if(utils.exists(error)){
+        console.log(error);
+        return;
+      };
+      var model = new utils.Model({});
+      if (data){
+        model.set("barcodeId", data.barcodeId);
+      }
+      var tapInView = new app.Views.TapIn({
+        model: model
+      });
     $("#container").html(tapInView.render().el);
+    });
   };
 
   routes.test = function(){
