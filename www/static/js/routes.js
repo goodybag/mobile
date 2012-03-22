@@ -169,6 +169,21 @@
     });
   };
 
+  routes.settings = function(){
+    var page = new app.Views.Settings();
+    $('#content').html(page.render().el);
+  };
+
+  routes.changePassword = function(){
+    var page = new app.Views.ChangePassword();
+    $('#content').html(page.render().el);
+  };
+
+  routes.changeTapIn = function(){
+    var page = new app.Views.ChangeTapIn();
+    $('#content').html(page.render().el);
+  };
+
   // Export
   for (var key in routes){
     this.app.routes[key] = routes[key];

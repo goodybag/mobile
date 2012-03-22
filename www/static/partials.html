@@ -34,8 +34,8 @@
       <div class="column">
           <div class="separator"></div>
       </div>
-      <li class="menu-item me">
-        <a href="/#!/me">Me</a>
+      <li class="menu-item settings">
+        <a href="/#!/settings">Settings</a>
       </li>
       <div class="column"></div>
     </ul>
@@ -355,4 +355,54 @@
     <div>Make me one</div>
     <button class="create">make it!</button>
   {{/if}}
+</script>
+
+<!-- ######## -->
+<!-- SETTINGS -->
+<!-- ######## -->
+<script id="settings-tmpl" type="text/x-handlebars-template">
+  <h1>Settings</h1>
+  <div class="field-row">
+    <a class="row-link" href="/#!/settings/change-password">Change Password</a>
+  </div>
+  <div class="field-row">
+    <a class="row-link" href="/#!/settings/change-tapin">Change TapIn ID</a>
+  </div>
+  <div class="field-row">
+    <a class="row-link" href="/#!/settings/change-picture">Change Picture</a>
+  </div>
+</script>
+<!-- ######################## -->
+<!-- SETTINGS CHANGE PASSWORD -->
+<!-- ######################## -->
+<script id="change-password-tmpl" type="text/x-handlebars-template">
+  <h1>Settings - Change Password</h1>
+  <form id="settings-change-password-form">
+    <div class="field-row">
+      <input type="password" placeholder="Current Password" />
+    </div>
+    <div class="field-row">
+      <input type="password" placeholder="New Password" />
+    </div>
+    <div class="field-row">
+      <button>Make it so, Number One.</button>
+    </div>
+  </form>
+</script>
+<!-- ##################### -->
+<!-- SETTINGS CHANGE TAPIN -->
+<!-- ##################### -->
+<script id="change-tapin-tmpl" type="text/x-handlebars-template">
+  <h1>Settings - Change TapIn ID</h1>
+  <form id="settings-change-tapin-form">
+    <div class="field-row">
+      <input type="text" placeholder="New TapIn ID" />
+    </div>
+    <div class="field-row">
+      <input type="password" placeholder="Password" />
+    </div>
+    <div class="field-row">
+      <button>I&#39;m Batman. Don&#39;t care just change it.</button>
+    </div>
+  </form>
 </script>

@@ -477,7 +477,49 @@
         $("#content").html(self.render().el);
       });
     }
-  })
+  });
+
+  views.Settings = utils.View.extend({
+    className: 'page settings',
+    render: function(){
+      $(this.el).html(app.templates.settings());
+      return this;
+    }
+  });
+
+  views.ChangePassword = utils.View.extend({
+    className: 'page change-password',
+    events: {
+      'submit #settings-change-password-form': 'formHandler'
+    },
+    render: function(){
+      $(this.el).html(app.templates.changePassword());
+      return this;
+    },
+    formHandler: function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      // Do your thang
+      return false;
+    }
+  });
+
+  views.ChangeTapIn = utils.View.extend({
+    className: 'page change-tapin',
+    events: {
+      'submit #settings-change-tapin-form': 'formHandler'
+    },
+    render: function(){
+      $(this.el).html(app.templates.changeTapIn());
+      return this;
+    },
+    formHandler: function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      // Do your thang
+      return false;
+    }
+  });
 
   // Export
   for (var name in views){

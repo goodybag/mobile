@@ -177,6 +177,9 @@ body, html
 .main-nav .menu-item.me
   background-position: -258px -259px
 
+.main-nav .menu-item.settings
+  background-position: -198px -259px
+
 .main-nav .menu-item.active.places
   background-position: 4px -318px
 
@@ -191,6 +194,9 @@ body, html
 
 .main-nav .menu-item.active.me
   background-position: -258px -318px
+
+.main-nav .menu-item.active.settings
+  background-position: -198px -318px
 
 
 // End Footer Nav
@@ -535,8 +541,10 @@ h2
   color: #4c90d0
 .row-link:after
   position: absolute
-  top: 6px
+  display: block
+  top: 50%
   right: 6px
+  margin-top: -10px
   color: #fff;
   text-align: center
   font-size: 32px;

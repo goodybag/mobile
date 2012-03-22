@@ -18,6 +18,11 @@
   templates.emailLogin  = "email-login-tmpl";
   templates.dashboard   = "dashboard-tmpl";
 
+  // Settings
+  templates.settings        = "settings-tmpl";
+  templates.changePassword  = "change-password-tmpl";
+  templates.changeTapIn     = "change-tapin-tmpl";
+
   // Goodies
   templates.goodies     = "goodies-tmpl";
   templates.noGoodies   = "no-goodies-tmpl";
