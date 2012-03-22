@@ -243,7 +243,7 @@
       var options = {
         firstName: $("#register-first-name", this.el).val()
         , lastName: $("#register-last-name", this.el).val()
-        , email: $("#register-email-name", this.el).val()
+        , email: $("#register-email-address", this.el).val()
         , password: $("#register-password", this.el).val()
       };
       if(options.password != $("#register-password-repeat", this.el).val()){
