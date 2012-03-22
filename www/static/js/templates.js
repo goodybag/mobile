@@ -22,6 +22,7 @@
   templates.settings        = "settings-tmpl";
   templates.changePassword  = "change-password-tmpl";
   templates.changeTapIn     = "change-tapin-tmpl";
+  templates.changePicture   = "change-picture-tmpl";
 
   // Goodies
   templates.goodies     = "goodies-tmpl";

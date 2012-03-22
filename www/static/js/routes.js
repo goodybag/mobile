@@ -184,6 +184,11 @@
     $('#content').html(page.render().el);
   };
 
+  routes.changePicture = function(){
+    var page = new app.Views.ChangePicture();
+    $('#content').html(page.render().el);
+  };
+
   // Export
   for (var key in routes){
     this.app.routes[key] = routes[key];
