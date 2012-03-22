@@ -299,9 +299,11 @@ html {
   font-size: 9px;
   text-transform: uppercase;
   font-weight: 200;
+  text-shadow: 0 1px 0 #fff;
 }
 .goodies-list > .goody .raised-amount {
   font-size: 22px;
+  text-shadow: 0 1px 0 #fff;
 }
 .meter .circle {
   margin-left: -6px;
@@ -409,6 +411,27 @@ html {
   border: solid 1px #b2b5bc;
   border-right: none;
   z-index: 3;
+}
+.page.tap-in {
+  text-align: center;
+}
+.story {
+  padding-bottom: 8px;
+  border-bottom: dotted #ccc 1px;
+  margin-bottom: 8px;
+}
+.story .column.picture {
+  width: 16%;
+  margin-right: 4%;
+}
+.story .column.picture img {
+  width: 100%;
+}
+.story .column.text {
+  width: 80%;
+}
+.story .name {
+  font-weight: 600;
 }
 .field-row {
   margin-bottom: 8px;

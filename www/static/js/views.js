@@ -140,7 +140,6 @@
     },
     render: function(){
       $(this.el).html(app.fragments.footerNav());
-      console.log(this.el);
       this.updateActive();
       return this;
     },
@@ -439,7 +438,7 @@
   });
 
   views.TapIn = utils.View.extend({
-    className: 'tap-in'
+    className: 'page tap-in'
     , events: {
       "click .save" : "saveCode"
       , "click .create" : "createCode"

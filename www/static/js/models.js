@@ -87,7 +87,7 @@
       }
     },
     pop: function(route){
-      var r = this.attributes.routes.pop();
+      var r = this.attributes.routes.shift();
       if (this.get('routes').length == 1) this.set('last', false);
       this.trigger('change:routes');
     }
