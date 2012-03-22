@@ -12,6 +12,8 @@
   this.app.activeRoute = new this.app.Models.ActiveRoute();
   this.app.Views.Main = new this.app.Views.Main();
 
+  this.app.user = new this.app.Models.User();
+
   $(document).ready(function(){
     app.compileTemplates(function(){
       app.Views.Main.render();

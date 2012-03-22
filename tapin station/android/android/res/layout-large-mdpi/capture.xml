@@ -29,9 +29,9 @@
   
   <ImageView
       android:id="@+id/image_overlay"
-      android:layout_width="1024px"
-      android:layout_height="600px"
       android:adjustViewBounds="false"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
       android:scaleType="fitXY"
       android:src="@drawable/scan_default" />
 

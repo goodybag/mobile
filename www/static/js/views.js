@@ -220,6 +220,7 @@
     className: 'page register'
     , events: {
       'submit #register-form': 'registerHandler'
+      , 'click #register-facebook': 'facebookLoginHandler'
     }
     , initialize: function(options){
       this.authModel = this.options.authModel;
@@ -247,6 +248,31 @@
 
       event.preventDefault();
       return false;
+    }
+    , facebookLoginHandler: function(){
+      var self = this;
+      FB.login(function(response){
+        if(response.session){
+          var accessToken = response.session.access_token;
+          FB.api('/me', function(response) {
+            api.auth.facebook(accessToken,function(error,consumer){
+              if(utils.exists(error)){
+                console.log(error);
+                return;
+              }
+              console.log("[facebook] authenticated");
+              app.Views.Main.authenticatedFrame(function(){
+                self.authenticatedHandler();
+              });
+            });
+          });
+        } else{
+          console.log("[facebook] error authenticating");
+        }
+      }
+      , {
+        perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
+      });
     }
     , authenticatedHandler: function(){
       var streamsView = new app.Views.Streams({});
