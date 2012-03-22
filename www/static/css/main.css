@@ -115,6 +115,7 @@ html {
 .main-nav .menu-item > a {
   position: absolute;
   width: 100%;
+  padding-top: 50px;
   text-align: center;
   bottom: 0;
   color: #8c95a0;
