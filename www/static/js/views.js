@@ -547,6 +547,23 @@
     }
   });
 
+  views.ChangePicture = utils.View.extend({
+    className: 'page change-picture',
+    events: {
+      'submit #settings-change-picture-form': 'formHandler'
+    },
+    render: function(){
+      $(this.el).html(app.templates.changePicture());
+      return this;
+    },
+    formHandler: function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      // Do your thang
+      return false;
+    }
+  });
+
   // Export
   for (var name in views){
     this.app.Views[name] = views[name];

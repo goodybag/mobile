@@ -105,7 +105,8 @@
         streams: 'activity',
         tapin: 'tapin',
         me: 'me',
-        places: 'places'
+        places: 'places',
+        settings: 'settings'
       }
     },
     initialize: function(){},
