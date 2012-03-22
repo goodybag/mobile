@@ -438,6 +438,7 @@
 
   _utils.View.extend = _utils.Model.extend = _utils.extend;
 
+
   // Export
   for (var key in _utils){
     this.utils[key] = _utils[key];

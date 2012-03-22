@@ -41,7 +41,7 @@
       api.auth.login(options, function(error, consumer){
         self.unset("password", {silent: true}); //clear for safety
         if(!utils.exists(error)){
-          app.user = new app.Models.User(consumer);
+          app.user.set(consumer);
           self.trigger("authenticated");
         };
       });
@@ -58,6 +58,7 @@
       api.auth.register(options, function(error, consumer){
         self.unset("password", {silent: true}); //clear for safety
         if(!utils.exists(error)){
+          app.user.set(consumer);
           self.trigger("authenticated");
         };
       });

@@ -12,7 +12,7 @@
       this.currentFrame = "landingFrame";
       // Setup sub-views
       this.subViews = {
-        userHeader: new app.Views.UserHeader(),
+        userHeader: new app.Views.UserHeader({model: app.user}),
         headerNav: new app.Views.HeaderNav({model: app.previousRoutes}),
         footerNav: new app.Views.FooterNav({model: app.activeRoute})
       };
@@ -98,6 +98,7 @@
                 return;
               }
               console.log("[facebook] authenticated");
+              app.user.set(consumer);
               app.Views.Main.authenticatedFrame(function(){
                 self.authenticatedHandler();
               });
@@ -126,7 +127,8 @@
     , authenticatedHandler: function(){
       console.log("[handler] landing-authenticated");
       var streamsView = new app.Views.Streams({});
-      $("#content").html(streamsView.render().el);
+      $("#content").html(streamsView.headerRender().el);
+      $("#content").append(streamsView.render().el);
       streamsView.loadGlobalActivity();
       return this;
     }
@@ -177,10 +179,16 @@
     className: 'sub-header profile inline-columns',
     id: "user-header",
     initialize: function(){
+      this.model.on("change", this.render, this);
       return this;
     },
     render: function(){
-      $(this.el).html(app.fragments.userHeader());
+      console.log('[render] - UserHeader');
+      $(this.el).html(app.fragments.userHeader(this.model.toJSON()));
+      $newImages = $("img.picture", this.el);
+      $newImages.error(function(){
+        $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
+      });
       return this;
     }
   });
@@ -204,13 +212,13 @@
     },
     leftHandler: function(){
       if (utils.exists(this.buttons.leftButton.handler)){
-        this.buttons.leftButton.handler.call(this);
+        this.buttons.leftButton.handler();
       }
       return this;
     },
     rightHandler: function(){
       if (utils.exists(this.buttons.rightButton.handler)){
-        this.buttons.rightButton.handler.call(this);
+        this.buttons.rightButton.handler();
       }
       return this;
     }
@@ -261,6 +269,7 @@
                 return;
               }
               console.log("[facebook] authenticated");
+              app.user.set(consumer);
               app.Views.Main.authenticatedFrame(function(){
                 self.authenticatedHandler();
               });
@@ -276,7 +285,8 @@
     }
     , authenticatedHandler: function(){
       var streamsView = new app.Views.Streams({});
-      $("#content").html(streamsView.render().el);
+      $("#content").html(streamsView.headerRender().el);
+      $("#content").append(streamsView.render().el);
       streamsView.loadGlobalActivity();
       return this;
     }
@@ -312,6 +322,7 @@
       return this;
     }
     , loadGlobalActivity: function(){
+      console.log("[handler] streams-loadGlobalActivity");
       app.router.changeHash("/#!/streams/global");
       var self = this;
       api.streams.global(function(error, stream){
@@ -340,6 +351,7 @@
       });
     }
     , loadMyActivity: function(){
+      console.log("[handler] streams-loadMyActivity");
       var self = this;
       app.router.changeHash("/#!/streams/me");
       api.streams.self(function(error, stream){
@@ -348,7 +360,9 @@
           return;
         };
 
+        console.log(self.el);
         var $activitiesContainer = $("#streams-activities", self.el);
+        console.log($activitiesContainer);
 
         $activitiesContainer.html("");
 
@@ -481,7 +495,7 @@
       var barcodeId = $("#tap-in-existing-barcodeId", this.el).val();
       api.auth.updateBarcodeId({barcodeId: barcodeId}, function(error, data){
         if(utils.exists(error)){
-          alert(error.message);
+          console.log(error);
           return;
         };
         if(data === true){
@@ -506,9 +520,16 @@
   });
 
   views.Settings = utils.View.extend({
-    className: 'page settings',
-    render: function(){
+    className: 'page settings'
+    , events: {
+      "click #settings-logout": "logout"
+    }
+    , render: function(){
       $(this.el).html(app.templates.settings());
+      return this;
+    }
+    , logout: function(){
+      window.location.href = "/#!/logout";
       return this;
     }
   });

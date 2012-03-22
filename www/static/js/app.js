@@ -8,15 +8,22 @@
   // For the api to use
   window.exists = utils.exists;
 
-  this.app.previousRoutes = new this.app.Models.PreviousRoutes();
-  this.app.activeRoute = new this.app.Models.ActiveRoute();
-  this.app.Views.Main = new this.app.Views.Main();
-
   this.app.user = new this.app.Models.User();
+  api.auth.session(function(error, consumer){
+    if(exists(error)){
+      console.error(error.message);
+      return;
+    };
+    app.user.set(consumer);
+  });
 
   $(document).ready(function(){
     app.compileTemplates(function(){
+      app.previousRoutes = new this.app.Models.PreviousRoutes();
+      app.activeRoute = new this.app.Models.ActiveRoute();
+      app.Views.Main = new this.app.Views.Main();
       app.Views.Main.render();
+
       $('#body').prepend(app.Views.Main.el);
       app.router.run('#!/');
     });

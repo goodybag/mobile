@@ -98,10 +98,22 @@
   };
 
   routes.login = function(){
-    console.log("[routes] - register");
+    console.log("[routes] - login");
     var landingView  = new app.Views.Landing({});
     $("#content").html(landingView.render().el);
     landingView.login();
+  };
+
+  routes.logout = function(){
+    console.log("[routes] - logout");
+    api.auth.logout(function(error, consumer){
+      if (utils.exists(error)){
+        console.log(error);
+        return;
+      }
+      app.user.clear();
+      window.location.replace("/#!/");
+    });
   };
 
   routes.emailLogin = function(){
