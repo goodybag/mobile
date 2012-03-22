@@ -348,12 +348,17 @@
     <div class="qrcode"></div>
     <div class="barcodeId">{{barcodeId}}</div>
   {{else}}
-    <div>Already have a goodybag qr code?</div>
-    <input type="text" name="barcodeId" id="tap-in-existing-barcodeId" />
-    <button class="save">save</button>
-    <div>----or----</div>
-    <div>Make me one</div>
-    <button class="create">make it!</button>
+    <h1>Already have a goodybag qr code?</h1>
+    <div class="field-row">
+      <input type="text" name="barcodeId" placeholder="Enter it right here" id="tap-in-existing-barcodeId" />
+    </div>
+    <div class="field-row">
+      <button class="save">Save</button>
+    </div>
+    <h2>Or make one right here</h2>
+    <div class="field-row">
+      <button class="create">Make It!</button>
+    </div>
   {{/if}}
 </script>
 
