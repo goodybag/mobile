@@ -11,6 +11,8 @@
   this.app.previousRoutes = new this.app.Models.PreviousRoutes();
   this.app.Views.Main = new this.app.Views.Main();
 
+  this.app.user = new this.app.Models.User();
+
   $(document).ready(function(){
     app.compileTemplates(function(){
       app.Views.Main.render();

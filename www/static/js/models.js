@@ -3,6 +3,8 @@
   this.app.Models = window.app.Models || {};
   var models = {};
 
+  models.User = utils.Model.extend({});
+
   models.Goody = utils.Model.extend({
     initialize: function(attributes, options){
       // Set the percentage field
@@ -39,6 +41,7 @@
       api.auth.login(options, function(error, consumer){
         self.unset("password", {silent: true}); //clear for safety
         if(!utils.exists(error)){
+          app.user = new app.Models.User(consumer);
           self.trigger("authenticated");
         };
       });
