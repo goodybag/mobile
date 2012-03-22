@@ -454,11 +454,11 @@ html {
   border-bottom: none;
 }
 .place > .column.left {
-  width: 24%;
+  width: 16%;
   margin-right: 4%;
 }
 .place > .column.right {
-  width: 72%;
+  width: 80%;
 }
 .place > .column.left > img {
   width: 100%;
