@@ -79,6 +79,7 @@
 <!-- ###################### -->
 <script id="header-nav-fragment" type="text/x-handlebars-fragment">
   <div class="graphic-wrapper">
+  <div class="logo graphic"></div>
     <div class="accent graphic"></div>
   </div>
   <div class="flex-columns">
@@ -88,7 +89,7 @@
       {{/if}}
     </div>
     <div class="middle column">
-      <div class="logo graphic"></div>
+
     </div>
     <div class="right column"></div>
   </div>
@@ -282,25 +283,27 @@
 <!-- PLACE -->
 <!-- ##### -->
 <script id="place-fragment" type="text/x-handlebars-template">
-  <div class="left">
+  <div class="column left">
     {{#if media.thumb}}
       <img src="{{media.thumb}}" />
     {{else}}
       <img src="https://goodybag.com.s3.amazonaws.com/default-85.jpg" />
     {{/if}}
   </div>
-  <div class="middle">
+  <div class="column right">
     <h2 class="name"><a href="{{url}}" target="_blank">{{publicName}}</a></h2>
     <div class="tags">
       {{#each type}}
       <span class="tag">
-        <a href="#">{{this}}</a>
+        {{this}}
       </span>
       {{/each}}
     </div>
   </div>
-  <div class="right">
-    <button class="view-details"> > </button>
+  <div class="actions">
+    <div class="field-row">
+      <button class="view-details">View Details</button>
+    </div>
   </div>
 </script>
 
@@ -308,20 +311,30 @@
 <!-- PLACE DETAILS -->
 <!-- ############# -->
 <script id="place-details-tmpl" type="text/x-handlebars-template">
-  <div class="name">{{publicName}}</div>
-  <div class="url">{{url}}</div>
-  <div class="email">{{email}}</div>
+  <h1 class="name">{{publicName}}</h1>
+  <div class="info">
+    <strong>Website: </strong>
+    <a class="url" href="{{url}}">{{url}}</a>
+  </div>
+  <div class="info">
+    <strong>Email: </strong>
+    <a class="email" href="mailto:{{email}}">{{email}}</a>
+  </div>
   <div class="locations">
   {{#each locations}}
-    <div class="location">
-      <div class="name">{{name}}</div>
-      <div class="street1">{{street1}}</div>
-      <div class="city">{{city}}</div>
-      <div class="state">{{state}}</div>
-      <div class="zip">{{zip}}</div>
-      <div class="phone">{{phone}}</div>
-      <button class="save">Save As Contact</button>
-    </div>
+    <address class="location">
+      <h3 class="name">{{name}}</h3>
+      <span class="street1">{{street1}}, </span>
+      <span class="city">{{city}}, </span>
+      <span class="state">{{state}}, </span>
+      <span class="zip">{{zip}}</span>
+      <div class="phone">
+        <a href="tel:{{phone}}">{{phone}}</a>
+      </div>
+      <div class="field-row save-row">
+        <button class="save">Save As Contact</button>
+      </div>
+    </address>
   {{/each}}
   </div>
 </script>

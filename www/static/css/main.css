@@ -55,6 +55,9 @@ html {
   background-image: url("/static/images/main-sprite.png");
 }
 .header-nav .logo {
+  position: absolute;
+  left: 50%;
+  margin-left: -42px;
   display: inline-block;
   margin-top: 2px;
   width: 85px;
@@ -420,6 +423,9 @@ html {
   border-bottom: dotted #ccc 1px;
   margin-bottom: 8px;
 }
+.story:last-child {
+  border-bottom: none;
+}
 .story .column.picture {
   width: 16%;
   margin-right: 4%;
@@ -432,6 +438,49 @@ html {
 }
 .story .name {
   font-weight: 600;
+}
+.place {
+  padding-bottom: 8px;
+  border-bottom: dotted #ccc 1px;
+  margin-bottom: 8px;
+}
+.place:last-child {
+  border-bottom: none;
+}
+.place > .column.left {
+  width: 24%;
+  margin-right: 4%;
+}
+.place > .column.right {
+  width: 72%;
+}
+.place > .column.left > img {
+  width: 100%;
+}
+.place .name > a {
+  color: inherit;
+  text-decoration: none;
+}
+.place .tag {
+  margin-right: 5px;
+}
+.place > .actions {
+  margin-top: 12px;
+  text-align: right;
+}
+.place-details .info {
+  margin-bottom: 6px;
+}
+.place-details .field-row.save-row {
+  margin-top: 12px;
+}
+.place-details .locations .location {
+  padding-bottom: 8px;
+  border-bottom: dotted #ccc 1px;
+  margin-bottom: 8px;
+}
+.place-details .locations .location:last-child {
+  border-bottom: none;
 }
 .field-row {
   margin-bottom: 8px;
@@ -453,6 +502,9 @@ html {
   padding: 6px;
   border: solid #aaa 1px;
   border-radius: 16px;
+}
+a {
+  color: #2c70a0;
 }
 h1 {
   font-size: 2rem;

@@ -344,7 +344,7 @@
   });
 
   views.Places = utils.View.extend({
-    className: 'places'
+    className: 'page places'
     , events: {
 
     }
@@ -369,7 +369,7 @@
   });
 
   views.Place = utils.View.extend({
-    className: 'place'
+    className: 'inline-columns place'
     , events: {
       'click .view-details': 'viewDetails'
     }
@@ -398,7 +398,7 @@
   });
 
   views.PlaceDetails = utils.View.extend({
-    className: 'place-details'
+    className: 'page place-details'
     , events: {
       "click .save" : "createContact"
     }

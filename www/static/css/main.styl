@@ -87,6 +87,9 @@ body, html
   height 49px
   main-sprite(-100px, 0)
 .header-nav .logo
+  position: absolute;
+  left: 50%
+  margin-left: -42px
   display: inline-block
   margin-top 2px
   width: 85px
@@ -446,6 +449,8 @@ body, html
   padding-bottom: 8px
   border-bottom: dotted #ccc 1px
   margin-bottom: 8px
+.story:last-child
+  border-bottom: none
 .story .column.picture
   width: 16%
   margin-right: 4%
@@ -455,6 +460,38 @@ body, html
   width: 80%
 .story .name
   font-weight: 600
+
+.place
+  padding-bottom: 8px
+  border-bottom: dotted #ccc 1px
+  margin-bottom: 8px
+.place:last-child
+  border-bottom: none
+.place > .column.left
+  width: 24%
+  margin-right: 4%
+.place > .column.right
+  width: 72%
+.place > .column.left > img
+  width: 100%
+.place .name > a
+  color: inherit
+  text-decoration: none
+.place .tag
+  margin-right: 5px
+.place > .actions
+  margin-top: 12px
+  text-align: right
+.place-details .info
+  margin-bottom: 6px
+.place-details .field-row.save-row
+  margin-top: 12px
+.place-details .locations .location
+  padding-bottom: 8px
+  border-bottom: dotted #ccc 1px
+  margin-bottom: 8px
+.place-details .locations .location:last-child
+  border-bottom: none
 
 .field-row
   margin-bottom: 8px
@@ -473,6 +510,9 @@ body, html
   padding: 6px
   border: solid #aaa 1px
   border-radius: 16px
+
+a
+  color: #2C70a0
 
 h1
   font-size: 2rem
