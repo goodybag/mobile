@@ -9,6 +9,7 @@
   window.exists = utils.exists;
 
   this.app.previousRoutes = new this.app.Models.PreviousRoutes();
+  this.app.activeRoute = new this.app.Models.ActiveRoute();
   this.app.Views.Main = new this.app.Views.Main();
 
   this.app.user = new this.app.Models.User();

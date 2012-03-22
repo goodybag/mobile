@@ -90,9 +90,31 @@
       }
     },
     pop: function(route){
-      var r = this.attributes.routes.pop();
+      var r = this.attributes.routes.shift();
       if (this.get('routes').length == 1) this.set('last', false);
       this.trigger('change:routes');
+    }
+  });
+
+  models.ActiveRoute = utils.Model.extend({
+    defaults: {
+      active: false,
+      current: false,
+      keys: {
+        goodies: 'goodies',
+        streams: 'activity',
+        tapin: 'tapin',
+        me: 'me',
+        places: 'places'
+      }
+    },
+    initialize: function(){},
+    setRoute: function(route){
+      this.set('current', route);
+      this.set('active', this.get('keys')[route.split('/')[2]] || false);
+      this.trigger('change:active');
+      console.log('[Active Route] - ' + this.get('keys')[route.split('/')[2]]);
+      return this;
     }
   });
 

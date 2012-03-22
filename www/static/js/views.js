@@ -13,16 +13,17 @@
       // Setup sub-views
       this.subViews = {
         userHeader: new app.Views.UserHeader(),
-        headerNav: new app.Views.HeaderNav({model: app.previousRoutes})
+        headerNav: new app.Views.HeaderNav({model: app.previousRoutes}),
+        footerNav: new app.Views.FooterNav({model: app.activeRoute})
       };
       return this;
     }
     , render: function(){
       $(this.el).html(app.templates.mainFrame());
       $('#header', this.el).append(this.subViews.headerNav.render().el);
-      //if (this.currentFrame == "authenticatedFrame"){
-        $('#header', this.el).append(this.subViews.userHeader.render().el);
-      //}
+      $('#header', this.el).append(this.subViews.userHeader.render().el);
+      console.log(this.subViews.footerNav);
+      $('#footer', this.el).html(this.subViews.footerNav.render().el);
       return this;
     }
     , authenticatedFrame: function(callback){
@@ -39,7 +40,6 @@
       console.log("[change-frame] landing");
       if(this.currentFrame == "landingFrame") return;
       this.currentFrame = "landingFrame";
-
 
       if(utils.exists(callback)){
         callback();
@@ -128,6 +128,26 @@
       var streamsView = new app.Views.Streams({});
       $("#content").html(streamsView.render().el);
       streamsView.loadGlobalActivity();
+      return this;
+    }
+  });
+
+  views.FooterNav = utils.View.extend({
+    tagname: 'nav',
+    className: 'main-nav',
+    initialize: function(){
+      this.model.on('change', this.updateActive, this);
+    },
+    render: function(){
+      $(this.el).html(app.fragments.footerNav());
+      this.updateActive();
+      return this;
+    },
+    updateActive: function(){
+      $('.menu-item').removeClass('active');
+      if (this.model.get('active')){
+        $('.menu-item.' + this.model.get('active')).addClass('active');
+      }
       return this;
     }
   });
@@ -296,7 +316,7 @@
       var self = this;
       api.streams.global(function(error, stream){
         if(exists(error)){
-          notify.error(error.message);
+          console.error(error.message);
           return;
         };
 
@@ -324,7 +344,7 @@
       app.router.changeHash("/#!/streams/me");
       api.streams.self(function(error, stream){
         if(exists(error)){
-          notify.error(error.message);
+          console.error(error.message);
           return;
         };
 
@@ -350,7 +370,7 @@
   });
 
   views.Places = utils.View.extend({
-    className: 'places'
+    className: 'page places'
     , events: {
 
     }
@@ -375,7 +395,7 @@
   });
 
   views.Place = utils.View.extend({
-    className: 'place'
+    className: 'inline-columns place'
     , events: {
       'click .view-details': 'viewDetails'
     }
@@ -404,7 +424,7 @@
   });
 
   views.PlaceDetails = utils.View.extend({
-    className: 'place-details'
+    className: 'page place-details'
     , events: {
       "click .save" : "createContact"
     }
@@ -444,7 +464,7 @@
   });
 
   views.TapIn = utils.View.extend({
-    className: 'tap-in'
+    className: 'page tap-in'
     , events: {
       "click .save" : "saveCode"
       , "click .create" : "createCode"
@@ -483,7 +503,49 @@
         $("#content").html(self.render().el);
       });
     }
-  })
+  });
+
+  views.Settings = utils.View.extend({
+    className: 'page settings',
+    render: function(){
+      $(this.el).html(app.templates.settings());
+      return this;
+    }
+  });
+
+  views.ChangePassword = utils.View.extend({
+    className: 'page change-password',
+    events: {
+      'submit #settings-change-password-form': 'formHandler'
+    },
+    render: function(){
+      $(this.el).html(app.templates.changePassword());
+      return this;
+    },
+    formHandler: function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      // Do your thang
+      return false;
+    }
+  });
+
+  views.ChangeTapIn = utils.View.extend({
+    className: 'page change-tapin',
+    events: {
+      'submit #settings-change-tapin-form': 'formHandler'
+    },
+    render: function(){
+      $(this.el).html(app.templates.changeTapIn());
+      return this;
+    },
+    formHandler: function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      // Do your thang
+      return false;
+    }
+  });
 
   // Export
   for (var name in views){

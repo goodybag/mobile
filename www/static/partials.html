@@ -2,12 +2,14 @@
 <!-- MAIN FRAME TEMPLATE -->
 <!-- ################### -->
 <script id="main-frame-tmpl" type="text/x-handlebars-template">
-<header id="header">
-
-</header>
-<div class="content" id="content">
-</div>
-<footer>
+  <header id="header"></header>
+  <div class="content" id="content"></div>
+  <footer id="footer"></footer>
+</script>
+<!-- ############### -->
+<!-- FOOTER FRAGMENT -->
+<!-- ############### -->
+<script id="footer-fragment" type="text/x-handlebars-fragment">
   <nav class="main-nav">
     <div class="tapin-bg"></div>
     <ul class="flex-columns">
@@ -32,14 +34,12 @@
       <div class="column">
           <div class="separator"></div>
       </div>
-      <li class="menu-item me">
-        <a href="/#!/me">Me</a>
+      <li class="menu-item settings">
+        <a href="/#!/settings">Settings</a>
       </li>
       <div class="column"></div>
     </ul>
   </nav>
-</footer>
-</div>
 </script>
 <!-- #################### -->
 <!-- USER HEADER FRAGMENT -->
@@ -79,6 +79,7 @@
 <!-- ###################### -->
 <script id="header-nav-fragment" type="text/x-handlebars-fragment">
   <div class="graphic-wrapper">
+  <div class="logo graphic"></div>
     <div class="accent graphic"></div>
   </div>
   <div class="flex-columns">
@@ -88,7 +89,7 @@
       {{/if}}
     </div>
     <div class="middle column">
-      <div class="logo graphic"></div>
+
     </div>
     <div class="right column"></div>
   </div>
@@ -238,16 +239,21 @@
 <!-- ######## -->
 <script id="activity-fragment" type="text/x-handlebars-template">
   <article class="story">
-    <img class="picture" src="https://s3.amazonaws.com/goodybag-uploads/consumers/{{who.id}}-85.png" />
-    {{#if who}}
-    <span class="name"><!--<a href="javascript:void('{{who.id}}')" class="user-profile-popup" data-id="{{who.id}}">--><strong>{{who.name}}</strong><!--</a>--></span>
-    {{else}}
-    <span class="name"><!--<a href="javascript:void(0)" class="user-profile-popup">--><strong>Someone</strong><!--</a>--></span>
-    {{/if}}
-    <span class="action">{{{action}}}</span>
-    <span class="date">{{timestamp}}</span>
+    <div class="inline-columns">
+      <div class="column picture">
+        <img class="picture" src="https://s3.amazonaws.com/goodybag-uploads/consumers/{{who.id}}-85.png" />
+      </div>
+      <div class="column text">
+        {{#if who.name}}
+        <span class="name">{{who.name}}</span>
+        {{else}}
+        <span class="name">Someone</span>
+        {{/if}}
+        <span class="action">{{{action}}}</span>
+        <span class="date">{{timestamp}}</span>
+      </div>
+    </div>
   </article>
-  <hr />
 </script>
 
 <!-- ################ -->
@@ -277,25 +283,27 @@
 <!-- PLACE -->
 <!-- ##### -->
 <script id="place-fragment" type="text/x-handlebars-template">
-  <div class="left">
+  <div class="column left">
     {{#if media.thumb}}
       <img src="{{media.thumb}}" />
     {{else}}
       <img src="https://goodybag.com.s3.amazonaws.com/default-85.jpg" />
     {{/if}}
   </div>
-  <div class="middle">
+  <div class="column right">
     <h2 class="name"><a href="{{url}}" target="_blank">{{publicName}}</a></h2>
     <div class="tags">
       {{#each type}}
       <span class="tag">
-        <a href="#">{{this}}</a>
+        {{this}}
       </span>
       {{/each}}
     </div>
   </div>
-  <div class="right">
-    <button class="view-details"> > </button>
+  <div class="actions">
+    <div class="field-row">
+      <button class="view-details">View Details</button>
+    </div>
   </div>
 </script>
 
@@ -303,20 +311,30 @@
 <!-- PLACE DETAILS -->
 <!-- ############# -->
 <script id="place-details-tmpl" type="text/x-handlebars-template">
-  <div class="name">{{publicName}}</div>
-  <div class="url">{{url}}</div>
-  <div class="email">{{email}}</div>
+  <h1 class="name">{{publicName}}</h1>
+  <div class="info">
+    <strong>Website: </strong>
+    <a class="url" href="{{url}}">{{url}}</a>
+  </div>
+  <div class="info">
+    <strong>Email: </strong>
+    <a class="email" href="mailto:{{email}}">{{email}}</a>
+  </div>
   <div class="locations">
   {{#each locations}}
-    <div class="location">
-      <div class="name">{{name}}</div>
-      <div class="street1">{{street1}}</div>
-      <div class="city">{{city}}</div>
-      <div class="state">{{state}}</div>
-      <div class="zip">{{zip}}</div>
-      <div class="phone">{{phone}}</div>
-      <button class="save">Save As Contact</button>
-    </div>
+    <address class="location">
+      <h3 class="name">{{name}}</h3>
+      <span class="street1">{{street1}}, </span>
+      <span class="city">{{city}}, </span>
+      <span class="state">{{state}}, </span>
+      <span class="zip">{{zip}}</span>
+      <div class="phone">
+        <a href="tel:{{phone}}">{{phone}}</a>
+      </div>
+      <div class="field-row save-row">
+        <button class="save">Save As Contact</button>
+      </div>
+    </address>
   {{/each}}
   </div>
 </script>
@@ -337,4 +355,54 @@
     <div>Make me one</div>
     <button class="create">make it!</button>
   {{/if}}
+</script>
+
+<!-- ######## -->
+<!-- SETTINGS -->
+<!-- ######## -->
+<script id="settings-tmpl" type="text/x-handlebars-template">
+  <h1>Settings</h1>
+  <div class="field-row">
+    <a class="row-link" href="/#!/settings/change-password">Change Password</a>
+  </div>
+  <div class="field-row">
+    <a class="row-link" href="/#!/settings/change-tapin">Change TapIn ID</a>
+  </div>
+  <div class="field-row">
+    <a class="row-link" href="/#!/settings/change-picture">Change Picture</a>
+  </div>
+</script>
+<!-- ######################## -->
+<!-- SETTINGS CHANGE PASSWORD -->
+<!-- ######################## -->
+<script id="change-password-tmpl" type="text/x-handlebars-template">
+  <h1>Settings - Change Password</h1>
+  <form id="settings-change-password-form">
+    <div class="field-row">
+      <input type="password" placeholder="Current Password" />
+    </div>
+    <div class="field-row">
+      <input type="password" placeholder="New Password" />
+    </div>
+    <div class="field-row">
+      <button>Make it so, Number One.</button>
+    </div>
+  </form>
+</script>
+<!-- ##################### -->
+<!-- SETTINGS CHANGE TAPIN -->
+<!-- ##################### -->
+<script id="change-tapin-tmpl" type="text/x-handlebars-template">
+  <h1>Settings - Change TapIn ID</h1>
+  <form id="settings-change-tapin-form">
+    <div class="field-row">
+      <input type="text" placeholder="New TapIn ID" />
+    </div>
+    <div class="field-row">
+      <input type="password" placeholder="Password" />
+    </div>
+    <div class="field-row">
+      <button>I&#39;m Batman. Don&#39;t care just change it.</button>
+    </div>
+  </form>
 </script>

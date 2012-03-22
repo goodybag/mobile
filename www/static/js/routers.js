@@ -5,17 +5,20 @@
     this.before(/#!\/.*/, app.routes.everything);
     this.after(app.routes.afterAll);
 
-    this.get ('#!/',                    app.routes.landing);
-    this.get ('#!/login',               app.routes.login);
-    this.get ('#!/register',            app.routes.register);
-    this.get ('#!/logout',              app.routes.logout);
-    this.get ('#!/tapin',               app.routes.tapIn);
-    this.get ('#!/streams',             app.routes.globalStream);
-    this.get ('#!/streams/global',      app.routes.globalStream);
-    this.get ('#!/streams/me',          app.routes.myStream);
-    this.get ('#!/places',              app.routes.places);
-    this.get ('#!/places/:id',          app.routes.placeDetails);
-    this.get ('#!/goodies',             app.routes.goodies);
+    this.get ('#!/',                            app.routes.landing);
+    this.get ('#!/login',                       app.routes.login);
+    this.get ('#!/register',                    app.routes.register);
+    this.get ('#!/logout',                      app.routes.logout);
+    this.get ('#!/tapin',                       app.routes.tapIn);
+    this.get ('#!/streams',                     app.routes.globalStream);
+    this.get ('#!/streams/global',              app.routes.globalStream);
+    this.get ('#!/streams/me',                  app.routes.myStream);
+    this.get ('#!/places',                      app.routes.places);
+    this.get ('#!/places/:id',                  app.routes.placeDetails);
+    this.get ('#!/goodies',                     app.routes.goodies);
+    this.get ('#!/settings',                    app.routes.settings);
+    this.get ('#!/settings/change-password',    app.routes.changePassword);
+    this.get ('#!/settings/change-tapin',       app.routes.changeTapIn);
   });
 
   app.router.changeHash = function(hash){
@@ -39,6 +42,5 @@
     }
     app.router.last_location = ["get", hash];
     window.location.replace(hash);
-    app.previousRoutes.add(hash);
   };
 }).call(this);

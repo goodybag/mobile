@@ -87,6 +87,9 @@ body, html
   height 49px
   main-sprite(-100px, 0)
 .header-nav .logo
+  position: absolute;
+  left: 50%
+  margin-left: -42px
   display: inline-block
   margin-top 2px
   width: 85px
@@ -147,6 +150,7 @@ body, html
 .main-nav .menu-item > a
   position: absolute
   width: 100%
+  padding-top: 50px
   text-align: center
   bottom: 0
   color: #8c95a0
@@ -173,6 +177,9 @@ body, html
 .main-nav .menu-item.me
   background-position: -258px -259px
 
+.main-nav .menu-item.settings
+  background-position: -198px -259px
+
 .main-nav .menu-item.active.places
   background-position: 4px -318px
 
@@ -187,6 +194,9 @@ body, html
 
 .main-nav .menu-item.active.me
   background-position: -258px -318px
+
+.main-nav .menu-item.active.settings
+  background-position: -198px -318px
 
 
 // End Footer Nav
@@ -321,8 +331,10 @@ body, html
   font-size: 9px
   text-transform: uppercase
   font-weight: 200
+  text-shadow: 0 1px 0 #fff;
 .goodies-list > .goody .raised-amount
   font-size: 22px
+  text-shadow: 0 1px 0 #fff;
 
 // All this meter is stuff is really un-organized
 
@@ -434,6 +446,58 @@ body, html
   z-index: 3;
 // End Meter stuff
 
+// TapIn Page
+.page.tap-in
+  text-align: center
+
+
+.story
+  padding-bottom: 8px
+  border-bottom: dotted #ccc 1px
+  margin-bottom: 8px
+.story:last-child
+  border-bottom: none
+.story .column.picture
+  width: 16%
+  margin-right: 4%
+.story .column.picture img
+  width: 100%
+.story .column.text
+  width: 80%
+.story .name
+  font-weight: 600
+
+.place
+  padding-bottom: 8px
+  border-bottom: dotted #ccc 1px
+  margin-bottom: 8px
+.place:last-child
+  border-bottom: none
+.place > .column.left
+  width: 24%
+  margin-right: 4%
+.place > .column.right
+  width: 72%
+.place > .column.left > img
+  width: 100%
+.place .name > a
+  color: inherit
+  text-decoration: none
+.place .tag
+  margin-right: 5px
+.place > .actions
+  margin-top: 12px
+  text-align: right
+.place-details .info
+  margin-bottom: 6px
+.place-details .field-row.save-row
+  margin-top: 12px
+.place-details .locations .location
+  padding-bottom: 8px
+  border-bottom: dotted #ccc 1px
+  margin-bottom: 8px
+.place-details .locations .location:last-child
+  border-bottom: none
 
 .field-row
   margin-bottom: 8px
@@ -452,6 +516,9 @@ body, html
   padding: 6px
   border: solid #aaa 1px
   border-radius: 16px
+
+a
+  color: #2C70a0
 
 h1
   font-size: 2rem
@@ -474,8 +541,10 @@ h2
   color: #4c90d0
 .row-link:after
   position: absolute
-  top: 6px
+  display: block
+  top: 50%
   right: 6px
+  margin-top: -10px
   color: #fff;
   text-align: center
   font-size: 32px;

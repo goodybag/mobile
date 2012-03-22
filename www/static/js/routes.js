@@ -7,6 +7,8 @@
   routes.everything = function(){
     console.log("BEFORE EVERYTHING!");
     // Probably ensure we're logged in and redirect if we're not
+
+    app.activeRoute.setRoute(this.path);
   };
 
   routes.afterAll = function(){
@@ -165,6 +167,21 @@
         $('#goodies-list').html($goodies);
       }
     });
+  };
+
+  routes.settings = function(){
+    var page = new app.Views.Settings();
+    $('#content').html(page.render().el);
+  };
+
+  routes.changePassword = function(){
+    var page = new app.Views.ChangePassword();
+    $('#content').html(page.render().el);
+  };
+
+  routes.changeTapIn = function(){
+    var page = new app.Views.ChangeTapIn();
+    $('#content').html(page.render().el);
   };
 
   // Export

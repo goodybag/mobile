@@ -11,10 +11,17 @@
   fragments.headerNav   = "header-nav-fragment";
   fragments.userHeader  = "user-header-fragment";
   fragments.pageNav     = "page-nav-fragment";
+  fragments.footerNav   = "footer-fragment";
+
   templates.landing     = "landing-tmpl";
   templates.register    = "register-tmpl";
   templates.emailLogin  = "email-login-tmpl";
   templates.dashboard   = "dashboard-tmpl";
+
+  // Settings
+  templates.settings        = "settings-tmpl";
+  templates.changePassword  = "change-password-tmpl";
+  templates.changeTapIn     = "change-tapin-tmpl";
 
   // Goodies
   templates.goodies     = "goodies-tmpl";
