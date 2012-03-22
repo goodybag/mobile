@@ -403,6 +403,10 @@
             model: new utils.Model(businesses[i])
           })
           $(self.el).append(placeView.render().el);
+          $newImages = $("img.picture", this.el);
+          $newImages.error(function(){
+            $(this).attr('src',"https://s3.amazonaws.com/goodybag.com/default-85.jpg");
+          });
         }
       });
     }
@@ -571,17 +575,80 @@
   views.ChangePicture = utils.View.extend({
     className: 'page change-picture',
     events: {
-      'submit #settings-change-picture-form': 'formHandler'
+      'click #change-picture-choose' : 'choosePic'
     },
     render: function(){
       $(this.el).html(app.templates.changePicture());
       return this;
     },
-    formHandler: function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      // Do your thang
-      return false;
+    choosePic: function(){
+      var self = this;
+
+      if(!app.user || !app.user.get("_id") || app.user.get("_id") == null || app.user.get("_id") == ""){
+        alert("Please login first");
+        window.location.href = "/#!/logout";
+        return;
+      };
+
+      navigator.camera.getPicture(
+        uploadPhoto,
+        function(message){
+          //alert('get picture failed or you clicked cancel');
+        },
+        { quality: 50,
+          destinationType: navigator.camera.DestinationType.FILE_URI,
+          sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY
+        }
+      );
+
+      function uploadPhoto(imageURI) {
+        var options = new FileUploadOptions();
+        options.fileKey="file";
+        options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+        options.mimeType="image/jpeg";
+
+        var userId = app.user.get("_id");
+        options.params = {
+          'params': JSON.stringify({
+            'auth': {
+              'key': "5a93b0ae8fae41699bd720cb34e63623"
+            },
+            'template_id': "dbdc34e64b9348c881351ea714fce75e",
+            'notify_url': "http://biz.goodybag.com/hooks/transloadit",
+            'steps': {
+              'export85': {
+                "path": "consumers/"+userId+"-85.png"
+              },
+              'export128': {
+                "path": "consumers/"+userId+"-128.png"
+              },
+              'export85Secure': {
+                'path': "consumers-secure/"+userId+"-85.png"
+              },
+              'export128Secure': {
+                'path': "consumers-secure/"+userId+"-128.png"
+              }
+            }
+          })
+        };
+
+        var ft = new FileTransfer();
+        ft.upload(imageURI, "http://api2.transloadit.com/assemblies", success, fail, options);
+        $("#change-picture-choose", this.el).text("Uploading").attr("disabled", true);
+      };
+
+      function success(r) {
+        console.log("Code = " + r.responseCode);
+        console.log("Response = " + r.response);
+        console.log("Sent = " + r.bytesSent);
+        var response = JSON.parse(r.response);
+        $("#change-picture-choose", self.el).text("Choose Photo").attr("disabled", false);
+        $("#user-header .picture").attr("src", response.uploads[0].url);
+      };
+
+      function fail(error) {
+        alert("An error has occurred: Code = " = error.code);
+      };
     }
   });
 

@@ -95,7 +95,7 @@
   <div class="flex-columns">
     <div class="left column">
       {{#if last}}
-        <a href="{{last}}" class="btn back">Back</a>
+        <a href="{{last}}" class="btn back" style="display:none;">Back</a>
       {{/if}}
     </div>
     <div class="middle column">
@@ -138,7 +138,7 @@
       <input type="password" placeholder="password" name="password" id="landing-login-password" />
     </div>
     <div class="field-row">
-      <button>Beam me up, Scotty!</button>
+      <button>Login</button>
     </div>
   </form>
 </script>
@@ -295,9 +295,9 @@
 <script id="place-fragment" type="text/x-handlebars-template">
   <div class="column left">
     {{#if media.thumb}}
-      <img src="{{media.thumb}}" />
+      <img class="picture" src="{{media.thumb}}" />
     {{else}}
-      <img src="https://goodybag.com.s3.amazonaws.com/default-85.jpg" />
+      <img class="picture" src="https://goodybag.com.s3.amazonaws.com/default-85.jpg" />
     {{/if}}
   </div>
   <div class="column right">
@@ -431,13 +431,7 @@
   <h1>Settings - Change Picture</h1>
   <form id="settings-change-picture-form">
     <div class="field-row">
-      <button>Select Picture</button>
-    </div>
-    <div class="field-row">
-      <input type="password" placeholder="Password" />
-    </div>
-    <div class="field-row">
-      <button>Say Cheese!</button>
+      <button id="change-picture-choose">Choose Photo</button>
     </div>
   </form>
 </script>
