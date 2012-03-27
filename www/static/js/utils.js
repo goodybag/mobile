@@ -7,6 +7,26 @@
 
   var _utils = {}; // Private utils
 
+  _utils.gbLoader = function($ele, options){
+    if (!$ele.hasClass('gb-loader')){
+      var $loading  = $('<div class="gb-loading"></div>')
+        , $overlay  = $('<div class="gb-loader-overlay"></div>')
+        , options   = options || {}
+      ;
+      $loading.append('<span class="loader-block s1"></span>')
+              .append('<span class="loader-block s2"></span>')
+              .append('<span class="loader-block s3"></span>');
+      if (exists(options.overlayCss)) $overlay.css(options.overlayCss);
+      if (exists(options.loaderCss)) $loading.css(options.loaderCss);
+      $overlay.append($loading);
+      $ele.addClass('gb-loader').prepend($overlay);
+    }else{
+      $('.gb-loading, .gb-loader-overlay', $ele).remove();
+      $ele.removeClass('gb-loader');
+    }
+    return function(){toggleLoader($ele, options)};
+  };
+
   _utils.exists = function(variable){
     if (typeof x !== "undefined" && x !== null) {
       return true;
