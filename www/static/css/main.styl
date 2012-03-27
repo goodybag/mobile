@@ -39,7 +39,7 @@ bg-white-stripe-diagonal()
 
 main-sprite(x = 0, y = 0)
   background-image url('/static/images/main-sprite.png')
-  if x != 0 and y != 0
+  if x != 0 or y != 0
     background-position x y
 
 // End Mixins
@@ -85,7 +85,7 @@ body, html
   margin-left: -215px;
   width 430px
   height 49px
-  main-sprite(-100px, 0)
+  main-sprite(-86px, 0)
 .header-nav .logo
   position: absolute;
   left: 50%

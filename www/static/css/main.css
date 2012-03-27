@@ -53,6 +53,7 @@ html {
   width: 430px;
   height: 49px;
   background-image: url("/static/images/main-sprite.png");
+  background-position: -86px 0;
 }
 .header-nav .logo {
   position: absolute;
