@@ -1,11 +1,31 @@
 (function(){
   this.utils = window.utils || {};
+  var slice   = Array.prototype.slice
+    , splice  = Array.prototype.splice
+    , _utils  = {} // Private utils
+  ;
 
-  var slice = Array.prototype.slice;
-  var splice = Array.prototype.splice;
+  _utils.overloadShortHand = function(types){
+    types = types.toLowerCase();
+    if (types.indexOf(',') == -1 && types.indexOf('t') == -1 && types.indexOf('u') == -1) return types;
+    return types.match(/\b[a-z]/g).join('');
+  };
 
-
-  var _utils = {}; // Private utils
+  _utils.overload = function(functions){
+    this.functionList = {};
+    var shortHandKey;
+    for (var argTypes in functions){
+      shortHandKey = utils.overloadShortHand(argTypes);
+      functionList[shortHandKey] = functions[argTypes];
+    }
+    return function(){
+      var key = "", i = 0;
+      for (; i < arguments.length; i++)
+        key += Object.prototype.toString.call(arguments[i])[8].toLowerCase();
+      if (!functionList.hasOwnProperty(key)) throw new Error("The function of type " + key + " is undefined");
+      return functionList[key].apply(this, arguments);
+    };
+  };
 
   _utils.gbLoader = function($ele, options){
     if (!($ele instanceof jQuery)) $ele = $($ele);

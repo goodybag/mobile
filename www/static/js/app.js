@@ -23,8 +23,8 @@
       app.activeRoute = new this.app.Models.ActiveRoute();
       app.Views.Main = new this.app.Views.Main();
       app.Views.Main.render();
-
       $('#body').prepend(app.Views.Main.el);
+
       app.router.run('#!/');
     });
   });
