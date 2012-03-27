@@ -8,6 +8,7 @@
   var _utils = {}; // Private utils
 
   _utils.gbLoader = function($ele, options){
+    if (!($ele instanceof jQuery)) $ele = $($ele);
     if (!$ele.hasClass('gb-loader')){
       var $loading  = $('<div class="gb-loading"></div>')
         , $overlay  = $('<div class="gb-loader-overlay"></div>')
