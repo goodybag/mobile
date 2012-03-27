@@ -6,8 +6,6 @@
 
   routes.everything = function(){
     console.log("BEFORE EVERYTHING!");
-    // Probably ensure we're logged in and redirect if we're not
-
     app.activeRoute.setRoute(this.path);
   };
 
