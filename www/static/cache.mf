@@ -4,7 +4,7 @@ CACHE:
 /index.html
 
 #CSS
-/static/css/style.css
+/static/css/main.css
 /static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css
 
 #JAVASCRIPT

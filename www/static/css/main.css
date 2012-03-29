@@ -181,7 +181,7 @@ html {
 }
 .sub-header.profile > .right {
   text-align: right;
-  width: 44%;
+  width: 43.7%;
 }
 .sub-header.profile .user-info > .item {
   display: inline-block;
@@ -441,7 +441,7 @@ html {
   width: 100%;
 }
 .story .column.text {
-  width: 84%;
+  width: 82%;
 }
 .story .name {
   font-weight: 600;
@@ -459,7 +459,7 @@ html {
   margin-right: 4%;
 }
 .place > .column.right {
-  width: 80%;
+  width: 78%;
 }
 .place > .column.left > img {
   width: 100%;
