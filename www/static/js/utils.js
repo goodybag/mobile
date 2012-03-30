@@ -27,11 +27,13 @@
     };
   };
 
-  _utils.gbLoader = function($ele, options){
+  _utils.loader = function($ele, options){
     if (!($ele instanceof jQuery)) $ele = $($ele);
     if (!$ele.hasClass('gb-loader')){
+      $('html').css('overflow', 'hidden');
       var $loading  = $('<div class="gb-loading"></div>')
         , $overlay  = $('<div class="gb-loader-overlay"></div>')
+        , $wrapper  = $('<div class="gb-loader-wrapper"></div>')
         , options   = options || {}
       ;
       $loading.append('<span class="loader-block s1"></span>')
@@ -39,13 +41,15 @@
               .append('<span class="loader-block s3"></span>');
       if (exists(options.overlayCss)) $overlay.css(options.overlayCss);
       if (exists(options.loaderCss)) $loading.css(options.loaderCss);
-      $overlay.append($loading);
-      $ele.addClass('gb-loader').prepend($overlay);
+      if (exists(options.loaderBlockCss)) $('.loader-block', $loading).css(options.loaderBlockCss);
+      $wrapper.append($loading);
+      $ele.addClass('gb-loader').prepend($overlay).prepend($wrapper);
     }else{
-      $('.gb-loading, .gb-loader-overlay', $ele).remove();
+      $('html').css('overflow', 'auto');
+      $('.gb-loading, .gb-loader-overlay, .gb-loader-wrapper', $ele).remove();
       $ele.removeClass('gb-loader');
     }
-    return function(){toggleLoader($ele, options)};
+    return function(){utils.loader($ele, options)};
   };
 
   _utils.exists = function(variable){

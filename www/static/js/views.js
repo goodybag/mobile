@@ -48,6 +48,33 @@
     }
   });
 
+  views.NoGoodies = utils.View.extend({
+    className: 'page no-goodies',
+    initialize: function(){
+      return this;
+    },
+    render: function(){
+      $(this.el).html(app.fragments.noGoodies());
+      return this;
+    }
+  });
+
+  views.Goodies = utils.View.extend({
+    className: 'page goodies',
+    initialize: function(){
+      return this;
+    },
+    render: function(){
+      $(this.el).html(app.templates.goodies());
+      return this;
+    },
+    addGoody: function(goody){
+      goody.render();
+      $('#goodies-list', $(this.el)).append($(goody.el));
+      return this;
+    }
+  });
+
   views.Goody = utils.View.extend({
     className: 'goody',
     initialize: function(){
@@ -528,6 +555,7 @@
     , events: {
       "click #settings-logout": "logout"
     }
+    , initialize: function(){ return this; }
     , render: function(){
       $(this.el).html(app.templates.settings());
       return this;

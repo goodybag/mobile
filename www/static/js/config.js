@@ -7,7 +7,7 @@
       pushState: false
     },
     changePage: {
-      transition: "slideLeft",
+      defaultTransition: "fade",
       transitions: [
         'slideLeft',
         'slideRight'

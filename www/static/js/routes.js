@@ -20,19 +20,22 @@
 
   routes.landing = function(){
     console.log("[routes] - landing");
-    var landingView  = new app.Views.Landing({
-      authModel: new app.Models.EmailAuth()
+    app.functions.changePage(function(done){
+      var landingView  = new app.Views.Landing({
+        authModel: new app.Models.EmailAuth()
+      });
+      done(landingView.render());
     });
-    $("#content").html(landingView.render().el);
   };
 
   routes.register = function(){
-    console.log("[routes] - register");
-    var landingView  = new app.Views.Landing({
-      authModel: new app.Models.EmailAuth()
+    app.functions.changePage(function(done){
+      var landingView  = new app.Views.Landing({
+        authModel: new app.Models.EmailAuth()
+      });
+      done(landingView.render());
+      landingView.registerView();
     });
-    $("#content").html(landingView.render().el);
-    landingView.registerView();
   };
 
   routes.globalStream = function(){
@@ -150,53 +153,74 @@
 
   routes.goodies = function(){
     console.log('[routes] - goodies');
-    $('#content').html(app.templates.goodies());
-    var options = {
-      media: 1,
-      progress: 1
-    };
-    api.loyalties.list(options, function(error, loyaltiesProgressAndMedia){
-      if(utils.exists(error)){
-        console.log(error.message);
-        return;
-      }
-      var goodies   = utils.goodyJoin(loyaltiesProgressAndMedia)
-        , $goodies  = $()
-        , goody
-      ;
-      if (goodies.length == 0){
-        $('#content').html(app.templates.noGoodies());
-      }else{
-        for (var i = 0; i < goodies.length; i++){
-          goody = new app.Views.Goody({
-            model: new app.Models.Goody(goodies[i])
-          });
-          goody.render();
-          $goodies = $goodies.add($(goody.el));
+
+    app.functions.changePage(function(done){
+      var goodiesPage = new app.Views.Goodies();
+      var options = {
+        media: 1,
+        progress: 1
+      };
+      goodiesPage.render();
+      api.loyalties.list(options, function(error, loyaltiesProgressAndMedia){
+        if(utils.exists(error)){
+          console.log(error.message);
+          return;
         }
-        $('#goodies-list').html($goodies);
-      }
+        var goodies   = utils.goodyJoin(loyaltiesProgressAndMedia)
+          , $goodies  = $()
+          , goody
+        ;
+        if (goodies.length == 0){
+          done(new app.Views.NoGoodies().render());
+        }else{
+          for (var i = 0; i < goodies.length; i++){
+            goody = new app.Views.Goody({
+              model: new app.Models.Goody(goodies[i])
+            });
+            goodiesPage.addGoody(goody);
+          }
+          done(goodiesPage);
+        }
+      });
     });
   };
 
   routes.settings = function(){
-    var page = new app.Views.Settings();
-    $('#content').html(page.render().el);
+    app.functions.changePage(function(done){
+      done(new app.Views.Settings().render());
+    });
   };
 
   routes.changePassword = function(){
-    var page = new app.Views.ChangePassword();
-    $('#content').html(page.render().el);
+    app.functions.changePage(function(done){
+      done(new app.Views.ChangePassword().render());
+    });
   };
 
   routes.changeTapIn = function(){
-    var page = new app.Views.ChangeTapIn();
-    $('#content').html(page.render().el);
+    app.functions.changePage(function(done){
+      done(new app.Views.ChangeTapIn().render());
+    });
   };
 
   routes.changePicture = function(){
-    var page = new app.Views.ChangePicture();
-    $('#content').html(page.render().el);
+    app.functions.changePage(function(done){
+      done(new app.Views.ChangePicture().render());
+    });
+  };
+
+  routes.androidConfig = function(){
+    var version = this.params.version
+      , link    = '<link rel="stylesheet" href="/static/css/{name}.css" />'
+    ;
+    // http://developer.android.com/reference/android/os/Build.VERSION_CODES.html
+    // For version codes - or go to globals
+    console.log("[android] - version: " + version);
+    if (version < app.globals.android.versionCodes['3.0']){
+      $('head').append($(link.replace('{name}', 'androidlt3')));
+    }
+
+    this.redirect('/#!/');
   };
 
   // Export
