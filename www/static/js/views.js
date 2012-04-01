@@ -16,6 +16,7 @@
         headerNav: new app.Views.HeaderNav({model: app.previousRoutes}),
         footerNav: new app.Views.FooterNav({model: app.activeRoute})
       };
+
       return this;
     }
     , render: function(){
@@ -107,10 +108,13 @@
       event.preventDefault();
       app.router.changeHash("/#!/register");
 
-      var registerView = new app.Views.Register({
-        authModel: new app.Models.EmailAuth()
+      app.changePage(function(done){
+        var registerView = new app.Views.Register({
+          authModel: new app.Models.EmailAuth()
+        });
+        registerView.render();
+        done(registerView);
       });
-      $("#content").html(registerView.render().el);
       return this;
     }
     , facebookLoginHandler: function(){
@@ -340,15 +344,60 @@
           handler: this.loadMyActivity
         }
       });
+
+      this.collection.on('reset', this.renderActivity, this);
+      this.collection.on('add', this.renderSingleActivity, this);
     }
     , headerRender: function(){
       return this.pageHeader.render();
     }
     , render: function(){
-      $(this.el).html(app.templates.streams());
+      var header = this.headerRender();
+      $(this.el).html(header);
+      $(this.el).append(app.templates.streams());
+      return this;
+    }
+    , renderActivity: function(){
+      var models = this.collection.models;
+      for (var i = 0; i < models.length; i++){
+        this.renderSingleActivity(models[i]);
+      }
+      return this;
+    }
+    , renderSingleActivity: function(activity){
+      $('#streams-activities', this.el).append(
+        app.fragments.activity(activity.toJSON())
+      );
       return this;
     }
     , loadGlobalActivity: function(){
+      var self = this;
+      app.changePage(function(done){
+        $('#streams-activities', this.el).html("");
+        this.collection.fetchGlobal({add: true}, function(error){
+          if (utils.exists(error)){
+            console.error(error.message);
+            return;
+          }
+          done(self);
+        });
+      });
+    }
+    , loadMyActivity: function(){
+      var self = this;
+      app.changePage(function(done){
+        $('#streams-activities', this.el).html("");
+        this.collection.fetchSelf({add: true}, function(error){
+          if (utils.exists(error)){
+            console.error(error.message);
+            return;
+          }
+          done(self);
+        });
+      });
+      return this;
+    }
+    /*, loadGlobalActivityOld: function(){
       console.log("[handler] streams-loadGlobalActivity");
       app.router.changeHash("/#!/streams/global");
       var self = this;
@@ -356,7 +405,7 @@
         if(exists(error)){
           console.error(error.message);
           return;
-        };
+        }
 
         var $activitiesContainer = $("#streams-activities", self.el);
 
@@ -377,7 +426,7 @@
         });
       });
     }
-    , loadMyActivity: function(){
+    , loadMyActivityOld: function(){
       console.log("[handler] streams-loadMyActivity");
       var self = this;
       app.router.changeHash("/#!/streams/me");
@@ -407,6 +456,16 @@
           $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
         });
       });
+    }*/
+  });
+
+  views.Activity = utils.View.extend({
+    initialize: function(){
+      return this;
+    },
+    render: function(){
+      $(this.el).html(app.fragments.activity(this.model.toJSON()));
+      return this;
     }
   });
 

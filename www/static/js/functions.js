@@ -13,7 +13,13 @@
   // Pass in a function (action) that calls the supplied callback
   // Probably called done and passes a prepared view to it
   // Transition optional
+  // Or just pass in the rendered view
   functions.changePage = function(action, transition){
+    // Passing in a view
+    if (typeof action !== "function"){
+      app.functions.transitionPage($(action.el), transition);
+      return app;
+    }
     var pageLoader = utils.loader($('html'), {
       overlayCss: {
         'background-color': '#000'
@@ -24,6 +30,7 @@
       app.functions.transitionPage($(renderedView.el), transition);
       console.log($(renderedView.el));
     });
+    return app;
   };
 
   // Provides animation and content change for pages
@@ -42,6 +49,7 @@
         app.transitions.fade($el);
         break;
     }
+    return app;
   };
 
   // Export

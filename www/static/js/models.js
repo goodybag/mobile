@@ -67,10 +67,22 @@
   });
 
   models.Activity = utils.Model.extend({
-    //who.id
-    //who.name
-    //action
-    //timestamp
+    initialize: function(attributes){
+      this.set('action', streamParser.renderSentence(attributes));
+      this.set('timestamp', moment(Date.create(attributes.dates.lastModified)).from());
+      return this;
+    },
+    toJSON: function(){
+      var self = this;
+      return {
+        who: {
+          id: self.who.id,
+          name: self.who.name,
+        },
+        action: self.action,
+        timestamp: self.timestamp
+      };
+    }
   });
 
   models.PreviousRoutes = utils.Model.extend({

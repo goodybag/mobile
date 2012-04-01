@@ -8,6 +8,8 @@
   // For the api to use
   window.exists = utils.exists;
 
+  this.app.changePage = this.app.functions.changePage;
+
   this.app.user = new this.app.Models.User();
   api.auth.session(function(error, consumer){
     if(exists(error)){

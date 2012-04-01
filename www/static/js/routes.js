@@ -29,28 +29,53 @@
   };
 
   routes.register = function(){
-    app.functions.changePage(function(done){
-      var landingView  = new app.Views.Landing({
-        authModel: new app.Models.EmailAuth()
-      });
-      done(landingView.render());
-      landingView.registerView();
+    var landingView  = new app.Views.Landing({
+      authModel: new app.Models.EmailAuth()
     });
+    landingView.render();
+    landingView.registerView();
   };
 
   routes.globalStream = function(){
-    var streamsView = new app.Views.Streams({});
+    app.changePage(function(done){
+      var streamsView = new app.Views.Streams({
+        collection: app.api.activity
+      });
+      app.api.activity.fetchGlobal({add: true}, function(error,data){
+        if (utils.exists(error)){
+          console.error(error.message);
+          return;
+        }
+        done(streamsView);
+      });
+    });
+    /*app.changePage(function(done){
+      var streamsView = new app.Views.Streams({});
+      app.router.replaceHash("/#!/streams/global");
+      streamsView.loadGlobalActivity();
+    });
+
     $("#content").html(streamsView.headerRender().el);
-    $("#content").append(streamsView.render().el);
-    app.router.replaceHash("/#!/streams/global");
-    streamsView.loadGlobalActivity();
+    $("#content").append(streamsView.render().el);*/
   };
 
   routes.myStream = function(){
-    var streamsView = new app.Views.Streams({});
+    app.changePage(function(done){
+      var streamsView = new app.Views.Streams({
+        collection: app.api.activity
+      });
+      app.api.activity.fetchSelf({add: true}, function(error){
+        if (utils.exists(error)){
+          console.error(error.message);
+          return;
+        }
+        done(streamsView);
+      });
+    });
+    /*var streamsView = new app.Views.Streams({});
     $("#content").html(streamsView.headerRender().el);
     $('#content').append(streamsView.render().el);
-    streamsView.loadMyActivity();
+    streamsView.loadMyActivity();*/
   };
 
   routes.places = function() {
@@ -88,14 +113,6 @@
       });
     $("#content").html(tapInView.render().el);
     });
-  };
-
-  routes.test = function(){
-    console.log("Test Success!");
-    var page = new app.Views.TestPage();
-    page.render();
-    console.log("woot!");
-    $.mobile.changePage($(page.el), {changeHash: false, transition: "flip"});
   };
 
   routes.login = function(){
