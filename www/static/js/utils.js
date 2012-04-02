@@ -62,14 +62,14 @@
     var shortHandKey;
     for (var argTypes in functions){
       shortHandKey = utils.overloadShortHand(argTypes);
-      functionList[shortHandKey] = functions[argTypes];
+      this.functionList[shortHandKey] = functions[argTypes];
     }
     return function(){
       var key = "", i = 0;
       for (; i < arguments.length; i++)
         key += Object.prototype.toString.call(arguments[i])[8].toLowerCase();
-      if (!functionList.hasOwnProperty(key)) throw new Error("The function of type " + key + " is undefined");
-      return functionList[key].apply(this, arguments);
+      if (!this.functionList.hasOwnProperty(key)) throw new Error("The function of type " + key + " is undefined");
+      return this.functionList[key].apply(this, arguments);
     };
   };
 

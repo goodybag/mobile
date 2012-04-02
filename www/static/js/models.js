@@ -76,11 +76,11 @@
       var self = this;
       return {
         who: {
-          id: self.who.id,
-          name: self.who.name,
+          id: self.get('who').id,
+          name: self.get('who').name,
         },
-        action: self.action,
-        timestamp: self.timestamp
+        action: self.get('action'),
+        timestamp: self.get('timestamp')
       };
     }
   });

@@ -19,20 +19,23 @@
     Model: null,
     api: null,
 
-    intitialize: function(){
+    initialize: function(){
       return this;
     },
 
     push: function(data, options){
       options = options || {};
       var model = new this.Model(data);
-      this.models(model);
+      this.models.push(model);
       if (!options.silent) this.trigger('add', model, this, options);
     },
 
-    reset: function(options){
+    reset: function(data, options){
       options = options || {};
       this.models = [];
+      for (var i = 0; i < data.length; i++){
+        this.push(data[i], {silent: !options.add});
+      }
       if (!options.silent) this.trigger('reset', this);
     },
 
@@ -68,22 +71,25 @@
       });
     },
 
-    fetch: function(options, callback){
-      if (typeof options == "function") {
-        callback = options;
-        options = {};
+    fetch: utils.overload({
+      "": function(){
+        this._fetch({add: false, silent: false}, function(){});
+      },
+      "f": function(callback){
+        this._fetch({add: false, silent: false}, callback);
+      },
+      "o": function(options){
+        this._fetch(options, function(){})
+      },
+      "o,f": function(options, callback){
+        this._fetch(options, callback);
       }
-      _fetch(options, callback);
-    },
+    }),
     _fetch: function(options, callback){
       var self = this;
-      options = options || {add: false};
       this.api.list(options, function(error, data){
         if (!utils.exists(error)){
-          for (var i = 0; i < data.length; i++){
-            self.push(data[i], {silent: options.add});
-          }
-          if (!options.add) self.trigger('reset', this);
+          self.reset({silent: options.silent, add: options.add});
         }
         callback(error, data);
       });
@@ -95,27 +101,25 @@
     api: api.streams,
 
     fetchGlobal: function(options, callback){
-      var self = this;
-      options = options || {add: false};
-      this.api.global(options, function(error, data){
-        if (!utils.exists(error)){
-          for (var i = 0; i < data.length; i++){
-            self.push(data[i], {silent: !options.add});
-          }
-          if (!options.add) self.trigger('reset', this);
-        }
-        callback(error, data);
-      });
+      options.which = "global";
+      this.fetch(options, callback);
     },
     fetchSelf: function(options, callback){
-      var self = this;
+      options.which = "self";
+      this.fetch(options, callback);
+    },
+    fetch: function(options, callback){
+      var self = this
+        , defaults = {
+          add: false,
+          silent: false,
+          which: "global"
+        }
+      ;
       options = options || {add: false};
-      this.api.self(options, function(error, data){
+      this.api[options.which](options, function(error, data){
         if (!utils.exists(error)){
-          for (var i = 0; i < data.length; i++){
-            self.push(data[i], {silent: options.add});
-          }
-          if (!options.add) self.trigger('reset', this);
+          self.reset(data, {silent: options.silent, add: options.add});
         }
         callback(error, data);
       });
@@ -127,6 +131,7 @@
   for (var name in collections){
     Collection = collectionConstructor;
     utils.extend(Collection.prototype, collections[name]);
+    utils.extend(Collection.prototype, utils.Events);
     this.app.api[name] = new Collection();
   }
 }).call(this);

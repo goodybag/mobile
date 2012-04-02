@@ -156,12 +156,18 @@
       return false;
     }
     , authenticatedHandler: function(){
-      console.log("[handler] landing-authenticated");
-      var streamsView = new app.Views.Streams({});
-      $("#content").html(streamsView.headerRender().el);
-      $("#content").append(streamsView.render().el);
-      streamsView.loadGlobalActivity();
-      return this;
+      app.changePage(function(done){
+      var streamsView = new app.Views.Streams({
+        collection: app.api.activity
+      }).render();
+      app.api.activity.fetchGlobal({add: true}, function(error,data){
+        if (utils.exists(error)){
+          console.error(error.message);
+          return;
+        }
+        done(streamsView);
+      });
+    });
     }
   });
 
@@ -324,50 +330,83 @@
   });
 
   views.Streams = utils.View.extend({
-    className: 'page streams'
-    , events: {
+    events: {
       "click #streams-all-button": 'loadGlobalActivity'
       , "click #streams-my-button": 'loadMyActivity'
     }
     , initialize: function(){
+      this.pageContent = new app.Views.StreamsPage({
+        collection: this.collection
+      });
+
       this.pageHeader = new app.Views.PageNav({
         leftButton: {
           id: "streams-all-button",
           text: "All Activity",
           classes: "",
-          handler: this.loadGlobalActivity
         },
         rightButton: {
           id: "streams-my-button",
           text: "My Activity",
           classes: "",
-          handler: this.loadMyActivity
         }
       });
 
+      this.subViews = [this.pageHeader, this.pageContent];
+
+      return this;
+    }
+    , render: function(){
+      console.log(this.subViews);
+      for (var i = 0; i < this.subViews.length; i++){
+        $(this.el).append(this.subViews[i].render().el);
+      }
+      return this;
+    }
+    , loadGlobalActivity: function(){
+      this.pageContent.loadGlobalActivity();
+      return this;
+    }
+    , loadMyActivity: function(){
+      this.pageContent.loadMyActivity();
+      return this;
+    }
+  });
+
+  views.StreamsPage = utils.View.extend({
+    className: 'page streams'
+    , initialize: function(){
+      console.log("[StreamsPage] - initialize");
+      console.log(this.collection);
       this.collection.on('reset', this.renderActivity, this);
       this.collection.on('add', this.renderSingleActivity, this);
     }
     , headerRender: function(){
+      console.log("[Streams] - Render page header");
       return this.pageHeader.render();
     }
     , render: function(){
-      var header = this.headerRender();
-      $(this.el).html(header);
       $(this.el).append(app.templates.streams());
       return this;
     }
     , renderActivity: function(){
+      console.log('[Streams] - renderActivity');
       var models = this.collection.models;
+      console.log(models);
+      $('#streams-activities', $(this.el)).html("");
       for (var i = 0; i < models.length; i++){
         this.renderSingleActivity(models[i]);
       }
       return this;
     }
     , renderSingleActivity: function(activity){
-      $('#streams-activities', this.el).append(
-        app.fragments.activity(activity.toJSON())
-      );
+      console.log('[Streams] - renderSingleActivity');
+      console.log(activity.toJSON());
+      var activityView = new app.Views.Activity({
+        model: activity
+      }).render();
+      console.log(activityView.el);
+      $('#streams-activities', $(this.el)).append(activityView.el);
       return this;
     }
     , loadGlobalActivity: function(){
@@ -385,9 +424,10 @@
     }
     , loadMyActivity: function(){
       var self = this;
+      console.log(self.collection);
       app.changePage(function(done){
-        $('#streams-activities', this.el).html("");
-        this.collection.fetchSelf({add: true}, function(error){
+        $('#streams-activities', self.el).html("");
+        self.collection.fetchSelf({add: true}, function(error){
           if (utils.exists(error)){
             console.error(error.message);
             return;

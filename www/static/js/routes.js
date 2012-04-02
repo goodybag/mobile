@@ -40,8 +40,8 @@
     app.changePage(function(done){
       var streamsView = new app.Views.Streams({
         collection: app.api.activity
-      });
-      app.api.activity.fetchGlobal({add: true}, function(error,data){
+      }).render();
+      app.api.activity.fetchGlobal({add: true}, function(error){
         if (utils.exists(error)){
           console.error(error.message);
           return;
