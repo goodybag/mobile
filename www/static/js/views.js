@@ -354,6 +354,8 @@
 
       this.subViews = [this.pageHeader, this.pageContent];
 
+      this.collection.on('reset', this.renderActivity, this);
+
       return this;
     }
     , render: function(){
@@ -361,14 +363,44 @@
       for (var i = 0; i < this.subViews.length; i++){
         $(this.el).append(this.subViews[i].render().el);
       }
+      this.pageContent.renderActivity();
       return this;
     }
+    , renderActivity: function(){
+      this.pageContent.renderActivity();
+    }
     , loadGlobalActivity: function(){
-      this.pageContent.loadGlobalActivity();
+      var self = this;
+      app.changePage(function(done){
+        $('#streams-activities', this.el).html("");
+        self.collection.fetchGlobal(function(error){
+          if (utils.exists(error)){
+            console.error(error.message);
+            return;
+          }
+          app.router.changeHash("#!/streams/global");
+          done(self.pageContent);
+        });
+      }, {
+        transition: 'load'
+      });
       return this;
     }
     , loadMyActivity: function(){
-      this.pageContent.loadMyActivity();
+      var self = this;
+      app.changePage(function(done){
+        $('#streams-activities', this.el).html("");
+        self.collection.fetchSelf(function(error, data){
+          if (utils.exists(error)){
+            console.error(error.message);
+            return;
+          }
+          app.router.changeHash("#!/streams/me");
+          done(self.pageContent);
+        });
+      }, {
+        transition: 'load'
+      });
       return this;
     }
   });
@@ -376,17 +408,14 @@
   views.StreamsPage = utils.View.extend({
     className: 'page streams'
     , initialize: function(){
-      console.log("[StreamsPage] - initialize");
-      console.log(this.collection);
-      this.collection.on('reset', this.renderActivity, this);
-      this.collection.on('add', this.renderSingleActivity, this);
+      return this;
     }
     , headerRender: function(){
       console.log("[Streams] - Render page header");
       return this.pageHeader.render();
     }
     , render: function(){
-      $(this.el).append(app.templates.streams());
+      $(this.el).html(app.templates.streams());
       return this;
     }
     , renderActivity: function(){
@@ -397,106 +426,21 @@
       for (var i = 0; i < models.length; i++){
         this.renderSingleActivity(models[i]);
       }
+      $newImages = $("img.picture", $(this.el));
+      $newImages.error(function(){
+        //since profile pictures are assumed to be s3/<id...>.png
+        //if the picture is not found we will replace it with the default goodybag pic
+        $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
+      });
       return this;
     }
     , renderSingleActivity: function(activity){
-      console.log('[Streams] - renderSingleActivity');
-      console.log(activity.toJSON());
       var activityView = new app.Views.Activity({
         model: activity
       }).render();
-      console.log(activityView.el);
       $('#streams-activities', $(this.el)).append(activityView.el);
       return this;
     }
-    , loadGlobalActivity: function(){
-      var self = this;
-      app.changePage(function(done){
-        $('#streams-activities', this.el).html("");
-        this.collection.fetchGlobal({add: true}, function(error){
-          if (utils.exists(error)){
-            console.error(error.message);
-            return;
-          }
-          done(self);
-        });
-      });
-    }
-    , loadMyActivity: function(){
-      var self = this;
-      console.log(self.collection);
-      app.changePage(function(done){
-        $('#streams-activities', self.el).html("");
-        self.collection.fetchSelf({add: true}, function(error){
-          if (utils.exists(error)){
-            console.error(error.message);
-            return;
-          }
-          done(self);
-        });
-      });
-      return this;
-    }
-    /*, loadGlobalActivityOld: function(){
-      console.log("[handler] streams-loadGlobalActivity");
-      app.router.changeHash("/#!/streams/global");
-      var self = this;
-      api.streams.global(function(error, stream){
-        if(exists(error)){
-          console.error(error.message);
-          return;
-        }
-
-        var $activitiesContainer = $("#streams-activities", self.el);
-
-        $activitiesContainer.html("");
-
-        var sentences = "";
-        for(var i=0; i<stream.length; i++){
-          sentences += streamParser.render(stream[i]);
-          //$(sentence).css("opacity", "0").appendTo($dashboardActivityFeed).delay(100*i).animate({opacity:1}, 250, "swing");
-        }
-        var $sentences = $(sentences);
-        $activitiesContainer.append($sentences);
-        $newImages = $("img.picture",$sentences);
-        $newImages.error(function(){
-          //since profile pictures are assumed to be s3/<id...>.png
-          //if the picture is not found we will replace it with the default goodybag pic
-          $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
-        });
-      });
-    }
-    , loadMyActivityOld: function(){
-      console.log("[handler] streams-loadMyActivity");
-      var self = this;
-      app.router.changeHash("/#!/streams/me");
-      api.streams.self(function(error, stream){
-        if(exists(error)){
-          console.error(error.message);
-          return;
-        };
-
-        console.log(self.el);
-        var $activitiesContainer = $("#streams-activities", self.el);
-        console.log($activitiesContainer);
-
-        $activitiesContainer.html("");
-
-        var sentences = "";
-        for(var i=0; i<stream.length; i++){
-          sentences += streamParser.render(stream[i]);
-          //$(sentence).css("opacity", "0").appendTo($dashboardActivityFeed).delay(100*i).animate({opacity:1}, 250, "swing");
-        }
-        var $sentences = $(sentences);
-        $activitiesContainer.append($sentences);
-        $newImages = $("img.picture",$sentences);
-        $newImages.error(function(){
-          //since profile pictures are assumed to be s3/<id...>.png
-          //if the picture is not found we will replace it with the default goodybag pic
-          $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
-        });
-      });
-    }*/
   });
 
   views.Activity = utils.View.extend({
@@ -517,13 +461,11 @@
     , initialize: function(){
     }
     , render: function(){
-      //$(this.el).html(app.templates.places());
       return this;
     }
-    , loadPlaces: function(){
+    , loadPlaces: function(callback){
       var self = this;
       api.businesses.listEquipped(function(error, businesses){
-        //ideally we would want to create a model for each business
         for (var i=0, length=businesses.length; i<length; i++){
           var placeView = new app.Views.Place({
             model: new utils.Model(businesses[i])
@@ -534,6 +476,7 @@
             $(this).attr('src',"https://s3.amazonaws.com/goodybag.com/default-85.jpg");
           });
         }
+        callback();
       });
     }
   });
@@ -552,17 +495,20 @@
     , viewDetails: function(){
       /* display business details */
       var self = this;
-      api.businesses.getOneEquipped(this.model.get("_id"), function(error, business){
-        if(utils.exists(error)){
-          console.log(error);
-          return;
-        };
-
-        var placeDetailsView = new app.Views.PlaceDetails({
-          model: new utils.Model(business)
+      console.log("View Details");
+      console.log(self.model);
+      app.changePage(function(done){
+        api.businesses.getOneEquipped(self.model.get('_id'), function(error, business){
+          if(utils.exists(error)){
+            console.log(error);
+            return;
+          };
+          var placeDetailsView = new app.Views.PlaceDetails({
+            model: new utils.Model(business)
+          });
+          app.router.changeHash("#!/places/"+self.model.get("_id"));
+          done(placeDetailsView.render());
         });
-        $("#content").html(placeDetailsView.render().el);
-        app.router.changeHash("#!/places/"+self.model.get("_id"));
       });
     }
   });

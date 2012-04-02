@@ -14,15 +14,19 @@
     }).append($el);
   };
 
-  transitions.fade = function($el){
-    var $content = $('#content');
-    $content.animate({
+  transitions.fade = function($el, options){
+    var $container = options.$container || $('#content');
+    $container.animate({
       opacity: 0
     }, function(){
-      $content.html($el).animate({
+      $container.html("").html($el).animate({
         opacity: 1
       });
     });
+  };
+
+  transitions.load = function($el, options){
+    // Do nothing
   };
 
   // Export

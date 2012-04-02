@@ -79,21 +79,27 @@
   };
 
   routes.places = function() {
-    var placesView = new app.Views.Places({});
-    $("#content").html(placesView.render().el);
-    placesView.loadPlaces();
+    app.changePage(function(done){
+      var placesView = new app.Views.Places({});
+      placesView.loadPlaces(function(){
+        done(placesView);
+      });
+    });
   };
 
   routes.placeDetails = function() {
-    api.businesses.getOneEquipped(this.params.id, function(error, business){
-      if(utils.exists(error)){
-        console.log(error);
-        return;
-      };
-      var placeDetailsView = new app.Views.PlaceDetails({
-        model: new utils.Model(business)
+    var self = this;
+    app.changePage(function(done){
+      api.businesses.getOneEquipped(self.params.id, function(error, business){
+        if(utils.exists(error)){
+          console.log(error);
+          return;
+        };
+        var placeDetailsView = new app.Views.PlaceDetails({
+          model: new utils.Model(business)
+        });
+        done(placeDetailsView.render());
       });
-      $("#content").html(placeDetailsView.render().el);
     });
   };
 

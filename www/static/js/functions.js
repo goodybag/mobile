@@ -14,10 +14,11 @@
   // Probably called done and passes a prepared view to it
   // Transition optional
   // Or just pass in the rendered view
-  functions.changePage = function(action, transition){
+  functions.changePage = function(action, options){
+    options = options || {};
     // Passing in a view
     if (typeof action !== "function"){
-      app.functions.transitionPage($(action.el), transition);
+      app.functions.transitionPage($(action.el), options);
       return app;
     }
     var pageLoader = utils.loader($('html'), {
@@ -27,27 +28,18 @@
     });
     action(function(renderedView){
       pageLoader();
-      app.functions.transitionPage($(renderedView.el), transition);
+      app.functions.transitionPage($(renderedView.el), options);
       console.log($(renderedView.el));
     });
     return app;
   };
 
   // Provides animation and content change for pages
-  functions.transitionPage = function($el, transition){
-    switch(transition){
-      default:
-        app.transitions[app.config.changePage.defaultTransition]($el);
-        break;
-      case 'slideLeft':
-        app.transitions.slideLeft($el);
-        break;
-      case 'slideRight':
-        app.transitions.slideLeft($el);
-        break;
-      case 'fade':
-        app.transitions.fade($el);
-        break;
+  functions.transitionPage = function($el, options){
+    if (!utils.exists(app.transitions[options.transition])){
+      app.transitions[app.config.changePage.defaultTransition]($el, options);
+    }else{
+      app.transitions[options.transition]($el, options);
     }
     return app;
   };

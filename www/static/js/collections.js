@@ -37,6 +37,7 @@
         this.push(data[i], {silent: !options.add});
       }
       if (!options.silent) this.trigger('reset', this);
+      return this;
     },
 
     get: function(id, callback){
@@ -101,22 +102,36 @@
     api: api.streams,
 
     fetchGlobal: function(options, callback){
+      if (typeof options == "function"){
+        callback = options;
+        options = {};
+      }else if(typeof options == "undefined"){
+        options = {};
+        callback = function(){};
+      }
       options.which = "global";
       this.fetch(options, callback);
     },
     fetchSelf: function(options, callback){
+      if (typeof options == "function"){
+        callback = options;
+        options = {};
+      }else if(typeof options == "undefined"){
+        options = {};
+        callback = function(){};
+      }
       options.which = "self";
       this.fetch(options, callback);
     },
     fetch: function(options, callback){
       var self = this
         , defaults = {
-          add: false,
-          silent: false,
-          which: "global"
-        }
+            add: false,
+            silent: false,
+            which: "global"
+          }
       ;
-      options = options || {add: false};
+      options = Object.merge(defaults, options);
       this.api[options.which](options, function(error, data){
         if (!utils.exists(error)){
           self.reset(data, {silent: options.silent, add: options.add});
