@@ -35,19 +35,26 @@ public class GoodybagActivity extends Activity {
         
         setContentView(R.layout.main);
 
+        GoodybagWebClient myClient = new GoodybagWebClient();
         mWebView = (WebView) findViewById(R.id.webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        mWebView.setWebViewClient(new GoodybagWebClient());
+        mWebView.setWebChromeClient(myClient);
         mWebView.loadUrl(Url);
     }
     
-    private class GoodybagWebClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
+    private class GoodybagWebClient extends WebChromeClient {
+        public void onConsoleMessage(String message, int lineNumber, String sourceID) {
+		    Log.d("Goodybag", message + " -- From line "
+		                         + lineNumber + " of "
+		                         + sourceID);
+		  }
+	    public boolean onConsoleMessage(ConsoleMessage cm) {
+		    Log.d("Goodybag", cm.message() + " -- From line "
+		            + cm.lineNumber() + " of "
+		            + cm.sourceId() );
+		    return true;
+		}
     }
     
 	  //helper method for clearCache() , recursive

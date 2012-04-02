@@ -77,12 +77,23 @@ html {
   height: 61px;
   z-index: 100;
 }
+.main-nav .nav-shadow {
+  display: none;
+  position: absolute;
+  width: 100%;
+  top: 14px;
+  z-index: 101;
+  height: 6px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #19283a), color-stop(100%, #354f72));
+  background: -webkit-linear-gradient(top, #19283a 0%, #354f72 100%);
+  background: linear-gradient(top, #19283a 0%, #354f72 100%);
+}
 .main-nav > .tapin-bg {
   display: inline-block;
   position: absolute;
   top: 0;
   left: 50%;
-  z-index: 101;
+  z-index: 102;
   margin-left: -39px;
   width: 79px;
   height: 61px;
@@ -495,7 +506,7 @@ html {
   border-bottom: none;
 }
 .field-row {
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 .field-row > button {
   display: block;
@@ -510,8 +521,10 @@ html {
 .field-row > input {
   display: block;
   width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
-  padding: 6px;
+  padding: 10px 6px;
   border: solid #aaa 1px;
   border-radius: 16px;
 }
@@ -528,7 +541,7 @@ h2 {
 .row-link {
   position: relative;
   display: block;
-  padding: 6px 8px;
+  padding: 10px 8px;
   border: solid #aaa 1px;
   border-radius: 16px;
   color: #4c90d0;
@@ -544,18 +557,18 @@ h2 {
   display: block;
   top: 50%;
   right: 6px;
-  margin-top: -10px;
+  margin-top: -12px;
   color: #fff;
   text-align: center;
   font-size: 32px;
-  line-height: 14px;
+  line-height: 18px;
   font-weight: 400;
   text-shadow: 0 1px 1px rgba(0,0,0,0.20);
   box-shadow: inset 0 1px 0 rgba(0,0,0,0.20), 0 1px 0 rgba(255,255,255,0.25);
   background: #4c90d0;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
   content: "\203A";
 }
 .btn,
@@ -567,7 +580,7 @@ button {
   font-size: 12px;
   font-weight: 400;
   text-shadow: 0 1px 1px rgba(0,0,0,0.20);
-  padding: 8px 16px;
+  padding: 10px 16px;
   border: solid 1px #21252a;
   border-top: solid #47494f 1px;
   border-radius: 4px;
@@ -609,6 +622,6 @@ button:active {
     border: solid 2px #e9ebed;
   }
   .sub-header.profile .pledge-bank > .pledge-wrapper > .pledge > .digit {
-    padding: 4px 7px 4px 8px;
+    padding: 4px 5px 4px 6px;
   }
 }

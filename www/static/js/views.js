@@ -174,6 +174,10 @@
   views.FooterNav = utils.View.extend({
     tagname: 'nav',
     className: 'main-nav',
+    events: {
+      'tap a': 'menuItemTap',
+      'click a': 'menuItemTap'
+    },
     initialize: function(){
       this.model.on('change', this.updateActive, this);
     },
@@ -188,6 +192,12 @@
         $('.menu-item.' + this.model.get('active')).addClass('active');
       }
       return this;
+    },
+    menuItemTap: function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      window.location = e.target.href;
+      return false;
     }
   });
 

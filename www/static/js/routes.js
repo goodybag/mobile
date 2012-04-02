@@ -234,16 +234,18 @@
 
   routes.androidConfig = function(){
     var version = this.params.version
-      , link    = '<link rel="stylesheet" href="/static/css/{name}.css" />'
+      , link    = '<link rel="stylesheet" href="/static/css/{name}.css" id="{name}" />'
     ;
     // http://developer.android.com/reference/android/os/Build.VERSION_CODES.html
     // For version codes - or go to globals
     console.log("[android] - version: " + version);
     if (version < app.globals.android.versionCodes['3.0']){
+      console.log(link.replace('{name}', 'androidlt3', "gi"));
       $('head').append($(link.replace('{name}', 'androidlt3')));
     }
-
-    this.redirect('/#!/');
+    console.log('android stylesheet');
+    console.log($('#androidlt3').attr('href'));
+    window.location = '/#!/';
   };
 
   // Export
