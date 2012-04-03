@@ -88,7 +88,7 @@
   models.PreviousRoutes = utils.Model.extend({
     defaults: {
       routes: [],
-      maxLength: 5,
+      maxLength: 10,
       last: false,
       goingBack: false
     },
@@ -103,9 +103,10 @@
       }
     },
     pop: function(route){
-      var r = this.attributes.routes.shift();
+      var r = this.attributes.routes.pop();
       if (this.get('routes').length == 1) this.set('last', false);
       this.trigger('change:routes');
+      return r;
     }
   });
 

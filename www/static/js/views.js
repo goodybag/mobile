@@ -215,10 +215,13 @@
       $(this.el).html(app.fragments.headerNav(this.model.toJSON()));
       return this;
     }
-    , backHandler: function(){
-      this.model.pop();
+    , backHandler: function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      var route = this.model.pop();
       this.model.set('goingBack', true);
-      return this;
+      window.location = route;
+      return false;
     }
   });
 
@@ -481,11 +484,11 @@
             model: new utils.Model(businesses[i])
           })
           $(self.el).append(placeView.render().el);
-          $newImages = $("img.picture", this.el);
-          $newImages.error(function(){
-            $(this).attr('src',"https://s3.amazonaws.com/goodybag.com/default-85.jpg");
-          });
         }
+        $newImages = $("img.picture", $(self.el));
+        $newImages.error(function(){
+          $(this).attr('src',"https://s3.amazonaws.com/goodybag.com/default-85.jpg");
+        });
         callback();
       });
     }

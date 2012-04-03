@@ -21,13 +21,10 @@
   routes.landing = function(){
     console.log("[routes] - landing");
     app.functions.changePage(function(done){
-      console.log('[change page] - action started');
       var landingView  = new app.Views.Landing({
         authModel: new app.Models.EmailAuth()
       });
-      console.log('[change page] - view created');
       done(landingView.render());
-      console.log('[change page] - done called');
     });
   };
 
@@ -243,11 +240,11 @@
     // For version codes - or go to globals
     console.log("[android] - version: " + version);
     if (version < app.globals.android.versionCodes['3.0']){
-      console.log(link.replace('{name}', 'androidlt3', "gi"));
+      // Android styles
       $('head').append($(link.replace('{name}', 'androidlt3')));
+      // Use simple goodies
+      app.fragments.goody = app.fragments.simpleGoody;
     }
-    console.log('android stylesheet');
-    console.log($('#androidlt3').attr('href'));
     window.location = '/#!/';
   };
 

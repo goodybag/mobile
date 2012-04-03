@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.*;
 import android.util.Log;
 
@@ -30,8 +31,6 @@ public class GoodybagActivity extends Activity {
         clearCache(this, 0);
         // remove title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
         setContentView(R.layout.main);
 

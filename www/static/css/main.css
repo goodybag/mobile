@@ -331,6 +331,31 @@ html {
   font-size: 22px;
   text-shadow: 0 1px 0 #fff;
 }
+.goodies-list > .goody .simple-meter {
+  border: solid #b2b5bc 1px;
+  border-radius: 8px;
+}
+.goodies-list > .goody .simple-meter .wrap {
+  padding: 1px;
+  border-radius: 7px;
+}
+.goodies-list > .goody .simple .business-name {
+  margin: 0 0 4px 3px;
+}
+.goodies-list > .goody .simple-meter .progress {
+  height: 16px;
+  border-radius: 6px;
+  background: url("/static/images/white-stripe-diagonal.png"), -webkit-linear-gradient(top, #b7ed15 0%, #8cba18 28%, #4e7e0b 65%, #3b5600 99%);
+}
+.goodies-list > .goody .simple .stats {
+  margin-top: 3px;
+}
+.goodies-list > .goody .simple .stats .key {
+  margin-left: 2px;
+}
+.goodies-list > .goody .simple .stats .key + .key {
+  margin-left: 6px;
+}
 .meter .circle {
   margin-left: -6px;
   width: 48px;
@@ -623,5 +648,10 @@ button:active {
   }
   .sub-header.profile .pledge-bank > .pledge-wrapper > .pledge > .digit {
     padding: 4px 5px 4px 6px;
+  }
+}
+@media screen and (max-height: 180px) {
+  #header: {
+    display: none;
   }
 }

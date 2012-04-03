@@ -309,6 +309,32 @@ body, html
 
 // All this meter is stuff is really un-organized
 
+// Simple meter for less capable browsers
+.goodies-list > .goody .simple-meter
+  border: solid #b2b5bc 1px;
+  border-radius: 8px
+
+.goodies-list > .goody .simple-meter .wrap
+  padding: 1px
+  border-radius: 7px
+
+.goodies-list > .goody .simple .business-name
+  margin: 0 0 4px 3px
+
+.goodies-list > .goody .simple-meter .progress
+  height: 16px
+  border-radius: 6px
+  background: url("/static/images/white-stripe-diagonal.png"), -webkit-linear-gradient(top, rgba(183,237,21,1) 0%,rgba(140,186,24,1) 28%,rgba(78,126,11,1) 65%,rgba(59,86,0,1) 99%);
+
+.goodies-list > .goody .simple .stats
+  margin-top: 3px
+
+.goodies-list > .goody .simple .stats .key
+  margin-left: 2px
+
+.goodies-list > .goody .simple .stats .key + .key
+  margin-left: 6px
+
 .meter .circle {
   margin-left: -6px;
   width: 48px;
@@ -585,5 +611,11 @@ button:active
   }
   .sub-header.profile .pledge-bank > .pledge-wrapper > .pledge > .digit {
     padding: 4px 5px 4px 6px
+  }
+}
+
+@media screen and (max-height: 180px) {
+  #header: {
+    display: none
   }
 }

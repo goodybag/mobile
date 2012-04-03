@@ -28,6 +28,7 @@
   templates.goodies     = "goodies-tmpl";
   templates.noGoodies   = "no-goodies-tmpl";
   fragments.goody       = "goody-fragment";
+  fragments.simpleGoody = "simple-goody-fragment";
 
   //Streams
   templates.streams               = "streams-tmpl";
