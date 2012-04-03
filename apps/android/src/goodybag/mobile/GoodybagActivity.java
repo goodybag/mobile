@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.*;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -14,16 +15,17 @@ import android.webkit.*;
 import android.util.Log;
 
 public class GoodybagActivity extends Activity {
-	
 	WebView mWebView;
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig){        
+	    super.onConfigurationChanged(newConfig);
+	}
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	int Version = Build.VERSION.SDK_INT;
-    	String Url = "http://192.168.2.112";
-    	
-    	if (Version < Build.VERSION_CODES.HONEYCOMB){
-    		Url = "http://192.168.2.112/#!/android/" + Version;
-    	}
+    	String Url = "http://192.168.2.112/#!/android/" + Version;
     	Log.v("navcache", "Version: " + Version);
     	
         super.onCreate(savedInstanceState);

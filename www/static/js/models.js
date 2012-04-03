@@ -89,7 +89,6 @@
     defaults: {
       routes: [],
       maxLength: 10,
-      last: false,
       goingBack: false
     },
     add: function(route){
@@ -99,14 +98,17 @@
       }
       if (this.get('routes').length > 1){
         this.set('last', this.get('routes')[this.get('routes').length - 2]);
-        this.trigger('change:routes');
       }
+      this.trigger('change:routes');
+      return this;
     },
     pop: function(route){
       var r = this.attributes.routes.pop();
-      if (this.get('routes').length == 1) this.set('last', false);
       this.trigger('change:routes');
       return r;
+    },
+    canGoBack: function(){
+      return (this.get('routes').length > 1);
     }
   });
 

@@ -1,3 +1,10 @@
 .main-nav .nav-shadow {
   display: block !important;
 }
+.sub-header.profile > .right {
+  text-align: right;
+  width: 42.7%;
+}
+.sub-header.profile .pledge-bank > .pledge-wrapper > .pledge > .digit {
+  padding: 4px 4px 4px 5px;
+}
