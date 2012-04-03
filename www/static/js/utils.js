@@ -73,7 +73,61 @@
     };
   };
 
-  _utils.loader = function($ele, options){
+  _utils.loader = (function(){
+    var defaults = {
+      // Nothing for now
+    };
+    var constructor = function($ele, options){
+      this.defaults  = defaults;
+      options        = options || {};
+      this.options   = Object.merge(this.defaults, options);
+      this.$ele      = ($ele instanceof jQuery) ? $ele : $($ele);
+      this.$loading  = $('<div class="gb-loading"></div>');
+      this.$overlay  = $('<div class="gb-loader-overlay"></div>');
+      this.$wrapper  = $('<div class="gb-loader-wrapper"></div>');
+
+      this.$loading.append('<span class="loader-block s1"></span>')
+                    .append('<span class="loader-block s2"></span>')
+                    .append('<span class="loader-block s3"></span>');
+      if (utils.exists(this.options.overlayCss)) this.$overlay.css(this.options.overlayCss);
+      if (utils.exists(this.options.loaderCss)) this.$loading.css(this.options.loaderCss);
+      if (utils.exists(this.options.loaderBlockCss)) $('.loader-block', this.$loading).css(this.options.loaderBlockCss);
+    };
+    constructor.prototype = {
+      toggle: function(){
+        if (!this.isLoading()){
+          this.start();
+        }else{
+          this.stop();
+        }
+        return this;
+      },
+      start: function(){
+        if (!this.isLoading()){
+          this.$wrapper.append(this.$loading);
+          this.$ele.addClass('gb-loader')
+              .prepend(this.$overlay)
+              .prepend(this.$wrapper);
+        }
+        return this;
+      },
+      stop: function(){
+        console.log(this.$overlay);
+        console.log(this.$wrapper);
+        console.log(this.$loading);
+        $('html').css('overflow', 'auto');
+        $('.gb-loading, .gb-loader-overlay, .gb-loader-wrapper', this.$ele).remove();
+        this.$ele.removeClass('gb-loader');
+        return this;
+      },
+      isLoading: function(){
+        return this.$ele.hasClass('gb-loader');
+      }
+    };
+    return constructor;
+  })();
+
+  /*_utils.loader = function($ele, options){
     if (!($ele instanceof jQuery)) $ele = $($ele);
     if (!$ele.hasClass('gb-loader')){
       $('html').css('overflow', 'hidden');
@@ -96,7 +150,7 @@
       $ele.removeClass('gb-loader');
     }
     return function(){utils.loader($ele, options)};
-  };
+  };*/
 
   _utils.exists = function(variable){
     if (typeof x !== "undefined" && x !== null) {

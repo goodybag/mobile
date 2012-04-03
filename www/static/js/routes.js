@@ -21,10 +21,13 @@
   routes.landing = function(){
     console.log("[routes] - landing");
     app.functions.changePage(function(done){
+      console.log('[change page] - action started');
       var landingView  = new app.Views.Landing({
         authModel: new app.Models.EmailAuth()
       });
+      console.log('[change page] - view created');
       done(landingView.render());
+      console.log('[change page] - done called');
     });
   };
 

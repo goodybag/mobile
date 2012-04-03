@@ -10,6 +10,9 @@
   this.app.functions = this.app.functions || {};
   var functions = {};
 
+  // Don't create a new pageLoader every changePage
+  var pageLoader = false;
+
   // Pass in a function (action) that calls the supplied callback
   // Probably called done and passes a prepared view to it
   // Transition optional
@@ -21,15 +24,19 @@
       app.functions.transitionPage($(action.el), options);
       return app;
     }
-    var pageLoader = utils.loader($('html'), {
-      overlayCss: {
-        'background-color': '#000'
-      }
-    });
+    if (!pageLoader) {
+      pageLoader = new utils.loader($('html'), {
+        overlayCss: {
+          'background-color': '#000'
+        }
+      });
+    }
+    pageLoader.start();
     action(function(renderedView){
-      pageLoader();
+      console.log('[change page] - inside done');
+      pageLoader.stop();
+      console.log('[change page] - loader off, transitioning');
       app.functions.transitionPage($(renderedView.el), options);
-      console.log($(renderedView.el));
     });
     return app;
   };
