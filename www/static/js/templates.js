@@ -16,6 +16,7 @@
   templates.landing     = "landing-tmpl";
   templates.register    = "register-tmpl";
   templates.emailLogin  = "email-login-tmpl";
+  fragments.loginError  = "login-error-fragment";
   templates.dashboard   = "dashboard-tmpl";
 
   // Settings

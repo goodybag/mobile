@@ -97,6 +97,7 @@
     , initialize: function(){
       this.authModel = this.options.authModel;
       this.authModel.on("authenticated", this.authenticatedHandler, this);
+      this.authModel.on('auth:fail', this.authFailHandler, this);
       return this;
     }
     , render: function(){
@@ -157,17 +158,35 @@
     }
     , authenticatedHandler: function(){
       app.changePage(function(done){
-      var streamsView = new app.Views.Streams({
-        collection: app.api.activity
-      }).render();
-      app.api.activity.fetchGlobal({add: true}, function(error,data){
-        if (utils.exists(error)){
-          console.error(error.message);
-          return;
-        }
-        done(streamsView);
+        var streamsView = new app.Views.Streams({
+          collection: app.api.activity
+        }).render();
+        app.api.activity.fetchGlobal({add: true}, function(error,data){
+          if (utils.exists(error)){
+            console.error(error.message);
+            return;
+          }
+          done(streamsView);
+        });
       });
-    });
+    }
+    , authFailHandler: function(error){
+      var errorView = new app.Views.LoginError({
+        error: error
+      });
+      $('.errors', $(this.el)).replaceWith(errorView.render().el);
+    }
+  });
+
+  views.LoginError = utils.View.extend({
+    className: 'errors',
+    initialize: function(attr){
+      this.error = attr.error;
+      return this;
+    },
+    render: function(){
+      $(this.el).html(app.fragments.loginError(this.error));
+      return this;
     }
   });
 

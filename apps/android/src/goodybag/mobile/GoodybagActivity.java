@@ -17,15 +17,15 @@ import android.util.Log;
 public class GoodybagActivity extends Activity {
 	WebView mWebView;
 	
-	@Override
+	/*@Override
 	public void onConfigurationChanged(Configuration newConfig){        
 	    super.onConfigurationChanged(newConfig);
-	}
+	}*/
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	int Version = Build.VERSION.SDK_INT;
-    	String Url = "http://192.168.2.133/#!/android/" + Version;
+    	String Url = "http://192.168.2.106/#!/android/" + Version;
     	Log.v("navcache", "Version: " + Version);
     	
         super.onCreate(savedInstanceState);

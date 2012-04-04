@@ -43,7 +43,9 @@
         if(!utils.exists(error)){
           app.user.set(consumer);
           self.trigger("authenticated");
-        };
+        }else{
+          self.trigger("auth:fail", error);
+        }
       });
       return this;
     }
@@ -99,7 +101,7 @@
       if (this.get('routes').length > 1){
         this.set('last', this.get('routes')[this.get('routes').length - 2]);
       }
-      this.trigger('change:routes');
+      this.trigger('change:routes', route, this.get('routes'));
       return this;
     },
     back: function(route){
@@ -108,6 +110,12 @@
     },
     canGoBack: function(){
       return (this.get('routes').length > 1);
+    },
+    clear: function(){
+      this.set('routes', []);
+      this.set('goingBack', false);
+      this.trigger('change:routes');
+      return this;
     }
   });
 

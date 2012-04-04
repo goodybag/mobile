@@ -132,6 +132,7 @@
     <a id="landing-register-button" class="row-link">Register</a>
   </div>
   <form id="landing-login-form">
+    <div class="errors"></div>
     <div class="field-row">
       <input type="email" placeholder="Email" name="email" id="landing-login-email" />
     </div>
@@ -465,4 +466,11 @@
       <button id="change-picture-choose">Choose Photo</button>
     </div>
   </form>
+</script>
+
+<!-- ########### -->
+<!-- LOGIN ERROR -->
+<!-- ########### -->
+<script id="login-error-fragment" type="text/x-handlebars-fragment">
+  <h3 class="error">{{friendlyMessage}}</h3>
 </script>

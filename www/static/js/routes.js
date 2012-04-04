@@ -136,6 +136,7 @@
         return;
       }
       app.user.clear();
+      app.previousRoutes.clear();
       window.location.replace("/#!/");
     });
   };
