@@ -25,7 +25,7 @@ public class GoodybagActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	int Version = Build.VERSION.SDK_INT;
-    	String Url = "http://192.168.2.112/#!/android/" + Version;
+    	String Url = "http://192.168.2.133/#!/android/" + Version;
     	Log.v("navcache", "Version: " + Version);
     	
         super.onCreate(savedInstanceState);

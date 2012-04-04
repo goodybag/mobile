@@ -212,16 +212,16 @@
     }
     , render: function(){
       console.log('[render] - HeaderNav');
-      $(this.el).html(app.fragments.headerNav(this.model.toJSON()));
+      $(this.el).html(app.fragments.headerNav({last: this.model.canGoBack()}));
       return this;
     }
-    , backHandler: function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      var route = this.model.pop();
-      this.model.set('goingBack', true);
-      window.location = route;
-      return false;
+    , backHandler: function(){
+      if (this.model.canGoBack()){
+        var route = this.model.back();
+        this.model.set('goingBack', true);
+        window.location.href = route;
+        this.render();
+      }
     }
   });
 

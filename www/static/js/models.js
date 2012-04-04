@@ -102,10 +102,9 @@
       this.trigger('change:routes');
       return this;
     },
-    pop: function(route){
-      var r = this.attributes.routes.pop();
-      this.trigger('change:routes');
-      return r;
+    back: function(route){
+      this.attributes.routes.pop();
+      return this.attributes.routes[this.attributes.routes.length - 1];
     },
     canGoBack: function(){
       return (this.get('routes').length > 1);
