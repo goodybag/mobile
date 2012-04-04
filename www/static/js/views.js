@@ -55,7 +55,7 @@
       return this;
     },
     render: function(){
-      $(this.el).html(app.fragments.noGoodies());
+      $(this.el).html(app.templates.noGoodies());
       return this;
     }
   });

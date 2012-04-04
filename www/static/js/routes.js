@@ -188,6 +188,7 @@
       api.loyalties.list(options, function(error, loyaltiesProgressAndMedia){
         if(utils.exists(error)){
           console.log(error.message);
+          done(new app.Views.NoGoodies().render())
           return;
         }
         var goodies   = utils.goodyJoin(loyaltiesProgressAndMedia)
