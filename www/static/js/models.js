@@ -3,8 +3,6 @@
   this.app.Models = window.app.Models || {};
   var models = {};
 
-  models.User = utils.Model.extend({});
-
   models.Goody = utils.Model.extend({
     initialize: function(attributes, options){
       // Set the percentage field
@@ -28,7 +26,9 @@
   });
 
   models.User = utils.Model.extend({
-
+    hasUserCache: function(){
+      return !!this.get('email');
+    }
   });
 
   models.EmailAuth = utils.Model.extend({

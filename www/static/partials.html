@@ -409,10 +409,10 @@
 <!-- ######## -->
 <script id="settings-tmpl" type="text/x-handlebars-template">
   <h1>Settings</h1>
-  <div class="field-row" style="display:none;">
+  <div class="field-row">
     <a class="row-link" href="/#!/settings/change-password">Change Password</a>
   </div>
-  <div class="field-row" style="display:none;">
+  <div class="field-row">
     <a class="row-link" href="/#!/settings/change-tapin">Change TapIn ID</a>
   </div>
   <div class="field-row">
@@ -427,30 +427,41 @@
 <!-- ######################## -->
 <script id="change-password-tmpl" type="text/x-handlebars-template">
   <h1>Settings - Change Password</h1>
+  <div class="errors"></div>
   <form id="settings-change-password-form">
     <div class="field-row">
-      <input type="password" placeholder="Current Password" />
+      <input type="password" placeholder="Current Password" name="password" />
     </div>
     <div class="field-row">
-      <input type="password" placeholder="New Password" />
+      <input type="password" placeholder="New Password" name="newPassword" />
+    </div>
+    <div class="field-row">
+      <input type="password" placeholder="Once Again" name="again" />
     </div>
     <div class="field-row">
       <button>Save</button>
     </div>
   </form>
 </script>
+<!-- ################################ -->
+<!-- SETTINGS CHANGE PASSWORD SUCCESS -->
+<!-- ################################ -->
+<script id="change-password-success-tmpl" type="text/x-handlebars-template">
+<h1>Password has been successfully changed!</h1>
+</script>
 <!-- ##################### -->
 <!-- SETTINGS CHANGE TAPIN -->
 <!-- ##################### -->
 <script id="change-tapin-tmpl" type="text/x-handlebars-template">
   <h1>Settings - Change TapIn ID</h1>
+  <div class="errors"></div>
   <form id="settings-change-tapin-form">
     <div class="field-row">
-      <input type="text" placeholder="New TapIn ID" />
+      <input type="text" placeholder="New TapIn ID" name="barcodeId" />
     </div>
-    <div class="field-row">
-      <input type="password" placeholder="Password" />
-    </div>
+    <!--/*<div class="field-row">
+      <input type="password" placeholder="Password" name="password" />
+    </div>*/-->
     <div class="field-row">
       <button>Save</button>
     </div>
@@ -473,4 +484,19 @@
 <!-- ########### -->
 <script id="login-error-fragment" type="text/x-handlebars-fragment">
   <h3 class="error">{{friendlyMessage}}</h3>
+</script>
+
+<!-- ############ -->
+<!-- GENERIC PAGE -->
+<!-- ############ -->
+<script id="generic-page-tmpl" type="text/x-handlebars-template">
+{{#if title}}
+  <h1>{{title}}</h1>
+{{/if}}
+{{#if subText}}
+  <p>{{subText}}</p>
+{{/if}}
+{{#if content}}
+  {{{content}}}
+{{/if}}
 </script>

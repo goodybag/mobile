@@ -6,6 +6,12 @@
 
   routes.everything = function(){
     console.log("BEFORE EVERYTHING!");
+
+    if (!app.user.hasUserCache() && this.path != "/#!" && this.path != "/#!/"){
+      this.redirect('/#!/');
+      return false;
+    }
+
     app.activeRoute.setRoute(this.path);
   };
 

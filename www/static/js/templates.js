@@ -12,6 +12,7 @@
   fragments.userHeader  = "user-header-fragment";
   fragments.pageNav     = "page-nav-fragment";
   fragments.footerNav   = "footer-fragment";
+  templates.genericPage = "generic-page-tmpl";
 
   templates.landing     = "landing-tmpl";
   templates.register    = "register-tmpl";
@@ -20,10 +21,11 @@
   templates.dashboard   = "dashboard-tmpl";
 
   // Settings
-  templates.settings        = "settings-tmpl";
-  templates.changePassword  = "change-password-tmpl";
-  templates.changeTapIn     = "change-tapin-tmpl";
-  templates.changePicture   = "change-picture-tmpl";
+  templates.settings                = "settings-tmpl";
+  templates.changePassword          = "change-password-tmpl";
+  templates.changePasswordSuccess   = "change-password-success-tmpl";
+  templates.changeTapIn             = "change-tapin-tmpl";
+  templates.changePicture           = "change-picture-tmpl";
 
   // Goodies
   templates.goodies     = "goodies-tmpl";

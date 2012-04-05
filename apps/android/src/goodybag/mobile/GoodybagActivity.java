@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -39,12 +40,23 @@ public class GoodybagActivity extends Activity {
         GoodybagWebClient myClient = new GoodybagWebClient();
         mWebView = (WebView) findViewById(R.id.webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setBackgroundColor(0x00000000);
         mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         mWebView.setWebChromeClient(myClient);
         mWebView.loadUrl(Url);
     }
     
     private class GoodybagWebClient extends WebChromeClient {
+    	@Override
+        public void onProgressChanged(WebView view, int progress) {
+    		if (progress == 100){
+    			//hide loading image
+                findViewById(R.id.imageLoading1).setVisibility(View.GONE);
+                //show webview
+                findViewById(R.id.webview).setVisibility(View.VISIBLE);
+    		}
+        }
+    	
         public void onConsoleMessage(String message, int lineNumber, String sourceID) {
 		    Log.d("Goodybag", message + " -- From line "
 		                         + lineNumber + " of "

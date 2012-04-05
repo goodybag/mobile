@@ -655,8 +655,55 @@
     formHandler: function(e){
       e.preventDefault();
       e.stopPropagation();
-      // Do your thang
+
+      var formData  = $('#settings-change-password-form').serializeObject()
+        , self      = this
+      ;
+      if (formData.newPassword != formData.again){
+        var errorView = new app.Views.LoginError({
+          error: {
+            friendlyMessage: "Passwords do not match"
+          }
+        });
+        $('.errors', $(this.el)).replaceWith(errorView.render().el);
+        return false;
+      }
+      api.auth.updatePassword(formData, function(error){
+        if (utils.exists(error)){
+          var errorView = new app.Views.LoginError({
+            error: error
+          });
+          $('.errors', $(self.el)).replaceWith(errorView.render().el);
+          return false;
+        }
+        app.changePage(function(done){
+          var successPage = new app.Views.ChangePasswordSuccess();
+          successPage.render();
+          done(successPage);
+        });
+      });
       return false;
+    }
+  });
+
+  views.GenericPage = utils.View.extend({
+    className: 'page',
+    initialize: function(options){
+      this.options = options || {};
+      if (utils.exists(this.options.classes)){
+        $(this.el).addClass(this.options.classes);
+      }
+      return this;
+    },
+    render: function(){
+      $(this.el).html(app.templates.genericPage(this.options));
+    }
+  });
+
+  views.ChangePasswordSuccess = utils.View.extend({
+    className: 'page change-password-success',
+    render: function(){
+      $(this.el).html(app.templates.changePasswordSuccess());
     }
   });
 
@@ -672,7 +719,28 @@
     formHandler: function(e){
       e.preventDefault();
       e.stopPropagation();
-      // Do your thang
+
+      var formData  = $('#settings-change-tapin-form').serializeObject()
+        , self      = this
+      ;
+      api.auth.updateBarcodeId(formData, function(error){
+        if (utils.exists(error)){
+          var errorView = new app.Views.LoginError({
+            error: error
+          });
+          $('.errors', $(self.el)).replaceWith(errorView.render().el);
+          return false;
+        }
+        app.changePage(function(done){
+          var successPage = new app.Views.GenericPage({
+            classes: 'change-tapin-success',
+            title: 'TapIn ID Change Success!'
+          });
+          successPage.render();
+          done(successPage);
+        });
+      });
+
       return false;
     }
   });
