@@ -7,7 +7,11 @@
       pushState: false
     },
     changePage: {
-      transition: "flip",
+      defaultTransition: "fade",
+      transitions: [
+        'slideLeft',
+        'slideRight'
+      ],
       changeHash: false
     },
     theme: 'b'

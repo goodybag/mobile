@@ -11,6 +11,7 @@
 <!-- ############### -->
 <script id="footer-fragment" type="text/x-handlebars-fragment">
   <nav class="main-nav">
+    <div class="nav-shadow"></div>
     <div class="tapin-bg"></div>
     <ul class="flex-columns">
       <div class="column"></div>
@@ -95,7 +96,7 @@
   <div class="flex-columns">
     <div class="left column">
       {{#if last}}
-        <a href="{{last}}" class="btn back" style="display:none;">Back</a>
+        <button class="back">Back</button>
       {{/if}}
     </div>
     <div class="middle column">
@@ -131,11 +132,12 @@
     <a id="landing-register-button" class="row-link">Register</a>
   </div>
   <form id="landing-login-form">
+    <div class="errors"></div>
     <div class="field-row">
       <input type="email" placeholder="Email" name="email" id="landing-login-email" />
     </div>
     <div class="field-row">
-      <input type="password" placeholder="password" name="password" id="landing-login-password" />
+      <input type="password" placeholder="Password" name="password" id="landing-login-password" />
     </div>
     <div class="field-row">
       <button>Login</button>
@@ -187,10 +189,8 @@
 <!-- GOODIES TEMPLATE -->
 <!-- ################ -->
 <script id="goodies-tmpl" type="text/x-handlebars-template">
-  <div class="page goodies">
-    <div class="goodies-list" id="goodies-list">
-      <!--/* Goody Fragment */-->
-    </div>
+  <div class="goodies-list" id="goodies-list">
+    <!--/* Goody Fragment */-->
   </div>
 </script>
 
@@ -230,6 +230,36 @@
       </div>
     </div>
     <div class="cents-remaining">{{funds.centsTilGoody}} more cents to go!</div>
+  </div>
+</script>
+
+<!-- ##################### -->
+<!-- SIMPLE GOODY FRAGMENT -->
+<!-- ##################### -->
+<script id="simple-goody-fragment" type="text/x-handlebars-fragment">
+  <div class="left">
+    <div class="raised-title">You&#39;ve Raised</div>
+    <div class="raised-amount">{{funds.charityCentsRaised}}&#162</div>
+  </div>
+  <div class="right simple">
+    <h3 class="business-name">
+    {{#if org.name}}
+      org.name
+    {{else}}
+      Goodybag Business
+    {{/if}}
+    </h3>
+    <div class="simple-meter">
+      <div class="wrap">
+        <div class="progress" style="width: {{percentage}}%"></div>
+      </div>
+    </div>
+    <div class="stats">
+      <strong class="key">Goal:</strong>
+      {{funds.centsRequired}}&#162
+      <strong class="key">Remaining:</strong>
+      {{funds.centsTilGoody}}
+    </div>
   </div>
 </script>
 
@@ -301,7 +331,9 @@
     {{/if}}
   </div>
   <div class="column right">
-    <h2 class="name"><a href="{{url}}" target="_blank">{{publicName}}</a></h2>
+    <h2 class="name">
+      <a href="/#!/places/{{_id}}">{{publicName}}</a>
+    </h2>
     <div class="tags">
       {{#each type}}
       <span class="tag">
@@ -377,10 +409,10 @@
 <!-- ######## -->
 <script id="settings-tmpl" type="text/x-handlebars-template">
   <h1>Settings</h1>
-  <div class="field-row" style="display:none;">
+  <div class="field-row">
     <a class="row-link" href="/#!/settings/change-password">Change Password</a>
   </div>
-  <div class="field-row" style="display:none;">
+  <div class="field-row">
     <a class="row-link" href="/#!/settings/change-tapin">Change TapIn ID</a>
   </div>
   <div class="field-row">
@@ -395,30 +427,41 @@
 <!-- ######################## -->
 <script id="change-password-tmpl" type="text/x-handlebars-template">
   <h1>Settings - Change Password</h1>
+  <div class="errors"></div>
   <form id="settings-change-password-form">
     <div class="field-row">
-      <input type="password" placeholder="Current Password" />
+      <input type="password" placeholder="Current Password" name="password" />
     </div>
     <div class="field-row">
-      <input type="password" placeholder="New Password" />
+      <input type="password" placeholder="New Password" name="newPassword" />
+    </div>
+    <div class="field-row">
+      <input type="password" placeholder="Once Again" name="again" />
     </div>
     <div class="field-row">
       <button>Save</button>
     </div>
   </form>
 </script>
+<!-- ################################ -->
+<!-- SETTINGS CHANGE PASSWORD SUCCESS -->
+<!-- ################################ -->
+<script id="change-password-success-tmpl" type="text/x-handlebars-template">
+<h1>Password has been successfully changed!</h1>
+</script>
 <!-- ##################### -->
 <!-- SETTINGS CHANGE TAPIN -->
 <!-- ##################### -->
 <script id="change-tapin-tmpl" type="text/x-handlebars-template">
   <h1>Settings - Change TapIn ID</h1>
+  <div class="errors"></div>
   <form id="settings-change-tapin-form">
     <div class="field-row">
-      <input type="text" placeholder="New TapIn ID" />
+      <input type="text" placeholder="New TapIn ID" name="barcodeId" />
     </div>
-    <div class="field-row">
-      <input type="password" placeholder="Password" />
-    </div>
+    <!--/*<div class="field-row">
+      <input type="password" placeholder="Password" name="password" />
+    </div>*/-->
     <div class="field-row">
       <button>Save</button>
     </div>
@@ -434,4 +477,26 @@
       <button id="change-picture-choose">Choose Photo</button>
     </div>
   </form>
+</script>
+
+<!-- ########### -->
+<!-- LOGIN ERROR -->
+<!-- ########### -->
+<script id="login-error-fragment" type="text/x-handlebars-fragment">
+  <h3 class="error">{{friendlyMessage}}</h3>
+</script>
+
+<!-- ############ -->
+<!-- GENERIC PAGE -->
+<!-- ############ -->
+<script id="generic-page-tmpl" type="text/x-handlebars-template">
+{{#if title}}
+  <h1>{{title}}</h1>
+{{/if}}
+{{#if subText}}
+  <p>{{subText}}</p>
+{{/if}}
+{{#if content}}
+  {{{content}}}
+{{/if}}
 </script>

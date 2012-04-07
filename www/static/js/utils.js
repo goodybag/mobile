@@ -1,11 +1,156 @@
 (function(){
   this.utils = window.utils || {};
+  var slice   = Array.prototype.slice
+    , splice  = Array.prototype.splice
+    , _utils  = {} // Private utils
+  ;
 
-  var slice = Array.prototype.slice;
-  var splice = Array.prototype.splice;
+  var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype
 
+  var
+    nativeForEach      = ArrayProto.forEach,
+    nativeMap          = ArrayProto.map,
+    nativeReduce       = ArrayProto.reduce,
+    nativeReduceRight  = ArrayProto.reduceRight,
+    nativeFilter       = ArrayProto.filter,
+    nativeEvery        = ArrayProto.every,
+    nativeSome         = ArrayProto.some,
+    nativeIndexOf      = ArrayProto.indexOf,
+    nativeLastIndexOf  = ArrayProto.lastIndexOf,
+    nativeIsArray      = Array.isArray,
+    nativeKeys         = Object.keys,
+    nativeBind         = FuncProto.bind;
 
-  var _utils = {}; // Private utils
+  _utils.extend = function(obj) {
+    utils.each(slice.call(arguments, 1), function(source) {
+      for (var prop in source) {
+        obj[prop] = source[prop];
+      }
+    });
+    return obj;
+  };
+
+  _utils.each = function(obj, iterator, context) {
+    if (obj == null) return;
+    if (nativeForEach && obj.forEach === nativeForEach) {
+      obj.forEach(iterator, context);
+    } else if (obj.length === +obj.length) {
+      for (var i = 0, l = obj.length; i < l; i++) {
+        if (i in obj && iterator.call(context, obj[i], i, obj) === breaker) return;
+      }
+    } else {
+      for (var key in obj) {
+        if (utils.has(obj, key)) {
+          if (iterator.call(context, obj[key], key, obj) === breaker) return;
+        }
+      }
+    }
+  };
+
+  _utils.has = function(obj, key) {
+    return hasOwnProperty.call(obj, key);
+  };
+
+  _utils.overloadShortHand = function(types){
+    types = types.toLowerCase();
+    if (types.indexOf(',') == -1 && types.indexOf('t') == -1 && types.indexOf('u') == -1) return types;
+    return types.match(/\b[a-z]/g).join('');
+  };
+
+  _utils.overload = function(functions){
+    this.functionList = {};
+    var shortHandKey;
+    for (var argTypes in functions){
+      shortHandKey = utils.overloadShortHand(argTypes);
+      this.functionList[shortHandKey] = functions[argTypes];
+    }
+    return function(){
+      var key = "", i = 0;
+      for (; i < arguments.length; i++)
+        key += Object.prototype.toString.call(arguments[i])[8].toLowerCase();
+      if (!this.functionList.hasOwnProperty(key)) throw new Error("The function of type " + key + " is undefined");
+      return this.functionList[key].apply(this, arguments);
+    };
+  };
+
+  _utils.loader = (function(){
+    var defaults = {
+      // Nothing for now
+    };
+    var constructor = function($ele, options){
+      this.defaults  = defaults;
+      options        = options || {};
+      this.options   = Object.merge(this.defaults, options);
+      this.$ele      = ($ele instanceof jQuery) ? $ele : $($ele);
+      this.$loading  = $('<div class="gb-loading"></div>');
+      this.$overlay  = $('<div class="gb-loader-overlay"></div>');
+      this.$wrapper  = $('<div class="gb-loader-wrapper"></div>');
+
+      this.$loading.append('<span class="loader-block s1"></span>')
+                    .append('<span class="loader-block s2"></span>')
+                    .append('<span class="loader-block s3"></span>');
+      if (utils.exists(this.options.overlayCss)) this.$overlay.css(this.options.overlayCss);
+      if (utils.exists(this.options.loaderCss)) this.$loading.css(this.options.loaderCss);
+      if (utils.exists(this.options.loaderBlockCss)) $('.loader-block', this.$loading).css(this.options.loaderBlockCss);
+    };
+    constructor.prototype = {
+      toggle: function(){
+        if (!this.isLoading()){
+          this.start();
+        }else{
+          this.stop();
+        }
+        return this;
+      },
+      start: function(){
+        if (!this.isLoading()){
+          this.$wrapper.append(this.$loading);
+          this.$ele.addClass('gb-loader')
+              .prepend(this.$overlay)
+              .prepend(this.$wrapper);
+        }
+        return this;
+      },
+      stop: function(){
+        console.log(this.$overlay);
+        console.log(this.$wrapper);
+        console.log(this.$loading);
+        $('html').css('overflow', 'auto');
+        $('.gb-loading, .gb-loader-overlay, .gb-loader-wrapper', this.$ele).remove();
+        this.$ele.removeClass('gb-loader');
+        return this;
+      },
+      isLoading: function(){
+        return this.$ele.hasClass('gb-loader');
+      }
+    };
+    return constructor;
+  })();
+
+  /*_utils.loader = function($ele, options){
+    if (!($ele instanceof jQuery)) $ele = $($ele);
+    if (!$ele.hasClass('gb-loader')){
+      $('html').css('overflow', 'hidden');
+      var $loading  = $('<div class="gb-loading"></div>')
+        , $overlay  = $('<div class="gb-loader-overlay"></div>')
+        , $wrapper  = $('<div class="gb-loader-wrapper"></div>')
+        , options   = options || {}
+      ;
+      $loading.append('<span class="loader-block s1"></span>')
+              .append('<span class="loader-block s2"></span>')
+              .append('<span class="loader-block s3"></span>');
+      if (exists(options.overlayCss)) $overlay.css(options.overlayCss);
+      if (exists(options.loaderCss)) $loading.css(options.loaderCss);
+      if (exists(options.loaderBlockCss)) $('.loader-block', $loading).css(options.loaderBlockCss);
+      $wrapper.append($loading);
+      $ele.addClass('gb-loader').prepend($overlay).prepend($wrapper);
+    }else{
+      $('html').css('overflow', 'auto');
+      $('.gb-loading, .gb-loader-overlay, .gb-loader-wrapper', $ele).remove();
+      $ele.removeClass('gb-loader');
+    }
+    return function(){utils.loader($ele, options)};
+  };*/
 
   _utils.exists = function(variable){
     if (typeof x !== "undefined" && x !== null) {
@@ -21,7 +166,7 @@
   };
 
   // The self-propagating extend function that Backbone classes use.
-  _utils.extend = function(protoProps, classProps){
+  _utils.backboneExtend = function(protoProps, classProps){
     var child = utils.inherits(this, protoProps, classProps);
     child.extend = this.extend;
     return child;
@@ -436,7 +581,7 @@
     return child;
   };
 
-  _utils.View.extend = _utils.Model.extend = _utils.extend;
+  _utils.View.extend = _utils.Model.extend = _utils.backboneExtend;
 
 
   // Export

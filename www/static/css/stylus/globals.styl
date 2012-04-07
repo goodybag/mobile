@@ -1,0 +1,39 @@
+// Variables
+
+def-font-size = 12px
+def-font-family = Helvetica Neue, sans-serif
+def-font-color = #6e767f
+
+// End Variables
+
+// Mixins
+
+// Returns our default font setup
+fonts(size = def-font-size)
+  font-family Helvetica Neue, sans-serif
+  font-size size
+  color def-font-color
+
+// cross-browser gradients
+bg-linear-gradient(startPoint, startColor, startInterval, endColor, endInterval)
+  background-color startColor
+  background-image -webkit-gradient(linear, deprecatedWebkitStartPoint, deprecatedWebkitEndPoint, color-stop(startInterval, startColor), color-stop(endInterval, endColor))
+  background-image -webkit-linear-gradient(startPoint, startColor startInterval, endColor endInterval)
+  background-image -moz-linear-gradient(startPoint, startColor startInterval, endColor endInterval)
+  background-image -ms-linear-gradient(startPoint, startColor startInterval, endColor endInterval)
+  background-image -o-linear-gradient(startPoint, startColor startInterval, endColor endInterval)
+  background-image linear-gradient(startPoint, startColor startInterval, endColor endInterval)
+
+
+bg-white-stripe()
+  background-image url('/static/images/white-stripe-vertical.png')
+
+bg-white-stripe-diagonal()
+  background-image url('/static/images/white-stripe-diagonal.png')
+
+main-sprite(x = 0, y = 0)
+  background-image url('/static/images/main-sprite.png')
+  if x != 0 or y != 0
+    background-position x y
+
+// End Mixins

@@ -8,6 +8,8 @@
   // For the api to use
   window.exists = utils.exists;
 
+  this.app.changePage = this.app.functions.changePage;
+
   this.app.user = new this.app.Models.User();
   api.auth.session(function(error, consumer){
     if(exists(error)){
@@ -23,8 +25,8 @@
       app.activeRoute = new this.app.Models.ActiveRoute();
       app.Views.Main = new this.app.Views.Main();
       app.Views.Main.render();
-
       $('#body').prepend(app.Views.Main.el);
+
       app.router.run('#!/');
     });
   });

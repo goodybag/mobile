@@ -1,45 +1,152 @@
+/*
+  Provides a Backbone-like experience with collections
+  that conforms to our existing api setup
+
+  Be sure that when you override default crud functions
+  to fire off the appropriate events.
+*/
+
 (function(){
   this.app = window.app || {};
-  this.app.Collections = window.app.Collections || {};
+  this.app.api = window.app.api || {};
   var collections = {};
 
-  collections.Loyalties = Backbone.Collections.extend({
-    model: app.Models.Loyalty,
-    url: '/api/consumers/loyalties?progress=1&media=1',
+  var collectionConstructor = function(options){
+    this.models = [];
+    this.initialize.call(this, options);
+  };
+  collectionConstructor.prototype = {
+    Model: null,
+    api: null,
 
-    getJoined: function(){
-      var progressObj = {};
-      var mediasObj = {};
-      var businessId;
-      var loyaltiesProgress = data.loyaltiesProgress;
-      for(var i=0; i<loyaltiesProgress.length; i++){
-        businessId = loyaltiesProgress[i].org.id;
-        progressObj[businessId] = loyaltiesProgress[i];
+    initialize: function(){
+      return this;
+    },
+
+    push: function(data, options){
+      options = options || {};
+      var model = new this.Model(data);
+      this.models.push(model);
+      if (!options.silent) this.trigger('add', model, this, options);
+    },
+
+    reset: function(data, options){
+      options = options || {};
+      this.models = [];
+      for (var i = 0; i < data.length; i++){
+        this.push(data[i], {silent: !options.add});
       }
-      /*var bizMedias = data.bizMedias;
-      for(var i=0; i<bizMedias.length; i++){
-        businessId = bizMedias[i]._id.toString();
-        mediasObj[businessId] = bizMedias[i].media;
-      }*/
-      var loyalties = data.loyalties;
-      var cents;
-      var goodiesJoined = [], goodyJ;
-      for(var i=0; i<loyalties.length; i++){
-        businessId = loyalties[i].org.id;
-        goodyJ = loyalties[i];
-        //goodyJ.media = mediasObj[businessId];
-        cents = exists(progressObj[businessId])? progressObj[businessId].data.tapIns : null; //customer may not have progress with the business yet..
-        goodyJ.funds.charityCentsRemaining = exists(cents) && exists(cents.charityCentsRemaining)? cents.charityCentsRemaining : 0;
-        goodyJ.funds.charityCentsRaised    = exists(cents) && exists(cents.charityCentsRaised)   ? cents.charityCentsRaised    : 0;
-        goodyJ.funds.charityCentsRedeemed  = exists(cents) && exists(cents.charityCentsRedeemed) ? cents.charityCentsRedeemed  : 0;
-        goodiesJoined.push(goodyJ);
+      if (!options.silent) this.trigger('reset', this);
+      return this;
+    },
+
+    get: function(id, callback){
+      this._get(id, callback);
+    },
+    _get: function(id, callback){
+      if (!utils.exists(callback))
+      this.api.single(id, callback);
+    },
+
+    add: function(model, callback){
+      this._add(model, callback);
+    },
+    _add: function(model, callback){
+      var self = this;
+      this.api.add(model, function(error, data){
+        if (!utils.exists(error)){
+          self.push(data);
+        }
+        callback(error, data);
+      });
+    },
+
+    del: function(id, callback){
+      this._del(id, callback);
+    },
+    _del: function(id, callback){
+      var self = this;
+      this.api.del(id, function(error){
+        self.trigger('remove');
+        callback(error);
+      });
+    },
+
+    fetch: utils.overload({
+      "": function(){
+        this._fetch({add: false, silent: false}, function(){});
+      },
+      "f": function(callback){
+        this._fetch({add: false, silent: false}, callback);
+      },
+      "o": function(options){
+        this._fetch(options, function(){})
+      },
+      "o,f": function(options, callback){
+        this._fetch(options, callback);
       }
-      return goodiesJoined;
+    }),
+    _fetch: function(options, callback){
+      var self = this;
+      this.api.list(options, function(error, data){
+        if (!utils.exists(error)){
+          self.reset({silent: options.silent, add: options.add});
+        }
+        callback(error, data);
+      });
     }
-  });
+  };
+
+  collections.activity = {
+    Model: app.Models.Activity,
+    api: api.streams,
+
+    fetchGlobal: function(options, callback){
+      if (typeof options == "function"){
+        callback = options;
+        options = {};
+      }else if(typeof options == "undefined"){
+        options = {};
+        callback = function(){};
+      }
+      options.which = "global";
+      this.fetch(options, callback);
+    },
+    fetchSelf: function(options, callback){
+      if (typeof options == "function"){
+        callback = options;
+        options = {};
+      }else if(typeof options == "undefined"){
+        options = {};
+        callback = function(){};
+      }
+      options.which = "self";
+      this.fetch(options, callback);
+    },
+    fetch: function(options, callback){
+      var self = this
+        , defaults = {
+            add: false,
+            silent: false,
+            which: "global"
+          }
+      ;
+      options = Object.merge(defaults, options);
+      this.api[options.which](options, function(error, data){
+        if (!utils.exists(error)){
+          self.reset(data, {silent: options.silent, add: options.add});
+        }
+        callback(error, data);
+      });
+    }
+  };
 
   // Export
+  var Collection;
   for (var name in collections){
-    this.app.Collections[name] = collections[name];
+    Collection = collectionConstructor;
+    utils.extend(Collection.prototype, collections[name]);
+    utils.extend(Collection.prototype, utils.Events);
+    this.app.api[name] = new Collection();
   }
 }).call(this);

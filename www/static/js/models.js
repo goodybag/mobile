@@ -3,8 +3,6 @@
   this.app.Models = window.app.Models || {};
   var models = {};
 
-  models.User = utils.Model.extend({});
-
   models.Goody = utils.Model.extend({
     initialize: function(attributes, options){
       // Set the percentage field
@@ -28,7 +26,9 @@
   });
 
   models.User = utils.Model.extend({
-
+    hasUserCache: function(){
+      return !!this.get('email');
+    }
   });
 
   models.EmailAuth = utils.Model.extend({
@@ -43,7 +43,9 @@
         if(!utils.exists(error)){
           app.user.set(consumer);
           self.trigger("authenticated");
-        };
+        }else{
+          self.trigger("auth:fail", error);
+        }
       });
       return this;
     }
@@ -67,17 +69,28 @@
   });
 
   models.Activity = utils.Model.extend({
-    //who.id
-    //who.name
-    //action
-    //timestamp
+    initialize: function(attributes){
+      this.set('action', streamParser.renderSentence(attributes));
+      this.set('timestamp', moment(Date.create(attributes.dates.lastModified)).from());
+      return this;
+    },
+    toJSON: function(){
+      var self = this;
+      return {
+        who: {
+          id: self.get('who').id,
+          name: self.get('who').name,
+        },
+        action: self.get('action'),
+        timestamp: self.get('timestamp')
+      };
+    }
   });
 
   models.PreviousRoutes = utils.Model.extend({
     defaults: {
       routes: [],
-      maxLength: 5,
-      last: false,
+      maxLength: 10,
       goingBack: false
     },
     add: function(route){
@@ -87,13 +100,22 @@
       }
       if (this.get('routes').length > 1){
         this.set('last', this.get('routes')[this.get('routes').length - 2]);
-        this.trigger('change:routes');
       }
+      this.trigger('change:routes', route, this.get('routes'));
+      return this;
     },
-    pop: function(route){
-      var r = this.attributes.routes.shift();
-      if (this.get('routes').length == 1) this.set('last', false);
+    back: function(route){
+      this.attributes.routes.pop();
+      return this.attributes.routes[this.attributes.routes.length - 1];
+    },
+    canGoBack: function(){
+      return (this.get('routes').length > 1);
+    },
+    clear: function(){
+      this.set('routes', []);
+      this.set('goingBack', false);
       this.trigger('change:routes');
+      return this;
     }
   });
 

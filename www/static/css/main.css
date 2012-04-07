@@ -18,7 +18,11 @@ html {
   padding: 0 12px;
   width: 100%;
   box-sizing: border-box;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4871a3), color-stop(100%, #273d57));
+  background: -webkit-linear-gradient(top, #4871a3 0%, #273d57 100%);
+  background: linear-gradient(top, #4871a3 0%, #273d57 100%);
   background-color: #4871a3;
+  background-image: -webkit-gradient(linear, deprecatedWebkitStartPoint, deprecatedWebkitEndPoint, color-stop(0%, #4871a3), color-stop(100%, #273d57));
   background-image: -webkit-linear-gradient(top, #4871a3 0%, #273d57 100%);
   background-image: -moz-linear-gradient(top, #4871a3 0%, #273d57 100%);
   background-image: -ms-linear-gradient(top, #4871a3 0%, #273d57 100%);
@@ -53,6 +57,7 @@ html {
   width: 430px;
   height: 49px;
   background-image: url("/static/images/main-sprite.png");
+  background-position: -86px 0;
 }
 .header-nav .logo {
   position: absolute;
@@ -72,12 +77,23 @@ html {
   height: 61px;
   z-index: 100;
 }
+.main-nav .nav-shadow {
+  display: none;
+  position: absolute;
+  width: 100%;
+  top: 14px;
+  z-index: 101;
+  height: 6px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #19283a), color-stop(100%, #354f72));
+  background: -webkit-linear-gradient(top, #19283a 0%, #354f72 100%);
+  background: linear-gradient(top, #19283a 0%, #354f72 100%);
+}
 .main-nav > .tapin-bg {
   display: inline-block;
   position: absolute;
   top: 0;
   left: 50%;
-  z-index: 101;
+  z-index: 102;
   margin-left: -39px;
   width: 79px;
   height: 61px;
@@ -180,7 +196,7 @@ html {
 }
 .sub-header.profile > .right {
   text-align: right;
-  width: 44%;
+  width: 43.7%;
 }
 .sub-header.profile .user-info > .item {
   display: inline-block;
@@ -217,6 +233,7 @@ html {
   border-radius: 7px;
   box-shadow: inset 0 1px 1px rgba(255,255,255,0.10), 0 1px 0 rgba(255,255,255,0.15);
   background-color: #333;
+  background-image: -webkit-gradient(linear, deprecatedWebkitStartPoint, deprecatedWebkitEndPoint, color-stop(0%, #333), color-stop(100%, #000));
   background-image: -webkit-linear-gradient(top, #333 0%, #000 100%);
   background-image: -moz-linear-gradient(top, #333 0%, #000 100%);
   background-image: -ms-linear-gradient(top, #333 0%, #000 100%);
@@ -259,7 +276,7 @@ html {
 .content {
   margin: 12px 3%;
 }
-.content > .page {
+.content .page {
   padding: 4px 2%;
   background-color: #fff;
   border: solid 1px #000;
@@ -313,6 +330,31 @@ html {
 .goodies-list > .goody .raised-amount {
   font-size: 22px;
   text-shadow: 0 1px 0 #fff;
+}
+.goodies-list > .goody .simple-meter {
+  border: solid #b2b5bc 1px;
+  border-radius: 8px;
+}
+.goodies-list > .goody .simple-meter .wrap {
+  padding: 1px;
+  border-radius: 7px;
+}
+.goodies-list > .goody .simple .business-name {
+  margin: 0 0 4px 3px;
+}
+.goodies-list > .goody .simple-meter .progress {
+  height: 16px;
+  border-radius: 6px;
+  background: url("/static/images/white-stripe-diagonal.png"), -webkit-linear-gradient(top, #b7ed15 0%, #8cba18 28%, #4e7e0b 65%, #3b5600 99%);
+}
+.goodies-list > .goody .simple .stats {
+  margin-top: 3px;
+}
+.goodies-list > .goody .simple .stats .key {
+  margin-left: 2px;
+}
+.goodies-list > .goody .simple .stats .key + .key {
+  margin-left: 6px;
 }
 .meter .circle {
   margin-left: -6px;
@@ -440,7 +482,7 @@ html {
   width: 100%;
 }
 .story .column.text {
-  width: 84%;
+  width: 82%;
 }
 .story .name {
   font-weight: 600;
@@ -458,7 +500,7 @@ html {
   margin-right: 4%;
 }
 .place > .column.right {
-  width: 80%;
+  width: 78%;
 }
 .place > .column.left > img {
   width: 100%;
@@ -489,7 +531,7 @@ html {
   border-bottom: none;
 }
 .field-row {
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 .field-row > button {
   display: block;
@@ -504,8 +546,10 @@ html {
 .field-row > input {
   display: block;
   width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
-  padding: 6px;
+  padding: 10px 6px;
   border: solid #aaa 1px;
   border-radius: 16px;
 }
@@ -522,7 +566,7 @@ h2 {
 .row-link {
   position: relative;
   display: block;
-  padding: 6px 8px;
+  padding: 10px 8px;
   border: solid #aaa 1px;
   border-radius: 16px;
   color: #4c90d0;
@@ -538,18 +582,18 @@ h2 {
   display: block;
   top: 50%;
   right: 6px;
-  margin-top: -10px;
+  margin-top: -12px;
   color: #fff;
   text-align: center;
   font-size: 32px;
-  line-height: 14px;
+  line-height: 18px;
   font-weight: 400;
   text-shadow: 0 1px 1px rgba(0,0,0,0.20);
   box-shadow: inset 0 1px 0 rgba(0,0,0,0.20), 0 1px 0 rgba(255,255,255,0.25);
   background: #4c90d0;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
   content: "\203A";
 }
 .btn,
@@ -561,7 +605,7 @@ button {
   font-size: 12px;
   font-weight: 400;
   text-shadow: 0 1px 1px rgba(0,0,0,0.20);
-  padding: 8px 16px;
+  padding: 10px 16px;
   border: solid 1px #21252a;
   border-top: solid #47494f 1px;
   border-radius: 4px;
@@ -603,6 +647,11 @@ button:active {
     border: solid 2px #e9ebed;
   }
   .sub-header.profile .pledge-bank > .pledge-wrapper > .pledge > .digit {
-    padding: 4px 7px 4px 8px;
+    padding: 4px 5px 4px 6px;
+  }
+}
+@media screen and (max-height: 180px) {
+  #header: {
+    display: none;
   }
 }

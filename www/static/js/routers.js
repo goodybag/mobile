@@ -20,6 +20,8 @@
     this.get ('#!/settings/change-password',    app.routes.changePassword);
     this.get ('#!/settings/change-tapin',       app.routes.changeTapIn);
     this.get ('#!/settings/change-picture',     app.routes.changePicture);
+
+    this.get ('#!/android/:version',            app.routes.androidConfig);
   });
 
   app.router.changeHash = function(hash){

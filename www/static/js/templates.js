@@ -12,22 +12,26 @@
   fragments.userHeader  = "user-header-fragment";
   fragments.pageNav     = "page-nav-fragment";
   fragments.footerNav   = "footer-fragment";
+  templates.genericPage = "generic-page-tmpl";
 
   templates.landing     = "landing-tmpl";
   templates.register    = "register-tmpl";
   templates.emailLogin  = "email-login-tmpl";
+  fragments.loginError  = "login-error-fragment";
   templates.dashboard   = "dashboard-tmpl";
 
   // Settings
-  templates.settings        = "settings-tmpl";
-  templates.changePassword  = "change-password-tmpl";
-  templates.changeTapIn     = "change-tapin-tmpl";
-  templates.changePicture   = "change-picture-tmpl";
+  templates.settings                = "settings-tmpl";
+  templates.changePassword          = "change-password-tmpl";
+  templates.changePasswordSuccess   = "change-password-success-tmpl";
+  templates.changeTapIn             = "change-tapin-tmpl";
+  templates.changePicture           = "change-picture-tmpl";
 
   // Goodies
   templates.goodies     = "goodies-tmpl";
   templates.noGoodies   = "no-goodies-tmpl";
   fragments.goody       = "goody-fragment";
+  fragments.simpleGoody = "simple-goody-fragment";
 
   //Streams
   templates.streams               = "streams-tmpl";

@@ -41,6 +41,29 @@ streamParser.render = function(activity){
   return app.fragments.activity({timestamp: moment(Date.create(activity.dates.lastModified)).from(), who: activity.who, action: sentence});
 };
 
+streamParser.renderSentence = function(activity){
+  var events = activity.events;
+  var sentences = {};
+  var event = null;
+
+  if (events.length<1){
+    return null;
+  }
+
+  for (var i=0; i<events.length; i++){
+    event = events[i];
+    sentences[event] = streamParser.route(activity, event);
+  }
+
+  var sentence = null;
+  if(events.length>1){
+    sentence = streamParser.join(sentences);
+  } else {
+    sentence = sentences[events[0]];
+  }
+  return sentence;
+};
+
 streamParser.route = function(activity, event){
   var sentence = null;
   switch(event){

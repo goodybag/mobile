@@ -6,7 +6,11 @@
 
   routes.everything = function(){
     console.log("BEFORE EVERYTHING!");
-    // Probably ensure we're logged in and redirect if we're not
+
+    if (!app.user.hasUserCache() && this.path != "/#!" && this.path != "/#!/"){
+      this.redirect('/#!/');
+      return false;
+    }
 
     app.activeRoute.setRoute(this.path);
   };
@@ -22,52 +26,86 @@
 
   routes.landing = function(){
     console.log("[routes] - landing");
-    var landingView  = new app.Views.Landing({
-      authModel: new app.Models.EmailAuth()
+    app.functions.changePage(function(done){
+      var landingView  = new app.Views.Landing({
+        authModel: new app.Models.EmailAuth()
+      });
+      done(landingView.render());
     });
-    $("#content").html(landingView.render().el);
   };
 
   routes.register = function(){
-    console.log("[routes] - register");
     var landingView  = new app.Views.Landing({
       authModel: new app.Models.EmailAuth()
     });
-    $("#content").html(landingView.render().el);
+    landingView.render();
     landingView.registerView();
   };
 
   routes.globalStream = function(){
-    var streamsView = new app.Views.Streams({});
+    app.changePage(function(done){
+      var streamsView = new app.Views.Streams({
+        collection: app.api.activity
+      }).render();
+      app.api.activity.fetchGlobal({add: true}, function(error){
+        if (utils.exists(error)){
+          console.error(error.message);
+          return;
+        }
+        done(streamsView);
+      });
+    });
+    /*app.changePage(function(done){
+      var streamsView = new app.Views.Streams({});
+      app.router.replaceHash("/#!/streams/global");
+      streamsView.loadGlobalActivity();
+    });
+
     $("#content").html(streamsView.headerRender().el);
-    $("#content").append(streamsView.render().el);
-    app.router.replaceHash("/#!/streams/global");
-    streamsView.loadGlobalActivity();
+    $("#content").append(streamsView.render().el);*/
   };
 
   routes.myStream = function(){
-    var streamsView = new app.Views.Streams({});
+    app.changePage(function(done){
+      var streamsView = new app.Views.Streams({
+        collection: app.api.activity
+      });
+      app.api.activity.fetchSelf({add: true}, function(error){
+        if (utils.exists(error)){
+          console.error(error.message);
+          return;
+        }
+        done(streamsView);
+      });
+    });
+    /*var streamsView = new app.Views.Streams({});
     $("#content").html(streamsView.headerRender().el);
     $('#content').append(streamsView.render().el);
-    streamsView.loadMyActivity();
+    streamsView.loadMyActivity();*/
   };
 
   routes.places = function() {
-    var placesView = new app.Views.Places({});
-    $("#content").html(placesView.render().el);
-    placesView.loadPlaces();
+    app.changePage(function(done){
+      var placesView = new app.Views.Places({});
+      placesView.loadPlaces(function(){
+        done(placesView);
+      });
+    });
   };
 
   routes.placeDetails = function() {
-    api.businesses.getOneEquipped(this.params.id, function(error, business){
-      if(utils.exists(error)){
-        console.log(error);
-        return;
-      };
-      var placeDetailsView = new app.Views.PlaceDetails({
-        model: new utils.Model(business)
+    var self = this;
+    app.changePage(function(done){
+      api.businesses.getOneEquipped(self.params.id, function(error, business){
+        if(utils.exists(error)){
+          console.log(error);
+          return;
+        };
+        var placeDetailsView = new app.Views.PlaceDetails({
+          model: new utils.Model(business)
+        });
+        done(placeDetailsView.render());
       });
-      $("#content").html(placeDetailsView.render().el);
     });
   };
 
@@ -89,14 +127,6 @@
     });
   };
 
-  routes.test = function(){
-    console.log("Test Success!");
-    var page = new app.Views.TestPage();
-    page.render();
-    console.log("woot!");
-    $.mobile.changePage($(page.el), {changeHash: false, transition: "flip"});
-  };
-
   routes.login = function(){
     console.log("[routes] - login");
     var landingView  = new app.Views.Landing({});
@@ -112,6 +142,7 @@
         return;
       }
       app.user.clear();
+      app.previousRoutes.clear();
       window.location.replace("/#!/");
     });
   };
@@ -152,53 +183,77 @@
 
   routes.goodies = function(){
     console.log('[routes] - goodies');
-    $('#content').html(app.templates.goodies());
-    var options = {
-      media: 1,
-      progress: 1
-    };
-    api.loyalties.list(options, function(error, loyaltiesProgressAndMedia){
-      if(utils.exists(error)){
-        console.log(error.message);
-        return;
-      }
-      var goodies   = utils.goodyJoin(loyaltiesProgressAndMedia)
-        , $goodies  = $()
-        , goody
-      ;
-      if (goodies.length == 0){
-        $('#content').html(app.templates.noGoodies());
-      }else{
-        for (var i = 0; i < goodies.length; i++){
-          goody = new app.Views.Goody({
-            model: new app.Models.Goody(goodies[i])
-          });
-          goody.render();
-          $goodies = $goodies.add($(goody.el));
+
+    app.functions.changePage(function(done){
+      var goodiesPage = new app.Views.Goodies();
+      var options = {
+        media: 1,
+        progress: 1
+      };
+      goodiesPage.render();
+      api.loyalties.list(options, function(error, loyaltiesProgressAndMedia){
+        if(utils.exists(error)){
+          console.log(error.message);
+          done(new app.Views.NoGoodies().render())
+          return;
         }
-        $('#goodies-list').html($goodies);
-      }
+        var goodies   = utils.goodyJoin(loyaltiesProgressAndMedia)
+          , $goodies  = $()
+          , goody
+        ;
+        if (goodies.length == 0){
+          done(new app.Views.NoGoodies().render());
+        }else{
+          for (var i = 0; i < goodies.length; i++){
+            goody = new app.Views.Goody({
+              model: new app.Models.Goody(goodies[i])
+            });
+            goodiesPage.addGoody(goody);
+          }
+          done(goodiesPage);
+        }
+      });
     });
   };
 
   routes.settings = function(){
-    var page = new app.Views.Settings();
-    $('#content').html(page.render().el);
+    app.functions.changePage(function(done){
+      done(new app.Views.Settings().render());
+    });
   };
 
   routes.changePassword = function(){
-    var page = new app.Views.ChangePassword();
-    $('#content').html(page.render().el);
+    app.functions.changePage(function(done){
+      done(new app.Views.ChangePassword().render());
+    });
   };
 
   routes.changeTapIn = function(){
-    var page = new app.Views.ChangeTapIn();
-    $('#content').html(page.render().el);
+    app.functions.changePage(function(done){
+      done(new app.Views.ChangeTapIn().render());
+    });
   };
 
   routes.changePicture = function(){
-    var page = new app.Views.ChangePicture();
-    $('#content').html(page.render().el);
+    app.functions.changePage(function(done){
+      done(new app.Views.ChangePicture().render());
+    });
+  };
+
+  routes.androidConfig = function(){
+    var version = this.params.version
+      , link    = '<link rel="stylesheet" href="/static/css/{name}.css" id="{name}" />'
+    ;
+    // http://developer.android.com/reference/android/os/Build.VERSION_CODES.html
+    // For version codes - or go to globals
+    console.log("[android] - version: " + version);
+    if (version < app.globals.android.versionCodes['3.0']){
+      // Android styles
+      $('head').append($(link.replace('{name}', 'androidlt3')));
+      // Use simple goodies
+      app.fragments.goody = app.fragments.simpleGoody;
+    }
+    window.location = '/#!/';
   };
 
   // Export

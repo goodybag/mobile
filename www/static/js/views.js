@@ -16,6 +16,7 @@
         headerNav: new app.Views.HeaderNav({model: app.previousRoutes}),
         footerNav: new app.Views.FooterNav({model: app.activeRoute})
       };
+
       return this;
     }
     , render: function(){
@@ -48,6 +49,33 @@
     }
   });
 
+  views.NoGoodies = utils.View.extend({
+    className: 'page no-goodies',
+    initialize: function(){
+      return this;
+    },
+    render: function(){
+      $(this.el).html(app.templates.noGoodies());
+      return this;
+    }
+  });
+
+  views.Goodies = utils.View.extend({
+    className: 'page goodies',
+    initialize: function(){
+      return this;
+    },
+    render: function(){
+      $(this.el).html(app.templates.goodies());
+      return this;
+    },
+    addGoody: function(goody){
+      goody.render();
+      $('#goodies-list', $(this.el)).append($(goody.el));
+      return this;
+    }
+  });
+
   views.Goody = utils.View.extend({
     className: 'goody',
     initialize: function(){
@@ -69,6 +97,7 @@
     , initialize: function(){
       this.authModel = this.options.authModel;
       this.authModel.on("authenticated", this.authenticatedHandler, this);
+      this.authModel.on('auth:fail', this.authFailHandler, this);
       return this;
     }
     , render: function(){
@@ -80,10 +109,13 @@
       event.preventDefault();
       app.router.changeHash("/#!/register");
 
-      var registerView = new app.Views.Register({
-        authModel: new app.Models.EmailAuth()
+      app.changePage(function(done){
+        var registerView = new app.Views.Register({
+          authModel: new app.Models.EmailAuth()
+        });
+        registerView.render();
+        done(registerView);
       });
-      $("#content").html(registerView.render().el);
       return this;
     }
     , facebookLoginHandler: function(){
@@ -125,11 +157,35 @@
       return false;
     }
     , authenticatedHandler: function(){
-      console.log("[handler] landing-authenticated");
-      var streamsView = new app.Views.Streams({});
-      $("#content").html(streamsView.headerRender().el);
-      $("#content").append(streamsView.render().el);
-      streamsView.loadGlobalActivity();
+      app.changePage(function(done){
+        var streamsView = new app.Views.Streams({
+          collection: app.api.activity
+        }).render();
+        app.api.activity.fetchGlobal({add: true}, function(error,data){
+          if (utils.exists(error)){
+            console.error(error.message);
+            return;
+          }
+          done(streamsView);
+        });
+      });
+    }
+    , authFailHandler: function(error){
+      var errorView = new app.Views.LoginError({
+        error: error
+      });
+      $('.errors', $(this.el)).replaceWith(errorView.render().el);
+    }
+  });
+
+  views.LoginError = utils.View.extend({
+    className: 'errors',
+    initialize: function(attr){
+      this.error = attr.error;
+      return this;
+    },
+    render: function(){
+      $(this.el).html(app.fragments.loginError(this.error));
       return this;
     }
   });
@@ -137,6 +193,10 @@
   views.FooterNav = utils.View.extend({
     tagname: 'nav',
     className: 'main-nav',
+    events: {
+      'tap a': 'menuItemTap',
+      'click a': 'menuItemTap'
+    },
     initialize: function(){
       this.model.on('change', this.updateActive, this);
     },
@@ -151,6 +211,12 @@
         $('.menu-item.' + this.model.get('active')).addClass('active');
       }
       return this;
+    },
+    menuItemTap: function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      window.location = e.target.href;
+      return false;
     }
   });
 
@@ -165,13 +231,16 @@
     }
     , render: function(){
       console.log('[render] - HeaderNav');
-      $(this.el).html(app.fragments.headerNav(this.model.toJSON()));
+      $(this.el).html(app.fragments.headerNav({last: this.model.canGoBack()}));
       return this;
     }
     , backHandler: function(){
-      this.model.pop();
-      this.model.set('goingBack', true);
-      return this;
+      if (this.model.canGoBack()){
+        var route = this.model.back();
+        this.model.set('goingBack', true);
+        window.location.href = route;
+        this.render();
+      }
     }
   });
 
@@ -293,93 +362,126 @@
   });
 
   views.Streams = utils.View.extend({
-    className: 'page streams'
-    , events: {
+    events: {
       "click #streams-all-button": 'loadGlobalActivity'
       , "click #streams-my-button": 'loadMyActivity'
     }
     , initialize: function(){
+      this.pageContent = new app.Views.StreamsPage({
+        collection: this.collection
+      });
+
       this.pageHeader = new app.Views.PageNav({
         leftButton: {
           id: "streams-all-button",
           text: "All Activity",
           classes: "",
-          handler: this.loadGlobalActivity
         },
         rightButton: {
           id: "streams-my-button",
           text: "My Activity",
           classes: "",
-          handler: this.loadMyActivity
         }
       });
+
+      this.subViews = [this.pageHeader, this.pageContent];
+
+      this.collection.on('reset', this.renderActivity, this);
+
+      return this;
+    }
+    , render: function(){
+      console.log(this.subViews);
+      for (var i = 0; i < this.subViews.length; i++){
+        $(this.el).append(this.subViews[i].render().el);
+      }
+      this.pageContent.renderActivity();
+      return this;
+    }
+    , renderActivity: function(){
+      this.pageContent.renderActivity();
+    }
+    , loadGlobalActivity: function(){
+      var self = this;
+      app.changePage(function(done){
+        $('#streams-activities', this.el).html("");
+        self.collection.fetchGlobal(function(error){
+          if (utils.exists(error)){
+            console.error(error.message);
+            return;
+          }
+          app.router.changeHash("#!/streams/global");
+          done(self.pageContent);
+        });
+      }, {
+        transition: 'load'
+      });
+      return this;
+    }
+    , loadMyActivity: function(){
+      var self = this;
+      app.changePage(function(done){
+        $('#streams-activities', this.el).html("");
+        self.collection.fetchSelf(function(error, data){
+          if (utils.exists(error)){
+            console.error(error.message);
+            return;
+          }
+          app.router.changeHash("#!/streams/me");
+          done(self.pageContent);
+        });
+      }, {
+        transition: 'load'
+      });
+      return this;
+    }
+  });
+
+  views.StreamsPage = utils.View.extend({
+    className: 'page streams'
+    , initialize: function(){
+      return this;
     }
     , headerRender: function(){
+      console.log("[Streams] - Render page header");
       return this.pageHeader.render();
     }
     , render: function(){
       $(this.el).html(app.templates.streams());
       return this;
     }
-    , loadGlobalActivity: function(){
-      console.log("[handler] streams-loadGlobalActivity");
-      app.router.changeHash("/#!/streams/global");
-      var self = this;
-      api.streams.global(function(error, stream){
-        if(exists(error)){
-          console.error(error.message);
-          return;
-        };
-
-        var $activitiesContainer = $("#streams-activities", self.el);
-
-        $activitiesContainer.html("");
-
-        var sentences = "";
-        for(var i=0; i<stream.length; i++){
-          sentences += streamParser.render(stream[i]);
-          //$(sentence).css("opacity", "0").appendTo($dashboardActivityFeed).delay(100*i).animate({opacity:1}, 250, "swing");
-        }
-        var $sentences = $(sentences);
-        $activitiesContainer.append($sentences);
-        $newImages = $("img.picture",$sentences);
-        $newImages.error(function(){
-          //since profile pictures are assumed to be s3/<id...>.png
-          //if the picture is not found we will replace it with the default goodybag pic
-          $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
-        });
+    , renderActivity: function(){
+      console.log('[Streams] - renderActivity');
+      var models = this.collection.models;
+      console.log(models);
+      $('#streams-activities', $(this.el)).html("");
+      for (var i = 0; i < models.length; i++){
+        this.renderSingleActivity(models[i]);
+      }
+      $newImages = $("img.picture", $(this.el));
+      $newImages.error(function(){
+        //since profile pictures are assumed to be s3/<id...>.png
+        //if the picture is not found we will replace it with the default goodybag pic
+        $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
       });
+      return this;
     }
-    , loadMyActivity: function(){
-      console.log("[handler] streams-loadMyActivity");
-      var self = this;
-      app.router.changeHash("/#!/streams/me");
-      api.streams.self(function(error, stream){
-        if(exists(error)){
-          console.error(error.message);
-          return;
-        };
+    , renderSingleActivity: function(activity){
+      var activityView = new app.Views.Activity({
+        model: activity
+      }).render();
+      $('#streams-activities', $(this.el)).append(activityView.el);
+      return this;
+    }
+  });
 
-        console.log(self.el);
-        var $activitiesContainer = $("#streams-activities", self.el);
-        console.log($activitiesContainer);
-
-        $activitiesContainer.html("");
-
-        var sentences = "";
-        for(var i=0; i<stream.length; i++){
-          sentences += streamParser.render(stream[i]);
-          //$(sentence).css("opacity", "0").appendTo($dashboardActivityFeed).delay(100*i).animate({opacity:1}, 250, "swing");
-        }
-        var $sentences = $(sentences);
-        $activitiesContainer.append($sentences);
-        $newImages = $("img.picture",$sentences);
-        $newImages.error(function(){
-          //since profile pictures are assumed to be s3/<id...>.png
-          //if the picture is not found we will replace it with the default goodybag pic
-          $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
-        });
-      });
+  views.Activity = utils.View.extend({
+    initialize: function(){
+      return this;
+    },
+    render: function(){
+      $(this.el).html(app.fragments.activity(this.model.toJSON()));
+      return this;
     }
   });
 
@@ -391,23 +493,22 @@
     , initialize: function(){
     }
     , render: function(){
-      //$(this.el).html(app.templates.places());
       return this;
     }
-    , loadPlaces: function(){
+    , loadPlaces: function(callback){
       var self = this;
       api.businesses.listEquipped(function(error, businesses){
-        //ideally we would want to create a model for each business
         for (var i=0, length=businesses.length; i<length; i++){
           var placeView = new app.Views.Place({
             model: new utils.Model(businesses[i])
           })
           $(self.el).append(placeView.render().el);
-          $newImages = $("img.picture", this.el);
-          $newImages.error(function(){
-            $(this).attr('src',"https://s3.amazonaws.com/goodybag.com/default-85.jpg");
-          });
         }
+        $newImages = $("img.picture", $(self.el));
+        $newImages.error(function(){
+          $(this).attr('src',"https://s3.amazonaws.com/goodybag.com/default-85.jpg");
+        });
+        callback();
       });
     }
   });
@@ -426,17 +527,20 @@
     , viewDetails: function(){
       /* display business details */
       var self = this;
-      api.businesses.getOneEquipped(this.model.get("_id"), function(error, business){
-        if(utils.exists(error)){
-          console.log(error);
-          return;
-        };
-
-        var placeDetailsView = new app.Views.PlaceDetails({
-          model: new utils.Model(business)
+      console.log("View Details");
+      console.log(self.model);
+      app.changePage(function(done){
+        api.businesses.getOneEquipped(self.model.get('_id'), function(error, business){
+          if(utils.exists(error)){
+            console.log(error);
+            return;
+          };
+          var placeDetailsView = new app.Views.PlaceDetails({
+            model: new utils.Model(business)
+          });
+          app.router.changeHash("#!/places/"+self.model.get("_id"));
+          done(placeDetailsView.render());
         });
-        $("#content").html(placeDetailsView.render().el);
-        app.router.changeHash("#!/places/"+self.model.get("_id"));
       });
     }
   });
@@ -528,6 +632,7 @@
     , events: {
       "click #settings-logout": "logout"
     }
+    , initialize: function(){ return this; }
     , render: function(){
       $(this.el).html(app.templates.settings());
       return this;
@@ -550,8 +655,55 @@
     formHandler: function(e){
       e.preventDefault();
       e.stopPropagation();
-      // Do your thang
+
+      var formData  = $('#settings-change-password-form').serializeObject()
+        , self      = this
+      ;
+      if (formData.newPassword != formData.again){
+        var errorView = new app.Views.LoginError({
+          error: {
+            friendlyMessage: "Passwords do not match"
+          }
+        });
+        $('.errors', $(this.el)).replaceWith(errorView.render().el);
+        return false;
+      }
+      api.auth.updatePassword(formData, function(error){
+        if (utils.exists(error)){
+          var errorView = new app.Views.LoginError({
+            error: error
+          });
+          $('.errors', $(self.el)).replaceWith(errorView.render().el);
+          return false;
+        }
+        app.changePage(function(done){
+          var successPage = new app.Views.ChangePasswordSuccess();
+          successPage.render();
+          done(successPage);
+        });
+      });
       return false;
+    }
+  });
+
+  views.GenericPage = utils.View.extend({
+    className: 'page',
+    initialize: function(options){
+      this.options = options || {};
+      if (utils.exists(this.options.classes)){
+        $(this.el).addClass(this.options.classes);
+      }
+      return this;
+    },
+    render: function(){
+      $(this.el).html(app.templates.genericPage(this.options));
+    }
+  });
+
+  views.ChangePasswordSuccess = utils.View.extend({
+    className: 'page change-password-success',
+    render: function(){
+      $(this.el).html(app.templates.changePasswordSuccess());
     }
   });
 
@@ -567,7 +719,28 @@
     formHandler: function(e){
       e.preventDefault();
       e.stopPropagation();
-      // Do your thang
+
+      var formData  = $('#settings-change-tapin-form').serializeObject()
+        , self      = this
+      ;
+      api.auth.updateBarcodeId(formData, function(error){
+        if (utils.exists(error)){
+          var errorView = new app.Views.LoginError({
+            error: error
+          });
+          $('.errors', $(self.el)).replaceWith(errorView.render().el);
+          return false;
+        }
+        app.changePage(function(done){
+          var successPage = new app.Views.GenericPage({
+            classes: 'change-tapin-success',
+            title: 'TapIn ID Change Success!'
+          });
+          successPage.render();
+          done(successPage);
+        });
+      });
+
       return false;
     }
   });

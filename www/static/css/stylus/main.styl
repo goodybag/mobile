@@ -1,48 +1,4 @@
-// We really need to break this up into separate files and import everything
-// Stylus will merge everything into one file for us
-
-
-
-// Variables
-
-def-font-size = 12px
-def-font-family = Helvetica Neue, sans-serif
-def-font-color = #6e767f
-
-// End Variables
-
-// Mixins
-
-// Returns our default font setup
-fonts(size = def-font-size)
-  font-family Helvetica Neue, sans-serif
-  font-size size
-  color def-font-color
-
-// cross-browser gradients
-bg-linear-gradient(startPoint, startColor, startInterval, endColor, endInterval, deprecatedWebkitStartPoint = false, deprecatedWebkitEndPoint = false)
-  background-color startColor
-  if deprecatedWebkitStartPoint && deprecatedWebkitEndPoint
-    background-image -webkit-gradient(linear, deprecatedWebkitStartPoint, deprecatedWebkitEndPoint, color-stop(startInterval, startColor), color-stop(endInterval, endColor))
-  background-image -webkit-linear-gradient(startPoint, startColor startInterval, endColor endInterval)
-  background-image -moz-linear-gradient(startPoint, startColor startInterval, endColor endInterval)
-  background-image -ms-linear-gradient(startPoint, startColor startInterval, endColor endInterval)
-  background-image -o-linear-gradient(startPoint, startColor startInterval, endColor endInterval)
-  background-image linear-gradient(startPoint, startColor startInterval, endColor endInterval)
-
-
-bg-white-stripe()
-  background-image url('/static/images/white-stripe-vertical.png')
-
-bg-white-stripe-diagonal()
-  background-image url('/static/images/white-stripe-diagonal.png')
-
-main-sprite(x = 0, y = 0)
-  background-image url('/static/images/main-sprite.png')
-  if x != 0 and y != 0
-    background-position x y
-
-// End Mixins
+@import 'globals'
 
 body, html
   fonts()
@@ -58,9 +14,12 @@ body, html
   z-index: 100
   top 0
   height 49px
-  padding: 0 12px;
+  padding: 0 12px
   width 100%
   box-sizing border-box
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4871a3), color-stop(100%,#273d57));
+  background: -webkit-linear-gradient(top, #4871a3 0%,#273d57 100%);
+  background: linear-gradient(top, #4871a3 0%,#273d57 100%);
   bg-linear-gradient(top, #4871a3, 0%, #273d57, 100%)
   box-shadow inset 0 1px 0 rgba(255,255,255, 0.4), 0 3px 6px rgba(0,0,0, 0.35)
   border-bottom solid #000 1px
@@ -85,7 +44,7 @@ body, html
   margin-left: -215px;
   width 430px
   height 49px
-  main-sprite(-100px, 0)
+  main-sprite(-86px, 0)
 .header-nav .logo
   position: absolute;
   left: 50%
@@ -105,12 +64,24 @@ body, html
   height: 61px
   z-index: 100
 
+.main-nav .nav-shadow
+  display: none
+  position: absolute
+  width: 100%
+  top: 14px
+  z-index: 101
+  height: 6px
+
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#19283a), color-stop(100%,#354F72));
+  background: -webkit-linear-gradient(top, #19283a 0%, #354F72 100%)
+  background: linear-gradient(top, #19283a 0%, #354F72 100%);
+
 .main-nav > .tapin-bg
   display: inline-block
   position: absolute
   top: 0
   left: 50%
-  z-index: 101
+  z-index: 102
   margin-left: -39px
   width: 79px
   height: 61px
@@ -214,7 +185,7 @@ body, html
   width: 56%
 .sub-header.profile > .right {
   text-align: right;
-  width: 44%;
+  width: 43.7%; // android not adding percentages correctly
 }
 .sub-header.profile .user-info > .item {
   display: inline-block
@@ -287,7 +258,7 @@ body, html
 .content
   margin: 12px 3%
 
-.content > .page {
+.content .page {
   padding: 4px 2%;
   background-color: #fff
   border: solid 1px #000
@@ -337,6 +308,32 @@ body, html
   text-shadow: 0 1px 0 #fff;
 
 // All this meter is stuff is really un-organized
+
+// Simple meter for less capable browsers
+.goodies-list > .goody .simple-meter
+  border: solid #b2b5bc 1px;
+  border-radius: 8px
+
+.goodies-list > .goody .simple-meter .wrap
+  padding: 1px
+  border-radius: 7px
+
+.goodies-list > .goody .simple .business-name
+  margin: 0 0 4px 3px
+
+.goodies-list > .goody .simple-meter .progress
+  height: 16px
+  border-radius: 6px
+  background: url("/static/images/white-stripe-diagonal.png"), -webkit-linear-gradient(top, rgba(183,237,21,1) 0%,rgba(140,186,24,1) 28%,rgba(78,126,11,1) 65%,rgba(59,86,0,1) 99%);
+
+.goodies-list > .goody .simple .stats
+  margin-top: 3px
+
+.goodies-list > .goody .simple .stats .key
+  margin-left: 2px
+
+.goodies-list > .goody .simple .stats .key + .key
+  margin-left: 6px
 
 .meter .circle {
   margin-left: -6px;
@@ -463,7 +460,7 @@ body, html
 .story .column.picture img
   width: 100%
 .story .column.text
-  width: 84%
+  width: 82% // Android not adding percentages correctly
 .story .name
   font-weight: 600
 
@@ -477,7 +474,7 @@ body, html
   width: 16%
   margin-right: 4%
 .place > .column.right
-  width: 80%
+  width: 78% // Android percentages
 .place > .column.left > img
   width: 100%
 .place .name > a
@@ -500,7 +497,7 @@ body, html
   border-bottom: none
 
 .field-row
-  margin-bottom: 8px
+  margin-bottom: 16px
 .field-row > button
   display: block
   width: 100%
@@ -512,8 +509,10 @@ body, html
 .field-row > input
   display: block
   width: 100%
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
   box-sizing: border-box
-  padding: 6px
+  padding: 10px 6px
   border: solid #aaa 1px
   border-radius: 16px
 
@@ -530,7 +529,7 @@ h2
 .row-link
   position: relative
   display: block
-  padding: 6px 8px
+  padding: 10px 8px
   border: solid #aaa 1px
   border-radius: 16px
   color: #4C90D0
@@ -544,11 +543,11 @@ h2
   display: block
   top: 50%
   right: 6px
-  margin-top: -10px
+  margin-top: -12px
   color: #fff;
   text-align: center
   font-size: 32px;
-  line-height: 14px
+  line-height: 18px
   font-weight: 400;
   text-shadow: 0 1px 1px rgba(0,0,0, 0.2);
   box-shadow: inset 0 1px 0 rgba(0,0,0, 0.2), 0 1px 0 rgba(255,255,255, 0.25);
@@ -556,9 +555,9 @@ h2
   //background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4C90D0), color-stop(100%,#2D476F));
   //background: -webkit-linear-gradient(top, #4C90D0 0%, #2D476F 100%);
   //background: linear-gradient(top, #4C90D0 0%, #2D476F 100%);
-  width: 20px
-  height: 20px
-  border-radius: 10px
+  width: 24px
+  height: 24px
+  border-radius: 12px
   content: "\203A"
 
 .btn,
@@ -570,7 +569,7 @@ button {
   font-size: 12px;
   font-weight: 400;
   text-shadow: 0 1px 1px rgba(0,0,0, 0.2);
-  padding: 8px 16px;
+  padding: 10px 16px;
   border: solid 1px #21252a;
   border-top: solid #47494f 1px;
   border-radius: 4px;
@@ -611,6 +610,12 @@ button:active
     border: solid 2px #e9ebed;
   }
   .sub-header.profile .pledge-bank > .pledge-wrapper > .pledge > .digit {
-    padding: 4px 7px 4px 8px
+    padding: 4px 5px 4px 6px
+  }
+}
+
+@media screen and (max-height: 180px) {
+  #header: {
+    display: none
   }
 }
