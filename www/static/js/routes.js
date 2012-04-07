@@ -7,7 +7,10 @@
   routes.everything = function(){
     console.log("BEFORE EVERYTHING!");
 
-    if (!app.user.hasUserCache() && this.path != "/#!" && this.path != "/#!/"){
+    if (!app.user.hasUserCache()
+        && this.path != "/#!"
+        && this.path != "/#!/"
+        && this.path.indexOf("android") == -1){
       this.redirect('/#!/');
       return false;
     }

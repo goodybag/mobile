@@ -211,7 +211,13 @@
     <div class="raised-amount">{{funds.charityCentsRaised}}&#162</div>
   </div>
   <div class="right">
-    <h3 class="business-name">{{org.name}}</h3>
+    <h3 class="business-name">
+    {{#if org.name}}
+      {{org.name}}
+    {{else}}
+      Business Name
+    {{/if}}
+    </h3>
     <div class="meter">
       <div class="left-border">
         <div class="inner"></div>
