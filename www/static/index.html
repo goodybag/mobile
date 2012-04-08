@@ -64,28 +64,28 @@
   </body>
   <script>
   //if an apple mobile device
-  alert(navigator.userAgent);
+  // alert(navigator.userAgent);
   if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i))){
     if(navigator.userAgent.match(/Safari/i)){//not in the app
-      alert("not in app");
+      // alert("not in app");
       console.log("attempting to get facebook");
       $.getScript("http://connect.facebook.net/en_US/all.js#xfbml=0&appId=152282721508707", function(data, status, xhr){
         console.log("initializing facebook");
         FB.init({appId: "152282721508707"});
       });
     } else { //in the app
-      alert("in app");
+      // alert("in app");
       $.getScript("/static/3/facebook_js_sdk.js", function(data, status, xhr){
-        alert("got script");
+        // alert("got script");
         document.addEventListener('deviceready', function() {
-          alert("device is ready");
+          // alert("device is ready");
           console.log("device is ready");
           FB.init({
             appId: "152282721508707",
             nativeInterface: PG.FB
           });
           console.log("facebookInitialized");
-          alert("facebookInitialized");
+          // alert("facebookInitialized");
         });
       });
     }
