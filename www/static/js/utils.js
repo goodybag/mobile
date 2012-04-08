@@ -21,6 +21,27 @@
     nativeKeys         = Object.keys,
     nativeBind         = FuncProto.bind;
 
+  _utils.scrolledToBottom = (function(){
+    var defaults = {
+      $el: $(window)
+    , onScrolledToBottom: function(){}
+    };
+    var constructor = function(options){
+      this.options = Object.merge(defaults, options);
+      this.$el = this.options.$el;
+      this.$el.scroll(this.scrollListener);
+    };
+    constructor.prototype = {
+      scrollListener: function(e){
+        if ($el.offsetHeight + $el.scrollTop >= $el.scrollHeight && !this.finished) {
+          this.options.onScrollToBottom(e, this, $el);
+        }
+      }
+    };
+
+    return constructor;
+  })();
+
   _utils.extend = function(obj) {
     utils.each(slice.call(arguments, 1), function(source) {
       for (var prop in source) {

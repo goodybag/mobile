@@ -128,17 +128,23 @@
         , defaults = {
             add: false,
             silent: false,
-            which: "global"
+            which: "global",
+            append: false
           }
       ;
       options = Object.merge(defaults, options);
       this.api[options.which](options, function(error, data){
         if (!utils.exists(error)){
-          self.reset(data, {silent: options.silent, add: options.add});
+          if (options.append){
+            self.append(data, {silent: options.silent, add: options.add});
+          }else{
+            self.reset(data, {silent: options.silent, add: options.add});
+          }
         }
         callback(error, data);
       });
-    }
+    },
+    append: function(){}
   };
 
   // Export

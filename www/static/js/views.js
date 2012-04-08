@@ -400,6 +400,7 @@
     }
     , renderActivity: function(){
       this.pageContent.renderActivity();
+      return this;
     }
     , loadGlobalActivity: function(){
       var self = this;
