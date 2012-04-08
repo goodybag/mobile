@@ -64,7 +64,8 @@
   </body>
   <script>
   //if an apple mobile device
-  if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i))){
+  //if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i))){
+  if(PhoneGap && PhoneGap.available){
     $.getScript("/static/3/facebook_js_sdk.js", function(data, status, xhr){
       document.addEventListener('deviceready', function() {
         console.log("device is ready");
