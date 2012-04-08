@@ -121,8 +121,15 @@
     , facebookLoginHandler: function(){
       var self = this;
       FB.login(function(response){
-        if(response.session){
-          var accessToken = response.session.access_token;
+        console.log("response");
+        console.log(response);
+        if(response.session || response.authResponse){
+          var accessToken;
+          if(response.session){
+            accessToken = response.session.access_token
+          } else{
+            accessToken = response.authResponse.accessToken;
+          }
           FB.api('/me', function(response) {
             api.auth.facebook(accessToken,function(error,consumer){
               if(utils.exists(error)){
@@ -141,7 +148,8 @@
         }
       }
       , {
-        perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
+        perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location",
+        scope: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
       });
     }
     , emailLoginHandler: function(){
@@ -329,8 +337,15 @@
     , facebookLoginHandler: function(){
       var self = this;
       FB.login(function(response){
-        if(response.session){
-          var accessToken = response.session.access_token;
+        console.log("response");
+        console.log(response);
+        if(response.session || response.authResponse){
+          var accessToken;
+          if(response.session){
+            accessToken = response.session.access_token
+          } else{
+            accessToken = response.authResponse.accessToken;
+          }
           FB.api('/me', function(response) {
             api.auth.facebook(accessToken,function(error,consumer){
               if(utils.exists(error)){
@@ -349,7 +364,8 @@
         }
       }
       , {
-        perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
+        perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location",
+        scope: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
       });
     }
     , authenticatedHandler: function(){
