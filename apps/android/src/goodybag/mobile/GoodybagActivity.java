@@ -26,7 +26,7 @@ public class GoodybagActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	int Version = Build.VERSION.SDK_INT;
-    	String Url = "http://192.168.2.106/#!/android/" + Version;
+    	String Url = "http://m.goodybag.com/#!/android/" + Version;
     	Log.v("navcache", "Version: " + Version);
     	
         super.onCreate(savedInstanceState);
@@ -54,6 +54,7 @@ public class GoodybagActivity extends Activity {
                 findViewById(R.id.imageLoading1).setVisibility(View.GONE);
                 //show webview
                 findViewById(R.id.webview).setVisibility(View.VISIBLE);
+                findViewById(R.id.webview).requestFocus(View.FOCUS_DOWN);
     		}
         }
     	
