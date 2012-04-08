@@ -34,6 +34,7 @@
         authModel: new app.Models.EmailAuth()
       });
       done(landingView.render());
+      app.Views.Main.landingFrame();
     });
   };
 

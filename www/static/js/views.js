@@ -115,6 +115,7 @@
         });
         registerView.render();
         done(registerView);
+        app.Views.Main.landingFrame();
       });
       return this;
     }
