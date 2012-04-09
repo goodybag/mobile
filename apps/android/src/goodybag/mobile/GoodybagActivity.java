@@ -2,7 +2,6 @@ package goodybag.mobile;
 
 import java.io.File;
 import java.util.*;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -14,8 +13,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.*;
 import android.util.Log;
+import org.apache.cordova.*;
 
-public class GoodybagActivity extends Activity {
+public class GoodybagActivity extends DroidGap {
 	WebView mWebView;
 	
 	/*@Override
@@ -29,7 +29,11 @@ public class GoodybagActivity extends Activity {
     	String Url = "http://m.goodybag.com/#!/android/" + Version;
     	Log.v("navcache", "Version: " + Version);
     	
-        super.onCreate(savedInstanceState);
+    	super.onCreate(savedInstanceState);
+    	super.loadUrl(Url);
+    	
+    	/* All of this crap should be handled by phonegap
+    	
         // clear cache
         clearCache(this, 0);
         // remove title
@@ -44,6 +48,7 @@ public class GoodybagActivity extends Activity {
         mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         mWebView.setWebChromeClient(myClient);
         mWebView.loadUrl(Url);
+        */
     }
     
     private class GoodybagWebClient extends WebChromeClient {
