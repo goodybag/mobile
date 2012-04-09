@@ -419,7 +419,7 @@
       return this;
     }
     , loadGlobalActivity: function(){
-      var self = this;
+      /*var self = this;
       app.changePage(function(done){
         $('#streams-activities', this.el).html("");
         self.collection.fetchGlobal(function(error){
@@ -428,15 +428,17 @@
             return;
           }
           app.router.changeHash("#!/streams/global");
+          app.trigger('leavePage:' + app.previousRoutes.previousRoute());
           done(self.pageContent);
         });
       }, {
         transition: 'load'
-      });
+      });*/
+      window.location.href = '/#!/streams/global';
       return this;
     }
     , loadMyActivity: function(){
-      var self = this;
+      /*var self = this;
       app.changePage(function(done){
         $('#streams-activities', this.el).html("");
         self.collection.fetchSelf(function(error, data){
@@ -449,7 +451,8 @@
         });
       }, {
         transition: 'load'
-      });
+      });*/
+      window.location.href = '/#!/streams/me';
       return this;
     }
   });

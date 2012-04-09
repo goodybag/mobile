@@ -7,6 +7,13 @@
   routes.everything = function(){
     console.log("BEFORE EVERYTHING!");
 
+    // Leave page events
+    if (app.previousRoutes.get('routes').length > 0){
+      console.log('leavePage:' + app.previousRoutes.previousRoute());
+      app.trigger('leavePage', app.previousRoutes.previousRoute());
+      app.trigger('leavePage:' + app.previousRoutes.previousRoute());
+    }
+
     if (!app.user.hasUserCache()
         && this.path != "/#!"
         && this.path != "/#!/"
@@ -66,7 +73,7 @@
     });
 
     // Load next page of results
-    var canScrollLoad = true
+    /*var canScrollLoad = true
       , $win          = $(window)
     ;
     $(window).scroll(function(e){
@@ -80,7 +87,7 @@
           if (data.length < options.limit) canScrollLoad = false;
         });
       }
-    });
+    });*/
   };
 
   routes.myStream = function(){
@@ -92,19 +99,40 @@
     app.changePage(function(done){
       var streamsView = new app.Views.Streams({
         collection: app.api.activity
-      });
+      }).render();
       app.api.activity.fetchSelf(options, function(error){
         if (utils.exists(error)){
           console.error(error.message);
           return;
         }
         done(streamsView);
+
+        // Scroll to end load more
+        var complete        = false
+          , loader          = utils.rowLoader()
+          , scrollObserver  = new utils.scrolledToEndObserver({
+            $el: $(window),
+            onScrollToEnd: function(e, observer){
+              console.log('scrolled to end');
+              if (complete) return;
+
+              loader.appendTo($('.page', $(streamsView.el)));
+              loader.start();
+
+              app.api.activity.fetchGlobal(options, function(error, data){
+                if (utils.exists(error)){
+                  console.error(error.message);
+                  return;
+                }
+                if (data.length < options.limit) complete = true;
+                loader.removeElFromDom();
+                loader.stop();
+              });
+            }
+          })
+        ;
       });
     });
-    /*var streamsView = new app.Views.Streams({});
-    $("#content").html(streamsView.headerRender().el);
-    $('#content').append(streamsView.render().el);
-    streamsView.loadMyActivity();*/
   };
 
   routes.places = function() {
