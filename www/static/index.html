@@ -113,8 +113,8 @@
   } else if(navigator.userAgent.match(/goodybag-app-android/i)){ //in android app
     console.log("in-android-app");
     scripts.push({phonegap: "/static/3/cordova-android/cordova-1.5.0.js"});
-    scripts.push({phonegapFacebookPlugin: "/static/3/cordova-android/cdv-plugin-fb-connect.js"});
-    scripts.push({facebook: "/static/3/cordova-android/facebook_js_sdk.js"});
+    //scripts.push({phonegapFacebookPlugin: "/static/3/cordova-android/cdv-plugin-fb-connect.js"});
+    //scripts.push({facebook: "/static/3/cordova-android/facebook_js_sdk.js"});
 
     headCallbacks.push(function(){
       document.addEventListener('deviceready', function() {
