@@ -14,8 +14,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.*;
 import android.util.Log;
+import org.apache.cordova.*;
 
-public class GoodybagActivity extends Activity {
+public class GoodybagActivity extends DroidGap {
 	WebView mWebView;
 	
 	/*@Override
@@ -35,6 +36,7 @@ public class GoodybagActivity extends Activity {
         // remove title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         
+        /* Replaced with DroidGap stuff
         setContentView(R.layout.main);
 
         GoodybagWebClient myClient = new GoodybagWebClient();
@@ -43,7 +45,12 @@ public class GoodybagActivity extends Activity {
         mWebView.setBackgroundColor(0x00000000);
         mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         mWebView.setWebChromeClient(myClient);
+        
         mWebView.loadUrl(Url);
+        */
+        
+        super.setIntegerProperty("splashscreen", R.drawable.splash);
+        super.loadUrl(Url);
     }
     
     private class GoodybagWebClient extends WebChromeClient {
