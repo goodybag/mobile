@@ -26,7 +26,7 @@ public class GoodybagActivity extends DroidGap {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	int Version = Build.VERSION.SDK_INT;
-    	String Url = "http://m-dev.goodybag.com/#!/android/" + Version;
+    	String Url = "http://m-.goodybag.com/#!/android/" + Version;
     	Log.v("navcache", "Version: " + Version);
     	
     	super.onCreate(savedInstanceState);
