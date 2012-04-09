@@ -21,6 +21,37 @@
     nativeKeys         = Object.keys,
     nativeBind         = FuncProto.bind;
 
+  _utils.scrolledToEndObserver = (function(){
+    var defaults = {
+      $el: $(window)
+    , onScrolledToEnd: function(){}
+    };
+    var constructor = function(options){
+      this.options = Object.merge(defaults, options);
+      this.$el = this.options.$el;
+      console.log('[scrolledToEndObserver constructor]');
+      console.log(this.$el);
+      this.$el.scroll($.proxy(this.scrollListener, this));
+      this.finished = false;
+    };
+    constructor.prototype = {
+      scrollListener: function(e){
+        console.log(this);
+        if (this.$el.offsetHeight() + this.$el.scrollTop() >= this.$el.scrollHeight() && !this.finished) {
+          this.options.onScrolledToEnd(e, this, this.$el);
+          this.finished = true;
+        }else{
+          this.finished = false;
+        }
+      },
+      destroy: function(){
+
+      }
+    };
+
+    return constructor;
+  })();
+
   _utils.extend = function(obj) {
     utils.each(slice.call(arguments, 1), function(source) {
       for (var prop in source) {
@@ -72,6 +103,45 @@
       return this.functionList[key].apply(this, arguments);
     };
   };
+
+  _utils.rowLoader = (function(){
+    var defaults = {
+      $el: $('<div class="gb-row-loader"')
+    }
+    , constructor = function(options){
+      this.options = Object.merge(defaults, options || {});
+      this.$el = this.options.$el;
+      this.loader = new utils.loader(this.$el);
+      return this;
+    };
+    constructor.prototype = {
+      toggle: function(){
+        this.loader.toggle();
+        return this;
+      },
+      start: function(){
+        this.loader.start();
+        return this;
+      },
+      stop: function(){
+        this.loader.stop();
+        return this;
+      },
+      isLoading: function(){
+        return this.loader.isLoading();
+      },
+      appendTo: function($appendEl){
+        $appendEl.append(this.$domEl = this.$el.clone());
+        return this;
+      },
+      removeElFromDom: function(){
+        this.$domEl.remove();
+        return this;
+      }
+    };
+
+    return constructor;
+  })();
 
   _utils.loader = (function(){
     var defaults = {

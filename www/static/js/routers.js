@@ -12,7 +12,9 @@
     this.get ('#!/tapin',                       app.routes.tapIn);
     this.get ('#!/streams',                     app.routes.globalStream);
     this.get ('#!/streams/global',              app.routes.globalStream);
+    this.get ('#!/streams/global/:page',        app.routes.globalStream);
     this.get ('#!/streams/me',                  app.routes.myStream);
+    this.get ('#!/streams/me/:page',            app.routes.myStream);
     this.get ('#!/places',                      app.routes.places);
     this.get ('#!/places/:id',                  app.routes.placeDetails);
     this.get ('#!/goodies',                     app.routes.goodies);
