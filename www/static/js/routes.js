@@ -7,13 +7,6 @@
   routes.everything = function(){
     console.log("BEFORE EVERYTHING!");
 
-    // Leave page events
-    if (app.previousRoutes.get('routes').length > 0){
-      console.log('leavePage:' + app.previousRoutes.previousRoute());
-      app.trigger('leavePage', app.previousRoutes.previousRoute());
-      app.trigger('leavePage:' + app.previousRoutes.previousRoute());
-    }
-
     if (!app.user.hasUserCache()
         && this.path != "/#!"
         && this.path != "/#!/"
@@ -105,13 +98,15 @@
           console.error(error.message);
           return;
         }
-        done(streamsView);
 
         // Scroll to end load more
-        var complete        = false
-          , loader          = utils.rowLoader()
-          , scrollObserver  = new utils.scrolledToEndObserver($(window), app.functions.stream.scrollListener)
-        ;
+        var scrollObserver  = new utils.scrolledToEndObserver($(window), app.functions.stream.scrollListenerMy);
+        // Make sure we remove the scroll listener after leaving this page
+        $(window).off('hashchange.stream').on('hashchange.stream', function(e){
+          scrollObserver.off();
+        });
+
+        done(streamsView);
       });
     });
   };

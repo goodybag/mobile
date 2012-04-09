@@ -59,7 +59,7 @@
         this.$el.on('scroll.' + this.id, this.scrollListener.bind(this));
         return this;
       },
-      unBind: function(){
+      off: function(){
         this.$el.off('scroll.' + this.id);
         return this;
       }
@@ -119,7 +119,7 @@
     };
   };
 
-  _utils.rowLoader = (function(){
+  _utils.RowLoader = (function(){
     var defaults = {
       $el: $('<div class="gb-row-loader"')
     }

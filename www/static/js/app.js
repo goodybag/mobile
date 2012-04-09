@@ -19,18 +19,6 @@
     app.user.set(consumer);
   });
 
-  app.on('leavePage', function(){
-    console.log("Leaving page");
-  });
-
-  app.on('leavePage:/#!/streams/global', function(){
-    console.log("Leaving streams global");
-  });
-
-  app.on('leavePage:/#!/streams/me', function(){
-    console.log("Leaving streams me");
-  });
-
   $(document).ready(function(){
     app.compileTemplates(function(){
       app.previousRoutes = new this.app.Models.PreviousRoutes();

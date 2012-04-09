@@ -52,23 +52,27 @@
   };
 
   functions.stream = {};
-  functions.stream.scrollListener = function(e, observer){
-    console.log('scrolled to end');
-    /*if (complete) return;
+  functions.stream.scrollListenerMy = (function(){
+    var complete = false
+      , loader    = new utils.RowLoader();
+    return function(e, observer){
+      console.log('scrolled to end');
+      if (complete) return;
 
-    loader.appendTo($('.page', $(streamsView.el)));
-    loader.start();
+      loader.appendTo($('.page', $(streamsView.el)));
+      loader.start();
 
-    app.api.activity.fetchGlobal(options, function(error, data){
-      if (utils.exists(error)){
-        console.error(error.message);
-        return;
-      }
-      if (data.length < options.limit) complete = true;
-      loader.removeElFromDom();
-      loader.stop();
-    });*/
-  };
+      app.api.activity.fetchGlobal(options, function(error, data){
+        if (utils.exists(error)){
+          console.error(error.message);
+          return;
+        }
+        if (data.length < options.limit) complete = true;
+        loader.removeElFromDom();
+        loader.stop();
+      });
+    };
+  })();
 
   // Export
   for (var key in functions){
