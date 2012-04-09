@@ -26,11 +26,12 @@ public class GoodybagActivity extends DroidGap {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	int Version = Build.VERSION.SDK_INT;
-    	String Url = "http://m.goodybag.com/#!/android/" + Version;
+    	String Url = "http://m-dev.goodybag.com/#!/android/" + Version;
     	Log.v("navcache", "Version: " + Version);
     	
     	super.onCreate(savedInstanceState);
     	super.loadUrl(Url);
+    	super.appView.getSettings().setUserAgentString("goodybag-app-android");
     	
     	/* All of this crap should be handled by phonegap
     	
@@ -48,7 +49,7 @@ public class GoodybagActivity extends DroidGap {
         mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         mWebView.setWebChromeClient(myClient);
         mWebView.loadUrl(Url);
-        */
+    	 */
     }
     
     private class GoodybagWebClient extends WebChromeClient {
