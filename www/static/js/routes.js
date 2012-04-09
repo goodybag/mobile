@@ -110,26 +110,7 @@
         // Scroll to end load more
         var complete        = false
           , loader          = utils.rowLoader()
-          , scrollObserver  = new utils.scrolledToEndObserver({
-            $el: $(window),
-            onScrollToEnd: function(e, observer){
-              console.log('scrolled to end');
-              if (complete) return;
-
-              loader.appendTo($('.page', $(streamsView.el)));
-              loader.start();
-
-              app.api.activity.fetchGlobal(options, function(error, data){
-                if (utils.exists(error)){
-                  console.error(error.message);
-                  return;
-                }
-                if (data.length < options.limit) complete = true;
-                loader.removeElFromDom();
-                loader.stop();
-              });
-            }
-          })
+          , scrollObserver  = new utils.scrolledToEndObserver($(window), app.functions.stream.scrollListener)
         ;
       });
     });

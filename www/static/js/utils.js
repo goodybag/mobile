@@ -22,33 +22,48 @@
     nativeBind         = FuncProto.bind;
 
   _utils.scrolledToEndObserver = (function(){
-    var defaults = {
-      $el: $(window)
-    , onScrolledToEnd: function(){}
-    };
-    var constructor = function(options){
-      this.options = Object.merge(defaults, options);
-      this.$el = this.options.$el;
-      console.log('[scrolledToEndObserver constructor]');
-      console.log(this.$el);
-      this.$el.scroll($.proxy(this.scrollListener, this));
+    var constructor = function($el, callback){
+      this.$el = $el;
+      this.callback = callback;
+      this.id = $.Guid.New();
       this.finished = false;
+      this.bind();
     };
     constructor.prototype = {
       scrollListener: function(e){
-        console.log(this);
-        if (this.$el.offsetHeight() + this.$el.scrollTop() >= this.$el.scrollHeight() && !this.finished) {
-          this.options.onScrolledToEnd(e, this, this.$el);
-          this.finished = true;
+        var el = this.$el[0], scroll;
+
+        if (this.$el[0] === window){
+          scroll = {
+            height: $(document).height(),
+            viewport: window.innerHeight,
+            top: window.scrollY
+          };
+        }else{
+          scroll = {
+            height: el.scrollHeight,
+            viewport: el.offsetHeight,
+            top: el.scrollTop
+          }
+        }
+        if (scroll.viewport + scroll.top >= scroll.height) {
+          if (!this.finished){
+            this.callback(e, this, this.$el);
+            this.finished = true;
+          }
         }else{
           this.finished = false;
         }
       },
-      destroy: function(){
-
+      bind: function(){
+        this.$el.on('scroll.' + this.id, this.scrollListener.bind(this));
+        return this;
+      },
+      unBind: function(){
+        this.$el.off('scroll.' + this.id);
+        return this;
       }
     };
-
     return constructor;
   })();
 
