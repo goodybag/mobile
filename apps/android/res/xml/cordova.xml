@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cordova>
-    <!-- <access origin="http://127.0.0.1*"/> -->
-    <access origin="http://.*"/>
+    <access origin="http://127.0.0.1*"/>
+    <access origin="http://goodybag.com*" subdomains="true" />
+    <access origin="https://goodybag.com*" subdomains="true" />
+    <access origin="http://*.goodybag.com*" subdomains="true" />
+    <access origin="https://*.goodybag.com*" subdomains="true" />
     <log level="DEBUG"/>
 </cordova>

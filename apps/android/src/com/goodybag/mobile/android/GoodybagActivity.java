@@ -1,4 +1,4 @@
-package goodybag.mobile;
+package com.goodybag.mobile.android;
 
 import java.io.File;
 import java.util.*;
