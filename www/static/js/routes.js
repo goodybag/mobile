@@ -47,11 +47,17 @@
   };
 
   routes.globalStream = function(){
+    var options  = {
+      page: this.params.page || 0,
+      limit: 15,
+      add: true
+    };
+
     app.changePage(function(done){
       var streamsView = new app.Views.Streams({
         collection: app.api.activity
       }).render();
-      app.api.activity.fetchGlobal({add: true}, function(error){
+      app.api.activity.fetchGlobal(options, function(error){
         if (utils.exists(error)){
           console.error(error.message);
           return;
@@ -59,33 +65,58 @@
         done(streamsView);
       });
     });
-    /*app.changePage(function(done){
-      var streamsView = new app.Views.Streams({});
-      app.router.replaceHash("/#!/streams/global");
-      streamsView.loadGlobalActivity();
-    });
 
-    $("#content").html(streamsView.headerRender().el);
-    $("#content").append(streamsView.render().el);*/
+    // Load next page of results
+    /*var canScrollLoad = true
+      , $win          = $(window)
+    ;
+    $(window).scroll(function(e){
+      if ($(window).offsetHeight + $(window).scrollTop >= $(window).scrollHeight && canScrollLoad) {
+        options.page++;
+        app.api.activity.fetchGlobal(options, function(error, data){
+          if (utils.exists(error)){
+            console.error(error.message);
+            return;
+          }
+          if (data.length < options.limit) canScrollLoad = false;
+        });
+      }
+    });*/
   };
 
   routes.myStream = function(){
+    var options  = {
+      page: this.params.page || 0,
+      add: true
+    };
+
     app.changePage(function(done){
       var streamsView = new app.Views.Streams({
         collection: app.api.activity
-      });
-      app.api.activity.fetchSelf({add: true}, function(error){
+      }).render();
+      /*app.api.activity.fetchSelf(options, function(error){
         if (utils.exists(error)){
           console.error(error.message);
           return;
         }
+
+        // Scroll to end load more
+        var loader = new utils.loader($('.gb-row-loader', $(streamsView.el)), {
+          overlayCss: { display: 'none' }
+        });
+        var scrollListener = function(e, observer){
+          console.log("END");
+          loader.start();
+        };
+        var scrollObserver  = new utils.scrolledToEndObserver($(window), scrollListener);
+        // Make sure we remove the scroll listener after leaving this page
+        $(window).off('hashchange.stream').on('hashchange.stream', function(e){
+          scrollObserver.off();
+        });
+
         done(streamsView);
-      });
+      });*/
     });
-    /*var streamsView = new app.Views.Streams({});
-    $("#content").html(streamsView.headerRender().el);
-    $('#content').append(streamsView.render().el);
-    streamsView.loadMyActivity();*/
   };
 
   routes.places = function() {

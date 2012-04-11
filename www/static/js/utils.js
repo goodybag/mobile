@@ -21,6 +21,52 @@
     nativeKeys         = Object.keys,
     nativeBind         = FuncProto.bind;
 
+  _utils.scrolledToEndObserver = (function(){
+    var constructor = function($el, callback){
+      this.$el = $el;
+      this.callback = callback;
+      this.id = $.Guid.New();
+      this.finished = false;
+      this.bind();
+    };
+    constructor.prototype = {
+      scrollListener: function(e){
+        var el = this.$el[0], scroll;
+
+        if (this.$el[0] === window){
+          scroll = {
+            height: $(document).height(),
+            viewport: window.innerHeight,
+            top: window.scrollY
+          };
+        }else{
+          scroll = {
+            height: el.scrollHeight,
+            viewport: el.offsetHeight,
+            top: el.scrollTop
+          }
+        }
+        if (scroll.viewport + scroll.top >= scroll.height) {
+          if (!this.finished){
+            this.callback(e, this, this.$el);
+            this.finished = true;
+          }
+        }else{
+          this.finished = false;
+        }
+      },
+      bind: function(){
+        this.$el.on('scroll.' + this.id, this.scrollListener.bind(this));
+        return this;
+      },
+      off: function(){
+        this.$el.off('scroll.' + this.id);
+        return this;
+      }
+    };
+    return constructor;
+  })();
+
   _utils.extend = function(obj) {
     utils.each(slice.call(arguments, 1), function(source) {
       for (var prop in source) {
@@ -73,9 +119,50 @@
     };
   };
 
+  _utils.RowLoader = (function(){
+    var defaults = {
+      $el: $('<div class="gb-row-loader"')
+    }
+    , constructor = function(options){
+      this.options = Object.merge(defaults, options || {});
+      this.$el = this.options.$el;
+      this.loader = new utils.loader(this.$el);
+      return this;
+    };
+    constructor.prototype = {
+      toggle: function(){
+        this.loader.toggle();
+        return this;
+      },
+      start: function(){
+        this.loader.start();
+        return this;
+      },
+      stop: function(){
+        this.loader.stop();
+        return this;
+      },
+      isLoading: function(){
+        return this.loader.isLoading();
+      },
+      appendTo: function($appendEl){
+        $appendEl.append(this.$domEl = this.$el.clone());
+        return this;
+      },
+      removeElFromDom: function(){
+        this.$domEl.remove();
+        return this;
+      }
+    };
+
+    return constructor;
+  })();
+
   _utils.loader = (function(){
     var defaults = {
-      // Nothing for now
+      outerCss: {
+        position: 'relative'
+      }
     };
     var constructor = function($ele, options){
       this.defaults  = defaults;
@@ -85,10 +172,11 @@
       this.$loading  = $('<div class="gb-loading"></div>');
       this.$overlay  = $('<div class="gb-loader-overlay"></div>');
       this.$wrapper  = $('<div class="gb-loader-wrapper"></div>');
-
+      this.oldOuterCss = this.$ele.css();
       this.$loading.append('<span class="loader-block s1"></span>')
-                    .append('<span class="loader-block s2"></span>')
-                    .append('<span class="loader-block s3"></span>');
+                   .append('<span class="loader-block s2"></span>')
+                   .append('<span class="loader-block s3"></span>');
+
       if (utils.exists(this.options.overlayCss)) this.$overlay.css(this.options.overlayCss);
       if (utils.exists(this.options.loaderCss)) this.$loading.css(this.options.loaderCss);
       if (utils.exists(this.options.loaderBlockCss)) $('.loader-block', this.$loading).css(this.options.loaderBlockCss);
@@ -104,6 +192,8 @@
       },
       start: function(){
         if (!this.isLoading()){
+          this.oldOuterCss = this.$ele.css();
+          this.$ele.css(this.options.outerCss);
           this.$wrapper.append(this.$loading);
           this.$ele.addClass('gb-loader')
               .prepend(this.$overlay)
@@ -112,12 +202,10 @@
         return this;
       },
       stop: function(){
-        console.log(this.$overlay);
-        console.log(this.$wrapper);
-        console.log(this.$loading);
         $('html').css('overflow', 'auto');
         $('.gb-loading, .gb-loader-overlay, .gb-loader-wrapper', this.$ele).remove();
         this.$ele.removeClass('gb-loader');
+        this.$ele.css(this.oldOuterCss);
         return this;
       },
       isLoading: function(){
