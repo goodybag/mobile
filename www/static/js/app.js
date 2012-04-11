@@ -23,7 +23,7 @@
     app.compileTemplates(function(){
       app.previousRoutes = new this.app.Models.PreviousRoutes();
       app.activeRoute = new this.app.Models.ActiveRoute();
-      app.Views.Main = new this.app.Views.Main();
+      app.Views.Main = app.mainView = new this.app.Views.Main();
       app.Views.Main.render();
       $('#body').prepend(app.Views.Main.el);
 
