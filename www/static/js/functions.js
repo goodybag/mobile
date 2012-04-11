@@ -28,6 +28,11 @@
       pageLoader = new utils.loader($('html'), {
         overlayCss: {
           'background-color': '#000'
+        },
+        outerCss: {
+          position: 'fixed',
+          width: '100%',
+          height: '100%'
         }
       });
     }
@@ -53,24 +58,25 @@
 
   functions.stream = {};
   functions.stream.scrollListenerMy = (function(){
-    var complete = false
-      , loader    = new utils.RowLoader();
+    var view      = this.view
+      , complete  = false
+      //, loader    = new utils.loader($('.gb-row-loader'), $(view.el))
+    ;
+    console.log("scroll listener");
+    console.log(this);
     return function(e, observer){
-      console.log('scrolled to end');
       if (complete) return;
 
-      loader.appendTo($('.page', $(streamsView.el)));
-      loader.start();
+      //loader.start();
 
-      app.api.activity.fetchGlobal(options, function(error, data){
+      /*app.api.activity.fetchGlobal(options, function(error, data){
         if (utils.exists(error)){
           console.error(error.message);
           return;
         }
         if (data.length < options.limit) complete = true;
-        loader.removeElFromDom();
         loader.stop();
-      });
+      });*/
     };
   })();
 

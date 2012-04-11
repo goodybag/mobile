@@ -93,21 +93,28 @@
       var streamsView = new app.Views.Streams({
         collection: app.api.activity
       }).render();
-      app.api.activity.fetchSelf(options, function(error){
+      /*app.api.activity.fetchSelf(options, function(error){
         if (utils.exists(error)){
           console.error(error.message);
           return;
         }
 
         // Scroll to end load more
-        var scrollObserver  = new utils.scrolledToEndObserver($(window), app.functions.stream.scrollListenerMy);
+        var loader = new utils.loader($('.gb-row-loader', $(streamsView.el)), {
+          overlayCss: { display: 'none' }
+        });
+        var scrollListener = function(e, observer){
+          console.log("END");
+          loader.start();
+        };
+        var scrollObserver  = new utils.scrolledToEndObserver($(window), scrollListener);
         // Make sure we remove the scroll listener after leaving this page
         $(window).off('hashchange.stream').on('hashchange.stream', function(e){
           scrollObserver.off();
         });
 
         done(streamsView);
-      });
+      });*/
     });
   };
 
