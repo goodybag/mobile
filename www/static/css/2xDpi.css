@@ -14,3 +14,51 @@
   background-image: url("/static/images/main-sprite-hi-res.png");
   background-position: -598px -366px;
 }
+.main-nav .menu-item.places {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: 8px -518px;
+}
+.main-nav .menu-item.activity {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -118px -518px;
+}
+.main-nav .menu-item.tapin {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -258px -518px;
+}
+.main-nav .menu-item.goodies {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -626px -518px;
+}
+.main-nav .menu-item.me {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -516px -518px;
+}
+.main-nav .menu-item.settings {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -396px -518px;
+}
+.main-nav .menu-item.active.places {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: 8px -636px;
+}
+.main-nav .menu-item.active.activity {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -118px -636px;
+}
+.main-nav .menu-item.active.tapin {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -258px -636px;
+}
+.main-nav .menu-item.active.goodies {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -626px -636px;
+}
+.main-nav .menu-item.active.me {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -516px -636px;
+}
+.main-nav .menu-item.active.settings {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -396px -636px;
+}
