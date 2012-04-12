@@ -56,8 +56,6 @@ html {
   margin-left: -215px;
   width: 430px;
   height: 49px;
-  background-image: url("/static/images/main-sprite.png");
-  background-position: -86px 0;
 }
 .header-nav .logo {
   position: absolute;
@@ -67,8 +65,6 @@ html {
   margin-top: 2px;
   width: 85px;
   height: 46px;
-  background-image: url("/static/images/main-sprite.png");
-  background-position: 3px -189px;
 }
 .main-nav {
   position: fixed;
@@ -97,8 +93,6 @@ html {
   margin-left: -39px;
   width: 79px;
   height: 61px;
-  background-image: url("/static/images/main-sprite.png");
-  background-position: -193px -167px;
 }
 .main-nav > ul {
   position: absolute;
@@ -118,7 +112,6 @@ html {
   height: 57px;
   z-index: 102;
   top: -15px;
-  background-image: url("/static/images/main-sprite.png");
 }
 .main-nav > .flex-columns > .column {
   text-align: center;
@@ -128,8 +121,6 @@ html {
   height: 42px;
   width: 2px;
   margin-top: 1px;
-  background-image: url("/static/images/main-sprite.png");
-  background-position: -299px -183px;
 }
 .main-nav .menu-item > a {
   position: absolute;

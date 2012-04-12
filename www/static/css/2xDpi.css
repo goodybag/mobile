@@ -1,0 +1,16 @@
+.header-nav .graphic-wrapper > .accent {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -172px 0;
+}
+.header-nav .logo {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: 6px -378px;
+}
+.main-nav > .tapin-bg {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -386px -334px;
+}
+.main-nav .separator {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-position: -598px -366px;
+}
