@@ -59,30 +59,6 @@
     return app;
   };
 
-  functions.stream = {};
-  functions.stream.scrollListenerMy = (function(){
-    var view      = this.view
-      , complete  = false
-      //, loader    = new utils.loader($('.gb-row-loader'), $(view.el))
-    ;
-    console.log("scroll listener");
-    console.log(this);
-    return function(e, observer){
-      if (complete) return;
-
-      //loader.start();
-
-      /*app.api.activity.fetchGlobal(options, function(error, data){
-        if (utils.exists(error)){
-          console.error(error.message);
-          return;
-        }
-        if (data.length < options.limit) complete = true;
-        loader.stop();
-      });*/
-    };
-  })();
-
   // Export
   for (var key in functions){
     this.app.functions[key] = functions[key];
