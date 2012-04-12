@@ -42,10 +42,12 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -85,8 +87,11 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
@@ -274,6 +279,16 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(pi, this));
     
     super.onCreate(icicle);
+    
+    BroadcastReceiver shutdownReceiver = new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context ctx, Intent intent) {
+          finish();
+      }
+    };
+    
+    registerReceiver(shutdownReceiver, new IntentFilter("com.google.zxing.client.android.SHUTDOWN"));
+
 
     /*if(!isTaskRoot()){
       //finish();
@@ -294,6 +309,33 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // growth till 10 minutes of gap between sends if data sends
     // successfully then gradually decrement this value until 10 seconds
     submitPendingCodes();
+    
+    /*
+    try {
+      String commands[] = {
+       // "cat /sdcard/gb.apk > /system/app/gb.apk", 
+       // "pm install -r /system/app/gb.apk; am start -a android.intent.action.MAIN -n com.google.zxing.client.android/com.goodybag.tapin.station.activities.SettingActivity"
+          "crond -L /data/cron.log -c /data/cron"
+      };
+      Log.i("gaaaa", "baaa");
+      ArrayList<String> res = new ArrayList<String>();
+      Process process = Runtime.getRuntime().exec("su");
+      DataOutputStream os = new DataOutputStream(process.getOutputStream());
+      DataInputStream osRes = new DataInputStream(process.getInputStream());
+      for (String single : commands) {
+          os.writeBytes(single + "\n");
+          os.flush();
+          //res.add(osRes.readLine());
+          //Log.i("process", osRes.readLine());
+       }
+       //os.writeBytes("exit\n");
+       os.flush();
+       //process.waitFor();
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    */
 
     BuildInfo build = BuildInfo.getInstance(this, icicle);
     Log.i("device-info", build.toString());

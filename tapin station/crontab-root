@@ -1,0 +1,1 @@
+*/1 * * * * su -c "/bin/sh /data/gb/scripts/update.sh"

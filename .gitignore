@@ -17,3 +17,10 @@ build/*
 #ignore private workspace stuff added by Xcode4
 xcuserdata
 project.xcworkspace
+
+#java
+bin/
+gen/
+
+#releases
+apps/releases/

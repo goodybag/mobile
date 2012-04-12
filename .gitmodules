@@ -1,0 +1,3 @@
+[submodule "lib/facebook-ios-sdk"]
+    path = lib/facebook-ios-sdk
+    url = git://github.com/facebook/facebook-ios-sdk.git
