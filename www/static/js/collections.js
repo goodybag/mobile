@@ -47,7 +47,14 @@
       if (!utils.exists(callback))
       this.api.single(id, callback);
     },
-
+    append: function(data, options){
+      options = options || {};
+      for (var i = 0; i < data.length; i++){
+        this.push(data[i], {silent: !options.add});
+      }
+      if (!options.silent) this.trigger('reset', this);
+      return this;
+    },
     add: function(model, callback){
       this._add(model, callback);
     },
@@ -136,15 +143,14 @@
       this.api[options.which](options, function(error, data){
         if (!utils.exists(error)){
           if (options.append){
-            self.append(data, {silent: options.silent, add: options.add});
+            self.append(data, options);
           }else{
-            self.reset(data, {silent: options.silent, add: options.add});
+            self.reset(data, options);
           }
         }
         callback(error, data);
       });
-    },
-    append: function(){}
+    }
   };
 
   // Export

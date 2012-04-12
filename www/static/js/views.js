@@ -166,18 +166,19 @@
       return false;
     }
     , authenticatedHandler: function(){
-      app.changePage(function(done){
-        var streamsView = new app.Views.Streams({
-          collection: app.api.activity
-        }).render();
-        app.api.activity.fetchGlobal({add: true}, function(error,data){
-          if (utils.exists(error)){
-            console.error(error.message);
-            return;
-          }
-          done(streamsView);
-        });
-      });
+      window.location.href = "#!/streams/global";
+      // app.changePage(function(done){
+      //   var streamsView = new app.Views.Streams({
+      //     collection: app.api.activity
+      //   }).render();
+      //   app.api.activity.fetchGlobal({add: true}, function(error,data){
+      //     if (utils.exists(error)){
+      //       console.error(error.message);
+      //       return;
+      //     }
+      //     done(streamsView);
+      //   });
+      // });
     }
     , authFailHandler: function(error){
       var errorView = new app.Views.LoginError({
@@ -404,6 +405,7 @@
       this.subViews = [this.pageHeader, this.pageContent];
 
       this.collection.on('reset', this.renderActivity, this);
+      this.collection.on('add', this.renderSingleActivity, this);
 
       return this;
     }
@@ -418,6 +420,9 @@
     , renderActivity: function(){
       this.pageContent.renderActivity();
       return this;
+    }
+    , renderSingleActivity: function(activity){
+      this.pageContent.renderSingleActivity(activity);
     }
     , loadGlobalActivity: function(){
       /*var self = this;
@@ -456,6 +461,9 @@
       window.location.href = '/#!/streams/me';
       return this;
     }
+    , fixImages: function(){
+      this.pageContent.fixImages();
+    }
   });
 
   views.StreamsPage = utils.View.extend({
@@ -479,12 +487,7 @@
       for (var i = 0; i < models.length; i++){
         this.renderSingleActivity(models[i]);
       }
-      $newImages = $("img.picture", $(this.el));
-      $newImages.error(function(){
-        //since profile pictures are assumed to be s3/<id...>.png
-        //if the picture is not found we will replace it with the default goodybag pic
-        $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
-      });
+      this.fixImages();
       return this;
     }
     , renderSingleActivity: function(activity){
@@ -493,6 +496,14 @@
       }).render();
       $('#streams-activities', $(this.el)).append(activityView.el);
       return this;
+    }
+    , fixImages: function(){
+      $newImages = $("img.picture", $(this.el));
+      $newImages.error(function(){
+        //since profile pictures are assumed to be s3/<id...>.png
+        //if the picture is not found we will replace it with the default goodybag pic
+        $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
+      });
     }
   });
 
@@ -516,9 +527,17 @@
     , render: function(){
       return this;
     }
-    , loadPlaces: function(callback){
+    , loadPlaces: function(options, callback){
+      if (Object.isFunction(options)){
+        callback = options;
+        options = {};
+      }
       var self = this;
-      api.businesses.listEquipped(function(error, businesses){
+      api.businesses.listEquipped(options, function(error, businesses){
+        if (utils.exists(error)){
+          callback(error);
+          return;
+        }
         for (var i=0, length=businesses.length; i<length; i++){
           var placeView = new app.Views.Place({
             model: new utils.Model(businesses[i])
@@ -529,7 +548,7 @@
         $newImages.error(function(){
           $(this).attr('src',"https://s3.amazonaws.com/goodybag.com/default-85.jpg");
         });
-        callback();
+        callback(error, businesses);
       });
     }
   });
@@ -843,6 +862,25 @@
       function fail(error) {
         alert("An error has occurred: Code = " = error.code);
       };
+    }
+  });
+
+  views.RowLoader = utils.View.extend({
+    className: 'gb-row-loader',
+    initialize: function(options){
+      this.$el = $(this.el);
+      this.loader = new utils.loader(this.$el, options);
+    },
+    start: function(){
+      this.loader.start();
+      return this;
+    },
+    stop: function(){
+      this.loader.stop();
+      return this;
+    },
+    isLoading: function(){
+      return this.loader.isLoading();
     }
   });
 

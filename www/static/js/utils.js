@@ -22,6 +22,22 @@
     nativeBind         = FuncProto.bind;
 
 
+  _utils.guid = function(){
+    var res = [], hv;
+    var rgx = new RegExp("[2345]");
+    for (var i = 0; i < 8; i++) {
+      hv = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+      if (rgx.exec(i.toString()) != null) {
+        if (i == 3) { hv = "6" + hv.substr(1, 3); }
+        res.push("-");
+      }
+      res.push(hv.toUpperCase());
+    }
+    value = res.join('');
+    $(this).data("value", value);
+    return value;
+  };
+
   _utils.removeInlineCss = function(el){
     el instanceof jQuery && (el = el[0]);
     for (var key in el.style){
@@ -33,7 +49,7 @@
     var constructor = function($el, callback){
       this.$el = $el;
       this.callback = callback;
-      this.id = $.Guid.New();
+      this.id = utils.guid();
       this.finished = false;
       this.bind();
     };
@@ -66,6 +82,9 @@
       bind: function(){
         this.$el.on('scroll.' + this.id, this.scrollListener.bind(this));
         return this;
+      },
+      on: function(){
+        return this.bind();
       },
       off: function(){
         this.$el.off('scroll.' + this.id);
@@ -101,7 +120,7 @@
     }
   };
 
-  _utils.has = function(obj, key) {
+  _utils.has = function(obj, key){
     return hasOwnProperty.call(obj, key);
   };
 
@@ -111,7 +130,8 @@
     return types.match(/\b[a-z]/g).join('');
   };
 
-  _utils.overload = function(functions){
+  _utils.overload = function(functions, context){
+    context || (context = this);
     this.functionList = {};
     var shortHandKey;
     for (var argTypes in functions){
@@ -123,7 +143,7 @@
       for (; i < arguments.length; i++)
         key += Object.prototype.toString.call(arguments[i])[8].toLowerCase();
       if (!this.functionList.hasOwnProperty(key)) throw new Error("The function of type " + key + " is undefined");
-      return this.functionList[key].apply(this, arguments);
+      return this.functionList[key].apply(context, arguments);
     };
   };
 
@@ -167,15 +187,15 @@
   })();
 
   _utils.loader = (function(){
-    var defaults = {
-      outerCss: {
-        position: 'relative'
-      }
-    };
     var constructor = function($ele, options){
-      this.defaults     = defaults;
-      options           = options || {};
-      this.options      = Object.merge(this.defaults, options);
+      var defaults = {
+        outerCss: {
+          position: 'relative'
+        }
+      };
+      options || (options = {});
+
+      this.options      = Object.merge(defaults, options);
       this.$ele         = ($ele instanceof jQuery) ? $ele : $($ele);
       this.$loading     = $('<div class="gb-loading"></div>');
       this.$overlay     = $('<div class="gb-loader-overlay"></div>');
@@ -202,7 +222,6 @@
         if (!this.isLoading()){
           console.log("[Loader] - Starting");
           this.$ele.css(this.options.outerCss);
-          console.log("FUCK");
           this.$wrapper.append(this.$loading);
           this.$ele.addClass('gb-loader')
               .prepend(this.$overlay)

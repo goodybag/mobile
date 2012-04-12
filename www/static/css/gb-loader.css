@@ -40,10 +40,12 @@
     vertical-align: middle;
     width: 10px;
     height: 20px;
-    margin: 50px 2px;
+    margin: 0 2px;
     background: black;
     -webkit-animation: loader 0.6s infinite alternate;
     -moz-animation: loader 0.6s infinite alternate;
+    -webkit-translate3d(0,0,0);
+    translate3d(0,0,0);
 }
 .gb-loading .s2 {
     -webkit-animation-delay: 0.3s;

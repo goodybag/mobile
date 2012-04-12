@@ -47,66 +47,66 @@
   };
 
   routes.globalStream = function(){
-    var options  = {
-      page: this.params.page || 0,
-      limit: 15,
-      add: true
-    };
-
     app.changePage(function(done){
+      var options = {
+        page: this.params.page || 0,
+        limit: 15,
+        add: false,
+        silent: false,
+        append: false
+      }, optionsAdd = {
+        page: this.params.page || 0,
+        limit: 15,
+        add: true,
+        silent: true,
+        append: true
+      };
+      options.skip = options.limit * options.page;
+      optionsAdd.skip = optionsAdd.limit * optionsAdd.page;
+
       var streamsView = new app.Views.Streams({
         collection: app.api.activity
       }).render();
-      app.api.activity.fetchGlobal(options, function(error){
+      app.api.activity.fetchGlobal(options, function(error, data){
         if (utils.exists(error)){
           console.error(error.message);
+          done(streamsView);
           return;
         }
-        done(streamsView);
-      });
-    });
 
-    // Load next page of results
-    /*var canScrollLoad = true
-      , $win          = $(window)
-    ;
-    $(window).scroll(function(e){
-      if ($(window).offsetHeight + $(window).scrollTop >= $(window).scrollHeight && canScrollLoad) {
-        options.page++;
-        app.api.activity.fetchGlobal(options, function(error, data){
-          if (utils.exists(error)){
-            console.error(error.message);
-            return;
-          }
-          if (data.length < options.limit) canScrollLoad = false;
-        });
-      }
-    });*/
-  };
-
-  routes.myStream = function(){
-    var options  = {
-      page: this.params.page || 0,
-      add: true
-    };
-
-    app.changePage(function(done){
-      var streamsView = new app.Views.Streams({
-        collection: app.api.activity
-      }).render();
-      /*app.api.activity.fetchSelf(options, function(error){
-        if (utils.exists(error)){
-          console.error(error.message);
+        // We don't want to do the other stuff if were on the last page
+        if (data.length < options.limit){
+          $('.gb-row-loader', streamsView.el).remove();
+          done(streamsView);
           return;
         }
 
         // Scroll to end load more
         var loader = new utils.loader($('.gb-row-loader', $(streamsView.el)), {
-          overlayCss: { display: 'none' }
+          overlayCss: { display: 'none' },
         });
         var scrollListener = function(e, observer){
-          console.log("END");
-          loader.start();
+          observer.off();
+          if (!loader.isLoading()){
+            loader.start();
+            optionsAdd.skip = optionsAdd.limit * ++optionsAdd.page;
+            app.api.activity.fetchGlobal(optionsAdd, function(error, data){
+              if (utils.exists(error)){
+                console.error(error.message);
+                done(streamsView);
+                return;
+              }
+              streamsView.fixImages();
+              // No more data
+              if (data.length < optionsAdd.limit){
+                observer.off();
+                $('.gb-row-loader', streamsView.el).remove();
+              }else{
+                observer.on();
+              }
+              loader.stop();
+            });
+          }
         };
         var scrollObserver  = new utils.scrolledToEndObserver($(window), scrollListener);
         // Make sure we remove the scroll listener after leaving this page
@@ -115,14 +115,132 @@
         });
 
         done(streamsView);
-      });*/
+      });
+    });
+  };
+
+  routes.myStream = function(){
+    app.changePage(function(done){
+      var options = {
+        page: this.params.page || 0,
+        limit: 15,
+        add: false,
+        silent: false,
+        append: false
+      }, optionsAdd = {
+        page: this.params.page || 0,
+        limit: 15,
+        add: true,
+        silent: true,
+        append: true
+      };
+      options.skip = options.limit * options.page;
+      optionsAdd.skip = optionsAdd.limit * optionsAdd.page;
+
+      var streamsView = new app.Views.Streams({
+        collection: app.api.activity
+      }).render();
+      app.api.activity.fetchSelf(options, function(error, data){
+        if (utils.exists(error)){
+          console.error(error.message);
+          done(streamsView);
+          return;
+        }
+
+        // We don't want to do the other stuff if were on the last page
+        if (data.length < options.limit){
+          $('.gb-row-loader', streamsView.el).remove();
+          done(streamsView);
+          return;
+        }
+
+        // Scroll to end load more
+        var loader = new utils.loader($('.gb-row-loader', $(streamsView.el)), {
+          overlayCss: { display: 'none' },
+        });
+        var scrollListener = function(e, observer){
+          observer.off();
+          if (!loader.isLoading()){
+            loader.start();
+            optionsAdd.skip = optionsAdd.limit * ++optionsAdd.page;
+            app.api.activity.fetchSelf(optionsAdd, function(error, data){
+              if (utils.exists(error)){
+                console.error(error.message);
+                done(streamsView);
+                return;
+              }
+              streamsView.fixImages();
+              // No more data
+              if (data.length < optionsAdd.limit){
+                observer.off();
+                $('.gb-row-loader', streamsView.el).remove();
+              }else{
+                observer.on();
+              }
+              loader.stop();
+            });
+          }
+        };
+        var scrollObserver = new utils.scrolledToEndObserver($(window), scrollListener);
+        // Make sure we remove the scroll listener after leaving this page
+        $(window).off('hashchange.stream').on('hashchange.stream', function(e){
+          scrollObserver.off();
+        });
+
+        done(streamsView);
+      });
     });
   };
 
   routes.places = function() {
     app.changePage(function(done){
+      var options = {
+        page: 0,
+        limit: 10
+      };
       var placesView = new app.Views.Places({});
-      placesView.loadPlaces(function(){
+      placesView.loadPlaces(options, function(error, data){
+        // We don't want to do the other stuff if were on the last page
+        if (data.length < options.limit){
+          done(placesView);
+          return;
+        }
+        // Scroll to end load more
+        var loader = new app.Views.RowLoader({
+          overlayCss: { display: 'none' },
+        });
+        $(placesView.el).append(loader.$el);
+        var scrollListener = function(e, observer){
+          observer.off();
+          if (!loader.isLoading()){
+            loader.start();
+            options.skip = options.limit * ++options.page;
+            placesView.loadPlaces(options, function(error, data){
+              if (utils.exists(error)){
+                console.error(error.message);
+                done(placesView);
+                return;
+              }
+              // No more data
+              if (data.length < options.limit){
+                observer.off();
+                loader.remove();
+              }else{
+                observer.on();
+                loader.stop();
+                // Remove the loader and move it to an appropriate spot
+                loader.$el.remove();
+                $(placesView.el).append(loader.$el);
+              }
+            });
+          }
+        };
+        var scrollObserver = new utils.scrolledToEndObserver($(window), scrollListener);
+        // Make sure we remove the scroll listener after leaving this page
+        $(window).off('hashchange.places').on('hashchange.places', function(e){
+          scrollObserver.off();
+        });
+
         done(placesView);
       });
     });
