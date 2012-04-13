@@ -137,42 +137,6 @@ html {
 .main-nav .menu-item.active > a {
   color: #fff;
 }
-.main-nav .menu-item.places {
-  background-position: 4px -259px;
-}
-.main-nav .menu-item.activity {
-  background-position: -59px -259px;
-}
-.main-nav .menu-item.tapin {
-  background-position: -129px -259px;
-}
-.main-nav .menu-item.goodies {
-  background-position: -313px -259px;
-}
-.main-nav .menu-item.me {
-  background-position: -258px -259px;
-}
-.main-nav .menu-item.settings {
-  background-position: -198px -259px;
-}
-.main-nav .menu-item.active.places {
-  background-position: 4px -318px;
-}
-.main-nav .menu-item.active.activity {
-  background-position: -59px -318px;
-}
-.main-nav .menu-item.active.tapin {
-  background-position: -129px -318px;
-}
-.main-nav .menu-item.active.goodies {
-  background-position: -313px -318px;
-}
-.main-nav .menu-item.active.me {
-  background-position: -258px -318px;
-}
-.main-nav .menu-item.active.settings {
-  background-position: -198px -318px;
-}
 .sub-header {
   box-sizing: border-box;
   background-color: #1d2b41;
