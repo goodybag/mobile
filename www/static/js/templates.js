@@ -35,6 +35,7 @@
 
   //Streams
   templates.streams               = "streams-tmpl";
+  templates.streamsNone           = "streams-none-tmpl";
   fragments.activity              = "activity-fragment";
   fragments.activityEventRsvped   = "activity-action-eventRsvped-fragment";
   fragments.activityPollCreated   = "activity-action-pollCreated-fragment";
