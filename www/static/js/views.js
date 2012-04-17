@@ -472,6 +472,10 @@
       var models = this.collection.models;
       console.log(models);
       $('#streams-activities', $(this.el)).html("");
+      if (models.length == 0){
+        $(this.el).html(app.templates.streamsNone());
+        return this;
+      }
       for (var i = 0; i < models.length; i++){
         this.renderSingleActivity(models[i]);
       }

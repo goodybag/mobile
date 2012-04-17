@@ -1,0 +1,64 @@
+.header-nav .graphic-wrapper > .accent {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -86px 0;
+}
+.header-nav .logo {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: 3px -189px;
+}
+.main-nav > .tapin-bg {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -193px -167px;
+}
+.main-nav .separator {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -299px -183px;
+}
+.main-nav .menu-item.places {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: 4px -259px;
+}
+.main-nav .menu-item.activity {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -59px -259px;
+}
+.main-nav .menu-item.tapin {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -129px -259px;
+}
+.main-nav .menu-item.goodies {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -313px -259px;
+}
+.main-nav .menu-item.me {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -258px -259px;
+}
+.main-nav .menu-item.settings {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -198px -259px;
+}
+.main-nav .menu-item.active.places {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: 4px -318px;
+}
+.main-nav .menu-item.active.activity {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -59px -318px;
+}
+.main-nav .menu-item.active.tapin {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -129px -318px;
+}
+.main-nav .menu-item.active.goodies {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -313px -318px;
+}
+.main-nav .menu-item.active.me {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -258px -318px;
+}
+.main-nav .menu-item.active.settings {
+  background-image: url("/static/images/main-sprite.png");
+  background-position: -198px -318px;
+}

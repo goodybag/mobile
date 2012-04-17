@@ -1,0 +1,83 @@
+.header-nav .graphic-wrapper > .accent {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: 102px -42px;
+}
+.main-nav > ul {
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.59);
+}
+.header-nav .logo {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: 3px -194px;
+}
+.main-nav > .tapin-bg {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: -206px -185px;
+}
+.main-nav .separator {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: -320px -200px;
+}
+.main-nav .menu-item.places {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: 8px -262px;
+}
+.main-nav .menu-item.activity {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: -51px -263px;
+}
+.main-nav .menu-item.tapin {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: -119px -262px;
+}
+.main-nav .menu-item.goodies {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: -302px -261px;
+}
+.main-nav .menu-item.me {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: -258px -259px;
+}
+.main-nav .menu-item.settings {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: -177px -260px;
+}
+.main-nav .menu-item.active.places {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: 4px -318px;
+}
+.main-nav .menu-item.active.activity {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: -59px -318px;
+}
+.main-nav .menu-item.active.tapin {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: -129px -318px;
+}
+.main-nav .menu-item.active.goodies {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: -313px -318px;
+}
+.main-nav .menu-item.active.me {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: -258px -318px;
+}
+.main-nav .menu-item.active.settings {
+  background-image: url("/static/images/main-sprite-hi-res.png");
+  background-size: 600px 600px;
+  background-position: -198px -318px;
+}
