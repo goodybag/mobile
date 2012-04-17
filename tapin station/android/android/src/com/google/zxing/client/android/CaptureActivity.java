@@ -900,6 +900,22 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     String locationId = preference.getString(Constants.KEY_LOCATION_ID, null);
 
     String timestamp = new Date().toString();
+    
+    try {
+      if(code.charAt(24) == '|' && code.charAt(49)=='|'){
+        Log.i("process-code", "attempting to update device idenfiers");
+        String identifiers[] = code.split("\\|");
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putString(Constants.KEY_BUSINESS_ID, identifiers[0]);
+        editor.putString(Constants.KEY_LOCATION_ID, identifiers[1]);
+        editor.putString(Constants.KEY_REGISTER_ID, identifiers[2]);
+        editor.commit();
+        Log.e("process-code", "saved device identifiers to configuration");
+        return;
+      }
+    } catch(Exception e){
+      Log.e("process-code", "not a configuration scan");
+    }
 
     submitCode(-1, businessId, locationId, registerId, code, timestamp, true);
 
