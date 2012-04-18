@@ -43,12 +43,12 @@
 
 #install busybox
 ./adb shell mkdir -p /system/xbin;
-./adb push /goodybag/mobile/tapin\ station/static/bin/busybox /system/xbin/busybox;
+./adb push /goodybag/mobile/tapin\ station/static/binaries/busybox /system/xbin/busybox;
 ./adb shell chmod 755 /system/xbin/busybox;
 ./adb shell /system/xbin/busybox --install -s /system/xbin;
 
 #install wget
-./adb push /goodybag/mobile/tapin\ station/static/bin/wget /system/xbin/wget;
+./adb push /goodybag/mobile/tapin\ station/static/binaries/wget /system/xbin/wget;
 ./adb shell chmod 755 /system/xbin/wget;
 
 #link to bin directory (needed for cron)
@@ -64,4 +64,4 @@
 
 
 #all in one line (recreate if modifications are made to the above)
-./adb wait-for-device; ./adb shell mount -o rw,remount -t yaffs2 /dev/block/nandd /system; ./adb shell mkdir -p /data/gb/scripts; ./adb push /goodybag/mobile/tapin\ station/static/scripts /data/gb/scripts; ./adb push /goodybag/mobile/tapin\ station/static/scripts /data/gb/original/scripts; ./adb push /goodybag/mobile/tapin\ station/static/preinstall.sh /system/bin/preinstall.sh; ./adb shell mkdir -p /system/xbin; ./adb push /goodybag/mobile/tapin\ station/static/bin/busybox /system/xbin/busybox; ./adb shell chmod 755 /system/xbin/busybox; ./adb shell /system/xbin/busybox --install -s /system/xbin; ./adb push /goodybag/mobile/tapin\ station/static/bin/wget /system/xbin/wget; ./adb shell chmod 755 /system/xbin/wget; ./adb shell ln -s /system/bin/ /bin; ./adb shell mkdir -p /data/cron; ./adb push /goodybag/mobile/tapin\ station/static/crontab-root /data/cron/root; ./adb shell crond -L /data/cron.log -c /data/cron; ./adb shell mount -o ro,remount -t yaffs2 /dev/block/nandd /system;
+./adb wait-for-device; ./adb shell mount -o rw,remount -t yaffs2 /dev/block/nandd /system; ./adb shell mkdir -p /data/gb/scripts; ./adb push /goodybag/mobile/tapin\ station/static/scripts /data/gb/scripts; ./adb push /goodybag/mobile/tapin\ station/static/scripts /data/gb/original/scripts; ./adb push /goodybag/mobile/tapin\ station/static/preinstall.sh /system/bin/preinstall.sh; ./adb shell mkdir -p /system/xbin; ./adb push /goodybag/mobile/tapin\ station/static/binaries/busybox /system/xbin/busybox; ./adb shell chmod 755 /system/xbin/busybox; ./adb shell /system/xbin/busybox --install -s /system/xbin; ./adb push /goodybag/mobile/tapin\ station/static/binaries/wget /system/xbin/wget; ./adb shell chmod 755 /system/xbin/wget; ./adb shell ln -s /system/bin/ /bin; ./adb shell mkdir -p /data/cron; ./adb push /goodybag/mobile/tapin\ station/static/crontab-root /data/cron/root; ./adb shell crond -L /data/cron.log -c /data/cron; ./adb shell mount -o ro,remount -t yaffs2 /dev/block/nandd /system;
