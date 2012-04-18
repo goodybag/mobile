@@ -21,6 +21,12 @@
 
 
 
+
+
+
+
+
+
 ###Install busybox, setup gb data directory, setup cron###
 
 #make /system writable
