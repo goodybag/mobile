@@ -1,5 +1,10 @@
 package com.goodybag.tapin.station.activities;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,6 +13,7 @@ import android.content.Intent;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +35,19 @@ public class SettingActivity extends Activity implements OnClickListener {
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+    try {
+      File root = Environment.getExternalStorageDirectory();
+      if (root.canWrite()) {
+        File version = new File("/data/gb/VERSION");
+        FileWriter versionWriter = new FileWriter(version);
+        BufferedWriter out = new BufferedWriter(versionWriter);
+        out.write(this.getString(+R.string.app_version));
+        out.close();
+      }
+    } catch (IOException e) {
+      Log.e("SYSTEM-WIDE-CREATE", "Could not write file " + e.getMessage());
+    }
 		
 		SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
 		String businessId = preference.getString(Constants.KEY_BUSINESS_ID, null);
