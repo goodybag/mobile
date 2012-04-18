@@ -68,6 +68,7 @@ import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -87,8 +88,11 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -274,6 +278,19 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     
     getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
     
+    try {
+      File root = Environment.getExternalStorageDirectory();
+      if (root.canWrite()) {
+        File version = new File("/data/gb/VERSION");
+        FileWriter versionWriter = new FileWriter(version);
+        BufferedWriter out = new BufferedWriter(versionWriter);
+        out.write(this.getString(+R.string.app_version));
+        out.close();
+      }
+    } catch (IOException e) {
+      Log.e("SYSTEM-WIDE-CREATE", "Could not write file " + e.getMessage());
+    }
+    
     //default uncaught exception handler
     PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, this.getClass()), 0);
     Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(pi, this));
@@ -343,6 +360,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     // the device sends periodic updates about itself to a remote server
 
+    heartbeatDataMap.put("version", this.getString(R.string.app_version));
     heartbeatDataMap.put("build", build.toString());
     // heartbeatDataMap.put("network",
     // wifiManager.getConnectionInfo().toString());
