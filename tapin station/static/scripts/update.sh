@@ -50,5 +50,5 @@ else
     echo "already on version - $localVersion";
 fi
 
-echo `date` > /data/gb/CRON_1
+echo `date` > /data/gb/UPDATE_TIMESTAMP_1
 echo "[GB] done"
