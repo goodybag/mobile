@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<accounts version="2" nextAuthorityId="4">
+<authority id="0" account="gbatxa@gmail.com" type="com.google" authority="com.android.calendar" enabled="false" syncable="true">
+<periodicSync period="86400" />
+</authority>
+<authority id="1" account="gbatxa@gmail.com" type="com.google" authority="gmail-ls" enabled="false" syncable="true">
+<periodicSync period="86400" />
+</authority>
+<authority id="2" account="gbatxa@gmail.com" type="com.google" authority="com.android.contacts" enabled="false" syncable="true">
+<periodicSync period="86400" />
+</authority>
+<authority id="3" account="gbatxa@gmail.com" type="com.google" authority="subscribedfeeds" enabled="true" syncable="true">
+<periodicSync period="86400" />
+</authority>
+</accounts>
