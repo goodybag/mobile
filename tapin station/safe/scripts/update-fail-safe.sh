@@ -20,3 +20,6 @@ else
 	logi "updater is working";
 	cp /data/gb/UPDATE_TIMESTAMP_1 /data/gb/UPDATE_TIMESTAMP_2;
 fi
+
+#have it brough to the foreground (will automatically ignore if it's already in the foreground)
+am start -a android.intent.action.MAIN -n com.google.zxing.client.android/com.goodybag.tapin.station.activities.SettingActivity;
