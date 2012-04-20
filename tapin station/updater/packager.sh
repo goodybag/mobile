@@ -23,14 +23,14 @@ rm -rf "$tmpDir"
 mkdir -p "$tmpDir"
 
 #copy files to package
-cp -R "$root/system" "$tmp/"
-cp "$root/updater/init.sh" "$tmp/"
-cp "$apk" "$tmp/"
+cp -R "$root/system" "$tmpDir/"
+cp "$root/updater/init.sh" "$tmpDir/"
+cp "$apk" "$tmpDir/"
 
 #package
-cd "$tmp"
-tar -czvf "$package" "$tmp/*"
-openssl aes-256-cbc -k "$key" -a -salt -in "$package" -out "$download"
-openssl md5 "$download" | cut -d "=" -f2 > "$checksum"
+cd "$tmpDir"
+tar -czvf "$package" "."
+openssl aes-256-cbc -kfile "$key" -a -salt -in "$package" -out "$download"
+openssl md5 "$download" | awk -F'= ' '{print $2}' > "$checksum"
 
 echo "UPLOAD THE VERSION FILE LAST"

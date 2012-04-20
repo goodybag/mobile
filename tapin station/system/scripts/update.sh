@@ -9,11 +9,12 @@ alias loge="log -p e -t'GB-UPDATE'";
 baseUrl="http://updates.station.goodybag.com";
 downloadUrl="$baseUrl/downloads";
 logi "[GB] checking for updates";
-remoteVersion=`/system/xbin/wget -qO- $url/VERSION`;
-localVersion=`cat /data/gb/system/VERSION`;
+remoteVersion=`/system/xbin/wget -qO- $baseUrl/VERSION`;
+localVersion=`cat /data/gb/VERSION`;
 
 #check for new version
-if [ $remoteVersion != $localVersion ] || [ -z $localVersion ]
+
+if [ "$remoteVersion" != "$localVersion" ] || [ -z "$localVersion" ] && [ "$remoteVersion" != "" ]
 then
 	if [ -e /data/gb/system/scripts/pre-download.sh ]
 	then
@@ -40,26 +41,28 @@ then
 	/system/bin/mkdir -p /data/gb/tmp/update;
 	/system/xbin/wget $downloadUrl/$remoteVersion.gbz -q -O /data/gb/tmp/update/update.gbz;
 
-	localChecksum=`openssl md5 /data/gb/tmp/update.gbz | awk -F'= ' '{print $2}'`
+	localChecksum=`openssl md5 /data/gb/tmp/update/update.gbz | awk -F'= ' '{print $2}'`
 
 	#verify checksum
 	if [ $localChecksum == $remoteChecksum ] && [ $localChecksum != "" ] && [ $remoteChecksum != "" ]
 	then
 		logi "checksum is valid, decrypting"
 		#decrypt
-		openssl aes-256-cbc -k /data/safe/KEY -a -d -in /data/gb/tmp/update.gbz -out /data/gb/tmp/update.tar.gz;
-		decryptSuccess = `echo $?`;
-		if [ decryptSuccess = "0" ]
+		openssl aes-256-cbc -kfile /data/safe/KEY -a -d -in /data/gb/tmp/update/update.gbz -out /data/gb/tmp/update/update.tar.gz;
+		decryptSuccess=`echo $?`;
+		if [ $decryptSuccess == "0" ]
 		then
 			logi "decryption was successful, updating"
-			/system/xbin/gunzip /data/gb/tmp/update.tar.gz;
-			/system/xbin/tar -zxf /data/gb/tmp update.tar;
-			/system/bin/sh /data/gb/tmp/update/init.sh;
+			/system/xbin/gunzip /data/gb/tmp/update/update.tar.gz;
+			mkdir -p /data/gb/tmp/update/package
+			cd /data/gb/tmp/update/package
+			/system/xbin/tar -xvf /data/gb/tmp/update/update.tar;
+			/system/bin/sh init.sh;
 		else
 			loge "decryption FAILED"
 		fi
 	else
-		loge "checksum is INVALID, not decrypting"
+		loge "checksum is INVALID (l: $localChecksum r: $remoteChecksum), not decrypting"
 	fi
 else
     logw "already on version - $localVersion";
