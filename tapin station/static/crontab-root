@@ -1,2 +1,0 @@
-*/1 * * * * su -c "/bin/sh /data/gb/scripts/update.sh >> /data/gb/update.log"
-*/2 * * * * su -c "/bin/sh /data/gb/scripts/update-fail-safe.sh >> /data/gb/update-fail-safe.log"

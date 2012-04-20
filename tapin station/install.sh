@@ -37,6 +37,10 @@ echo "install wget"
 adb shell /system/xbin/busybox cp -f /data/gb/system/binaries/wget /system/xbin/wget;
 adb shell chmod 755 /system/xbin/wget;
 
+echo "install openssl"
+adb shell /system/xbin/busybox cp -f /data/gb/system/binaries/openssl /system/xbin/openssl;
+adb shell chmod 755 /system/xbin/openssl;
+
 echo "link to bin directory (needed for cron)"
 adb shell /system/xbin/busybox ln -s -f /system/bin/ /bin;
 

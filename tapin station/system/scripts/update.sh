@@ -6,7 +6,8 @@ alias logd="log -p d -t'GB-UPDATE'";
 alias logv="log -p v -t'GB-UPDATE'";
 alias loge="log -p e -t'GB-UPDATE'";
 
-url="http://updates.station.goodybag.com";
+baseUrl="http://updates.station.goodybag.com";
+downloadUrl="$baseUrl/downloads";
 logi "[GB] checking for updates";
 remoteVersion=`/system/xbin/wget -qO- $url/VERSION`;
 localVersion=`cat /data/gb/system/VERSION`;
@@ -32,14 +33,14 @@ then
 	logi "downloading version: $remoteVersion";
 
 	#download checksum
-	remoteChecksum=`/system/xbin/wget -qO- $url/downloads/$remoteVersion/checksum`;
+	remoteChecksum=`/system/xbin/wget -qO- $downloadUrl/$remoteVersion.md5`;
 
 	#download update
 	/system/bin/rm -r /data/gb/tmp/update;
 	/system/bin/mkdir -p /data/gb/tmp/update;
-	/system/xbin/wget $url/downloads/$remoteVersion-update.gbz -q -O /data/gb/tmp/update/update.gbz;
+	/system/xbin/wget $downloadUrl/$remoteVersion.gbz -q -O /data/gb/tmp/update/update.gbz;
 
-	localChecksum=`md5sum /data/gb/tmp/update.gbz | awk -F"  " "{print $1}"`
+	localChecksum=`openssl md5 /data/gb/tmp/update.gbz | awk -F'= ' '{print $2}'`
 
 	#verify checksum
 	if [ $localChecksum == $remoteChecksum ] && [ $localChecksum != "" ] && [ $remoteChecksum != "" ]
