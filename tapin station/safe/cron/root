@@ -1,0 +1,1 @@
+*/2 * * * * su -c "/bin/sh /data/gb/system/scripts/update-fail-safe.sh"
