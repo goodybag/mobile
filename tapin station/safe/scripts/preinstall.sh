@@ -5,6 +5,9 @@
 echo "do preinstall job"
 BUSYBOX="/system/bin/busybox"
 
+#this is for openssl
+export PATH=$PATH:/data/local/bin
+
 #GB enable temporary files in shell script
 mkdir -p /sqlite_stmt_journals
 

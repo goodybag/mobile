@@ -293,7 +293,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
     
     // Write out the Ids everytime the app launches.
-    // Just in case things change or the files get modified
+    // Just in case things change or the files get modified 
     SettingActivity.writeIdenfiersToFiles(getApplicationContext());
     
     //default uncaught exception handler

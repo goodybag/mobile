@@ -16,6 +16,18 @@ then
 	loge "UPDATER DID NOT RUN! RESTORING SYSTEM!";
 	rm -r /data/gb/system
 	cp -R /data/safe/original/* /data/gb/system/
+
+	#restarting cron if it's running
+	loge "RESTARTING CRON"
+	regular_cron=`/system/xbin/busybox ps aux | grep crond\ -c\ \/data\/cron$ | awk '/([0-9]+)\s*([0-9]+)/ {print $1}'`
+
+	if [ "$regular_cron" != "" ]
+	then
+		kill -9 $regular_cron
+	fi
+
+	/system/xbin/crond -c /data/cron
+
 else
 	logi "updater is working";
 	cp /data/gb/UPDATE_TIMESTAMP_1 /data/gb/UPDATE_TIMESTAMP_2;
@@ -28,7 +40,7 @@ then
 	logw "regular cron is not running, restarting it"
 	/system/xbin/crond -c /data/cron
 else
-	logi "the regular cron script is still running"
+	logi "the regular cron script is running"
 fi
 
 

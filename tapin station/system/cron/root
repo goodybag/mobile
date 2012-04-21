@@ -1,1 +1,1 @@
-*/1 * * * * su -c "/bin/sh /data/gb/system/scripts/update.sh"
+*/1 * * * * /bin/sh /data/gb/system/scripts/update.sh
