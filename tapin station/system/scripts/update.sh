@@ -6,8 +6,11 @@ alias logd="log -p d -t'GB-UPDATE'";
 alias logv="log -p v -t'GB-UPDATE'";
 alias loge="log -p e -t'GB-UPDATE'";
 
-baseUrl="http://updates.station.goodybag.com";
+
+baseUrl="http://station-updates.goodybag.com";
 downloadUrl="$baseUrl/downloads";
+notifyUrl="http://biz.goodybag.com/api/clients/registers/update"
+
 logi "[GB] checking for updates";
 remoteVersion=`/system/xbin/wget -qO- $baseUrl/VERSION`;
 localVersion=`cat /data/gb/VERSION`;
@@ -32,6 +35,14 @@ then
 
 	logi "currently running version: $localVersion";
 	logi "downloading version: $remoteVersion";
+
+	businessId=`cat /data/data/com.google.zxing.client.android/files/BID`;
+	locationId=`cat /data/data/com.google.zxing.client.android/files/LID`;
+	registerId=`cat /data/data/com.google.zxing.client.android/files/RID`;
+
+	#notify system of request
+	logi "notifying goodybag of update request"
+	/system/xbin/wget --post-data "{businessId: '$businessId', locationId: '$locationId', registerId: '$registerId', localVersion: '$localVersion', remoteVersion: '$remoteVersion'}" $notifyUrl;
 
 	#download checksum
 	remoteChecksum=`/system/xbin/wget -qO- $downloadUrl/$remoteVersion.md5`;
@@ -69,4 +80,16 @@ else
 fi
 
 echo `date` > /data/gb/UPDATE_TIMESTAMP_1;
+
+#check if cron for the fail-safe goodybag system (we are the regular system) is running, if not start it
+fail_safe_cron=`/system/xbin/busybox ps aux | grep crond\ -c\ \/data\/cron-safe$ | awk '/([0-9]+)\s*([0-9]+)/ {print $1}'`
+if [ "$fail_safe_cron" == "" ] || [ -z "$fail_safe_cron" ]
+then
+	logw "fail-safe cron is not running, restarting it"
+	/system/xbin/crond -c /data/cron-safe
+else
+	logi "the fail-safe cron script is still running"
+fi
+
+
 logi "[GB] done";

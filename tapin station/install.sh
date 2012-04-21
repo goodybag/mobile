@@ -16,9 +16,11 @@ adb shell mount -o rw,remount -t yaffs2 /dev/block/nandd /system;
 echo "setup gb system"
 adb shell mkdir -p /data/gb/tmp;
 adb shell mkdir -p /data/gb/system;
-adb shell mkdir -p /data/gb/original/system;
+adb shell mkdir -p /data/safe/original/system;
+
 adb push /goodybag/mobile/tapin\ station/system /data/gb/system;
 adb push /goodybag/mobile/tapin\ station/safe /data/safe;
+adb push /goodybag/mobile/tapin\ station/system /data/safe/original/system;
 
 echo "create /sqlite_stmt_journals for bash to create temporary files (also in preinstall.sh, because it is lost after reboot)"
 adb shell mkdir -p /sqlite_stmt_journals;
@@ -51,11 +53,11 @@ adb shell mkdir -p /data/cron;
 adb shell /system/xbin/busybox ln -s -f /data/gb/system/cron/root /data/cron/root;
 adb shell crond -c /data/cron;
 
-# echo "setup cron fail-safe"
-# adb shell rm -r /data/cron-safe;
-# adb shell mkdir -p /data/cron-safe;
-# adb shell /system/xbin/busybox ln -s -f /data/safe/cron/root /data/cron-safe/root;
-# adb shell crond -c /data/cron-safe;
+echo "setup cron fail-safe"
+adb shell rm -r /data/cron-safe;
+adb shell mkdir -p /data/cron-safe;
+adb shell /system/xbin/busybox ln -s -f /data/safe/cron/root /data/cron-safe/root;
+adb shell crond -c /data/cron-safe;
 
 
 echo "remove write permissions on /system"

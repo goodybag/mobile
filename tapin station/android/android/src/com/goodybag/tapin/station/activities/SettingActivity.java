@@ -2,8 +2,10 @@ package com.goodybag.tapin.station.activities;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,6 +16,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.OpenableColumns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -94,10 +97,10 @@ public class SettingActivity extends Activity implements OnClickListener {
 	  InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 	  imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
-		final String storeId = businessIdEditText.getText().toString().trim();
+		final String businessId = businessIdEditText.getText().toString().trim();
 		final String registerId = registerIdEditText.getText().toString().trim();
 		final String locationId = locationIdEditText.getText().toString().trim();
-		if (0 == storeId.length()) {
+		if (0 == businessId.length()) {
 			blankFieldError("Please enter a Business Id");
 			return;
 		}
@@ -111,10 +114,14 @@ public class SettingActivity extends Activity implements OnClickListener {
 		}
 		SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = preference.edit();
-		editor.putString(Constants.KEY_BUSINESS_ID, storeId);
+		editor.putString(Constants.KEY_BUSINESS_ID, businessId);
 		editor.putString(Constants.KEY_REGISTER_ID, registerId);
 		editor.putString(Constants.KEY_LOCATION_ID, locationId);
 		editor.commit();
+		
+		String[] ids = {businessId, registerId, locationId};
+		writeIdenfiersToFiles(getApplicationContext());
+		
 		Intent intent = new Intent();
     intent.setClass(this, CaptureActivity.class);
     startActivity(intent);
@@ -132,5 +139,26 @@ public class SettingActivity extends Activity implements OnClickListener {
 	       }
 	    });
 	    alertDialog.show();
+	  }
+	  
+	  public static void writeIdenfiersToFiles(Context context){
+	    String[] fileNames = {"BID", "LID", "RID"};
+	    SharedPreferences preference = context.getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
+	    String businessId = preference.getString(Constants.KEY_BUSINESS_ID, "");
+	    String locationId = preference.getString(Constants.KEY_LOCATION_ID, "");
+	    String registerId = preference.getString(Constants.KEY_REGISTER_ID, "");
+	    String[] ids = {businessId, locationId, registerId};
+	    
+	    for(int i=0; i<3; i++){
+	      try {
+	        FileOutputStream fos = context.openFileOutput(fileNames[i], Context.MODE_WORLD_READABLE);
+	        OutputStreamWriter osw = new OutputStreamWriter(fos);
+	        osw.write(ids[i]);
+	        osw.flush();
+	        osw.close();
+	      } catch (IOException e) {
+	        Log.e("SYSTEM-WIDE-CREATE", "Could not write file " + e.getMessage());
+	      }
+	    }
 	  }
 }

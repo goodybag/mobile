@@ -22,6 +22,7 @@ package com.google.zxing.client.android;
 
 import com.goodybag.tapin.station.ChangeImageAndEnableCaptureThread;
 import com.goodybag.tapin.station.Constants;
+import com.goodybag.tapin.station.activities.SettingActivity;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
@@ -291,6 +292,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       Log.e("SYSTEM-WIDE-CREATE", "Could not write file " + e.getMessage());
     }
     
+    // Write out the Ids everytime the app launches.
+    // Just in case things change or the files get modified
+    SettingActivity.writeIdenfiersToFiles(getApplicationContext());
+    
     //default uncaught exception handler
     PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, this.getClass()), 0);
     Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(pi, this));
@@ -397,8 +402,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           while (true) {
             SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
             String businessId = preference.getString(Constants.KEY_BUSINESS_ID, null);
-            String registerId = preference.getString(Constants.KEY_REGISTER_ID, null);
             String locationId = preference.getString(Constants.KEY_LOCATION_ID, null);
+            String registerId = preference.getString(Constants.KEY_REGISTER_ID, null);
 
             RestClient restClient = new RestClient(Constants.URL_HEARTBEAT);
 
@@ -914,8 +919,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public void processCode(String code, boolean save) {
     SharedPreferences preference = getSharedPreferences(Constants.SETTING_PREF_NAME, Context.MODE_PRIVATE);
     String businessId = preference.getString(Constants.KEY_BUSINESS_ID, null);
-    String registerId = preference.getString(Constants.KEY_REGISTER_ID, null);
     String locationId = preference.getString(Constants.KEY_LOCATION_ID, null);
+    String registerId = preference.getString(Constants.KEY_REGISTER_ID, null);
 
     String timestamp = new Date().toString();
     
@@ -928,6 +933,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         editor.putString(Constants.KEY_LOCATION_ID, identifiers[1]);
         editor.putString(Constants.KEY_REGISTER_ID, identifiers[2]);
         editor.commit();
+        String[] ids = {businessId, registerId, locationId};
+        SettingActivity.writeIdenfiersToFiles(getApplicationContext());
         Log.e("process-code", "saved device identifiers to configuration");
         return;
       }
@@ -1074,6 +1081,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     // submit data to server. if fail then store to database to be set later
     String code = rawResult.getText();
+    
+    // We do this because the tablet sometimes randomly beeps (and usually they're random small codes)
+    // So we just ignore small codes. We don't follow that standard and we don't need to collect it. 
+    if (code.length()<4){
+      return;
+    }
 
     showSuccessScreen();
     
