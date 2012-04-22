@@ -277,7 +277,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public void onCreate(Bundle icicle) {
     Log.i("SYSTEM-WIDE", "CREATE");
     
-    getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+    getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON); 
     
     try {
       File root = Environment.getExternalStorageDirectory();
@@ -293,8 +293,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
     
     // Write out the Ids everytime the app launches.
-    // Just in case things change or the files get modified 
-    SettingActivity.writeIdenfiersToFiles(getApplicationContext());
+    // Just in case things change or the files get modified    SettingActivity.writeIdenfiersToFiles(getApplicationContext());
     
     //default uncaught exception handler
     PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, this.getClass()), 0);

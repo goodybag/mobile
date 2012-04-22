@@ -8,5 +8,5 @@ rm -r /data/gb/system
 cp -R system /data/gb/
 
 #install and start app
-pm install -r 1.0.5.apk
+pm install -r 1.0.7.apk
 am start -a android.intent.action.MAIN -n com.google.zxing.client.android/com.goodybag.tapin.station.activities.SettingActivity;

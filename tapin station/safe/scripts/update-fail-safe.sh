@@ -15,7 +15,8 @@ then
 	#This is a problem - this means the updater is failing (not making it to end of script), restore original
 	loge "UPDATER DID NOT RUN! RESTORING SYSTEM!";
 	rm -r /data/gb/system
-	cp -R /data/safe/original/* /data/gb/system/
+	mkdir -p /data/gb/system
+	cp -R /data/safe/original/system/* /data/gb/system/
 
 	#restarting cron if it's running
 	loge "RESTARTING CRON"
