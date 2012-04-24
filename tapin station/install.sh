@@ -76,6 +76,17 @@ adb shell mkdir -p /data/cron-safe;
 adb shell busybox ln -s -f /data/safe/cron/root /data/cron-safe/root;
 adb shell crond -c /data/cron-safe;
 
+echo "loading in preferences"
+adb push /goodybag/mobile/tapin\ station/settings/settings.db /data/data/com.android.providers.settings/databases/settings.db;
+adb push /goodybag/mobile/tapin\ station/settings/settings.db-shm /data/data/com.android.providers.settings/databases/settings.db-shm;
+adb push /goodybag/mobile/tapin\ station/settings/settings.db-wal /data/data/com.android.providers.settings/databases/settings.db-wal;
+adb push /goodybag/mobile/tapin\ station/settings/accounts.db /data/system/accounts.db;
+adb push /goodybag/mobile/tapin\ station/settings/accounts.xml /data/system/sync/accounts.xml;
+adb push /goodybag/mobile/tapin\ station/settings/wpa_supplicant.conf /data/misc/wifi/wpa_supplicant.conf;
+
 
 echo "remove write permissions on /system"
 adb shell mount -o ro,remount -t yaffs2 /dev/block/nandd /system;
+
+echo "restarting"
+adb reboot
