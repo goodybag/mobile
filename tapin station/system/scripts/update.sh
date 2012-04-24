@@ -7,7 +7,7 @@ alias logv="log -p v -t'GB-UPDATE'";
 alias loge="log -p e -t'GB-UPDATE'";
 
 
-baseUrl="http://station-updates.goodybag.com";
+baseUrl="http://station-updater.goodybag.com";
 downloadUrl="$baseUrl/downloads";
 notifyUrl="http://biz.goodybag.com/api/clients/registers/update"
 
