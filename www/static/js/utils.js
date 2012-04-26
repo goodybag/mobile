@@ -51,17 +51,16 @@
     return hasOwnProperty.call(obj, key);
   };
 
-  _utils.overloadShortHand = function(types){
+  var overloadShortHand = function(types){
     types = types.toLowerCase();
     if (types.indexOf(',') == -1 && types.indexOf('t') == -1 && types.indexOf('u') == -1) return types;
     return types.match(/\b[a-z]/g).join('');
   };
-
   _utils.overload = function(functions){
     this.functionList = {};
     var shortHandKey;
     for (var argTypes in functions){
-      shortHandKey = utils.overloadShortHand(argTypes);
+      shortHandKey = overloadShortHand(argTypes);
       this.functionList[shortHandKey] = functions[argTypes];
     }
     return function(){
