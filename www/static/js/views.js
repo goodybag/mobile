@@ -166,19 +166,7 @@
       return false;
     }
     , authenticatedHandler: function(){
-      window.location.href = "#!/streams/global";
-      // app.changePage(function(done){
-      //   var streamsView = new app.Views.Streams({
-      //     collection: app.api.activity
-      //   }).render();
-      //   app.api.activity.fetchGlobal({add: true}, function(error,data){
-      //     if (utils.exists(error)){
-      //       console.error(error.message);
-      //       return;
-      //     }
-      //     done(streamsView);
-      //   });
-      // });
+      window.location.href = "/#!/streams/global";
     }
     , authFailHandler: function(error){
       var errorView = new app.Views.LoginError({
@@ -372,11 +360,7 @@
       });
     }
     , authenticatedHandler: function(){
-      var streamsView = new app.Views.Streams({});
-      $("#content").html(streamsView.headerRender().el);
-      $("#content").append(streamsView.render().el);
-      streamsView.loadGlobalActivity();
-      return this;
+      window.location.href = "/#!/streams/global";
     }
   });
 
