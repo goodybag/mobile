@@ -21,6 +21,79 @@
     nativeKeys         = Object.keys,
     nativeBind         = FuncProto.bind;
 
+
+  _utils.guid = function(){
+    var res = [], hv;
+    var rgx = new RegExp("[2345]");
+    for (var i = 0; i < 8; i++) {
+      hv = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+      if (rgx.exec(i.toString()) != null) {
+        if (i == 3) { hv = "6" + hv.substr(1, 3); }
+        res.push("-");
+      }
+      res.push(hv.toUpperCase());
+    }
+    value = res.join('');
+    $(this).data("value", value);
+    return value;
+  };
+
+  _utils.removeInlineCss = function(el){
+    el instanceof jQuery && (el = el[0]);
+    for (var key in el.style){
+      el.style[key] = "";
+    }
+  };
+
+  _utils.scrolledToEndObserver = (function(){
+    var constructor = function($el, callback){
+      this.$el = $el;
+      this.callback = callback;
+      this.id = utils.guid();
+      this.finished = false;
+      this.bind();
+    };
+    constructor.prototype = {
+      scrollListener: function(e){
+        var el = this.$el[0], scroll;
+
+        if (this.$el[0] === window){
+          scroll = {
+            height: $(document).height(),
+            viewport: window.innerHeight,
+            top: window.scrollY
+          };
+        }else{
+          scroll = {
+            height: el.scrollHeight,
+            viewport: el.offsetHeight,
+            top: el.scrollTop
+          }
+        }
+        if (scroll.viewport + scroll.top >= scroll.height) {
+          if (!this.finished){
+            this.callback(e, this, this.$el);
+            this.finished = true;
+          }
+        }else{
+          this.finished = false;
+        }
+      },
+      bind: function(){
+        this.$el.on('scroll.' + this.id, this.scrollListener.bind(this));
+        return this;
+      },
+      on: function(){
+        return this.bind();
+      },
+      off: function(){
+        this.$el.off('scroll.' + this.id);
+        return this;
+      }
+    };
+    return constructor;
+  })();
+
   _utils.extend = function(obj) {
     utils.each(slice.call(arguments, 1), function(source) {
       for (var prop in source) {
@@ -47,7 +120,7 @@
     }
   };
 
-  _utils.has = function(obj, key) {
+  _utils.has = function(obj, key){
     return hasOwnProperty.call(obj, key);
   };
 
@@ -56,7 +129,9 @@
     if (types.indexOf(',') == -1 && types.indexOf('t') == -1 && types.indexOf('u') == -1) return types;
     return types.match(/\b[a-z]/g).join('');
   };
-  _utils.overload = function(functions){
+
+  _utils.overload = function(functions, context){
+    context || (context = this);
     this.functionList = {};
     var shortHandKey;
     for (var argTypes in functions){
@@ -68,26 +143,67 @@
       for (; i < arguments.length; i++)
         key += Object.prototype.toString.call(arguments[i])[8].toLowerCase();
       if (!this.functionList.hasOwnProperty(key)) throw new Error("The function of type " + key + " is undefined");
-      return this.functionList[key].apply(this, arguments);
+      return this.functionList[key].apply(context, arguments);
     };
   };
 
-  _utils.loader = (function(){
+  _utils.RowLoader = (function(){
     var defaults = {
-      // Nothing for now
+      $el: $('<div class="gb-row-loader"')
+    }
+    , constructor = function(options){
+      this.options = Object.merge(defaults, options || {});
+      this.$el = this.options.$el;
+      this.loader = new utils.loader(this.$el);
+      return this;
     };
-    var constructor = function($ele, options){
-      this.defaults  = defaults;
-      options        = options || {};
-      this.options   = Object.merge(this.defaults, options);
-      this.$ele      = ($ele instanceof jQuery) ? $ele : $($ele);
-      this.$loading  = $('<div class="gb-loading"></div>');
-      this.$overlay  = $('<div class="gb-loader-overlay"></div>');
-      this.$wrapper  = $('<div class="gb-loader-wrapper"></div>');
+    constructor.prototype = {
+      toggle: function(){
+        this.loader.toggle();
+        return this;
+      },
+      start: function(){
+        this.loader.start();
+        return this;
+      },
+      stop: function(){
+        this.loader.stop();
+        return this;
+      },
+      isLoading: function(){
+        return this.loader.isLoading();
+      },
+      appendTo: function($appendEl){
+        $appendEl.append(this.$domEl = this.$el.clone());
+        return this;
+      },
+      removeElFromDom: function(){
+        this.$domEl.remove();
+        return this;
+      }
+    };
 
+    return constructor;
+  })();
+
+  _utils.loader = (function(){
+    var constructor = function($ele, options){
+      var defaults = {
+        outerCss: {
+          position: 'relative'
+        }
+      };
+      options || (options = {});
+
+      this.options      = Object.merge(defaults, options);
+      this.$ele         = ($ele instanceof jQuery) ? $ele : $($ele);
+      this.$loading     = $('<div class="gb-loading"></div>');
+      this.$overlay     = $('<div class="gb-loader-overlay"></div>');
+      this.$wrapper     = $('<div class="gb-loader-wrapper"></div>');
       this.$loading.append('<span class="loader-block s1"></span>')
-                    .append('<span class="loader-block s2"></span>')
-                    .append('<span class="loader-block s3"></span>');
+                   .append('<span class="loader-block s2"></span>')
+                   .append('<span class="loader-block s3"></span>');
+
       if (utils.exists(this.options.overlayCss)) this.$overlay.css(this.options.overlayCss);
       if (utils.exists(this.options.loaderCss)) this.$loading.css(this.options.loaderCss);
       if (utils.exists(this.options.loaderBlockCss)) $('.loader-block', this.$loading).css(this.options.loaderBlockCss);
@@ -102,7 +218,10 @@
         return this;
       },
       start: function(){
+        console.log("[Loader] - Start");
         if (!this.isLoading()){
+          console.log("[Loader] - Starting");
+          this.$ele.css(this.options.outerCss);
           this.$wrapper.append(this.$loading);
           this.$ele.addClass('gb-loader')
               .prepend(this.$overlay)
@@ -111,10 +230,7 @@
         return this;
       },
       stop: function(){
-        console.log(this.$overlay);
-        console.log(this.$wrapper);
-        console.log(this.$loading);
-        $('html').css('overflow', 'auto');
+        utils.removeInlineCss(this.$ele);
         $('.gb-loading, .gb-loader-overlay, .gb-loader-wrapper', this.$ele).remove();
         this.$ele.removeClass('gb-loader');
         return this;

@@ -116,6 +116,11 @@
       this.set('goingBack', false);
       this.trigger('change:routes');
       return this;
+    },
+    previousRoute: function(){
+      var routes = this.attributes.routes;
+      if (routes.length > 1)
+        return routes[routes.length - 2];
     }
   });
 
