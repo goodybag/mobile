@@ -54,30 +54,30 @@
 .main-nav .menu-item.active.places {
   background-image: url("/static/images/main-sprite-hi-res.png");
   background-size: 600px 600px;
-  background-position: 4px -318px;
+  background-position: 9px -325px;
 }
 .main-nav .menu-item.active.activity {
   background-image: url("/static/images/main-sprite-hi-res.png");
   background-size: 600px 600px;
-  background-position: -59px -318px;
+  background-position: -51px -322px;
 }
 .main-nav .menu-item.active.tapin {
   background-image: url("/static/images/main-sprite-hi-res.png");
   background-size: 600px 600px;
-  background-position: -129px -318px;
+  background-position: -119px -337px;
 }
 .main-nav .menu-item.active.goodies {
   background-image: url("/static/images/main-sprite-hi-res.png");
   background-size: 600px 600px;
-  background-position: -313px -318px;
+  background-position: -302px -326px;
 }
 .main-nav .menu-item.active.me {
   background-image: url("/static/images/main-sprite-hi-res.png");
   background-size: 600px 600px;
-  background-position: -258px -318px;
+  background-position: -258px -325px;
 }
 .main-nav .menu-item.active.settings {
   background-image: url("/static/images/main-sprite-hi-res.png");
   background-size: 600px 600px;
-  background-position: -198px -318px;
+  background-position: -177px -325px;
 }

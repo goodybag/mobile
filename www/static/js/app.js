@@ -16,7 +16,14 @@
       console.error(error.message);
       return;
     };
-    app.user.set(consumer);
+    if (utils.exists(consumer)){
+      if (window.location.hash){
+        window.location.href = window.location.hash;
+      }else{
+        window.location.href = '#!/streams/global';
+      }
+      app.user.set(consumer);
+    }
   });
 
   $(document).ready(function(){

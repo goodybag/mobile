@@ -324,6 +324,7 @@
         , lastName: $("#register-last-name", this.el).val()
         , email: $("#register-email-address", this.el).val()
         , password: $("#register-password", this.el).val()
+        , screenName: $('#register-screen-name', this.el).val()
       };
       if(options.password != $("#register-password-repeat", this.el).val()){
         alert("passwords don't match");
@@ -625,7 +626,7 @@
       contact.phoneNumbers = [phoneNumber];
       contact.addresses = [address];
 
-      contact.save(function(){alert('Contact Saved');}, function(){alert('Error Saving Contact');});
+      contact.save();
     }
   });
 
