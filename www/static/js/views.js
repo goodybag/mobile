@@ -598,7 +598,7 @@
       contact.phoneNumbers = [phoneNumber];
       contact.addresses = [address];
 
-      contact.save(function(){alert('Contact Saved');}, function(){alert('Error Saving Contact');});
+      contact.save();
     }
   });
 

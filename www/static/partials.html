@@ -372,16 +372,18 @@
   {{#each locations}}
     <address class="location">
       <h3 class="name">{{name}}</h3>
-      <span class="street1">{{street1}}, </span>
-      <span class="city">{{city}}, </span>
-      <span class="state">{{state}}, </span>
-      <span class="zip">{{zip}}</span>
+      <a href="http://maps.google.com/maps?q={{street1}} {{city}}, {{state}} {{zip}}">
+        <span class="street1">{{street1}}, </span>
+        <span class="city">{{city}}, </span>
+        <span class="state">{{state}}, </span>
+        <span class="zip">{{zip}}</span>
+      </a>
       <div class="phone">
         <a href="tel:{{phone}}">{{phone}}</a>
       </div>
-      <div class="field-row save-row">
+      <!--/*<div class="field-row save-row">
         <button class="save">Save As Contact</button>
-      </div>
+      </div>*/-->
     </address>
   {{/each}}
   </div>
