@@ -25,13 +25,21 @@
       return app;
     }
     if (!pageLoader) {
+      console.log("[change page] - Creating Loader");
       pageLoader = new utils.loader($('html'), {
         overlayCss: {
           'background-color': '#000'
+        },
+        outerCss: {
+          position: 'fixed',
+          width: '100%',
+          height: '100%'
         }
       });
+      console.log("[change page] - Loader Created");
     }
     pageLoader.start();
+    console.log("[change page] - Loader Started");
     action(function(renderedView){
       console.log('[change page] - inside done');
       pageLoader.stop();
