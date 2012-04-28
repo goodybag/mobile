@@ -96,6 +96,7 @@
                 done(streamsView);
                 return;
               }
+              streamsView.renderActivity();
               streamsView.fixImages();
               // No more data
               if (data.length < optionsAdd.limit){
@@ -114,6 +115,7 @@
           scrollObserver.off();
         });
 
+        streamsView.renderActivity();
         done(streamsView);
       });
     });
@@ -169,6 +171,7 @@
                 done(streamsView);
                 return;
               }
+              streamsView.renderActivity();
               streamsView.fixImages();
               // No more data
               if (data.length < optionsAdd.limit){
@@ -187,6 +190,7 @@
           scrollObserver.off();
         });
 
+        streamsView.renderActivity();
         done(streamsView);
       });
     });

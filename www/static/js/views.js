@@ -389,7 +389,7 @@
 
       this.subViews = [this.pageHeader, this.pageContent];
 
-      this.collection.on('reset', this.renderActivity, this);
+      //this.collection.on('reset', this.renderActivity, this);
       this.collection.on('add', this.renderSingleActivity, this);
 
       return this;
@@ -399,7 +399,7 @@
       for (var i = 0; i < this.subViews.length; i++){
         $(this.el).append(this.subViews[i].render().el);
       }
-      this.pageContent.renderActivity();
+      //Called in route now this.pageContent.renderActivity();
       return this;
     }
     , renderActivity: function(){
@@ -470,6 +470,7 @@
       console.log(models);
       $('#streams-activities', $(this.el)).html("");
       if (models.length == 0){
+        console.log("G's Blood stain")
         $(this.el).html(app.templates.streamsNone());
         return this;
       }
