@@ -17,7 +17,6 @@
     for (var key in u.attributes.funds){
       u.attributes.funds[key] = u.attributes.funds[key].floor(1);
     }
-    console.log(app.user.attributes);
   });
 
   api.auth.session(function(error, consumer){

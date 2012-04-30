@@ -15,6 +15,13 @@
       return false;
     }
 
+    var notAllowed = ['/#!/one-last-thing', '/#!/settings', '/#!/logout'];
+    if (app.user.hasUserCache() && !app.user.get('setScreenName') && notAllowed.indexOf(this.path) == -1){
+      console.log("NO SCREEN NAME");
+      this.redirect('/#!/one-last-thing');
+      return false;
+    }
+
     app.activeRoute.setRoute(this.path);
   };
 
@@ -411,6 +418,12 @@
       app.fragments.goody = app.fragments.simpleGoody;
     }
     window.location = '/#!/';
+  };
+
+  routes.oneLastThing = function(){
+    app.functions.changePage(function(done){
+      done(new app.Views.OneLastThing().render());
+    });
   };
 
   // Export

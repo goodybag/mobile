@@ -23,7 +23,6 @@
       $(this.el).html(app.templates.mainFrame());
       $('#header', this.el).append(this.subViews.headerNav.render().el);
       $('#header', this.el).append(this.subViews.userHeader.render().el);
-      console.log(this.subViews.footerNav);
       $('#footer', this.el).html(this.subViews.footerNav.render().el);
       return this;
     }
@@ -91,8 +90,8 @@
     className: 'page landing'
     , events: {
       'click #landing-register-button': 'registerView'
-      , 'click #landing-login-facebook-button': 'facebookLoginHandler'
-      , 'submit #landing-login-form': 'emailLoginHandler'
+    , 'click #landing-login-facebook-button': 'facebookLoginHandler'
+    , 'submit #landing-login-form': 'emailLoginHandler'
     }
     , initialize: function(){
       this.authModel = this.options.authModel;
@@ -295,7 +294,7 @@
     className: 'page register'
     , events: {
       'submit #register-form': 'registerHandler'
-      , 'click #register-facebook': 'facebookLoginHandler'
+    , 'click #register-facebook': 'facebookLoginHandler'
     }
     , initialize: function(options){
       this.authModel = this.options.authModel;
@@ -328,8 +327,6 @@
     , facebookLoginHandler: function(){
       var self = this;
       FB.login(function(response){
-        console.log("response");
-        console.log(response);
         if(response.session || response.authResponse){
           var accessToken;
           if(response.session){
@@ -871,6 +868,39 @@
     },
     isLoading: function(){
       return this.loader.isLoading();
+    }
+  });
+
+  views.OneLastThing = utils.View.extend({
+    className: 'page one-last-thing'
+  , events: {
+      'submit #one-last-thing-form': 'onFormSubmit'
+    }
+  , initialize: function(){
+      return this;
+    }
+  , render: function(){
+      $(this.el).html(app.templates.oneLastThing());
+      return this;
+    }
+  , onFormSubmit: function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      var sn = $('#one-last-thing-screen-name', this.el).val();
+      api.auth.updateScreenName(sn, function(error){
+        if (utils.exists(error)){
+          console.log(error);
+          var errorView = new app.Views.LoginError({
+            error: error
+          });
+          $('.errors', $(this.el)).replaceWith(errorView.render().el);
+          return;
+        }
+        app.user.set('screenName', sn);
+        app.user.set('setScreenName', true);
+        window.location.href = "/#!/streams/global";
+      });
+      return false;
     }
   });
 
