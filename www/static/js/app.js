@@ -45,22 +45,18 @@
 
       // Fix position static shtuff
       if (app.functions.lacksPositionStatic()){
-        alert("No position static");
         $('.main-nav').css('position', 'absolute');
         $('.header-nav').css('position', 'absolute');
         window.onscroll = function(e){
-          $('.header-nav').css({
-            top: window.pageYOffset + 'px'
-          });
-          $('.main-nav').css({
-            top: (window.pageYOffset + window.innerHeight - $('.main-nav').height()) + 'px'
-          });
+          app.Views.Main.fixStatics();
         };
       }
 
       if (app.functions.lacksInsetShadow()){
         $('.main-nav .nav-shadow').css('display', 'block');
       }
+
+      alert($('.header-nav').width());
 
       app.router.run('#!/');
     });

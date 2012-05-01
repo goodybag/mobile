@@ -46,6 +46,14 @@
       }
       return this;
     }
+    , fixStatics: function(){
+        $('.header-nav').css({
+          top: window.pageYOffset + 'px'
+        });
+        $('.main-nav').css({
+          top: (window.pageYOffset + window.innerHeight - $('.main-nav').height()) + 'px'
+        });
+      }
   });
 
   views.NoGoodies = utils.View.extend({
