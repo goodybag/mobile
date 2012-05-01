@@ -1,4 +1,5 @@
 (function(){
+
   this.app.cache = this.app.cache || {};
   this.app.cached = this.app.cached || {};
   // Give our app events -
@@ -41,6 +42,15 @@
       app.Views.Main = app.mainView = new this.app.Views.Main();
       app.Views.Main.render();
       $('#body').prepend(app.Views.Main.el);
+
+      // Fix position static shtuff
+
+      if (app.functions.lacksPositionStatic()){
+        window.addEventListener('ontouchmove', function(e){
+          $('.main-nav')[0].style.webkitTransform = "translate3d(0, " + window.pageYOffset + "px, 0)";
+        });
+      }
+      alert(app.config.iosLt5);
 
       app.router.run('#!/');
     });

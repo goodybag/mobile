@@ -59,6 +59,11 @@
     return app;
   };
 
+  functions.lacksPositionStatic = function(){
+    if (app.config.iosLt5) return true;
+    return false;
+  };
+
   // Export
   for (var key in functions){
     this.app.functions[key] = functions[key];
