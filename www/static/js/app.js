@@ -56,8 +56,6 @@
         $('.main-nav .nav-shadow').css('display', 'block');
       }
 
-      alert($('.header-nav').width());
-
       app.router.run('#!/');
     });
   });
