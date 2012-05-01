@@ -45,7 +45,7 @@
       pageLoader.stop();
       console.log('[change page] - loader off, transitioning');
       app.functions.transitionPage($(renderedView.el), options);
-      app.Views.Main.fixStatics();
+      if (app.functions.lacksPositionStatic()) app.Views.Main.fixStatics();
     });
     return app;
   };
