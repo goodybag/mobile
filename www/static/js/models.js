@@ -80,6 +80,7 @@
         who: {
           id: self.get('who').id,
           name: self.get('who').name,
+          screenName: self.get('who').screenName
         },
         action: self.get('action'),
         timestamp: self.get('timestamp')

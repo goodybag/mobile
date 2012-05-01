@@ -47,14 +47,20 @@
       if (app.functions.lacksPositionStatic()){
         alert("No position static");
         $('.main-nav').css('position', 'absolute');
+        $('.header-nav').css('position', 'absolute');
         window.onscroll = function(e){
-          // $('.main-nav').css({
-          //   top: (window.pageYOffset + window.innerHeight - $('.main-nav').height()) + 'px'
-          // });
+          $('.header-nav').css({
+            top: window.pageYOffset + 'px'
+          });
+          $('.main-nav').css({
+            top: (window.pageYOffset + window.innerHeight - $('.main-nav').height()) + 'px'
+          });
         };
       }
 
-
+      if (app.functions.lacksInsetShadow()){
+        $('.main-nav .nav-shadow').css('display', 'block');
+      }
 
       app.router.run('#!/');
     });
