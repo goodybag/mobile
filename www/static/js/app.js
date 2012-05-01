@@ -44,13 +44,17 @@
       $('#body').prepend(app.Views.Main.el);
 
       // Fix position static shtuff
-
       if (app.functions.lacksPositionStatic()){
-        window.addEventListener('ontouchmove', function(e){
-          $('.main-nav')[0].style.webkitTransform = "translate3d(0, " + window.pageYOffset + "px, 0)";
-        });
+        alert("No position static");
+        $('.main-nav').css('position', 'absolute');
+        window.onscroll = function(e){
+          // $('.main-nav').css({
+          //   top: (window.pageYOffset + window.innerHeight - $('.main-nav').height()) + 'px'
+          // });
+        };
       }
-      alert(app.config.iosLt5);
+
+
 
       app.router.run('#!/');
     });

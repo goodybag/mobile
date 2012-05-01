@@ -188,7 +188,7 @@
   });
 
   views.FooterNav = utils.View.extend({
-    tagname: 'nav',
+    tagName: 'nav',
     className: 'main-nav',
     events: {
       'tap a': 'menuItemTap',
