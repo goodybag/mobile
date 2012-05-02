@@ -61,11 +61,11 @@
   };
 
   // Provides animation and content change for pages
-  functions.transitionPage = function($el, options){
+  functions.transitionPage = function($el, options, callback){
     if (!utils.exists(app.transitions[options.transition])){
-      app.transitions[app.config.changePage.defaultTransition]($el, options);
+      app.transitions[app.config.changePage.defaultTransition]($el, options, callback);
     }else{
-      app.transitions[options.transition]($el, options);
+      app.transitions[options.transition]($el, options, callback);
     }
     return app;
   };
