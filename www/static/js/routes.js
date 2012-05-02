@@ -116,7 +116,7 @@
             });
           }
         };
-        var scrollObserver  = new utils.scrolledToEndObserver($(window), scrollListener);
+        var scrollObserver = new utils.scrolledToEndObserver($(window), scrollListener);
         // Make sure we remove the scroll listener after leaving this page
         $(window).off('hashchange.stream').on('hashchange.stream', function(e){
           scrollObserver.off();

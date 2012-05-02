@@ -51,6 +51,7 @@
       this.callback = callback;
       this.id = utils.guid();
       this.finished = false;
+      this.fireAt = 0.9; // Percentage down the page to fire at
       this.bind();
     };
     constructor.prototype = {
@@ -70,7 +71,7 @@
             top: el.scrollTop
           }
         }
-        if (scroll.viewport + scroll.top >= scroll.height) {
+        if (scroll.viewport + scroll.top >= scroll.height * this.fireAt) {
           if (!this.finished){
             this.callback(e, this, this.$el);
             this.finished = true;
