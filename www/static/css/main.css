@@ -7,6 +7,10 @@ html {
   padding-bottom: 22px;
   background-image: url("/static/images/white-stripe-vertical.png");
 }
+.loading-container {
+  display: none;
+  z-index: 100000;
+}
 .outer-container {
   padding-top: 49px;
 }

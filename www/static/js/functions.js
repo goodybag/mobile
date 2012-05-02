@@ -24,27 +24,37 @@
       app.functions.transitionPage($(action.el), options);
       return app;
     }
+    $('.loading-container').css({
+      width: $(window).width() + "px"
+    , height: window.innerHeight + "px"
+    , top: window.pageYOffset + "px"
+    });
     if (!pageLoader) {
       console.log("[change page] - Creating Loader");
-      pageLoader = new utils.loader($('html'), {
+      pageLoader = new utils.loader($('.loading-container'), {
         overlayCss: {
           'background-color': '#000'
-        },
-        outerCss: {
-          position: 'fixed',
-          width: '100%',
-          height: '100%'
+        , opacity: '0.5'
+        , width: '100%'
+        , height: '100%'
+        }
+      , outerCss: {
+          position: 'absolute'
         }
       });
       console.log("[change page] - Loader Created");
     }
+    $('.loading-container').css('display', 'block');
     pageLoader.start();
     console.log("[change page] - Loader Started");
     action(function(renderedView){
       console.log('[change page] - inside done');
       pageLoader.stop();
+      $('.loading-container').css('display', 'none');
       console.log('[change page] - loader off, transitioning');
-      app.functions.transitionPage($(renderedView.el), options);
+      app.functions.transitionPage($(renderedView.el), options, function(){
+        window.scrollTo(0, 0);
+      });
       if (app.functions.lacksPositionStatic()) app.Views.Main.fixStatics();
     });
     return app;

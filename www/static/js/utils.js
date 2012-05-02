@@ -204,6 +204,7 @@
                    .append('<span class="loader-block s2"></span>')
                    .append('<span class="loader-block s3"></span>');
 
+      if (utils.exists(this.options.wrapperCss)) this.$wrapper.css(this.options.wrapperCss);
       if (utils.exists(this.options.overlayCss)) this.$overlay.css(this.options.overlayCss);
       if (utils.exists(this.options.loaderCss)) this.$loading.css(this.options.loaderCss);
       if (utils.exists(this.options.loaderBlockCss)) $('.loader-block', this.$loading).css(this.options.loaderBlockCss);

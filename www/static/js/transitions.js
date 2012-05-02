@@ -14,14 +14,14 @@
     }).append($el);
   };
 
-  transitions.fade = function($el, options){
+  transitions.fade = function($el, options, callback){
     var $container = options.$container || $('#content');
     $container.animate({
       opacity: 0
     }, function(){
       $container.html("").html($el).animate({
         opacity: 1
-      });
+      }, callback);
     });
   };
 
