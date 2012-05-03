@@ -7,6 +7,10 @@ html {
   padding-bottom: 22px;
   background-image: url("/static/images/white-stripe-vertical.png");
 }
+.loading-container {
+  display: none;
+  z-index: 100000;
+}
 .outer-container {
   padding-top: 49px;
 }
@@ -17,6 +21,7 @@ html {
   height: 49px;
   padding: 0 12px;
   width: 100%;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4871a3), color-stop(100%, #273d57));
   background: -webkit-linear-gradient(top, #4871a3 0%, #273d57 100%);
@@ -53,8 +58,8 @@ html {
   left: 50%;
 }
 .header-nav .graphic-wrapper > .accent {
-  margin-left: -215px;
-  width: 430px;
+  margin-left: -160px;
+  width: 320px;
   height: 49px;
 }
 .header-nav .logo {

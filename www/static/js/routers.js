@@ -22,6 +22,7 @@
     this.get ('#!/settings/change-password',    app.routes.changePassword);
     this.get ('#!/settings/change-tapin',       app.routes.changeTapIn);
     this.get ('#!/settings/change-picture',     app.routes.changePicture);
+    this.get ('#!/one-last-thing',              app.routes.oneLastThing);
 
     this.get ('#!/android/:version',            app.routes.androidConfig);
   });

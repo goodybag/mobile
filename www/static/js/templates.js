@@ -14,11 +14,12 @@
   fragments.footerNav   = "footer-fragment";
   templates.genericPage = "generic-page-tmpl";
 
-  templates.landing     = "landing-tmpl";
-  templates.register    = "register-tmpl";
-  templates.emailLogin  = "email-login-tmpl";
-  fragments.loginError  = "login-error-fragment";
-  templates.dashboard   = "dashboard-tmpl";
+  templates.landing       = "landing-tmpl";
+  templates.register      = "register-tmpl";
+  templates.emailLogin    = "email-login-tmpl";
+  fragments.loginError    = "login-error-fragment";
+  templates.dashboard     = "dashboard-tmpl";
+  templates.oneLastThing  = "one-last-thing-tmpl";
 
   // Settings
   templates.settings                = "settings-tmpl";

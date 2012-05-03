@@ -48,6 +48,7 @@
 		12EC9B9214FDF16D003D3BF5 /* Facebook.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EC9B7714FDF16C003D3BF5 /* Facebook.m */; };
 		12EC9B9314FDF16D003D3BF5 /* FBLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EC9B7A14FDF16C003D3BF5 /* FBLoginDialog.m */; };
 		12EC9B9414FDF16D003D3BF5 /* FBDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EC9B7C14FDF16C003D3BF5 /* FBDialog.m */; };
+		221FBE4415505E8300A7543E /* Cordova.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 221FBE4315505E8300A7543E /* Cordova.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,6 +144,7 @@
 		12EC9B8714FDF16C003D3BF5 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		12EC9B8814FDF16C003D3BF5 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		12EC9B8914FDF16C003D3BF5 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		221FBE4315505E8300A7543E /* Cordova.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cordova.framework; path = ../../../../../Users/Shared/Cordova/Frameworks/Cordova.framework; sourceTree = "<group>"; };
 		525BFE731509C8FD00C66A83 /* PhoneGapLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PhoneGapLib.xcodeproj; path = ../../../../../Users/john/PhoneGapLib/PhoneGapLib.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -165,6 +167,7 @@
 				128494E314FC5F8000802566 /* MobileCoreServices.framework in Frameworks */,
 				128494E514FC5F8000802566 /* CoreMedia.framework in Frameworks */,
 				128494F014FC5F8000802566 /* PhoneGap.framework in Frameworks */,
+				221FBE4415505E8300A7543E /* Cordova.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,6 +204,7 @@
 		128494CB14FC5F8000802566 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				221FBE4315505E8300A7543E /* Cordova.framework */,
 				128494CC14FC5F8000802566 /* Foundation.framework */,
 				128494CE14FC5F8000802566 /* UIKit.framework */,
 				128494D014FC5F8000802566 /* CoreGraphics.framework */,
@@ -618,7 +622,10 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = /Users/Shared/PhoneGap/Frameworks;
+				FRAMEWORK_SEARCH_PATHS = (
+					/Users/Shared/PhoneGap/Frameworks,
+					/Users/Shared/Cordova/Frameworks,
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Goodybag/Goodybag-Prefix.pch";
@@ -651,7 +658,10 @@
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = /Users/Shared/PhoneGap/Frameworks;
+				FRAMEWORK_SEARCH_PATHS = (
+					/Users/Shared/PhoneGap/Frameworks,
+					/Users/Shared/Cordova/Frameworks,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Goodybag/Goodybag-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "PHONEGAP_FRAMEWORK=YES";

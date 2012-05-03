@@ -15,6 +15,13 @@
       return false;
     }
 
+    var notAllowed = ['/#!/one-last-thing', '/#!/settings', '/#!/logout'];
+    if (app.user.hasUserCache() && !app.user.get('setScreenName') && notAllowed.indexOf(this.path) == -1){
+      console.log("NO SCREEN NAME");
+      this.redirect('/#!/one-last-thing');
+      return false;
+    }
+
     app.activeRoute.setRoute(this.path);
   };
 
@@ -96,6 +103,7 @@
                 done(streamsView);
                 return;
               }
+              streamsView.renderActivity();
               streamsView.fixImages();
               // No more data
               if (data.length < optionsAdd.limit){
@@ -108,12 +116,13 @@
             });
           }
         };
-        var scrollObserver  = new utils.scrolledToEndObserver($(window), scrollListener);
+        var scrollObserver = new utils.scrolledToEndObserver($(window), scrollListener);
         // Make sure we remove the scroll listener after leaving this page
         $(window).off('hashchange.stream').on('hashchange.stream', function(e){
           scrollObserver.off();
         });
 
+        streamsView.renderActivity();
         done(streamsView);
       });
     });
@@ -169,6 +178,7 @@
                 done(streamsView);
                 return;
               }
+              streamsView.renderActivity();
               streamsView.fixImages();
               // No more data
               if (data.length < optionsAdd.limit){
@@ -187,6 +197,7 @@
           scrollObserver.off();
         });
 
+        streamsView.renderActivity();
         done(streamsView);
       });
     });
@@ -407,6 +418,12 @@
       app.fragments.goody = app.fragments.simpleGoody;
     }
     window.location = '/#!/';
+  };
+
+  routes.oneLastThing = function(){
+    app.functions.changePage(function(done){
+      done(new app.Views.OneLastThing().render());
+    });
   };
 
   // Export
