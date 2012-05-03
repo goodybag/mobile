@@ -51,6 +51,7 @@
       this.callback = callback;
       this.id = utils.guid();
       this.finished = false;
+      this.fireAt = 0.9; // Percentage down the page to fire at
       this.bind();
     };
     constructor.prototype = {
@@ -70,7 +71,7 @@
             top: el.scrollTop
           }
         }
-        if (scroll.viewport + scroll.top >= scroll.height) {
+        if (scroll.viewport + scroll.top >= scroll.height * this.fireAt) {
           if (!this.finished){
             this.callback(e, this, this.$el);
             this.finished = true;
@@ -204,6 +205,7 @@
                    .append('<span class="loader-block s2"></span>')
                    .append('<span class="loader-block s3"></span>');
 
+      if (utils.exists(this.options.wrapperCss)) this.$wrapper.css(this.options.wrapperCss);
       if (utils.exists(this.options.overlayCss)) this.$overlay.css(this.options.overlayCss);
       if (utils.exists(this.options.loaderCss)) this.$loading.css(this.options.loaderCss);
       if (utils.exists(this.options.loaderBlockCss)) $('.loader-block', this.$loading).css(this.options.loaderBlockCss);

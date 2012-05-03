@@ -24,39 +24,60 @@
       app.functions.transitionPage($(action.el), options);
       return app;
     }
+    $('.loading-container').css({
+      width: $(window).width() + "px"
+    , height: window.innerHeight + "px"
+    , top: window.pageYOffset + "px"
+    });
     if (!pageLoader) {
       console.log("[change page] - Creating Loader");
-      pageLoader = new utils.loader($('html'), {
+      pageLoader = new utils.loader($('.loading-container'), {
         overlayCss: {
           'background-color': '#000'
-        },
-        outerCss: {
-          position: 'fixed',
-          width: '100%',
-          height: '100%'
+        , opacity: '0.5'
+        , width: '100%'
+        , height: '100%'
+        }
+      , outerCss: {
+          position: 'absolute'
         }
       });
       console.log("[change page] - Loader Created");
     }
+    $('.loading-container').css('display', 'block');
     pageLoader.start();
     console.log("[change page] - Loader Started");
     action(function(renderedView){
       console.log('[change page] - inside done');
       pageLoader.stop();
+      $('.loading-container').css('display', 'none');
       console.log('[change page] - loader off, transitioning');
-      app.functions.transitionPage($(renderedView.el), options);
+      app.functions.transitionPage($(renderedView.el), options, function(){
+        window.scrollTo(0, 0);
+      });
+      if (app.functions.lacksPositionStatic()) app.Views.Main.fixStatics();
     });
     return app;
   };
 
   // Provides animation and content change for pages
-  functions.transitionPage = function($el, options){
+  functions.transitionPage = function($el, options, callback){
     if (!utils.exists(app.transitions[options.transition])){
-      app.transitions[app.config.changePage.defaultTransition]($el, options);
+      app.transitions[app.config.changePage.defaultTransition]($el, options, callback);
     }else{
-      app.transitions[options.transition]($el, options);
+      app.transitions[options.transition]($el, options, callback);
     }
     return app;
+  };
+
+  functions.lacksPositionStatic = function(){
+    if (app.config.iosLt5) return true;
+    return false;
+  };
+
+  functions.lacksInsetShadow = function(){
+    if (app.config.iosLt5) return true;
+    return false;
   };
 
   // Export

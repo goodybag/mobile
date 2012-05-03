@@ -15,6 +15,12 @@
       changeHash: false
     },
     theme: 'b'
+  , iosLt5: (function(){
+      return (/(iPhone|iPod|iPad)/i.test(navigator.userAgent)) && (/OS [1-4]_._. like Mac OS X/i.test(navigator.userAgent));
+    })()
+  , isIos: (function(){
+      return (/(iPhone|iPod|iPad)/i.test(navigator.userAgent));
+    })()
   };
 
   // Export
