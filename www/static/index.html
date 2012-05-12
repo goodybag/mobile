@@ -142,6 +142,7 @@
   }
 
   head.ready(function(){
+    console.log(headCallbacks);
     for(var i=0, length=headCallbacks.length; i<length; i++){
       headCallbacks[i].call();
     };

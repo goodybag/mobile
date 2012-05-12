@@ -128,6 +128,7 @@
     }
     , facebookLoginHandler: function(){
       var self = this;
+      console.log("[landing] - test");
       FB.login(function(response){
         console.log("response");
         console.log(response);
@@ -324,6 +325,7 @@
     }
     , facebookLoginHandler: function(){
       var self = this;
+      console.log("[register] - test");
       FB.login(function(response){
         if(response.session || response.authResponse){
           var accessToken;
