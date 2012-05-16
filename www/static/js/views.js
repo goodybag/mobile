@@ -131,6 +131,8 @@
       FB.login(function(response){
         console.log("response");
         console.log(response);
+        alert('login response');
+        alert(response);
         if(response.session || response.authResponse){
           var accessToken;
           if(response.session){
@@ -138,6 +140,7 @@
           } else{
             accessToken = response.authResponse.accessToken;
           }
+          alert(accessToken);
           FB.api('/me', function(response) {
             api.auth.facebook(accessToken,function(error,consumer){
               if(utils.exists(error)){

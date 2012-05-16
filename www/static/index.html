@@ -102,9 +102,12 @@
     scripts.push({facebook: "/static/3/facebook_js_sdk.js"});
 
     headCallbacks.push(function(){
+      alert('head callback');
+      alert(PG);
       document.addEventListener('deviceready', function() {
         // alert("device is ready");
         console.log("device is ready");
+        alert('device is ready');
         FB.init({
           appId: "152282721508707",
           nativeInterface: PG.FB
