@@ -198,6 +198,7 @@
   views.FooterNav = utils.View.extend({
     tagName: 'nav',
     className: 'main-nav',
+    id: 'main-nav',
     events: {
       'click a': 'anchorClick'
     },
@@ -226,6 +227,7 @@
 
   views.HeaderNav = utils.View.extend({
     className: 'header-nav'
+    , id: 'header-nav'
     , events: {
       'tap .back': 'backHandler',
       'click .back': 'backHandler'

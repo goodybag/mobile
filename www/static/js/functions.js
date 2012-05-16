@@ -30,7 +30,6 @@
     , top: window.pageYOffset + "px"
     });
     if (!pageLoader) {
-      console.log("[change page] - Creating Loader");
       pageLoader = new utils.loader($('.loading-container'), {
         overlayCss: {
           'background-color': '#000'
@@ -42,18 +41,15 @@
           position: 'absolute'
         }
       });
-      console.log("[change page] - Loader Created");
     }
     $('.loading-container').css('display', 'block');
     pageLoader.start();
-    console.log("[change page] - Loader Started");
     action(function(renderedView){
-      console.log('[change page] - inside done');
       pageLoader.stop();
       $('.loading-container').css('display', 'none');
-      console.log('[change page] - loader off, transitioning');
       app.functions.transitionPage($(renderedView.el), options, function(){
         window.scrollTo(0, 0);
+        app.trigger('page:change:complete');
       });
       if (app.functions.lacksPositionStatic()) app.Views.Main.fixStatics();
     });
@@ -78,6 +74,22 @@
   functions.lacksInsetShadow = function(){
     if (app.config.iosLt5) return true;
     return false;
+  };
+
+  // var paddingTop;
+  functions.hidePositionStaticElements = function(){
+    $('#main-nav').css('display', 'none');
+    $('#header-nav').css('display', 'none');
+    // This padding top business causes the input unfocus :(
+    // Re-implement this when you can figure out, not too important now
+    // paddingTop = $('.outer-container').css('padding-top');
+    // $('.outer-container').css('padding-top', 0);
+  };
+
+  functions.showPositionStaticElements = function(){
+    $('#main-nav').css('display', 'block');
+    $('#header-nav').css('display', 'block');
+    //$('.outer-container').css('padding-top', paddingTop || "49px");
   };
 
   // Export

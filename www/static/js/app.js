@@ -35,6 +35,19 @@
     }
   });
 
+  // Position Static fix for inputs on ios 5
+  if (app.config.isIos && !app.config.iosLt5){
+    alert('ios5');
+    app.on('page:change:complete', function(){
+      //$('input').undbind('.position-static-fix');
+      $('input').on('focus.position-static-fix', function(){
+        app.functions.hidePositionStaticElements();
+      }).on('blur.position-static-fix', function(){
+        app.functions.showPositionStaticElements();
+      });
+    });
+  }
+
   $(document).ready(function(){
     app.compileTemplates(function(){
       app.previousRoutes = new this.app.Models.PreviousRoutes();
@@ -50,6 +63,7 @@
         window.onscroll = function(e){
           app.Views.Main.fixStatics();
         };
+        app.Views.Main.fixStatics();
       }
 
       if (app.functions.lacksInsetShadow()){
