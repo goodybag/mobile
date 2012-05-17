@@ -109,6 +109,7 @@
     }
     , render: function(){
       $(this.el).html(app.templates.landing({}));
+      this.delegateEvents();
       return this;
     }
     , registerView: function(){
@@ -128,37 +129,72 @@
     }
     , facebookLoginHandler: function(){
       var self = this;
-      FB.login(function(response){
-        console.log("response");
-        console.log(response);
-        if(response.session || response.authResponse){
-          var accessToken;
-          if(response.session){
-            accessToken = response.session.access_token
-          } else{
-            accessToken = response.authResponse.accessToken;
-          }
-          FB.api('/me', function(response) {
-            api.auth.facebook(accessToken,function(error,consumer){
-              if(utils.exists(error)){
-                console.log(error);
-                return;
-              }
-              console.log("[facebook] authenticated");
-              app.user.set(consumer);
-              app.Views.Main.authenticatedFrame(function(){
-                self.authenticatedHandler();
-              });
+      var loader = new utils.loader($('.loading-container'), {
+        overlayCss: {
+          'background-color': '#000'
+        , opacity: '0.5'
+        , width: '100%'
+        , height: '100%'
+        }
+      , outerCss: {
+          position: 'absolute'
+        }
+      });
+      loader.start();
+      console.log("Facebook Login");
+
+      if (app.accessToken){
+        FB.api('/me', function(response) {
+          api.auth.facebook(app.accessToken,function(error,consumer){
+            if(utils.exists(error)){
+              console.log(error);
+              loader.stop();
+              return;
+            }
+            console.log("[facebook] authenticated");
+            app.user.set(consumer);
+            app.Views.Main.authenticatedFrame(function(){
+              loader.stop();
+              self.authenticatedHandler();
             });
           });
-        } else{
-          console.log("[facebook] error authenticating");
+        });
+      }else{
+        FB.login(function(response){
+          console.log("response");
+          console.log(response);
+          if(response.session || response.authResponse){
+            if(response.session){
+              app.accessToken = response.session.access_token
+            } else{
+              app.accessToken = response.authResponse.app.accessToken;
+            }
+            FB.api('/me', function(response) {
+              api.auth.facebook(app.accessToken,function(error,consumer){
+                if(utils.exists(error)){
+                  console.log(error);
+                  loader.stop();
+                  return;
+                }
+                console.log("[facebook] authenticated");
+                app.user.set(consumer);
+                app.Views.Main.authenticatedFrame(function(){
+                  loader.stop();
+                  self.authenticatedHandler();
+                });
+              });
+            });
+          } else{
+            console.log("[facebook] error authenticating");
+            loader.stop();
+          }
         }
+        , {
+          perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location",
+          scope: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
+        });
       }
-      , {
-        perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location",
-        scope: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
-      });
+
     }
     , emailLoginHandler: function(){
       console.log("[handler] landing-email-login");
@@ -335,6 +371,18 @@
     }
     , facebookLoginHandler: function(){
       var self = this;
+      var loader = new utils.loader($('.loading-container'), {
+        overlayCss: {
+          'background-color': '#000'
+        , opacity: '0.5'
+        , width: '100%'
+        , height: '100%'
+        }
+      , outerCss: {
+          position: 'absolute'
+        }
+      });
+      loader.start();
       FB.login(function(response){
         if(response.session || response.authResponse){
           var accessToken;
@@ -347,17 +395,20 @@
             api.auth.facebook(accessToken,function(error,consumer){
               if(utils.exists(error)){
                 console.log(error);
+                loader.stop();
                 return;
               }
               console.log("[facebook] authenticated");
               app.user.set(consumer);
               app.Views.Main.authenticatedFrame(function(){
+                loader.stop();
                 self.authenticatedHandler();
               });
             });
           });
         } else{
           console.log("[facebook] error authenticating");
+          loader.stop();
         }
       }
       , {
@@ -373,12 +424,14 @@
   views.Streams = utils.View.extend({
     events: {
       "click #streams-all-button": 'loadGlobalActivity'
-      , "click #streams-my-button": 'loadMyActivity'
+    , "click #streams-my-button": 'loadMyActivity'
     }
     , initialize: function(){
+      console.log("[Streams View] - Initialize");
       this.pageContent = new app.Views.StreamsPage({
         collection: this.collection
       });
+      console.log("[Streams View] - page Content Set");
 
       this.pageHeader = new app.Views.PageNav({
         leftButton: {
@@ -392,19 +445,23 @@
           classes: "",
         }
       });
+      console.log("[Streams View] - Page Header set");
 
       this.subViews = [this.pageHeader, this.pageContent];
 
       //this.collection.on('reset', this.renderActivity, this);
       this.collection.on('add', this.renderSingleActivity, this);
-
+      console.log("[Streams View] - Initialize Complete");
       return this;
     }
     , render: function(){
-      console.log(this.subViews);
+      console.log("[Streams View] - Rendering");
+      console.log(this.subViews.length);
       for (var i = 0; i < this.subViews.length; i++){
+        console.log("[Streams View] - Rendering view " + i);
         $(this.el).append(this.subViews[i].render().el);
       }
+      console.log("[Streams View] - Render complete");
       //Called in route now this.pageContent.renderActivity();
       return this;
     }
@@ -473,7 +530,6 @@
     , renderActivity: function(){
       console.log('[Streams] - renderActivity');
       var models = this.collection.models;
-      console.log(models);
       $('#streams-activities', $(this.el)).html("");
       if (models.length == 0){
         console.log("G's Blood stain")

@@ -43,7 +43,7 @@ PhoneGap = {
     commandQueueFlushing: false,
     _constructors: [],
     documentEventHandler: {},   // Collection of custom document event handlers
-    windowEventHandler: {} 
+    windowEventHandler: {}
 };
 
 /**
@@ -93,25 +93,25 @@ PhoneGap.addConstructor = function(func) {
     }
 };
 
-(function() 
+(function()
  {
     var timer = setInterval(function()
     {
-                            
+
         var state = document.readyState;
-                            
+
         if ( ( state == 'loaded' || state == 'complete' ) && DeviceInfo.uuid != null )
         {
             clearInterval(timer); // stop looking
             // run our constructors list
-            while (PhoneGap._constructors.length > 0) 
+            while (PhoneGap._constructors.length > 0)
             {
                 var constructor = PhoneGap._constructors.shift();
-                try 
+                try
                 {
                     constructor();
-                } 
-                catch(e) 
+                }
+                catch(e)
                 {
                     if (typeof(console['log']) == 'function')
                     {
@@ -124,7 +124,7 @@ PhoneGap.addConstructor = function(func) {
                 }
             }
             // all constructors run, now fire the deviceready event
-            var e = document.createEvent('Events'); 
+            var e = document.createEvent('Events');
             e.initEvent('deviceready');
             document.dispatchEvent(e);
         }
@@ -166,7 +166,7 @@ PhoneGap.createGapBridge = function() {
     return gapBridge;
 }
 
-/** 
+/**
  * Execute a PhoneGap command by queuing it and letting the native side know
  * there are queued commands. The native side will then request all of the
  * queued commands and execute them.
@@ -182,16 +182,16 @@ PhoneGap.createGapBridge = function() {
  * @param {String} service      The name of the service to use
  * @param {String} action       The name of the action to use
  * @param {String[]} [args]     Zero or more arguments to pass to the method
- *      
+ *
  * FORMAT TWO
  * @param {String} command    Command to be run in PhoneGap, e.g.
  *                            "ClassName.method"
  * @param {String[]} [args]   Zero or more arguments to pass to the method
  *                            object parameters are passed as an array object
  *                            [object1, object2] each object will be passed as
- *                            JSON strings 
+ *                            JSON strings
  */
-PhoneGap.exec = function() { 
+PhoneGap.exec = function() {
     if (!PhoneGap.available) {
         alert("ERROR: Attempting to call PhoneGap.exec()"
               +" before 'deviceready'. Ignoring.");
@@ -220,7 +220,7 @@ PhoneGap.exec = function() {
         service = splitCommand.join(".");
         actionArgs = Array.prototype.splice.call(arguments, 1);
     }
-    
+
     // Start building the command object.
     var command = {
         className: service,
@@ -232,7 +232,7 @@ PhoneGap.exec = function() {
     // arguments if given.
     if (successCallback || failCallback) {
         callbackId = service + PhoneGap.callbackId++;
-        PhoneGap.callbacks[callbackId] = 
+        PhoneGap.callbacks[callbackId] =
             {success:successCallback, fail:failCallback};
     }
     if (callbackId != null) {
@@ -300,7 +300,7 @@ PhoneGap.callbackSuccess = function(callbackId, args) {
                 console.log("Error in success callback: "+callbackId+" = "+e);
             }
         }
-    
+
         // Clear callback if not expecting any more results
         if (!args.keepCallback) {
             delete PhoneGap.callbacks[callbackId];
@@ -324,7 +324,7 @@ PhoneGap.callbackError = function(callbackId, args) {
         catch (e) {
             console.log("Error in error callback: "+callbackId+" = "+e);
         }
-        
+
         // Clear callback if not expecting any more results
         if (!args.keepCallback) {
             delete PhoneGap.callbacks[callbackId];
@@ -340,7 +340,7 @@ PhoneGap.callbackError = function(callbackId, args) {
  * @return
  */
 PhoneGap.clone = function(obj) {
-    if(!obj) { 
+    if(!obj) {
         return obj;
     }
 
@@ -359,7 +359,7 @@ PhoneGap.clone = function(obj) {
     if(!(obj instanceof Object)){
         return obj;
     }
-    
+
     if (obj instanceof Date) {
         return obj;
     }
@@ -373,7 +373,7 @@ PhoneGap.clone = function(obj) {
     return retVal;
 };
 
-// Intercept calls to document.addEventListener 
+// Intercept calls to document.addEventListener
 PhoneGap.m_document_addEventListener = document.addEventListener;
 
 // Intercept calls to window.addEventListener
@@ -408,15 +408,15 @@ PhoneGap.addDocumentEventHandler = function(event, callback) {
  */
 document.addEventListener = function(evt, handler, capture) {
     var e = evt.toLowerCase();
-           
+
     // If subscribing to an event that is handled by a plugin
     if (typeof PhoneGap.documentEventHandler[e] !== "undefined") {
         if (PhoneGap.documentEventHandler[e](e, handler, true)) {
             return; // Stop default behavior
         }
     }
-    
-    PhoneGap.m_document_addEventListener.call(document, evt, handler, capture); 
+
+    PhoneGap.m_document_addEventListener.call(document, evt, handler, capture);
 };
 
 /**
@@ -428,14 +428,14 @@ document.addEventListener = function(evt, handler, capture) {
  */
 window.addEventListener = function(evt, handler, capture) {
     var e = evt.toLowerCase();
-        
+
     // If subscribing to an event that is handled by a plugin
     if (typeof PhoneGap.windowEventHandler[e] !== "undefined") {
         if (PhoneGap.windowEventHandler[e](e, handler, true)) {
             return; // Stop default behavior
         }
     }
-        
+
     PhoneGap.m_window_addEventListener.call(window, evt, handler, capture);
 };
 
@@ -536,7 +536,7 @@ PhoneGap.fireEvent = function(type, target, data) {
     target = target || document;
     if (target.dispatchEvent === undefined) { // ie window.dispatchEvent is undefined in iOS 3.x
         target = document;
-    } 
+    }
 
     target.dispatchEvent(e);
 };
@@ -569,7 +569,7 @@ PhoneGap.UUIDcreatePart = function(length) {
 
 if (!PhoneGap.hasResource("debugconsole")) {
 	PhoneGap.addResource("debugconsole");
-	
+
 /**
  * This class provides access to the debugging console.
  * @constructor
@@ -585,7 +585,7 @@ DebugConsole.INFO_LEVEL   = 1;
 DebugConsole.WARN_LEVEL   = 2;
 DebugConsole.ERROR_LEVEL  = 4;
 DebugConsole.NONE_LEVEL   = 8;
-													
+
 DebugConsole.prototype.setLevel = function(level) {
     this.logLevel = level;
 };
@@ -627,7 +627,7 @@ DebugConsole.prototype.processMessage = function(message, maxDepth) {
             }
             return str;
         }
-        
+
         return ("Object:\n" + makeStructured(message, maxDepth));
     }
 };
@@ -736,7 +736,7 @@ Coordinates = function(lat, lng, alt, acc, head, vel, altAcc) {
 	/**
 	 * The altitude accuracy of the position.
 	 */
-	this.altitudeAccuracy = (altAcc != 'undefined') ? altAcc : null; 
+	this.altitudeAccuracy = (altAcc != 'undefined') ? altAcc : null;
 };
 
 Coordinates.prototype.clone = function()
@@ -780,11 +780,11 @@ PositionOptions = function(enableHighAccuracy, timeout, maximumAge) {
 	 */
 	this.timeout = timeout || 10000;
 	/**
-     * The age of a cached position whose age is no greater than the specified time 
-     * in milliseconds. 
+     * The age of a cached position whose age is no greater than the specified time
+     * in milliseconds.
      */
 	this.maximumAge = maximumAge || 0;
-	
+
 	if (this.maximumAge < 0) {
 		this.maximumAge = 0;
 	}
@@ -806,7 +806,7 @@ PositionError.TIMEOUT = 3;
 
 };if (!PhoneGap.hasResource("acceleration")) {
 	PhoneGap.addResource("acceleration");
- 	
+
 
 /**
  * This class contains acceleration information
@@ -852,7 +852,7 @@ AccelerationOptions = function() {
  * This class provides access to device accelerometer data.
  * @constructor
  */
-Accelerometer = function() 
+Accelerometer = function()
 {
 	/**
 	 * The last known acceleration.
@@ -864,7 +864,7 @@ Accelerometer = function()
  * Asynchronously aquires the current acceleration.
  * @param {Function} successCallback The function to call when the acceleration
  * data is available
- * @param {Function} errorCallback The function to call when there is an error 
+ * @param {Function} errorCallback The function to call when there is an error
  * getting the acceleration data.
  * @param {AccelerationOptions} options The options for getting the accelerometer data
  * such as timeout.
@@ -872,7 +872,7 @@ Accelerometer = function()
 Accelerometer.prototype.getCurrentAcceleration = function(successCallback, errorCallback, options) {
 	// If the acceleration is available then call success
 	// If the acceleration is not available then call error
-	
+
 	// Created for iPhone, Iphone passes back _accel obj litteral
 	if (typeof successCallback == "function") {
 		successCallback(this.lastAcceleration);
@@ -889,7 +889,7 @@ Accelerometer.prototype._onAccelUpdate = function(x,y,z)
  * Asynchronously aquires the acceleration repeatedly at a given interval.
  * @param {Function} successCallback The function to call each time the acceleration
  * data is available
- * @param {Function} errorCallback The function to call when there is an error 
+ * @param {Function} errorCallback The function to call when there is an error
  * getting the acceleration data.
  * @param {AccelerationOptions} options The options for getting the accelerometer data
  * such as timeout.
@@ -900,7 +900,7 @@ Accelerometer.prototype.watchAcceleration = function(successCallback, errorCallb
 	// TODO: add the interval id to a list so we can clear all watches
  	var frequency = (options != undefined && options.frequency != undefined) ? options.frequency : 10000;
 	var updatedOptions = {
-		desiredFrequency:frequency 
+		desiredFrequency:frequency
 	}
 	PhoneGap.exec(null, null, "com.phonegap.accelerometer", "start", [options]);
 
@@ -930,43 +930,43 @@ Accelerometer.installDeviceMotionHandler = function()
 	if (!(window.DeviceMotionEvent == undefined)) {
 		// supported natively, so we don't have to add support
 		return;
-	}	
-	
+	}
+
 	var self = this;
 	var devicemotionEvent = 'devicemotion';
 	self.deviceMotionWatchId = null;
 	self.deviceMotionListenerCount = 0;
 	self.deviceMotionLastEventTimestamp = 0;
-	
+
 	// backup original `window.addEventListener`, `window.removeEventListener`
     var _addEventListener = window.addEventListener;
     var _removeEventListener = window.removeEventListener;
-													
+
 	var windowDispatchAvailable = !(window.dispatchEvent === undefined); // undefined in iOS 3.x
-													
+
 	var accelWin = function(acceleration) {
 		var evt = document.createEvent('Events');
 	    evt.initEvent(devicemotionEvent);
-	
+
 		evt.acceleration = null; // not all devices have gyroscope, don't care for now if we actually have it.
 		evt.rotationRate = null; // not all devices have gyroscope, don't care for now if we actually have it:
 		evt.accelerationIncludingGravity = acceleration; // accelerometer, all iOS devices have it
-		
+
 		var currentTime = new Date().getTime();
 		evt.interval =  (self.deviceMotionLastEventTimestamp == 0) ? 0 : (currentTime - self.deviceMotionLastEventTimestamp);
 		self.deviceMotionLastEventTimestamp = currentTime;
-		
+
 		if (windowDispatchAvailable) {
 			window.dispatchEvent(evt);
 		} else {
 			document.dispatchEvent(evt);
 		}
 	};
-	
+
 	var accelFail = function() {
-		
+
 	};
-													
+
     // override `window.addEventListener`
     window.addEventListener = function() {
         if (arguments[0] === devicemotionEvent) {
@@ -974,14 +974,14 @@ Accelerometer.installDeviceMotionHandler = function()
 			if (self.deviceMotionListenerCount == 1) { // start
 				self.deviceMotionWatchId = navigator.accelerometer.watchAcceleration(accelWin, accelFail, { frequency:500});
 			}
-		} 
-													
+		}
+
 		if (!windowDispatchAvailable) {
 			return document.addEventListener.apply(this, arguments);
 		} else {
 			return _addEventListener.apply(this, arguments);
 		}
-    };	
+    };
 
     // override `window.removeEventListener'
     window.removeEventListener = function() {
@@ -990,14 +990,14 @@ Accelerometer.installDeviceMotionHandler = function()
 			if (self.deviceMotionListenerCount == 0) { // stop
 				navigator.accelerometer.clearWatch(self.deviceMotionWatchId);
 			}
-		} 
-		
+		}
+
 		if (!windowDispatchAvailable) {
 			return document.removeEventListener.apply(this, arguments);
 		} else {
 			return _removeEventListener.apply(this, arguments);
 		}
-    };	
+    };
 };
 
 
@@ -1022,7 +1022,7 @@ var Battery = function() {
 
 /**
  * Registers as an event producer for battery events.
- * 
+ *
  * @param {Object} eventType
  * @param {Object} handler
  * @param {Object} add
@@ -1034,7 +1034,7 @@ Battery.prototype.eventHandler = function(eventType, handler, add) {
         if (me._batteryListener.length === 0 && me._lowListener.length === 0 && me._criticalListener.length === 0) {
             PhoneGap.exec(me._status, me._error, "com.phonegap.battery", "start", []);
         }
-        
+
         // Register the event listener in the proper array
         if (eventType === "batterystatus") {
             var pos = me._batteryListener.indexOf(handler);
@@ -1057,20 +1057,20 @@ Battery.prototype.eventHandler = function(eventType, handler, add) {
         if (eventType === "batterystatus") {
             var pos = me._batteryListener.indexOf(handler);
             if (pos > -1) {
-                me._batteryListener.splice(pos, 1);        
+                me._batteryListener.splice(pos, 1);
             }
         } else if (eventType === "batterylow") {
             var pos = me._lowListener.indexOf(handler);
             if (pos > -1) {
-                me._lowListener.splice(pos, 1);        
+                me._lowListener.splice(pos, 1);
             }
         } else if (eventType === "batterycritical") {
             var pos = me._criticalListener.indexOf(handler);
             if (pos > -1) {
-                me._criticalListener.splice(pos, 1);        
+                me._criticalListener.splice(pos, 1);
             }
         }
-        
+
         // If there are no more registered event listeners stop the battery listener on native side.
         if (me._batteryListener.length === 0 && me._lowListener.length === 0 && me._criticalListener.length === 0) {
             PhoneGap.exec(null, null, "com.phonegap.battery", "stop", []);
@@ -1080,7 +1080,7 @@ Battery.prototype.eventHandler = function(eventType, handler, add) {
 
 /**
  * Callback for battery status
- * 
+ *
  * @param {Object} info			keys: level, isPlugged
  */
 Battery.prototype._status = function(info) {
@@ -1090,7 +1090,7 @@ Battery.prototype._status = function(info) {
 			// Fire batterystatus event
 			//PhoneGap.fireWindowEvent("batterystatus", info);
 			// use this workaround since iOS 3.x does have window.dispatchEvent
-			PhoneGap.fireEvent("batterystatus", window, info);	
+			PhoneGap.fireEvent("batterystatus", window, info);
 
 			// Fire low battery event
 			if (info.level == 20 || info.level == 5) {
@@ -1107,7 +1107,7 @@ Battery.prototype._status = function(info) {
 			}
 		}
 		me._level = info.level;
-		me._isPlugged = info.isPlugged;	
+		me._isPlugged = info.isPlugged;
 	}
 };
 
@@ -1128,14 +1128,14 @@ PhoneGap.addConstructor(function() {
 });
 }if (!PhoneGap.hasResource("camera")) {
 	PhoneGap.addResource("camera");
-	
+
 
 /**
  * This class provides access to the device camera.
  * @constructor
  */
 Camera = function() {
-	
+
 }
 /**
  *  Available Camera Options
@@ -1159,7 +1159,7 @@ Camera = function() {
  */
 Camera.DestinationType = {
     DATA_URL: 0,                // Return base64 encoded string
-    FILE_URI: 1                 // Return file uri 
+    FILE_URI: 1                 // Return file uri
 };
 Camera.prototype.DestinationType = Camera.DestinationType;
 
@@ -1172,38 +1172,38 @@ Camera.prototype.DestinationType = Camera.DestinationType;
  *                sourceType: Camera.PictureSourceType.PHOTOLIBRARY})
  */
 Camera.PictureSourceType = {
-    PHOTOLIBRARY : 0,           // Choose image from picture library 
+    PHOTOLIBRARY : 0,           // Choose image from picture library
     CAMERA : 1,                 // Take picture from camera
-    SAVEDPHOTOALBUM : 2         // Choose image from picture library 
+    SAVEDPHOTOALBUM : 2         // Choose image from picture library
 };
 Camera.prototype.PictureSourceType = Camera.PictureSourceType;
 
-/** 
- * Encoding of image returned from getPicture. 
- * 
- * Example: navigator.camera.getPicture(success, fail, 
- *              { quality: 80, 
- *                destinationType: Camera.DestinationType.DATA_URL, 
- *                sourceType: Camera.PictureSourceType.CAMERA, 
- *                encodingType: Camera.EncodingType.PNG}) 
- */ 
-Camera.EncodingType = { 
-	JPEG: 0,                    // Return JPEG encoded image 
-	PNG: 1                      // Return PNG encoded image 
+/**
+ * Encoding of image returned from getPicture.
+ *
+ * Example: navigator.camera.getPicture(success, fail,
+ *              { quality: 80,
+ *                destinationType: Camera.DestinationType.DATA_URL,
+ *                sourceType: Camera.PictureSourceType.CAMERA,
+ *                encodingType: Camera.EncodingType.PNG})
+ */
+Camera.EncodingType = {
+	JPEG: 0,                    // Return JPEG encoded image
+	PNG: 1                      // Return PNG encoded image
 };
 Camera.prototype.EncodingType = Camera.EncodingType;
 
-/** 
+/**
  * Type of pictures to select from.  Only applicable when
- *	PictureSourceType is PHOTOLIBRARY or SAVEDPHOTOALBUM 
- * 
- * Example: navigator.camera.getPicture(success, fail, 
- *              { quality: 80, 
- *                destinationType: Camera.DestinationType.DATA_URL, 
- *                sourceType: Camera.PictureSourceType.PHOTOLIBRARY, 
- *                mediaType: Camera.MediaType.PICTURE}) 
- */ 
-Camera.MediaType = { 
+ *	PictureSourceType is PHOTOLIBRARY or SAVEDPHOTOALBUM
+ *
+ * Example: navigator.camera.getPicture(success, fail,
+ *              { quality: 80,
+ *                destinationType: Camera.DestinationType.DATA_URL,
+ *                sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+ *                mediaType: Camera.MediaType.PICTURE})
+ */
+Camera.MediaType = {
 	PICTURE: 0,             // allow selection of still pictures only. DEFAULT. Will return format specified via DestinationType
 	VIDEO: 1,                // allow selection of video only, ONLY RETURNS URL
 	ALLMEDIA : 2			// allow selection from all media types
@@ -1232,7 +1232,7 @@ Camera.prototype.getPicture = function(successCallback, errorCallback, options) 
         console.log("Camera Error: errorCallback is not a function");
         return;
     }
-	
+
 	PhoneGap.exec(successCallback, errorCallback, "com.phonegap.camera","getPicture",[options]);
 };
 
@@ -1251,25 +1251,25 @@ if (!PhoneGap.hasResource("device")) {
  * phone, etc.
  * @constructor
  */
-Device = function() 
+Device = function()
 {
     this.platform = null;
     this.version  = null;
     this.name     = null;
     this.phonegap      = null;
     this.uuid     = null;
-    try 
-	{      
+    try
+	{
 		this.platform = DeviceInfo.platform;
 		this.version  = DeviceInfo.version;
 		this.name     = DeviceInfo.name;
 		this.phonegap = DeviceInfo.gap;
 		this.uuid     = DeviceInfo.uuid;
 
-    } 
-	catch(e) 
+    }
+	catch(e)
 	{
-        // TODO: 
+        // TODO:
     }
 	this.available = PhoneGap.available = this.uuid != null;
 }
@@ -1307,7 +1307,7 @@ function Capture() {
 
 /**
  * Launch audio recorder application for recording audio clip(s).
- * 
+ *
  * @param {Function} successCB
  * @param {Function} errorCB
  * @param {CaptureAudioOptions} options
@@ -1325,7 +1325,7 @@ Capture.prototype.captureAudio = function(successCallback, errorCallback, option
 
 /**
  * Launch camera application for taking image(s).
- * 
+ *
  * @param {Function} successCB
  * @param {Function} errorCB
  * @param {CaptureImageOptions} options
@@ -1358,7 +1358,7 @@ Capture.prototype._castMediaFile = function(pluginResult) {
 
 /**
  * Launch device camera application for recording video(s).
- * 
+ *
  * @param {Function} successCB
  * @param {Function} errorCB
  * @param {CaptureVideoOptions} options
@@ -1371,12 +1371,12 @@ Capture.prototype.captureVideo = function(successCallback, errorCallback, option
  * Encapsulates a set of parameters that the capture device supports.
  */
 function ConfigurationData() {
-    // The ASCII-encoded string in lower case representing the media type. 
-    this.type; 
-    // The height attribute represents height of the image or video in pixels. 
-    // In the case of a sound clip this attribute has value 0. 
+    // The ASCII-encoded string in lower case representing the media type.
+    this.type;
+    // The height attribute represents height of the image or video in pixels.
+    // In the case of a sound clip this attribute has value 0.
     this.height = 0;
-    // The width attribute represents width of the image or video in pixels. 
+    // The width attribute represents width of the image or video in pixels.
     // In the case of a sound clip this attribute has value 0
     this.width = 0;
 };
@@ -1386,9 +1386,9 @@ function ConfigurationData() {
  */
 var CaptureImageOptions = function() {
     // Upper limit of images user can take. Value must be equal or greater than 1.
-    this.limit = 1; 
+    this.limit = 1;
     // The selected image mode. Must match with one of the elements in supportedImageModes array.
-    this.mode = null; 
+    this.mode = null;
 };
 
 /**
@@ -1417,7 +1417,7 @@ var CaptureAudioOptions = function() {
 
 /**
  * Represents a single file.
- * 
+ *
  * name {DOMString} name of the file, without path information
  * fullPath {DOMString} the full path of the file, including the name
  * type {DOMString} mime type
@@ -1434,7 +1434,7 @@ function MediaFile(name, fullPath, type, lastModifiedDate, size) {
 
 /**
  * Request capture format data for a specific file and type
- * 
+ *
  * @param {Function} successCB
  * @param {Function} errorCB
  */
@@ -1445,12 +1445,12 @@ MediaFile.prototype.getFormatData = function(successCallback, errorCallback) {
 			});
 	} else {
     	PhoneGap.exec(successCallback, errorCallback, "com.phonegap.mediacapture", "getFormatData", [this.fullPath, this.type]);
-	}	
+	}
 };
 
 /**
  * MediaFileData encapsulates format information of a media file.
- * 
+ *
  * @param {DOMString} codecs
  * @param {long} bitrate
  * @param {long} height
@@ -1509,7 +1509,7 @@ var Contact = function(id, displayName, name, nickname, phoneNumbers, emails, ad
     this.birthday = birthday || null; // JS Date
     this.note = note || null;
     this.photos = photos || null; // ContactField[]
-    this.categories = categories || null; 
+    this.categories = categories || null;
     this.urls = urls || null; // ContactField[]
 };
 
@@ -1535,7 +1535,7 @@ Contact.prototype.convertDatesOut = function()
 			this[dates[i]] = value;
 		}
 	}
-	
+
 };
 /**
 * Converts milliseconds to JS Date when returning from iOS
@@ -1580,7 +1580,7 @@ Contact.prototype.remove = function(successCB, errorCB) {
 *		"true" to allow editing the contact
 *		"false" (default) display contact
 */
-Contact.prototype.display = function(errorCB, options) { 
+Contact.prototype.display = function(errorCB, options) {
 	if (this.id == null) {
         if (typeof errorCB == "function") {
         	var errorObj = new ContactError();
@@ -1648,7 +1648,7 @@ Contact.prototype.clone = function() {
 Contact.prototype.save = function(successCB, errorCB) {
 	// don't modify the original contact
 	var cloned = PhoneGap.clone(this);
-	cloned.convertDatesOut(); 
+	cloned.convertDatesOut();
 	PhoneGap.exec(successCB, errorCB, "com.phonegap.contacts","save", [{"contact": cloned}]);
 };
 
@@ -1772,7 +1772,7 @@ Contacts.prototype._findCallback = function(pluginResult) {
 	var contacts = new Array();
 	try {
 		for (var i=0; i<pluginResult.message.length; i++) {
-			var newContact = navigator.contacts.create(pluginResult.message[i]); 
+			var newContact = navigator.contacts.create(pluginResult.message[i]);
 			newContact.convertDatesIn();
 			contacts.push(newContact);
 		}
@@ -1802,9 +1802,9 @@ Contacts.prototype._contactCallback = function(pluginResult)
 	}
 	pluginResult.message = newContact;
 	return pluginResult;
-	
+
 };
-/** 
+/**
 * Need to return an error object rather than just a single error code
 * @param error code
 * Call optional error callback if found.
@@ -1818,7 +1818,7 @@ Contacts.prototype._errCallback = function(pluginResult)
 	return pluginResult;
 };
 // iPhone only api to create a new contact via the GUI
-Contacts.prototype.newContactUI = function(successCallback) { 
+Contacts.prototype.newContactUI = function(successCallback) {
     PhoneGap.exec(successCallback, null, "com.phonegap.contacts","newContact", []);
 };
 // iPhone only api to select a contact via the GUI
@@ -1877,7 +1877,7 @@ ContactError.PERMISSION_DENIED_ERROR = 20;
 /**
  * Add the contact interface into the browser.
  */
-PhoneGap.addConstructor(function() { 
+PhoneGap.addConstructor(function() {
     if(typeof navigator.contacts == "undefined") {
     	navigator.contacts = new Contacts();
     }
@@ -1893,7 +1893,7 @@ if (!PhoneGap.hasResource("file")) {
 
 /**
  * This class provides some useful information about a file.
- * This is the fields returned when navigator.fileMgr.getFileProperties() 
+ * This is the fields returned when navigator.fileMgr.getFileProperties()
  * is called.
  */
 FileProperties = function(filePath) {
@@ -1903,7 +1903,7 @@ FileProperties = function(filePath) {
 }
 /**
  * Represents a single file.
- * 
+ *
  * name {DOMString} name of the file, without path information
  * fullPath {DOMString} the full path of the file, including the name
  * type {DOMString} mime type
@@ -2041,7 +2041,7 @@ FileReader.prototype.abort = function() {
     var error = new FileError();
     error.code = error.ABORT_ERR;
     this.error = error;
-   
+
     // If error callback
     if (typeof this.onerror === "function") {
         evt = File._createEvent("error", this);
@@ -2157,7 +2157,7 @@ FileReader.prototype.readAsText = function(file, encoding) {
  */
 FileReader.prototype.readAsDataURL = function(file) {
     this.fileName = "";
-    
+
     if (typeof file.fullPath === "undefined") {
         this.fileName = file;
     } else {
@@ -2271,10 +2271,10 @@ FileWriter = function(file) {
 	    this.fileName = file.fullPath || file;
 	    this.length = file.size || 0;
 	}
-	
+
 	// default is to write at the beginning of the file
     this.position = 0;
-    
+
     this.readyState = 0; // EMPTY
 
     this.result = null;
@@ -2303,13 +2303,13 @@ FileWriter.prototype.abort = function() {
     // check for invalid state
 	if (this.readyState === FileWriter.DONE || this.readyState === FileWriter.INIT) {
 		throw FileError.INVALID_STATE_ERR;
-	} 
+	}
 
     // set error
     var error = new FileError(), evt;
     error.code = error.ABORT_ERR;
     this.error = error;
-    
+
     // If error callback
     if (typeof this.onerror === "function") {
         evt = File._createEvent("error", this);
@@ -2320,7 +2320,7 @@ FileWriter.prototype.abort = function() {
         evt = File._createEvent("abort", this);
         this.onabort(evt);
     }
-    
+
     this.readyState = FileWriter.DONE;
 
     // If write end callback
@@ -2332,7 +2332,7 @@ FileWriter.prototype.abort = function() {
 
 /**
  * @Deprecated: use write instead
- * 
+ *
  * @param file to write the data to
  * @param text to be written
  * @param bAppend if true write to end of file, otherwise overwrite the file
@@ -2359,9 +2359,9 @@ FileWriter.prototype.writeAsText = function(file, text, bAppend) {
         var evt = File._createEvent("writestart", me);
         me.onwritestart(evt);
     }
-	
-	
-    // Write file 
+
+
+    // Write file
 	navigator.fileMgr.writeAsText(file, text, bAppend,
         // Success callback
         function(r) {
@@ -2423,7 +2423,7 @@ FileWriter.prototype.writeAsText = function(file, text, bAppend) {
 
 /**
  * Writes data to the file
- *  
+ *
  * @param text to be written
  */
 FileWriter.prototype.write = function(text) {
@@ -2454,12 +2454,12 @@ FileWriter.prototype.write = function(text) {
                 return;
             }
 
-            
+
             // position always increases by bytes written because file would be extended
             me.position += r;
 			// The length of the file is now where we are done writing.
 			me.length = me.position;
-            
+
             // If onwrite callback
             if (typeof me.onwrite === "function") {
                 evt = File._createEvent("write", me);
@@ -2507,13 +2507,13 @@ FileWriter.prototype.write = function(text) {
 
 };
 
-/** 
+/**
  * Moves the file pointer to the location specified.
- * 
- * If the offset is a negative number the position of the file 
- * pointer is rewound.  If the offset is greater than the file 
- * size the position is set to the end of the file.  
- * 
+ *
+ * If the offset is a negative number the position of the file
+ * pointer is rewound.  If the offset is greater than the file
+ * size the position is set to the end of the file.
+ *
  * @param offset is the location to move the file pointer to.
  */
 FileWriter.prototype.seek = function(offset) {
@@ -2525,12 +2525,12 @@ FileWriter.prototype.seek = function(offset) {
     if (!offset) {
         return;
     }
-    
+
     // See back from end of file.
     if (offset < 0) {
 		this.position = Math.max(offset + this.length, 0);
 	}
-    // Offset is bigger then file size so set position 
+    // Offset is bigger then file size so set position
     // to the end of the file.
 	else if (offset > this.length) {
 		this.position = this.length;
@@ -2539,12 +2539,12 @@ FileWriter.prototype.seek = function(offset) {
     // to start writing.
 	else {
 		this.position = offset;
-	}	
+	}
 };
 
-/** 
+/**
  * Truncates the file to the size specified.
- * 
+ *
  * @param size to chop the file at.
  */
 FileWriter.prototype.truncate = function(size) {
@@ -2552,7 +2552,7 @@ FileWriter.prototype.truncate = function(size) {
 	if (this.readyState === FileWriter.WRITING) {
 		throw FileError.INVALID_STATE_ERR;
 	}
-	// what if no size specified? 
+	// what if no size specified?
 
     // WRITING state
     this.readyState = FileWriter.WRITING;
@@ -2636,7 +2636,7 @@ LocalFileSystem.APPLICATION = 3;
 
 /**
  * Requests a filesystem in which to store application data.
- * 
+ *
  * @param {int} type of file system being requested
  * @param {Function} successCallback is called with the new FileSystem
  * @param {Function} errorCallback is called with a FileError
@@ -2655,7 +2655,7 @@ LocalFileSystem.prototype.requestFileSystem = function(type, size, successCallba
 };
 
 /**
- * 
+ *
  * @param {DOMString} uri referring to a local file in a filesystem
  * @param {Function} successCallback is called with the new entry
  * @param {Function} errorCallback is called with a FileError
@@ -2665,11 +2665,11 @@ LocalFileSystem.prototype.resolveLocalFileSystemURI = function(uri, successCallb
 };
 
 /**
-* This function  is required as we need to convert raw 
-* JSON objects into concrete File and Directory objects.  
-* 
+* This function  is required as we need to convert raw
+* JSON objects into concrete File and Directory objects.
+*
 * @param a JSON Objects that need to be converted to DirectoryEntry or FileEntry objects.
-* @returns an entry 
+* @returns an entry
 */
 LocalFileSystem.prototype._castFS = function(pluginResult) {
     var entry = null;
@@ -2679,7 +2679,7 @@ LocalFileSystem.prototype._castFS = function(pluginResult) {
     entry.name = pluginResult.message.root.name;
     entry.fullPath = pluginResult.message.root.fullPath;
     pluginResult.message.root = entry;
-    return pluginResult;    
+    return pluginResult;
 }
 
 LocalFileSystem.prototype._castEntry = function(pluginResult) {
@@ -2695,17 +2695,17 @@ LocalFileSystem.prototype._castEntry = function(pluginResult) {
     entry.name = pluginResult.message.name;
     entry.fullPath = pluginResult.message.fullPath;
     pluginResult.message = entry;
-    return pluginResult;    
+    return pluginResult;
 }
 
 LocalFileSystem.prototype._castEntries = function(pluginResult) {
     var entries = pluginResult.message;
-	var retVal = []; 
+	var retVal = [];
 	for (i=0; i<entries.length; i++) {
 		retVal.push(window.localFileSystem._createEntry(entries[i]));
 	}
     pluginResult.message = retVal;
-    return pluginResult;    
+    return pluginResult;
 }
 
 LocalFileSystem.prototype._createEntry = function(castMe) {
@@ -2720,14 +2720,14 @@ LocalFileSystem.prototype._createEntry = function(castMe) {
     entry.isFile = castMe.isFile;
     entry.name = castMe.name;
     entry.fullPath = castMe.fullPath;
-    return entry;    
+    return entry;
 
 }
 
 LocalFileSystem.prototype._castDate = function(pluginResult) {
 	if (pluginResult.message.modificationTime) {
 		var metadataObj = new Metadata();
-		
+
 	    metadataObj.modificationTime = new Date(pluginResult.message.modificationTime);
 	    pluginResult.message = metadataObj;
 	}
@@ -2738,10 +2738,10 @@ LocalFileSystem.prototype._castDate = function(pluginResult) {
         file.name = pluginResult.message.name;
         file.fullPath = pluginResult.message.fullPath;
 		file.lastModifiedDate = new Date(pluginResult.message.lastModifiedDate);
-	    pluginResult.message = file;		
+	    pluginResult.message = file;
 	}
 
-    return pluginResult;	
+    return pluginResult;
 }
 LocalFileSystem.prototype._castError = function(pluginResult) {
 	var fileError = new FileError();
@@ -2752,7 +2752,7 @@ LocalFileSystem.prototype._castError = function(pluginResult) {
 
 /**
  * Information about the state of the file or directory
- * 
+ *
  * {Date} modificationTime (readonly)
  */
 Metadata = function() {
@@ -2761,8 +2761,8 @@ Metadata = function() {
 
 /**
  * Supplies arguments to methods that lookup or create files and directories
- * 
- * @param {boolean} create file or directory if it doesn't exist 
+ *
+ * @param {boolean} create file or directory if it doesn't exist
  * @param {boolean} exclusive if true the command will fail if the file or directory exists
  */
 Flags = function(create, exclusive) {
@@ -2772,7 +2772,7 @@ Flags = function(create, exclusive) {
 
 /**
  * An interface representing a file system
- * 
+ *
  * {DOMString} name the unique name of the file system (readonly)
  * {DirectoryEntry} root directory of the file system (readonly)
  */
@@ -2783,7 +2783,7 @@ FileSystem = function() {
 
 /**
  * An interface representing a directory on the file system.
- * 
+ *
  * {boolean} isFile always false (readonly)
  * {boolean} isDirectory always true (readonly)
  * {DOMString} name of the directory, excluding the path leading to it (readonly)
@@ -2800,7 +2800,7 @@ DirectoryEntry = function() {
 
 /**
  * Copies a directory to a new location
- * 
+ *
  * @param {DirectoryEntry} parent the directory to which to copy the entry
  * @param {DOMString} newName the new name of the entry, defaults to the current name
  * @param {Function} successCallback is called with the new entry
@@ -2812,7 +2812,7 @@ DirectoryEntry.prototype.copyTo = function(parent, newName, successCallback, err
 
 /**
  * Looks up the metadata of the entry
- * 
+ *
  * @param {Function} successCallback is called with a Metadata object
  * @param {Function} errorCallback is called with a FileError
  */
@@ -2822,7 +2822,7 @@ DirectoryEntry.prototype.getMetadata = function(successCallback, errorCallback) 
 
 /**
  * Gets the parent of the entry
- * 
+ *
  * @param {Function} successCallback is called with a parent entry
  * @param {Function} errorCallback is called with a FileError
  */
@@ -2832,7 +2832,7 @@ DirectoryEntry.prototype.getParent = function(successCallback, errorCallback) {
 
 /**
  * Moves a directory to a new location
- * 
+ *
  * @param {DirectoryEntry} parent the directory to which to move the entry
  * @param {DOMString} newName the new name of the entry, defaults to the current name
  * @param {Function} successCallback is called with the new entry
@@ -2844,7 +2844,7 @@ DirectoryEntry.prototype.moveTo = function(parent, newName, successCallback, err
 
 /**
  * Removes the entry
- * 
+ *
  * @param {Function} successCallback is called with no parameters
  * @param {Function} errorCallback is called with a FileError
  */
@@ -2854,7 +2854,7 @@ DirectoryEntry.prototype.remove = function(successCallback, errorCallback) {
 
 /**
  * Returns a URI that can be used to identify this entry.
- * 
+ *
  * @param {DOMString} mimeType for a FileEntry, the mime type to be used to interpret the file, when loaded through this URI.
  * @param {Function} successCallback is called with the new entry
  * @param {Function} errorCallback is called with a FileError
@@ -2873,7 +2873,7 @@ DirectoryEntry.prototype.createReader = function(successCallback, errorCallback)
 
 /**
  * Creates or looks up a directory
- * 
+ *
  * @param {DOMString} path either a relative or absolute path from this directory in which to look up or create a directory
  * @param {Flags} options to create or excluively create the directory
  * @param {Function} successCallback is called with the new entry
@@ -2885,7 +2885,7 @@ DirectoryEntry.prototype.getDirectory = function(path, options, successCallback,
 
 /**
  * Creates or looks up a file
- * 
+ *
  * @param {DOMString} path either a relative or absolute path from this directory in which to look up or create a file
  * @param {Flags} options to create or excluively create the file
  * @param {Function} successCallback is called with the new entry
@@ -2897,7 +2897,7 @@ DirectoryEntry.prototype.getFile = function(path, options, successCallback, erro
 
 /**
  * Deletes a directory and all of it's contents
- * 
+ *
  * @param {Function} successCallback is called with no parameters
  * @param {Function} errorCallback is called with a FileError
  */
@@ -2909,22 +2909,22 @@ DirectoryEntry.prototype.removeRecursively = function(successCallback, errorCall
  * An interface that lists the files and directories in a directory.
  */
 DirectoryReader = function(fullPath){
-	this.fullPath = fullPath || null;    
+	this.fullPath = fullPath || null;
 };
 
 /**
  * Returns a list of entries from a directory.
- * 
+ *
  * @param {Function} successCallback is called with a list of entries
  * @param {Function} errorCallback is called with a FileError
  */
 DirectoryReader.prototype.readEntries = function(successCallback, errorCallback) {
     PhoneGap.exec(successCallback, errorCallback, "com.phonegap.file", "readEntries", [this.fullPath]);
 }
- 
+
 /**
  * An interface representing a directory on the file system.
- * 
+ *
  * {boolean} isFile always true (readonly)
  * {boolean} isDirectory always false (readonly)
  * {DOMString} name of the file, excluding the path leading to it (readonly)
@@ -2941,7 +2941,7 @@ FileEntry = function() {
 
 /**
  * Copies a file to a new location
- * 
+ *
  * @param {DirectoryEntry} parent the directory to which to copy the entry
  * @param {DOMString} newName the new name of the entry, defaults to the current name
  * @param {Function} successCallback is called with the new entry
@@ -2953,7 +2953,7 @@ FileEntry.prototype.copyTo = function(parent, newName, successCallback, errorCal
 
 /**
  * Looks up the metadata of the entry
- * 
+ *
  * @param {Function} successCallback is called with a Metadata object
  * @param {Function} errorCallback is called with a FileError
  */
@@ -2963,7 +2963,7 @@ FileEntry.prototype.getMetadata = function(successCallback, errorCallback) {
 
 /**
  * Gets the parent of the entry
- * 
+ *
  * @param {Function} successCallback is called with a parent entry
  * @param {Function} errorCallback is called with a FileError
  */
@@ -2973,7 +2973,7 @@ FileEntry.prototype.getParent = function(successCallback, errorCallback) {
 
 /**
  * Moves a directory to a new location
- * 
+ *
  * @param {DirectoryEntry} parent the directory to which to move the entry
  * @param {DOMString} newName the new name of the entry, defaults to the current name
  * @param {Function} successCallback is called with the new entry
@@ -2985,7 +2985,7 @@ FileEntry.prototype.moveTo = function(parent, newName, successCallback, errorCal
 
 /**
  * Removes the entry
- * 
+ *
  * @param {Function} successCallback is called with no parameters
  * @param {Function} errorCallback is called with a FileError
  */
@@ -2995,7 +2995,7 @@ FileEntry.prototype.remove = function(successCallback, errorCallback) {
 
 /**
  * Returns a URI that can be used to identify this entry.
- * 
+ *
  * @param {DOMString} mimeType for a FileEntry, the mime type to be used to interpret the file, when loaded through this URI.
  * @param {Function} successCallback is called with the new entry
  * @param {Function} errorCallback is called with a FileError
@@ -3007,12 +3007,12 @@ FileEntry.prototype.toURI = function(mimeType, successCallback, errorCallback) {
 
 /**
  * Creates a new FileWriter associated with the file that this FileEntry represents.
- * 
+ *
  * @param {Function} successCallback is called with the new FileWriter
  * @param {Function} errorCallback is called with a FileError
  */
 FileEntry.prototype.createWriter = function(successCallback, errorCallback) {
-	this.file(function(filePointer) {	
+	this.file(function(filePointer) {
 		var writer = new FileWriter(filePointer);
 		if (writer.fileName == null || writer.fileName == "") {
 			if (typeof errorCallback == "function") {
@@ -3023,13 +3023,13 @@ FileEntry.prototype.createWriter = function(successCallback, errorCallback) {
 		}
 		if (typeof successCallback == "function") {
 			successCallback(writer);
-		}       
+		}
 	}, errorCallback);
 };
 
 /**
  * Returns a File that represents the current state of the file that this FileEntry represents.
- * 
+ *
  * @param {Function} successCallback is called with the new File object
  * @param {Function} errorCallback is called with a FileError
  */
@@ -3085,13 +3085,13 @@ FileTransferError.INVALID_URL_ERR = 2;
 FileTransferError.CONNECTION_ERR = 3;
 
 /**
-* Given an absolute file path, uploads a file on the device to a remote server 
+* Given an absolute file path, uploads a file on the device to a remote server
 * using a multipart HTTP request.
 * @param filePath {String}           Full path of the file on the device
 * @param server {String}             URL of the server to receive the file
 * @param successCallback (Function}  Callback to be invoked when upload has completed
 * @param errorCallback {Function}    Callback to be invoked upon error
-* @param options {FileUploadOptions} Optional parameters such as file name and mimetype           
+* @param options {FileUploadOptions} Optional parameters such as file name and mimetype
 */
 FileTransfer.prototype.upload = function(filePath, server, successCallback, errorCallback, options) {
 	if(!options.params) {
@@ -3108,7 +3108,7 @@ FileTransfer.prototype.upload = function(filePath, server, successCallback, erro
 	if(!options.mimeType) {
 		options.mimeType = 'image/jpeg';
 	}
-	
+
 	// successCallback required
 	if (typeof successCallback != "function") {
         console.log("FileTransfer Error: successCallback is not a function");
@@ -3121,7 +3121,7 @@ FileTransfer.prototype.upload = function(filePath, server, successCallback, erro
         console.log("FileTransfer Error: errorCallback is not a function");
         return;
     }
-	
+
     PhoneGap.exec(successCallback, errorCallback, 'com.phonegap.filetransfer', 'upload', [options]);
 };
 
@@ -3191,11 +3191,11 @@ Geolocation = function() {
  * Asynchronously aquires the current position.
  * @param {Function} successCallback The function to call when the position
  * data is available
- * @param {Function} errorCallback The function to call when there is an error 
+ * @param {Function} errorCallback The function to call when there is an error
  * getting the position data.
  * @param {PositionOptions} options The options for getting the position data
  * such as timeout.
- * PositionOptions.forcePrompt:Bool default false, 
+ * PositionOptions.forcePrompt:Bool default false,
  * - tells iPhone to prompt the user to turn on location services.
  * - may cause your app to exit while the user is sent to the Settings app
  * PositionOptions.distanceFilter:double aka Number
@@ -3203,27 +3203,27 @@ Geolocation = function() {
 PositionOptions
 {
    desiredAccuracy:Number
-   - a distance in meters 
+   - a distance in meters
 		< 10   = best accuracy  ( Default value )
 		< 100  = Nearest Ten Meters
 		< 1000 = Nearest Hundred Meters
 		< 3000 = Accuracy Kilometers
 		3000+  = Accuracy 3 Kilometers
-		
+
 	forcePrompt:Boolean default false ( iPhone Only! )
     - tells iPhone to prompt the user to turn on location services.
 	- may cause your app to exit while the user is sent to the Settings app
-	
+
 	distanceFilter:Number
 	- The minimum distance (measured in meters) a device must move laterally before an update event is generated.
 	- measured relative to the previously delivered location
 	- default value: null ( all movements will be reported )
-	
+
 }
 
  */
- 
-Geolocation.prototype.getCurrentPosition = function(successCallback, errorCallback, options) 
+
+Geolocation.prototype.getCurrentPosition = function(successCallback, errorCallback, options)
 {
     // create an always valid local success callback
     var win = successCallback;
@@ -3231,24 +3231,24 @@ Geolocation.prototype.getCurrentPosition = function(successCallback, errorCallba
     {
         win = function(position) {};
     }
-    
+
     // create an always valid local error callback
     var fail = errorCallback;
     if (!fail || typeof(fail) != 'function')
     {
         fail = function(positionError) {};
-    }	
+    }
 
     var self = this;
     var totalTime = 0;
 	var timeoutTimerId;
-	
+
 	// set params to our default values
 	var params = new PositionOptions();
-	
-    if (options) 
+
+    if (options)
     {
-        if (options.maximumAge) 
+        if (options.maximumAge)
         {
             // special case here if we have a cached value that is younger than maximumAge
             if(this.lastPosition)
@@ -3256,17 +3256,17 @@ Geolocation.prototype.getCurrentPosition = function(successCallback, errorCallba
                 var now = new Date().getTime();
                 if((now - this.lastPosition.timestamp) < options.maximumAge)
                 {
-                    win(this.lastPosition); // send cached position immediately 
+                    win(this.lastPosition); // send cached position immediately
                     return;                 // Note, execution stops here -jm
                 }
             }
             params.maximumAge = options.maximumAge;
         }
-        if (options.enableHighAccuracy) 
+        if (options.enableHighAccuracy)
         {
             params.enableHighAccuracy = (options.enableHighAccuracy == true); // make sure it's truthy
         }
-        if (options.timeout) 
+        if (options.timeout)
         {
             params.timeout = options.timeout;
         }
@@ -3277,44 +3277,44 @@ Geolocation.prototype.getCurrentPosition = function(successCallback, errorCallba
     if (!this.locationRunning)
     {
         successListener = function(position)
-        { 
+        {
             win(position);
             self.stop();
         };
         errorListener = function(positionError)
-        { 
+        {
             fail(positionError);
             self.stop();
         };
     }
-    
+
     this.listener = {"success":successListener,"fail":failListener};
     this.start(params);
-	
+
 	var onTimeout = function()
 	{
 	    self.setError(new PositionError(PositionError.TIMEOUT,"Geolocation Error: Timeout."));
 	};
 
     clearTimeout(this.timeoutTimerId);
-    this.timeoutTimerId = setTimeout(onTimeout, params.timeout); 
+    this.timeoutTimerId = setTimeout(onTimeout, params.timeout);
 };
 
 /**
  * Asynchronously aquires the position repeatedly at a given interval.
  * @param {Function} successCallback The function to call each time the position
  * data is available
- * @param {Function} errorCallback The function to call when there is an error 
+ * @param {Function} errorCallback The function to call when there is an error
  * getting the position data.
  * @param {PositionOptions} options The options for getting the position data
  * such as timeout and the frequency of the watch.
  */
 Geolocation.prototype.watchPosition = function(successCallback, errorCallback, options) {
-	// Invoke the appropriate callback with a new Position object every time the implementation 
-	// determines that the position of the hosting device has changed. 
+	// Invoke the appropriate callback with a new Position object every time the implementation
+	// determines that the position of the hosting device has changed.
 
 	var self = this; // those == this & that
-	
+
 	var params = new PositionOptions();
 
     if(options)
@@ -3332,25 +3332,25 @@ Geolocation.prototype.watchPosition = function(successCallback, errorCallback, o
 
 	var that = this;
     var lastPos = that.lastPosition? that.lastPosition.clone() : null;
-    
+
 	var intervalFunction = function() {
-        
+
 		var filterFun = function(position) {
             if (lastPos == null || !position.equals(lastPos)) {
                 // only call the success callback when there is a change in position, per W3C
                 successCallback(position);
             }
-            
+
             // clone the new position, save it as our last position (internal var)
             lastPos = position.clone();
         };
-		
+
 		that.getCurrentPosition(filterFun, errorCallback, params);
 	};
-	
+
     // Retrieve location immediately and schedule next retrieval afterwards
 	intervalFunction();
-	
+
 	return setInterval(intervalFunction, params.timeout);
 };
 
@@ -3367,7 +3367,7 @@ Geolocation.prototype.clearWatch = function(watchId) {
  * Called by the geolocation framework when the current location is found.
  * @param {PositionOptions} position The current position.
  */
-Geolocation.prototype.setLocation = function(position) 
+Geolocation.prototype.setLocation = function(position)
 {
     var _position = new Position(position.coords, position.timestamp);
 
@@ -3376,15 +3376,15 @@ Geolocation.prototype.setLocation = function(position)
         clearTimeout(this.timeoutTimerId);
         this.timeoutTimerId = 0;
     }
-    
+
 	this.lastError = null;
     this.lastPosition = _position;
-    
+
     if(this.listener && typeof(this.listener.success) == 'function')
     {
         this.listener.success(_position);
     }
-    
+
     this.listener = null;
 };
 
@@ -3392,18 +3392,18 @@ Geolocation.prototype.setLocation = function(position)
  * Called by the geolocation framework when an error occurs while looking up the current position.
  * @param {String} message The text of the error message.
  */
-Geolocation.prototype.setError = function(error) 
+Geolocation.prototype.setError = function(error)
 {
 	var _error = new PositionError(error.code, error.message);
 
     this.locationRunning = false
-	
+
     if(this.timeoutTimerId)
     {
         clearTimeout(this.timeoutTimerId);
         this.timeoutTimerId = 0;
     }
-    
+
     this.lastError = _error;
     // call error handlers directly
     if(this.listener && typeof(this.listener.fail) == 'function')
@@ -3414,23 +3414,23 @@ Geolocation.prototype.setError = function(error)
 
 };
 
-Geolocation.prototype.start = function(positionOptions) 
+Geolocation.prototype.start = function(positionOptions)
 {
     PhoneGap.exec(null, null, "com.phonegap.geolocation", "startLocation", [positionOptions]);
     this.locationRunning = true
 
 };
 
-Geolocation.prototype.stop = function() 
+Geolocation.prototype.stop = function()
 {
     PhoneGap.exec(null, null, "com.phonegap.geolocation", "stopLocation", []);
     this.locationRunning = false
 };
 
 
-PhoneGap.addConstructor(function() 
+PhoneGap.addConstructor(function()
 {
-    if (typeof navigator._geo == "undefined") 
+    if (typeof navigator._geo == "undefined")
     {
         // replace origObj's functions ( listed in funkList ) with the same method name on proxyObj
         // this is a workaround to prevent UIWebView/MobileSafari default implementation of GeoLocation
@@ -3438,11 +3438,11 @@ PhoneGap.addConstructor(function()
         var __proxyObj = function (origObj,proxyObj,funkList)
         {
             var replaceFunk = function(org,proxy,fName)
-            { 
+            {
                 org[fName] = function()
-                { 
-                   return proxy[fName].apply(proxy,arguments); 
-                }; 
+                {
+                   return proxy[fName].apply(proxy,arguments);
+                };
             };
 
             for(var v in funkList) { replaceFunk(origObj,proxyObj,funkList[v]);}
@@ -3472,7 +3472,7 @@ CompassHeading = function() {
 	this.trueHeading = null;
 	this.headingAccuracy = null;
 	this.timestamp = null;
-}	
+}
 /**
  * This class provides access to device Compass data.
  * @constructor
@@ -3488,7 +3488,7 @@ Compass = function() {
  * Asynchronously acquires the current heading.
  * @param {Function} successCallback The function to call when the heading
  * data is available
- * @param {Function} errorCallback The function to call when there is an error 
+ * @param {Function} errorCallback The function to call when there is an error
  * getting the heading data.
  * @param {PositionOptions} options The options for getting the heading data (not used).
  */
@@ -3513,12 +3513,12 @@ Compass.prototype.getCurrentHeading = function(successCallback, errorCallback, o
  * Asynchronously acquires the heading repeatedly at a given interval.
  * @param {Function} successCallback The function to call each time the heading
  * data is available
- * @param {Function} errorCallback The function to call when there is an error 
+ * @param {Function} errorCallback The function to call when there is an error
  * getting the heading data.
  * @param {HeadingOptions} options The options for getting the heading data
  * such as timeout and the frequency of the watch.
  */
-Compass.prototype.watchHeading= function(successCallback, errorCallback, options) 
+Compass.prototype.watchHeading= function(successCallback, errorCallback, options)
 {
 	// Default interval (100 msec)
     var frequency = (options !== undefined) ? options.frequency : 100;
@@ -3550,7 +3550,7 @@ Compass.prototype.watchHeading= function(successCallback, errorCallback, options
  * Clears the specified heading watch.
  * @param {String} watchId The ID of the watch returned from #watchHeading.
  */
-Compass.prototype.clearWatch = function(id) 
+Compass.prototype.clearWatch = function(id)
 {
 	// Stop javascript timer & remove from timer list
     if (id && navigator.compass.timers[id]) {
@@ -3558,28 +3558,28 @@ Compass.prototype.clearWatch = function(id)
         delete navigator.compass.timers[id];
     }
     if (navigator.compass.timers.length == 0) {
-    	// stop the 
+    	// stop the
     	PhoneGap.exec(null, null, "com.phonegap.geolocation", "stopHeading", []);
     }
 };
 
 /** iOS only
- * Asynchronously fires when the heading changes from the last reading.  The amount of distance 
+ * Asynchronously fires when the heading changes from the last reading.  The amount of distance
  * required to trigger the event is specified in the filter paramter.
  * @param {Function} successCallback The function to call each time the heading
  * data is available
- * @param {Function} errorCallback The function to call when there is an error 
+ * @param {Function} errorCallback The function to call when there is an error
  * getting the heading data.
  * @param {HeadingOptions} options The options for getting the heading data
  * 			@param {filter} number of degrees change to trigger a callback with heading data (float)
  *
  * In iOS this function is more efficient than calling watchHeading  with a frequency for updates.
  * Only one watchHeadingFilter can be in effect at one time.  If a watchHeadingFilter is in effect, calling
- * getCurrentHeading or watchHeading will use the existing filter value for specifying heading change. 
+ * getCurrentHeading or watchHeading will use the existing filter value for specifying heading change.
   */
-Compass.prototype.watchHeadingFilter = function(successCallback, errorCallback, options) 
+Compass.prototype.watchHeadingFilter = function(successCallback, errorCallback, options)
 {
- 
+
  	if (options === undefined || options.filter === undefined) {
  		console.log("Compass Error:  options.filter not specified");
  		return;
@@ -3598,14 +3598,14 @@ Compass.prototype.watchHeadingFilter = function(successCallback, errorCallback, 
     }
     PhoneGap.exec(successCallback, errorCallback, "com.phonegap.geolocation", "watchHeadingFilter", [options]);
 }
-Compass.prototype.clearWatchFilter = function() 
+Compass.prototype.clearWatchFilter = function()
 {
     	PhoneGap.exec(null, null, "com.phonegap.geolocation", "stopHeading", []);
 };
 
-PhoneGap.addConstructor(function() 
+PhoneGap.addConstructor(function()
 {
-    if (typeof navigator.compass == "undefined") 
+    if (typeof navigator.compass == "undefined")
     {
         navigator.compass = new Compass();
     }
@@ -3875,7 +3875,7 @@ Notification.prototype.confirm = function(message, resultCallback, title, button
  * @param {String} colour The colour of the light.
  */
 Notification.prototype.blink = function(count, colour) {
-// NOT IMPLEMENTED	
+// NOT IMPLEMENTED
 };
 
 Notification.prototype.vibrate = function(mills) {
@@ -3908,7 +3908,7 @@ Orientation  = function() {
 
 /**
  * Set the current orientation of the phone.  This is called from the device automatically.
- * 
+ *
  * When the orientation is changed, the DOMEvent \c orientationChanged is dispatched against
  * the document element.  The event has the property \c orientation which can be used to retrieve
  * the device's current orientation, in addition to the \c Orientation.currentOrientation class property.
@@ -3927,7 +3927,7 @@ Orientation.prototype.setOrientation = function(orientation) {
  * Asynchronously aquires the current orientation.
  * @param {Function} successCallback The function to call when the orientation
  * is known.
- * @param {Function} errorCallback The function to call when there is an error 
+ * @param {Function} errorCallback The function to call when there is an error
  * getting the orientation.
  */
 Orientation.prototype.getCurrentOrientation = function(successCallback, errorCallback) {
@@ -3939,12 +3939,12 @@ Orientation.prototype.getCurrentOrientation = function(successCallback, errorCal
  * Asynchronously aquires the orientation repeatedly at a given interval.
  * @param {Function} successCallback The function to call each time the orientation
  * data is available.
- * @param {Function} errorCallback The function to call when there is an error 
+ * @param {Function} errorCallback The function to call when there is an error
  * getting the orientation data.
  */
 Orientation.prototype.watchOrientation = function(successCallback, errorCallback) {
-	// Invoke the appropriate callback with a new Position object every time the implementation 
-	// determines that the position of the hosting device has changed. 
+	// Invoke the appropriate callback with a new Position object every time the implementation
+	// determines that the position of the hosting device has changed.
 	this.getCurrentPosition(successCallback, errorCallback);
 	return setInterval(function() {
 		navigator.orientation.getCurrentOrientation(successCallback, errorCallback);
@@ -3961,24 +3961,24 @@ Orientation.prototype.clearWatch = function(watchId) {
 
 Orientation.install = function()
 {
-    if (typeof navigator.orientation == "undefined") { 
+    if (typeof navigator.orientation == "undefined") {
 		navigator.orientation = new Orientation();
 	}
-	
+
 	var windowDispatchAvailable = !(window.dispatchEvent === undefined); // undefined in iOS 3.x
 	if (windowDispatchAvailable) {
 		return;
-	} 
-	
+	}
+
 	// the code below is to capture window.add/remove eventListener calls on window
 	// this is for iOS 3.x where listening on 'orientationchange' events don't work on document/window (don't know why)
 	// however, window.onorientationchange DOES handle the 'orientationchange' event (sent through document), so...
 	// then we multiplex the window.onorientationchange event (consequently - people shouldn't overwrite this)
-	
+
 	var self = this;
 	var orientationchangeEvent = 'orientationchange';
 	var newOrientationchangeEvent = 'orientationchange_pg';
-	
+
 	// backup original `window.addEventListener`, `window.removeEventListener`
     var _addEventListener = window.addEventListener;
     var _removeEventListener = window.removeEventListener;
@@ -3986,32 +3986,32 @@ Orientation.install = function()
 	window.onorientationchange = function() {
 		PhoneGap.fireEvent(newOrientationchangeEvent, window);
 	}
-	
+
     // override `window.addEventListener`
     window.addEventListener = function() {
         if (arguments[0] === orientationchangeEvent) {
-			arguments[0] = newOrientationchangeEvent; 
-		} 
-													
+			arguments[0] = newOrientationchangeEvent;
+		}
+
 		if (!windowDispatchAvailable) {
 			return document.addEventListener.apply(this, arguments);
 		} else {
 			return _addEventListener.apply(this, arguments);
 		}
-    };	
+    };
 
     // override `window.removeEventListener'
     window.removeEventListener = function() {
         if (arguments[0] === orientationchangeEvent) {
-			arguments[0] = newOrientationchangeEvent; 
-		} 
-		
+			arguments[0] = newOrientationchangeEvent;
+		}
+
 		if (!windowDispatchAvailable) {
 			return document.removeEventListener.apply(this, arguments);
 		} else {
 			return _removeEventListener.apply(this, arguments);
 		}
-    };	
+    };
 };
 
 PhoneGap.addConstructor(Orientation.install);
@@ -4052,7 +4052,7 @@ if (!PhoneGap.hasResource("telephony")) {
  * @constructor
  */
 Telephony = function() {
-	
+
 }
 
 /**
@@ -4078,9 +4078,9 @@ Connection = function() {
 	this.type = Connection.UNKNOWN;
 
 	/* initialize from the extended DeviceInfo properties */
-    try {      
+    try {
 		this.type	= DeviceInfo.connection.type;
-    } 
+    }
 	catch(e) {
     }
 };
