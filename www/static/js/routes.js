@@ -54,7 +54,9 @@
   };
 
   routes.globalStream = function(){
+    console.log("[Global Stream]");
     app.changePage(function(done){
+      console.log("[Global Stream] - change page start");
       var options = {
         page: this.params.page || 0,
         limit: 15,
@@ -71,18 +73,23 @@
       options.skip = options.limit * options.page;
       optionsAdd.skip = optionsAdd.limit * optionsAdd.page;
 
+      console.log("[Global Stream] - instantiate streamsView");
       var streamsView = new app.Views.Streams({
         collection: app.api.activity
       }).render();
+      console.log("[Global Stream] - fetchGlobal");
       app.api.activity.fetchGlobal(options, function(error, data){
         if (utils.exists(error)){
           console.error(error.message);
+          console.log("[Global Stream] - Error! " - error.message);
           done(streamsView);
           return;
         }
+        console.log("[Global Stream] - Inside callback");
 
         // We don't want to do the other stuff if were on the last page
         if (data.length < options.limit){
+          console.log("[Global Stream] - Last Page");
           $('.gb-row-loader', streamsView.el).remove();
           done(streamsView);
           return;
@@ -117,13 +124,16 @@
           }
         };
         var scrollObserver = new utils.scrolledToEndObserver($(window), scrollListener);
+        console.log("[Global Stream] - Turn off old hashchange events");
         // Make sure we remove the scroll listener after leaving this page
         $(window).off('hashchange.stream').on('hashchange.stream', function(e){
+          console.log("[Global Stream] - hashchange");
           scrollObserver.off();
         });
-
+        console.log("[Global Stream] - Render Activity");
         streamsView.renderActivity();
         done(streamsView);
+        console.log("[Global Stream] - Done");
       });
     });
   };

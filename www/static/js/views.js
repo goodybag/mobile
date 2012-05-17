@@ -403,12 +403,14 @@
   views.Streams = utils.View.extend({
     events: {
       "click #streams-all-button": 'loadGlobalActivity'
-      , "click #streams-my-button": 'loadMyActivity'
+    , "click #streams-my-button": 'loadMyActivity'
     }
     , initialize: function(){
+      console.log("[Streams View] - Initialize");
       this.pageContent = new app.Views.StreamsPage({
         collection: this.collection
       });
+      console.log("[Streams View] - page Content Set");
 
       this.pageHeader = new app.Views.PageNav({
         leftButton: {
@@ -422,19 +424,23 @@
           classes: "",
         }
       });
+      console.log("[Streams View] - Page Header set");
 
       this.subViews = [this.pageHeader, this.pageContent];
 
       //this.collection.on('reset', this.renderActivity, this);
       this.collection.on('add', this.renderSingleActivity, this);
-
+      console.log("[Streams View] - Initialize Complete");
       return this;
     }
     , render: function(){
-      console.log(this.subViews);
+      console.log("[Streams View] - Rendering");
+      console.log(this.subViews.length);
       for (var i = 0; i < this.subViews.length; i++){
+        console.log("[Streams View] - Rendering view " + i);
         $(this.el).append(this.subViews[i].render().el);
       }
+      console.log("[Streams View] - Render complete");
       //Called in route now this.pageContent.renderActivity();
       return this;
     }
@@ -503,7 +509,6 @@
     , renderActivity: function(){
       console.log('[Streams] - renderActivity');
       var models = this.collection.models;
-      console.log(models);
       $('#streams-activities', $(this.el)).html("");
       if (models.length == 0){
         console.log("G's Blood stain")
