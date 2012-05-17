@@ -125,7 +125,7 @@
           running = true;
           console.log("device is ready");
           FB.init({
-            appId: "152282721508707",
+            appId: "159340790837933",
             nativeInterface: PG.FB
           });
           console.log("facebookInitialized");
@@ -148,7 +148,7 @@
         // alert("device is ready");
         console.log("device is ready");
         FB.init({
-          appId: "152282721508707"
+          appId: "159340790837933"
           , nativeInterface: CDV.FB
           , useCachedDialogs: false
         });
@@ -158,10 +158,10 @@
     });
   } else {
     console.log("in-browser");
-    scripts.push({facebook: "http://connect.facebook.net/en_US/all.js#xfbml=0&appId=152282721508707"});
+    scripts.push({facebook: "http://connect.facebook.net/en_US/all.js#xfbml=0&appId=159340790837933"});
     headCallbacks.push(function(){
       console.log("initializing facebook");
-      FB.init({appId: "152282721508707"});
+      FB.init({appId: "159340790837933"});
     });
   }
 
