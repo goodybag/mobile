@@ -143,7 +143,6 @@
       this.set('current', route);
       this.set('active', this.get('keys')[route.split('/')[2]] || false);
       this.trigger('change:active');
-      console.log('[Active Route] - ' + this.get('keys')[route.split('/')[2]]);
       return this;
     }
   });

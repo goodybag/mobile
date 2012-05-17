@@ -96,19 +96,19 @@
   ];
 
   // Setup awesome logging
-  headCallbacks.push(function(){
-    // We'll make this more robust later
-    var original = console.log;
-    console.log = function(){
-      $.post('/logs', {
-        type: 'Info'
-      , color: 'yellow'
-      , message: arguments[0]
-      , agent: navigator.userAgent
-      }, function(){ });
-      original.apply(console, arguments);
-    };
-  });
+  // headCallbacks.push(function(){
+  //   // We'll make this more robust later
+  //   var original = console.log;
+  //   console.log = function(){
+  //     $.post('/logs', {
+  //       type: 'Info'
+  //     , color: 'yellow'
+  //     , message: arguments[0]
+  //     , agent: navigator.userAgent
+  //     }, function(){ });
+  //     original.apply(console, arguments);
+  //   };
+  // });
 
   if (((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i))) && !navigator.userAgent.match(/Safari/i)){ //in iphone app
     console.log("in-iphone-app");
@@ -125,7 +125,7 @@
           running = true;
           console.log("device is ready");
           FB.init({
-            appId: "159340790837933",
+            appId: "152282721508707",
             nativeInterface: PG.FB
           });
           console.log("facebookInitialized");
@@ -148,7 +148,7 @@
         // alert("device is ready");
         console.log("device is ready");
         FB.init({
-          appId: "159340790837933"
+          appId: "152282721508707"
           , nativeInterface: CDV.FB
           , useCachedDialogs: false
         });
@@ -158,10 +158,10 @@
     });
   } else {
     console.log("in-browser");
-    scripts.push({facebook: "http://connect.facebook.net/en_US/all.js#xfbml=0&appId=159340790837933"});
+    scripts.push({facebook: "http://connect.facebook.net/en_US/all.js#xfbml=0&appId=152282721508707"});
     headCallbacks.push(function(){
       console.log("initializing facebook");
-      FB.init({appId: "159340790837933"});
+      FB.init({appId: "152282721508707"});
     });
   }
 
