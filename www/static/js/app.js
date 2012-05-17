@@ -63,6 +63,10 @@
           app.Views.Main.fixStatics();
         };
         app.Views.Main.fixStatics();
+        app.on('page:change:complete', function(){
+          console.log("FIX STATICS!");
+          app.Views.Main.fixStatics();
+        });
       }
 
       if (app.functions.lacksInsetShadow()){

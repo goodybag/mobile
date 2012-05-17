@@ -95,23 +95,47 @@
     , {streamParser: "/static/js/streamParser.js"}
   ];
 
+  // Setup awesome logging
+  // headCallbacks.push(function(){
+  //   // We'll make this more robust later
+  //   var original = console.log;
+  //   console.log = function(){
+  //     $.post('/logs', {
+  //       type: 'Info'
+  //     , color: 'yellow'
+  //     , message: arguments[0]
+  //     , agent: navigator.userAgent
+  //     }, function(){ });
+  //     original.apply(console, arguments);
+  //   };
+  // });
+
   if (((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i))) && !navigator.userAgent.match(/Safari/i)){ //in iphone app
     console.log("in-iphone-app");
     scripts.push({phonegap: "/static/3/phonegap-1.4.1.js"});
     scripts.push({phonegapFacebookPlugin: "/static/3/pg-plugin-fb-connect.js"});
     scripts.push({facebook: "/static/3/facebook_js_sdk.js"});
 
+    // Maintain when device is ready and scripts are loaded because
+    // iOS 4 is not able to do so with this version of PG
+    var deviceReady = false
+      , scriptsLoaded = false
+      , running = false
+      , scriptsLoadedDeviceReady = function(){
+          running = true;
+          console.log("device is ready");
+          FB.init({
+            appId: "152282721508707",
+            nativeInterface: PG.FB
+          });
+          console.log("facebookInitialized");
+        }
+    ;
+    document.addEventListener('deviceready', function(){
+      if ((deviceReady = true) && scriptsLoaded && !running) scriptsLoadedDeviceReady();
+    });
     headCallbacks.push(function(){
-      document.addEventListener('deviceready', function() {
-        // alert("device is ready");
-        console.log("device is ready");
-        FB.init({
-          appId: "152282721508707",
-          nativeInterface: PG.FB
-        });
-        console.log("facebookInitialized");
-        // alert("facebookInitialized");
-      });
+      if ((scriptsLoaded = true) && deviceReady && !running) scriptsLoadedDeviceReady();
     });
   } else if(navigator.userAgent.match(/goodybag-app-android/i)){ //in android app
     console.log("in-android-app");
