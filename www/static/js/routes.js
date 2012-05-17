@@ -74,59 +74,57 @@
       var streamsView = new app.Views.Streams({
         collection: app.api.activity
       }).render();
-      console.log("DONE CHANGING");
-      done(streamsView);
-      // app.api.activity.fetchGlobal(options, function(error, data){
-      //   if (utils.exists(error)){
-      //     console.error(error.message);
-      //     done(streamsView);
-      //     return;
-      //   }
+      app.api.activity.fetchGlobal(options, function(error, data){
+        if (utils.exists(error)){
+          console.error(error.message);
+          done(streamsView);
+          return;
+        }
 
-      //   // We don't want to do the other stuff if were on the last page
-      //   if (data.length < options.limit){
-      //     $('.gb-row-loader', streamsView.el).remove();
-      //     done(streamsView);
-      //     return;
-      //   }
+        // We don't want to do the other stuff if were on the last page
+        if (data.length < options.limit){
+          $('.gb-row-loader', streamsView.el).remove();
+          done(streamsView);
+          return;
+        }
 
-      //   // Scroll to end load more
-      //   var loader = new utils.loader($('.gb-row-loader', $(streamsView.el)), {
-      //     overlayCss: { display: 'none' },
-      //   });
-      //   var scrollListener = function(e, observer){
-      //     observer.off();
-      //     if (!loader.isLoading()){
-      //       loader.start();
-      //       optionsAdd.skip = optionsAdd.limit * ++optionsAdd.page;
-      //       app.api.activity.fetchGlobal(optionsAdd, function(error, data){
-      //         if (utils.exists(error)){
-      //           console.error(error.message);
-      //           done(streamsView);
-      //           return;
-      //         }
-      //         streamsView.renderActivity();
-      //         streamsView.fixImages();
-      //         // No more data
-      //         if (data.length < optionsAdd.limit){
-      //           observer.off();
-      //           $('.gb-row-loader', streamsView.el).remove();
-      //         }else{
-      //           observer.on();
-      //         }
-      //         loader.stop();
-      //       });
-      //     }
-      //   };
-      //   var scrollObserver = new utils.scrolledToEndObserver($(window), scrollListener);
-      //   // Make sure we remove the scroll listener after leaving this page
-      //   $(window).off('hashchange.stream').on('hashchange.stream', function(e){
-      //     scrollObserver.off();
-      //   });
+        // Scroll to end load more
+        var loader = new utils.loader($('.gb-row-loader', $(streamsView.el)), {
+          overlayCss: { display: 'none' },
+        });
+        var scrollListener = function(e, observer){
+          observer.off();
+          if (!loader.isLoading()){
+            loader.start();
+            optionsAdd.skip = optionsAdd.limit * ++optionsAdd.page;
+            app.api.activity.fetchGlobal(optionsAdd, function(error, data){
+              if (utils.exists(error)){
+                console.error(error.message);
+                done(streamsView);
+                return;
+              }
+              streamsView.renderActivity();
+              streamsView.fixImages();
+              // No more data
+              if (data.length < optionsAdd.limit){
+                observer.off();
+                $('.gb-row-loader', streamsView.el).remove();
+              }else{
+                observer.on();
+              }
+              loader.stop();
+            });
+          }
+        };
+        var scrollObserver = new utils.scrolledToEndObserver($(window), scrollListener);
+        // Make sure we remove the scroll listener after leaving this page
+        $(window).off('hashchange.stream').on('hashchange.stream', function(e){
+          scrollObserver.off();
+        });
 
-      //   streamsView.renderActivity();
-      //   done(streamsView);
-      // });
+        streamsView.renderActivity();
+        done(streamsView);
+      });
     });
   };
 
