@@ -129,18 +129,6 @@
     }
     , facebookLoginHandler: function(){
       var self = this;
-      var loader = new utils.loader($('.loading-container'), {
-        overlayCss: {
-          'background-color': '#000'
-        , opacity: '0.5'
-        , width: '100%'
-        , height: '100%'
-        }
-      , outerCss: {
-          position: 'absolute'
-        }
-      });
-      loader.start();
       console.log("Facebook Login");
 
       if (app.accessToken){
@@ -148,13 +136,11 @@
           api.auth.facebook(app.accessToken,function(error,consumer){
             if(utils.exists(error)){
               console.log(error);
-              loader.stop();
               return;
             }
             console.log("[facebook] authenticated");
             app.user.set(consumer);
             app.Views.Main.authenticatedFrame(function(){
-              loader.stop();
               self.authenticatedHandler();
             });
           });
@@ -173,20 +159,17 @@
               api.auth.facebook(app.accessToken,function(error,consumer){
                 if(utils.exists(error)){
                   console.log(error);
-                  loader.stop();
                   return;
                 }
                 console.log("[facebook] authenticated");
                 app.user.set(consumer);
                 app.Views.Main.authenticatedFrame(function(){
-                  loader.stop();
                   self.authenticatedHandler();
                 });
               });
             });
           } else{
             console.log("[facebook] error authenticating");
-            loader.stop();
           }
         }
         , {
@@ -371,18 +354,6 @@
     }
     , facebookLoginHandler: function(){
       var self = this;
-      var loader = new utils.loader($('.loading-container'), {
-        overlayCss: {
-          'background-color': '#000'
-        , opacity: '0.5'
-        , width: '100%'
-        , height: '100%'
-        }
-      , outerCss: {
-          position: 'absolute'
-        }
-      });
-      loader.start();
       FB.login(function(response){
         if(response.session || response.authResponse){
           var accessToken;
@@ -395,20 +366,17 @@
             api.auth.facebook(accessToken,function(error,consumer){
               if(utils.exists(error)){
                 console.log(error);
-                loader.stop();
                 return;
               }
               console.log("[facebook] authenticated");
               app.user.set(consumer);
               app.Views.Main.authenticatedFrame(function(){
-                loader.stop();
                 self.authenticatedHandler();
               });
             });
           });
         } else{
           console.log("[facebook] error authenticating");
-          loader.stop();
         }
       }
       , {
