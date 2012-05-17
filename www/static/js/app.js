@@ -35,9 +35,8 @@
     }
   });
 
-  // Position Static fix for inputs on ios 5
-  if (app.config.isIos && !app.config.iosLt5){
-    alert('ios5');
+  // Position Static fix for inputs on ios
+  if (app.config.isIos){
     app.on('page:change:complete', function(){
       //$('input').undbind('.position-static-fix');
       $('input').on('focus.position-static-fix', function(){
