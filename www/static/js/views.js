@@ -198,6 +198,9 @@
   views.FooterNav = utils.View.extend({
     tagName: 'nav',
     className: 'main-nav',
+    events: {
+      'click a': 'anchorClick'
+    },
     initialize: function(){
       this.model.on('change', this.updateActive, this);
     },
@@ -212,6 +215,12 @@
         $('.menu-item.' + this.model.get('active')).addClass('active');
       }
       return this;
+    }
+  , anchorClick: function(e){
+      // This is necessary for android to work for some reason
+      // DON'T TAKE IT AGAIN, JOHN! -john
+      window.location.href = e.target.href;
+      return false;
     }
   });
 
