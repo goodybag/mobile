@@ -22,6 +22,10 @@
     nativeBind         = FuncProto.bind;
 
 
+  _utils.isRootHash = function(){
+    return window.location.hash === "" || window.location.hash === "#!" || window.location.hash === "#!/";
+  };
+
   _utils.guid = function(){
     var res = [], hv;
     var rgx = new RegExp("[2345]");

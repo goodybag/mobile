@@ -105,6 +105,7 @@
       this.authModel = this.options.authModel;
       this.authModel.on("authenticated", this.authenticatedHandler, this);
       this.authModel.on('auth:fail', this.authFailHandler, this);
+      this.loggingIn = false;
       return this;
     }
     , render: function(){
@@ -128,10 +129,48 @@
       return this;
     }
     , facebookLoginHandler: function(){
+      if (this.loggingIn) return;
       var self = this;
+      this.loggingIn = true;
       console.log("Facebook Login");
 
-      if (app.accessToken){
+      FB.login(function(response){
+        console.log(JSON.stringify(response));
+
+        console.log("Set New Access Token");
+        if (response.session){
+          console.log(response.session.access_token);
+          console.log(response.session.expires);
+          app.functions.setFbAccessToken(
+            response.session.access_token
+          , response.session.expires
+          );
+        }else{
+          app.functions.setFbAccessToken(
+            response.authResponse.app.accessToken
+          , response.authResponse.app.expires
+          );
+        }
+        console.log("Authenticate with Goodybag with new Access token");
+        api.auth.facebook(app.facebook.access_token, function(error, consumer){
+          if(utils.exists(error)){
+            console.log(error);
+            return;
+          }
+          console.log("[facebook] authenticated");
+          app.user.set(consumer);
+          app.Views.Main.authenticatedFrame(function(){
+            self.authenticatedHandler();
+          });
+        })
+      }, {
+        perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location",
+        scope: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
+      });
+
+
+
+      /*if (app.accessToken){
         FB.api('/me', function(response) {
           api.auth.facebook(app.accessToken,function(error,consumer){
             if(utils.exists(error)){
@@ -176,7 +215,7 @@
           perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location",
           scope: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
         });
-      }
+      }*/
 
     }
     , emailLoginHandler: function(){

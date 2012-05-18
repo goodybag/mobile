@@ -92,6 +92,16 @@
     //$('.outer-container').css('padding-top', paddingTop || "49px");
   };
 
+  functions.setFbAccessToken = function(token, expires){
+    localStorage["facebook.access_token"] = token;
+    localStorage["facebook.expires"] = expires.toString();
+    app.facebook = {
+      access_token: token
+    , expires: expires
+    };
+    app.facebook.expired = app.facebook.expires < new Date();
+  };
+
   // Export
   for (var key in functions){
     this.app.functions[key] = functions[key];
