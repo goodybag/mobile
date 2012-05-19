@@ -6,6 +6,7 @@
     backbone: {
       pushState: false
     },
+    postLoginUrl: '#!/streams/global',
     changePage: {
       defaultTransition: "fade",
       transitions: [
