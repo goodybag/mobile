@@ -132,15 +132,9 @@
       if (this.loggingIn) return;
       var self = this;
       this.loggingIn = true;
-      console.log("Facebook Login");
 
       FB.login(function(response){
-        console.log(JSON.stringify(response));
-
-        console.log("Set New Access Token");
         if (response.session){
-          console.log(response.session.access_token);
-          console.log(response.session.expires);
           app.functions.setFbAccessToken(
             response.session.access_token
           , response.session.expires
@@ -151,13 +145,11 @@
           , response.authResponse.app.expires
           );
         }
-        console.log("Authenticate with Goodybag with new Access token");
         api.auth.facebook(app.facebook.access_token, function(error, consumer){
           if(utils.exists(error)){
             console.log(error);
             return;
           }
-          console.log("[facebook] authenticated");
           app.user.set(consumer);
           app.Views.Main.authenticatedFrame(function(){
             self.authenticatedHandler();
@@ -167,56 +159,6 @@
         perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location",
         scope: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
       });
-
-
-
-      /*if (app.accessToken){
-        FB.api('/me', function(response) {
-          api.auth.facebook(app.accessToken,function(error,consumer){
-            if(utils.exists(error)){
-              console.log(error);
-              return;
-            }
-            console.log("[facebook] authenticated");
-            app.user.set(consumer);
-            app.Views.Main.authenticatedFrame(function(){
-              self.authenticatedHandler();
-            });
-          });
-        });
-      }else{
-        FB.login(function(response){
-          console.log("response");
-          console.log(response);
-          if(response.session || response.authResponse){
-            if(response.session){
-              app.accessToken = response.session.access_token
-            } else{
-              app.accessToken = response.authResponse.app.accessToken;
-            }
-            FB.api('/me', function(response) {
-              api.auth.facebook(app.accessToken,function(error,consumer){
-                if(utils.exists(error)){
-                  console.log(error);
-                  return;
-                }
-                console.log("[facebook] authenticated");
-                app.user.set(consumer);
-                app.Views.Main.authenticatedFrame(function(){
-                  self.authenticatedHandler();
-                });
-              });
-            });
-          } else{
-            console.log("[facebook] error authenticating");
-          }
-        }
-        , {
-          perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location",
-          scope: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
-        });
-      }*/
-
     }
     , emailLoginHandler: function(){
       console.log("[handler] landing-email-login");
@@ -731,13 +673,17 @@
     , events: {
       "click #settings-logout": "logout"
     }
-    , initialize: function(){ return this; }
+    , initialize: function(){
+      this.logout.bind(this);
+      return this;
+    }
     , render: function(){
       $(this.el).html(app.templates.settings());
+      this.delegateEvents();
       return this;
     }
     , logout: function(){
-      window.location.href = "/#!/logout";
+      app.user.logout();
       return this;
     }
   });
@@ -858,7 +804,7 @@
 
       if(!app.user || !app.user.get("_id") || app.user.get("_id") == null || app.user.get("_id") == ""){
         alert("Please login first");
-        window.location.href = "/#!/logout";
+        app.user.logout();
         return;
       };
 

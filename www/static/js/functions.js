@@ -101,6 +101,10 @@
     };
     app.facebook.expired = app.facebook.expires < new Date();
   };
+  functions.clearFbAccessToken = function(){
+    localStorage.removeItem("facebook.access_token");
+    localStorage.removeItem("facebook.expires");
+  }
 
   // Export
   for (var key in functions){

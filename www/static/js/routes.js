@@ -310,15 +310,7 @@
 
   routes.logout = function(){
     console.log("[routes] - logout");
-    api.auth.logout(function(error, consumer){
-      if (utils.exists(error)){
-        console.log(error);
-        return;
-      }
-      app.user.clear();
-      app.previousRoutes.clear();
-      window.location.href = "/#!/";
-    });
+    app.user.logout();
   };
 
   routes.emailLogin = function(){
