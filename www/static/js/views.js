@@ -105,6 +105,7 @@
       this.authModel = this.options.authModel;
       this.authModel.on("authenticated", this.authenticatedHandler, this);
       this.authModel.on('auth:fail', this.authFailHandler, this);
+      this.loggingIn = false;
       return this;
     }
     , render: function(){
@@ -128,73 +129,36 @@
       return this;
     }
     , facebookLoginHandler: function(){
+      if (this.loggingIn) return;
       var self = this;
-      var loader = new utils.loader($('.loading-container'), {
-        overlayCss: {
-          'background-color': '#000'
-        , opacity: '0.5'
-        , width: '100%'
-        , height: '100%'
-        }
-      , outerCss: {
-          position: 'absolute'
-        }
-      });
-      loader.start();
-      console.log("Facebook Login");
+      this.loggingIn = true;
 
-      if (app.accessToken){
-        FB.api('/me', function(response) {
-          api.auth.facebook(app.accessToken,function(error,consumer){
-            if(utils.exists(error)){
-              console.log(error);
-              loader.stop();
-              return;
-            }
-            console.log("[facebook] authenticated");
-            app.user.set(consumer);
-            app.Views.Main.authenticatedFrame(function(){
-              loader.stop();
-              self.authenticatedHandler();
-            });
-          });
-        });
-      }else{
-        FB.login(function(response){
-          console.log("response");
-          console.log(response);
-          if(response.session || response.authResponse){
-            if(response.session){
-              app.accessToken = response.session.access_token
-            } else{
-              app.accessToken = response.authResponse.app.accessToken;
-            }
-            FB.api('/me', function(response) {
-              api.auth.facebook(app.accessToken,function(error,consumer){
-                if(utils.exists(error)){
-                  console.log(error);
-                  loader.stop();
-                  return;
-                }
-                console.log("[facebook] authenticated");
-                app.user.set(consumer);
-                app.Views.Main.authenticatedFrame(function(){
-                  loader.stop();
-                  self.authenticatedHandler();
-                });
-              });
-            });
-          } else{
-            console.log("[facebook] error authenticating");
-            loader.stop();
+      FB.login(function(response){
+        if (response.session){
+          app.functions.setFbAccessToken(
+            response.session.access_token
+          , response.session.expires
+          );
+        }else{
+          app.functions.setFbAccessToken(
+            response.authResponse.app.accessToken
+          , response.authResponse.app.expires
+          );
+        }
+        api.auth.facebook(app.facebook.access_token, function(error, consumer){
+          if(utils.exists(error)){
+            console.log(error);
+            return;
           }
-        }
-        , {
-          perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location",
-          scope: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
-        });
-      }
-
+          app.user.set(consumer);
+          app.Views.Main.authenticatedFrame(function(){
+            self.authenticatedHandler();
+          });
+        })
+      }, {
+        perms: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location",
+        scope: "email, user_birthday, user_likes, user_interests, user_hometown, user_location, user_activities, user_work_history, user_education_history, friends_location"
+      });
     }
     , emailLoginHandler: function(){
       console.log("[handler] landing-email-login");
@@ -371,18 +335,6 @@
     }
     , facebookLoginHandler: function(){
       var self = this;
-      var loader = new utils.loader($('.loading-container'), {
-        overlayCss: {
-          'background-color': '#000'
-        , opacity: '0.5'
-        , width: '100%'
-        , height: '100%'
-        }
-      , outerCss: {
-          position: 'absolute'
-        }
-      });
-      loader.start();
       FB.login(function(response){
         if(response.session || response.authResponse){
           var accessToken;
@@ -395,20 +347,17 @@
             api.auth.facebook(accessToken,function(error,consumer){
               if(utils.exists(error)){
                 console.log(error);
-                loader.stop();
                 return;
               }
               console.log("[facebook] authenticated");
               app.user.set(consumer);
               app.Views.Main.authenticatedFrame(function(){
-                loader.stop();
                 self.authenticatedHandler();
               });
             });
           });
         } else{
           console.log("[facebook] error authenticating");
-          loader.stop();
         }
       }
       , {
@@ -724,13 +673,17 @@
     , events: {
       "click #settings-logout": "logout"
     }
-    , initialize: function(){ return this; }
+    , initialize: function(){
+      this.logout.bind(this);
+      return this;
+    }
     , render: function(){
       $(this.el).html(app.templates.settings());
+      this.delegateEvents();
       return this;
     }
     , logout: function(){
-      window.location.href = "/#!/logout";
+      app.user.logout();
       return this;
     }
   });
@@ -851,7 +804,7 @@
 
       if(!app.user || !app.user.get("_id") || app.user.get("_id") == null || app.user.get("_id") == ""){
         alert("Please login first");
-        window.location.href = "/#!/logout";
+        app.user.logout();
         return;
       };
 

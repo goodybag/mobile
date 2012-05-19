@@ -29,6 +29,25 @@
     hasUserCache: function(){
       return !!this.get('email');
     }
+  , logout: function(callback){
+      callback || (callback = function(){});
+      app.trigger('logout:begin');
+      var self = this;
+      FB.logout(function(){
+        api.auth.logout(function(error, consumer){
+          if (utils.exists(error)){
+            console.log(error);
+            app.trigger('logout:fail', error);
+            return;
+          }
+          self.clear();
+          app.previousRoutes.clear();
+          app.functions.clearFbAccessToken();
+          callback();
+          app.trigger('logout:success');
+        });
+      });
+    }
   });
 
   models.EmailAuth = utils.Model.extend({
