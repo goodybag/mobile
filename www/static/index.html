@@ -96,19 +96,19 @@
   ];
 
   // Setup awesome logging
-  headCallbacks.push(function(){
-    // We'll make this more robust later
-    var original = console.log;
-    console.log = function(){
-      $.post('/logs', {
-        type: 'Info'
-      , color: 'yellow'
-      , message: arguments[0]
-      , agent: navigator.userAgent
-      }, function(){ });
-      original.apply(console, arguments);
-    };
-  });
+  // headCallbacks.push(function(){
+  //   // We'll make this more robust later
+  //   var original = console.log;
+  //   console.log = function(){
+  //     $.post('/logs', {
+  //       type: 'Info'
+  //     , color: 'yellow'
+  //     , message: arguments[0]
+  //     , agent: navigator.userAgent
+  //     }, function(){ });
+  //     original.apply(console, arguments);
+  //   };
+  // });
 
   if (((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i))) && !navigator.userAgent.match(/Safari/i)){ //in iphone app
     console.log("in-iphone-app");
