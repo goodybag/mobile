@@ -169,7 +169,6 @@
 
       this.authModel.set(options);
       this.authModel.login();
-
       return false;
     }
     , authenticatedHandler: function(){
@@ -555,12 +554,10 @@
   });
 
   views.Place = utils.View.extend({
-    className: 'inline-columns place'
+    className: 'inline-columns place push-link'
     , events: {
-      'click .view-details': 'viewDetails'
-    }
-    , initialize: function(){
-    }
+        'click': 'viewDetails'
+      }
     , render: function() {
       $(this.el).html(app.fragments.place(this.model.toJSON()));
       return this;
