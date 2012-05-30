@@ -490,6 +490,10 @@ html {
 .place-details .locations .location:last-child {
   border-bottom: none;
 }
+.place-details .locations .location > .address {
+  display: block;
+  margin-bottom: 4px;
+}
 .field-row {
   margin-bottom: 16px;
 }

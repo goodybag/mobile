@@ -568,8 +568,6 @@
     , viewDetails: function(){
       /* display business details */
       var self = this;
-      console.log("View Details");
-      console.log(self.model);
       app.changePage(function(done){
         api.businesses.getOneEquipped(self.model.get('_id'), function(error, business){
           if(utils.exists(error)){
