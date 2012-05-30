@@ -349,37 +349,40 @@
 
   routes.goodies = function(){
     console.log('[routes] - goodies');
-
     app.functions.changePage(function(done){
-      var goodiesPage = new app.Views.Goodies();
-      var options = {
-        media: 1,
-        progress: 1
-      };
-      goodiesPage.render();
-      api.loyalties.list(options, function(error, loyaltiesProgressAndMedia){
-        if(utils.exists(error)){
-          console.log(error.message);
-          done(new app.Views.NoGoodies().render())
-          return;
-        }
-        var goodies   = utils.goodyJoin(loyaltiesProgressAndMedia)
-          , $goodies  = $()
-          , goody
-        ;
-        if (goodies.length == 0){
-          done(new app.Views.NoGoodies().render());
-        }else{
-          for (var i = 0; i < goodies.length; i++){
-            goody = new app.Views.Goody({
-              model: new app.Models.Goody(goodies[i])
-            });
-            goodiesPage.addGoody(goody);
-          }
-          done(goodiesPage);
-        }
-      });
+      done(new app.Views.GoodiesComingSoon().render());
     });
+
+    // app.functions.changePage(function(done){
+    //   var goodiesPage = new app.Views.Goodies();
+    //   var options = {
+    //     media: 1,
+    //     progress: 1
+    //   };
+    //   goodiesPage.render();
+    //   api.loyalties.list(options, function(error, loyaltiesProgressAndMedia){
+    //     if(utils.exists(error)){
+    //       console.log(error.message);
+    //       done(new app.Views.NoGoodies().render())
+    //       return;
+    //     }
+    //     var goodies   = utils.goodyJoin(loyaltiesProgressAndMedia)
+    //       , $goodies  = $()
+    //       , goody
+    //     ;
+    //     if (goodies.length == 0){
+    //       done(new app.Views.NoGoodies().render());
+    //     }else{
+    //       for (var i = 0; i < goodies.length; i++){
+    //         goody = new app.Views.Goody({
+    //           model: new app.Models.Goody(goodies[i])
+    //         });
+    //         goodiesPage.addGoody(goody);
+    //       }
+    //       done(goodiesPage);
+    //     }
+    //   });
+    // });
   };
 
   routes.settings = function(){

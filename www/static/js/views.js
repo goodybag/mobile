@@ -67,13 +67,31 @@
     }
   });
 
+  views.GoodiesComingSoon = utils.View.extend({
+    className: 'page goodies-coming-soon'
+  , render: function(){
+      this.el.innerHTML = app.templates.goodiesComingSoon();
+      return this;
+    }
+  });
+
+  // Now incomplete until we fix API shtuff
   views.Goodies = utils.View.extend({
     className: 'page goodies',
-    initialize: function(){
+    initialize: function(options){
+      this.goodies = options.goodies;
       return this;
     },
     render: function(){
       $(this.el).html(app.templates.goodies());
+      var $el = $(this.el).find('#goodies-list');
+      for (var i = 0; i < this.goodies.length; i++){
+        $el.append(
+          new app.Views.Goody({
+            json: this.goodies[i]
+          }).render().el
+        );
+      }
       return this;
     },
     addGoody: function(goody){
@@ -85,11 +103,12 @@
 
   views.Goody = utils.View.extend({
     className: 'goody',
-    initialize: function(){
+    initialize: function(options){
+      this.json = options.json;
       return this;
     },
     render: function(){
-      $(this.el).html(app.fragments.goody(this.model.toJSON()));
+      $(this.el).html(app.fragments.goody(this.json));
       return this;
     }
   });
