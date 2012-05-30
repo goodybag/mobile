@@ -61,10 +61,6 @@
     }
   });
 
-  setTimeout(function(){
-    alert('testing');
-  }, 4000);
-
   // Position Static fix for inputs on ios
   if (app.config.isIos){
     app.on('page:change:complete', function(){
