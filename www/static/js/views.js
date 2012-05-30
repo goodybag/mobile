@@ -67,13 +67,31 @@
     }
   });
 
+  views.GoodiesComingSoon = utils.View.extend({
+    className: 'page goodies-coming-soon'
+  , render: function(){
+      this.el.innerHTML = app.templates.goodiesComingSoon();
+      return this;
+    }
+  });
+
+  // Now incomplete until we fix API shtuff
   views.Goodies = utils.View.extend({
     className: 'page goodies',
-    initialize: function(){
+    initialize: function(options){
+      this.goodies = options.goodies;
       return this;
     },
     render: function(){
       $(this.el).html(app.templates.goodies());
+      var $el = $(this.el).find('#goodies-list');
+      for (var i = 0; i < this.goodies.length; i++){
+        $el.append(
+          new app.Views.Goody({
+            json: this.goodies[i]
+          }).render().el
+        );
+      }
       return this;
     },
     addGoody: function(goody){
@@ -85,11 +103,12 @@
 
   views.Goody = utils.View.extend({
     className: 'goody',
-    initialize: function(){
+    initialize: function(options){
+      this.json = options.json;
       return this;
     },
     render: function(){
-      $(this.el).html(app.fragments.goody(this.model.toJSON()));
+      $(this.el).html(app.fragments.goody(this.json));
       return this;
     }
   });
@@ -169,7 +188,6 @@
 
       this.authModel.set(options);
       this.authModel.login();
-
       return false;
     }
     , authenticatedHandler: function(){
@@ -555,12 +573,10 @@
   });
 
   views.Place = utils.View.extend({
-    className: 'inline-columns place'
+    className: 'inline-columns place push-link'
     , events: {
-      'click .view-details': 'viewDetails'
-    }
-    , initialize: function(){
-    }
+        'click': 'viewDetails'
+      }
     , render: function() {
       $(this.el).html(app.fragments.place(this.model.toJSON()));
       return this;
@@ -568,8 +584,6 @@
     , viewDetails: function(){
       /* display business details */
       var self = this;
-      console.log("View Details");
-      console.log(self.model);
       app.changePage(function(done){
         api.businesses.getOneEquipped(self.model.get('_id'), function(error, business){
           if(utils.exists(error)){
@@ -590,12 +604,16 @@
     className: 'page place-details'
     , events: {
       "click .save" : "createContact"
+    , "click #place-details-business-website": "businessWebsiteClick"
     }
     , initialize: function(){
     }
     , render: function() {
       $(this.el).html(app.templates.placeDetails(this.model.toJSON()));
       return this;
+    }
+    , businessWebsiteClick: function(e){
+      if (utils.exists(PG)) return false;
     }
     , createContact: function(event) {
       console.log("[handler] save contact");
@@ -872,8 +890,12 @@
 
   views.RowLoader = utils.View.extend({
     className: 'gb-row-loader',
+    events: {
+      'click': 'rowClick'
+    },
     initialize: function(options){
       this.$el = $(this.el);
+      this.$el.html("Tap to Load More");
       this.loader = new utils.loader(this.$el, options);
     },
     start: function(){
@@ -886,6 +908,12 @@
     },
     isLoading: function(){
       return this.loader.isLoading();
+    },
+    rowClick: function(e){
+      console.log("CLIIIIIIIIICK");
+      if (this.options.onClick){
+        this.options.onClick(e, this);
+      }
     }
   });
 

@@ -33,7 +33,7 @@ body, html
   position:relative
   z-index 2
 .header-nav > .flex-columns > .column
-  padding-top: 8px
+  padding-top: 6px
 .header-nav > .flex-columns > .middle
   text-align center
   padding-top: 2px
@@ -429,9 +429,8 @@ body, html
   font-weight: 600
 
 .place
-  padding-bottom: 8px
+  padding: 8px 0
   border-bottom: dotted #ccc 1px
-  margin-bottom: 8px
 .place:last-child
   border-bottom: none
 .place > .column.left
@@ -439,8 +438,11 @@ body, html
   margin-right: 4%
 .place > .column.right
   width: 78% // Android percentages
+  margin-bottom: 5px
 .place > .column.left > img
   width: 100%
+.place .name
+  margin: 0
 .place .name > a
   color: inherit
   text-decoration: none
@@ -459,6 +461,9 @@ body, html
   margin-bottom: 8px
 .place-details .locations .location:last-child
   border-bottom: none
+.place-details .locations .location > .address
+  display: block
+  margin-bottom: 4px
 
 .field-row
   margin-bottom: 16px
@@ -524,6 +529,28 @@ h2
   border-radius: 12px
   content: "\203A"
 
+.push-link
+  position: relative
+  display: block
+  padding: 14px 8px
+  border-bottom: solid #ddd 1px
+  color: inherit
+  font-size: 16px
+  text-decoration: none
+.push-link:visited
+  color: inherit
+.push-link:after
+  position: absolute
+  display: block
+  top: 50%
+  right: 6px
+  margin-top: -12px
+  color: #888;
+  font-size: 32px;
+  line-height: 18px
+  font-weight: 400;
+  content: "\203A"
+
 .btn,
 .btn:visited,
 button {
@@ -547,7 +574,11 @@ button:active
   box-shadow: 0 1px 0 rgba(255,255,255, 0.25);
 
 .gb-row-loader
-  height: 60px
+  box-sizing: border-box
+  min-height: 60px
+  padding: 16px 0
+  text-align: center
+  font-size: 18px
 
 
 .columns
