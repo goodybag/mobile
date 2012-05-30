@@ -585,12 +585,16 @@
     className: 'page place-details'
     , events: {
       "click .save" : "createContact"
+    , "click #place-details-business-website": "businessWebsiteClick"
     }
     , initialize: function(){
     }
     , render: function() {
       $(this.el).html(app.templates.placeDetails(this.model.toJSON()));
       return this;
+    }
+    , businessWebsiteClick: function(e){
+      if (utils.exists(PG)) return false;
     }
     , createContact: function(event) {
       console.log("[handler] save contact");

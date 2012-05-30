@@ -365,10 +365,12 @@
 <!-- ############# -->
 <script id="place-details-tmpl" type="text/x-handlebars-template">
   <h1 class="name">{{publicName}}</h1>
+  {{#if url}}
   <div class="info">
     <strong>Website: </strong>
-    <a class="url" href="{{url}}">{{url}}</a>
+    <a class="url" href="{{url}}" target="_blank" id="place-details-business-website">{{url}}</a>
   </div>
+  {{/if}}
   <div class="info">
     <strong>Email: </strong>
     <a class="email" href="mailto:{{email}}">{{email}}</a>
