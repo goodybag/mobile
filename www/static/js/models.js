@@ -54,13 +54,17 @@
     defaults: {
       authenticated: false
     }
+    , hasUserCache: function(){
+      return !!this.get('email');
+    }
     , login: function() {
       var self = this;
       var options = {email: this.get("email"), password: this.get("password")};
       api.auth.login(options, function(error, consumer){
         self.unset("password", {silent: true}); //clear for safety
         if(!utils.exists(error)){
-          app.user.set(consumer);
+          self.set(consumer);
+          app.user = self;
           self.trigger("authenticated");
         }else{
           self.trigger("auth:fail", error);
@@ -84,6 +88,14 @@
         };
       });
       return this;
+    }
+    , logout: function(){
+      var self = this;
+      api.auth.logout(function(error){
+        app.previousRoutes.clear();
+        self.clear();
+        app.trigger('logout:success');
+      });
     }
   });
 
