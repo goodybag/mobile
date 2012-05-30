@@ -169,7 +169,6 @@
 
       this.authModel.set(options);
       this.authModel.login();
-
       return false;
     }
     , authenticatedHandler: function(){
@@ -555,12 +554,10 @@
   });
 
   views.Place = utils.View.extend({
-    className: 'inline-columns place'
+    className: 'inline-columns place push-link'
     , events: {
-      'click .view-details': 'viewDetails'
-    }
-    , initialize: function(){
-    }
+        'click': 'viewDetails'
+      }
     , render: function() {
       $(this.el).html(app.fragments.place(this.model.toJSON()));
       return this;
@@ -568,8 +565,6 @@
     , viewDetails: function(){
       /* display business details */
       var self = this;
-      console.log("View Details");
-      console.log(self.model);
       app.changePage(function(done){
         api.businesses.getOneEquipped(self.model.get('_id'), function(error, business){
           if(utils.exists(error)){
@@ -590,12 +585,16 @@
     className: 'page place-details'
     , events: {
       "click .save" : "createContact"
+    , "click #place-details-business-website": "businessWebsiteClick"
     }
     , initialize: function(){
     }
     , render: function() {
       $(this.el).html(app.templates.placeDetails(this.model.toJSON()));
       return this;
+    }
+    , businessWebsiteClick: function(e){
+      if (utils.exists(PG)) return false;
     }
     , createContact: function(event) {
       console.log("[handler] save contact");
