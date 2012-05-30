@@ -41,7 +41,7 @@ html {
   z-index: 2;
 }
 .header-nav > .flex-columns > .column {
-  padding-top: 8px;
+  padding-top: 6px;
 }
 .header-nav > .flex-columns > .middle {
   text-align: center;
