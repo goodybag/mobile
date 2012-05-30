@@ -124,6 +124,9 @@
           }
         };
         var scrollObserver = new utils.scrolledToEndObserver($(window), scrollListener);
+        $(streamsView.el).find('.gb-row-loader').click(function(e){
+          scrollListener(e, scrollObserver);
+        });
         console.log("[Global Stream] - Turn off old hashchange events");
         // Make sure we remove the scroll listener after leaving this page
         $(window).off('hashchange.stream').on('hashchange.stream', function(e){
@@ -228,7 +231,7 @@
         }
         // Scroll to end load more
         var loader = new app.Views.RowLoader({
-          overlayCss: { display: 'none' },
+          overlayCss: { display: 'none' }
         });
         $(placesView.el).append(loader.$el);
         var scrollListener = function(e, observer){
@@ -252,11 +255,16 @@
                 // Remove the loader and move it to an appropriate spot
                 loader.$el.remove();
                 $(placesView.el).append(loader.$el);
+                loader.delegateEvents();
               }
             });
           }
         };
         var scrollObserver = new utils.scrolledToEndObserver($(window), scrollListener);
+        loader.options.onClick = function(e){
+          console.log("CLEEK!");
+          scrollListener(e, scrollObserver);
+        };
         // Make sure we remove the scroll listener after leaving this page
         $(window).off('hashchange.places').on('hashchange.places', function(e){
           scrollObserver.off();
