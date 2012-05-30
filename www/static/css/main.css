@@ -448,9 +448,8 @@ html {
   font-weight: 600;
 }
 .place {
-  padding-bottom: 8px;
+  padding: 8px 0;
   border-bottom: dotted #ccc 1px;
-  margin-bottom: 8px;
 }
 .place:last-child {
   border-bottom: none;
@@ -461,9 +460,13 @@ html {
 }
 .place > .column.right {
   width: 78%;
+  margin-bottom: 5px;
 }
 .place > .column.left > img {
   width: 100%;
+}
+.place .name {
+  margin: 0;
 }
 .place .name > a {
   color: inherit;
@@ -558,6 +561,30 @@ h2 {
   width: 24px;
   height: 24px;
   border-radius: 12px;
+  content: "\203A";
+}
+.push-link {
+  position: relative;
+  display: block;
+  padding: 14px 8px;
+  border-bottom: solid #ddd 1px;
+  color: inherit;
+  font-size: 16px;
+  text-decoration: none;
+}
+.push-link:visited {
+  color: inherit;
+}
+.push-link:after {
+  position: absolute;
+  display: block;
+  top: 50%;
+  right: 6px;
+  margin-top: -12px;
+  color: #888;
+  font-size: 32px;
+  line-height: 18px;
+  font-weight: 400;
   content: "\203A";
 }
 .btn,
