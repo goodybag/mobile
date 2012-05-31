@@ -123,29 +123,28 @@
 <!-- LANDING PAGE TEMPLATE -->
 <!-- ##################### -->
 <script id="landing-tmpl" type="text/x-handlebars-template">
-  <div class="field-row">
-    <a id="landing-login-facebook-button" class="row-link">Login With Facebook</a>
-  </div>
-  <div class="field-row">
-    <a id="landing-register-button" class="row-link">Register</a>
-  </div>
+  <a id="landing-login-facebook-button" class="push-link">Login With Facebook</a>
+  <a id="landing-register-button" class="push-link">Register</a>
+  <h2>Login With Email</h2>
   <form id="landing-login-form">
     <div class="errors"></div>
-    <div class="field-row">
-      <input type="email" placeholder="Email" name="email" id="landing-login-email" required="required" />
-    </div>
-    <div class="field-row">
-      <input type="password" placeholder="Password" name="password" id="landing-login-password" required="required" />
-    </div>
-    <div class="field-row">
-      <button>Login</button>
-    </div>
+      <fieldset class="fieldset">
+      <div class="field-row">
+        <input type="email" placeholder="Email" name="email" id="landing-login-email" required="required" />
+      </div>
+      <div class="field-row">
+        <input type="password" placeholder="Password" name="password" id="landing-login-password" required="required" />
+      </div>
+      <div class="field-row">
+        <button>Login</button>
+      </div>
+    </fieldset>
   </form>
 </script>
 
 <script id="register-tmpl" type="text/x-handlebars-template">
   <div class="field-row">
-    <a id="register-facebook" class="row-link">Register With Facebook</a>
+    <a id="register-facebook" class="push-link">Register With Facebook</a>
   </div>
   <form id="register-form">
     <div class="field-row">
@@ -185,6 +184,14 @@
   <h1>Dashboard</h1>
   <a href="#!/goodies">Goodies</a>
   <a href="#!/settings">Settings</a>
+</script>
+
+<!-- ############################ -->
+<!-- GOODIES COMING SOON TEMPLATE -->
+<!-- ############################ -->
+<script id="goodies-coming-soon-tmpl" type="text/x-handlebars-template">
+  <h1>Goodies Are Coming REALLY Soon!</h1>
+  <p>Check back here in a few days and you&#39;ll see lots of awesome stuff you can redeem.</p>
 </script>
 
 <!-- ################ -->
@@ -279,7 +286,7 @@
     <div id="streams-activities">
       <!-- activity fragments -->
     </div>
-    <div class="gb-row-loader"></div>
+    <div class="gb-row-loader">Tap to Load More</div>
   </section>
 </script>
 
@@ -359,11 +366,6 @@
       {{/each}}
     </div>
   </div>
-  <div class="actions">
-    <div class="field-row">
-      <button class="view-details">View Details</button>
-    </div>
-  </div>
 </script>
 
 <!-- ############# -->
@@ -371,10 +373,12 @@
 <!-- ############# -->
 <script id="place-details-tmpl" type="text/x-handlebars-template">
   <h1 class="name">{{publicName}}</h1>
+  {{#if url}}
   <div class="info">
     <strong>Website: </strong>
-    <a class="url" href="{{url}}">{{url}}</a>
+    <a class="url" href="{{url}}" target="_blank" id="place-details-business-website">{{url}}</a>
   </div>
+  {{/if}}
   <div class="info">
     <strong>Email: </strong>
     <a class="email" href="mailto:{{email}}">{{email}}</a>
@@ -383,12 +387,12 @@
   {{#each locations}}
     <address class="location">
       <h3 class="name">{{name}}</h3>
-      <a href="http://maps.google.com/maps?q={{street1}} {{city}}, {{state}} {{zip}}">
+      <div class="address">
         <span class="street1">{{street1}}, </span>
         <span class="city">{{city}}, </span>
         <span class="state">{{state}}, </span>
         <span class="zip">{{zip}}</span>
-      </a>
+      </div>
       <div class="phone">
         <a href="tel:{{phone}}">{{phone}}</a>
       </div>
@@ -428,24 +432,16 @@
 <!-- ######## -->
 <script id="settings-tmpl" type="text/x-handlebars-template">
   <h1>Settings</h1>
-  <div class="field-row">
-    <a class="row-link" href="/#!/settings/change-password">Change Password</a>
-  </div>
-  <div class="field-row">
-    <a class="row-link" href="/#!/settings/change-tapin">Change TapIn ID</a>
-  </div>
-  <div class="field-row">
-    <a class="row-link" href="/#!/settings/change-picture">Change Picture</a>
-  </div>
-  <div class="field-row">
-      <button id="settings-logout">Logout</button>
-    </div>
+    <a class="push-link" href="/#!/settings/change-password">Change Password</a>
+    <a class="push-link" href="/#!/settings/change-tapin">Change TapIn ID</a>
+    <a class="push-link" href="/#!/settings/change-picture">Change Picture</a>
+    <div class="push-link" id="settings-logout">Logout</div>
 </script>
 <!-- ######################## -->
 <!-- SETTINGS CHANGE PASSWORD -->
 <!-- ######################## -->
 <script id="change-password-tmpl" type="text/x-handlebars-template">
-  <h1>Settings - Change Password</h1>
+  <h1>Change Password</h1>
   <div class="errors"></div>
   <form id="settings-change-password-form">
     <div class="field-row">
@@ -472,7 +468,7 @@
 <!-- SETTINGS CHANGE TAPIN -->
 <!-- ##################### -->
 <script id="change-tapin-tmpl" type="text/x-handlebars-template">
-  <h1>Settings - Change TapIn ID</h1>
+  <h1>Change TapIn ID</h1>
   <div class="errors"></div>
   <form id="settings-change-tapin-form">
     <div class="field-row">
@@ -490,7 +486,7 @@
 <!-- SETTINGS CHANGE PICTURE -->
 <!-- ####################### -->
 <script id="change-picture-tmpl" type="text/x-handlebars-template">
-  <h1>Settings - Change Picture</h1>
+  <h1>Change Picture</h1>
   <form id="settings-change-picture-form">
     <div class="field-row">
       <button id="change-picture-choose">Choose Photo</button>
