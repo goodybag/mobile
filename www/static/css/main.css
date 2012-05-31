@@ -434,11 +434,11 @@ html {
 .story:last-child {
   border-bottom: none;
 }
-.story .column.picture {
+.story .column.picture-wrapper {
   width: 12%;
   margin-right: 4%;
 }
-.story .column.picture img {
+.story .column.picture-wrapper .picture {
   width: 100%;
 }
 .story .column.text {
