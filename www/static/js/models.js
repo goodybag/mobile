@@ -52,13 +52,7 @@
     }
     , register: function(){
       var self = this;
-      var options = {
-        firstName: this.get("firstName")
-        , lastName: this.get("lastName")
-        , email: this.get("email")
-        , password: this.get("password")
-      };
-      api.auth.register(options, function(error, consumer){
+      api.auth.register(this.toJSON(), function(error, consumer){
         self.unset("password", {silent: true}); //clear for safety
         if(!utils.exists(error)){
           app.user.set(consumer);
