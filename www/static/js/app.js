@@ -69,6 +69,7 @@
         app.functions.hidePositionStaticElements();
       }).on('blur.position-static-fix', function(){
         app.functions.showPositionStaticElements();
+        app.functions.lacksPositionStatic() && app.Views.Main.fixStatics();
       });
     });
   }

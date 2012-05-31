@@ -3,28 +3,6 @@
   this.app.Models = window.app.Models || {};
   var models = {};
 
-  models.Goody = utils.Model.extend({
-    initialize: function(attributes, options){
-      // Set the percentage field
-      var percentage = Math.ceil((attributes.funds.charityCentsRemaining / attributes.funds.centsRequired)*100);
-      var funds = attributes.funds;
-      funds.centsTilGoody = attributes.funds.centsRequired - attributes.funds.charityCentsRemaining;
-      if (percentage > 100){
-        percentage = 100;
-        funds.centsTilGoody = 0;
-      }
-      if (percentage < 0){
-        //this shouldnt be possible..
-        percentage = 0
-        funds.centsTilGoody = goody.funds.centsRequired;
-      };
-      this.set('funds', funds);
-      this.set('percentage', percentage);
-
-      return this;
-    }
-  });
-
   models.User = utils.Model.extend({
     hasUserCache: function(){
       return !!this.get('email');
@@ -54,13 +32,17 @@
     defaults: {
       authenticated: false
     }
+    , hasUserCache: function(){
+      return !!this.get('email');
+    }
     , login: function() {
       var self = this;
       var options = {email: this.get("email"), password: this.get("password")};
       api.auth.login(options, function(error, consumer){
         self.unset("password", {silent: true}); //clear for safety
         if(!utils.exists(error)){
-          app.user.set(consumer);
+          self.set(consumer);
+          app.user = self;
           self.trigger("authenticated");
         }else{
           self.trigger("auth:fail", error);
@@ -70,13 +52,7 @@
     }
     , register: function(){
       var self = this;
-      var options = {
-        firstName: this.get("firstName")
-        , lastName: this.get("lastName")
-        , email: this.get("email")
-        , password: this.get("password")
-      };
-      api.auth.register(options, function(error, consumer){
+      api.auth.register(this.toJSON(), function(error, consumer){
         self.unset("password", {silent: true}); //clear for safety
         if(!utils.exists(error)){
           app.user.set(consumer);
@@ -84,6 +60,14 @@
         };
       });
       return this;
+    }
+    , logout: function(){
+      var self = this;
+      api.auth.logout(function(error){
+        app.previousRoutes.clear();
+        self.clear();
+        app.trigger('logout:success');
+      });
     }
   });
 
