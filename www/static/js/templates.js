@@ -29,10 +29,11 @@
   templates.changePicture           = "change-picture-tmpl";
 
   // Goodies
-  templates.goodies     = "goodies-tmpl";
-  templates.noGoodies   = "no-goodies-tmpl";
-  fragments.goody       = "goody-fragment";
-  fragments.simpleGoody = "simple-goody-fragment";
+  templates.goodies           = "goodies-tmpl";
+  templates.goodiesComingSoon = "goodies-coming-soon-tmpl";
+  templates.noGoodies         = "no-goodies-tmpl";
+  fragments.goody             = "goody-fragment";
+  fragments.simpleGoody       = "simple-goody-fragment";
 
   //Streams
   templates.streams               = "streams-tmpl";
