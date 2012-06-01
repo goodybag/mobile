@@ -17,9 +17,15 @@ CACHE:
 /static/3/jquery.qrcode.js
 /static/3/qrcode.js
 /static/3/serializeObject.js
+/static/3/head.load.min.js
+/static/3/sammy-latest.min.js
+/static/3/handlebars-1.0.0.beta.4.js
+/static/3/sprintf-0.7-beta1.js
 /static/3/phonegap-1.4.1.js
 /static/3/pg-plugin-fb-connect.js
 /static/3/facebook_js_sdk.js
+/static/js/handlebar-helpers.js
+/static/js/streamParser.js
 /static/js/models.js
 /static/js/templates.js
 /static/js/transitions.js
@@ -33,8 +39,13 @@ CACHE:
 /static/js/routers.js
 /static/js/app.js
 
+#IMAGES
+/static/images/white-stripe-vertical.png
+/static/images/main-sprite.png
+favicon.ico
+
 #MODIFIER
-modified?i=22
+modified?i=29
 
 NETWORK:
 *

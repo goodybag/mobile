@@ -37,29 +37,29 @@
     app.facebook.expired = app.facebook.expires < new Date();
   }
 
-  // api.auth.session(function(error, consumer){
-  //   if(exists(error)){
-  //     console.log(error.message);
-  //     return;
-  //   };
+  api.auth.session(function(error, consumer){
+    if(exists(error)){
+      console.log(error.message);
+      return;
+    };
 
-  //   if (utils.exists(consumer)){
-  //     app.user.set(consumer);
-  //     window.location.href = utils.isRootHash() ? app.config.postLoginUrl : window.location.hash;
-  //   }else{
-  //     // Check Local storage to see if we can auto fb-login
-  //     if (utils.exists(app.facebook) && !app.facebook.expired){
-  //       api.auth.facebook(app.facebook.access_token, function(error, consumer){
-  //         if (utils.exists(error)){
-  //           console.log(error.message);
-  //           return;
-  //         }
-  //         app.user.set(consumer);
-  //         window.location.href = utils.isRootHash() ? app.config.postLoginUrl : window.location.hash;
-  //       });
-  //     }
-  //   }
-  // });
+    if (utils.exists(consumer)){
+      app.user.set(consumer);
+      window.location.href = utils.isRootHash() ? app.config.postLoginUrl : window.location.hash;
+    }else{
+      // Check Local storage to see if we can auto fb-login
+      if (utils.exists(app.facebook) && !app.facebook.expired){
+        api.auth.facebook(app.facebook.access_token, function(error, consumer){
+          if (utils.exists(error)){
+            console.log(error.message);
+            return;
+          }
+          app.user.set(consumer);
+          window.location.href = utils.isRootHash() ? app.config.postLoginUrl : window.location.hash;
+        });
+      }
+    }
+  });
 
   // Position Static fix for inputs on ios
   if (app.config.isIos){
