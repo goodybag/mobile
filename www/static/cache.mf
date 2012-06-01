@@ -5,14 +5,18 @@ CACHE:
 
 #CSS
 /static/css/main.css
-/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css
+/static/css/androidlt3.css
+/static/css/gb-loader.css
+/static/css/reset.css
+/static/css/1xDpi.css
+/static/css/2xDpi.css
 
 #JAVASCRIPT
 /static/3/jquery-1.7.1.min.js
-/static/3/jquery.mobile-1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js
 /static/3/sugar-0.9.4.min.js
 /static/3/jquery.qrcode.js
 /static/3/qrcode.js
+/static/3/serializeObject.js
 /static/3/phonegap-1.4.1.js
 /static/3/pg-plugin-fb-connect.js
 /static/3/facebook_js_sdk.js
