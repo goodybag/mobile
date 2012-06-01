@@ -20,8 +20,13 @@ CACHE:
 /static/3/phonegap-1.4.1.js
 /static/3/pg-plugin-fb-connect.js
 /static/3/facebook_js_sdk.js
-/static/js/master.js
 /static/js/models.js
+/static/js/templates.js
+/static/js/transitions.js
+/static/js/functions.js
+/static/js/config.js
+/static/js/utils.js
+/static/js/globals.js
 /static/js/collections.js
 /static/js/views.js
 /static/js/routes.js
