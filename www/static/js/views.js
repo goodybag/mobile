@@ -422,39 +422,10 @@
       this.pageContent.renderSingleActivity(activity);
     }
     , loadGlobalActivity: function(){
-      /*var self = this;
-      app.changePage(function(done){
-        $('#streams-activities', this.el).html("");
-        self.collection.fetchGlobal(function(error){
-          if (utils.exists(error)){
-            console.error(error.message);
-            return;
-          }
-          app.router.changeHash("#!/streams/global");
-          app.trigger('leavePage:' + app.previousRoutes.previousRoute());
-          done(self.pageContent);
-        });
-      }, {
-        transition: 'load'
-      });*/
       window.location.href = '/#!/streams/global';
       return this;
     }
     , loadMyActivity: function(){
-      /*var self = this;
-      app.changePage(function(done){
-        $('#streams-activities', this.el).html("");
-        self.collection.fetchSelf(function(error, data){
-          if (utils.exists(error)){
-            console.error(error.message);
-            return;
-          }
-          app.router.changeHash("#!/streams/me");
-          done(self.pageContent);
-        });
-      }, {
-        transition: 'load'
-      });*/
       window.location.href = '/#!/streams/me';
       return this;
     }
@@ -481,14 +452,12 @@
       var models = this.collection.models;
       $('#streams-activities', $(this.el)).html("");
       if (models.length == 0){
-        console.log("G's Blood stain")
         $(this.el).html(app.templates.streamsNone());
         return this;
       }
       for (var i = 0; i < models.length; i++){
         this.renderSingleActivity(models[i]);
       }
-      //this.fixImages();
       return this;
     }
     , renderSingleActivity: function(activity){
@@ -497,14 +466,6 @@
       }).render();
       $('#streams-activities', $(this.el)).append(activityView.el);
       return this;
-    }
-    , fixImages: function(){
-      $newImages = $("img.picture", $(this.el));
-      $newImages.error(function(){
-        //since profile pictures are assumed to be s3/<id...>.png
-        //if the picture is not found we will replace it with the default goodybag pic
-        $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
-      });
     }
   });
 
@@ -518,8 +479,7 @@
       $(this.el).html(app.fragments.activity(this.model.toJSON()));
       if (!this.pictureRendered && !this.pictureSourceNotFound){
         this.picture = document.createElement('img');
-        this.picture.src = app.config.businessLogo.replace('{{id}}', this.model.attributes.who.id);
-        utils.addClass(this.logo, 'business-logo');
+        this.picture.src = app.config.consumerPicture.replace('{{id}}', this.model.attributes.who.id);
         this.picture.onload = this.renderPicture.bind(this);
         this.picture.onerror = this.pictureLoadError.bind(this);
       }

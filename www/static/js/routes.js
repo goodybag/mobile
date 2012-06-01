@@ -205,6 +205,9 @@
           }
         };
         var scrollObserver = new utils.scrolledToEndObserver($(window), scrollListener);
+        $(streamsView.el).find('.gb-row-loader').click(function(e){
+          scrollListener(e, scrollObserver);
+        });
         // Make sure we remove the scroll listener after leaving this page
         $(window).off('hashchange.stream').on('hashchange.stream', function(e){
           scrollObserver.off();
