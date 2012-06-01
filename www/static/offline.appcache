@@ -13,7 +13,7 @@ CACHE:
 
 #JAVASCRIPT
 /static/3/jquery-1.7.1.min.js
-/static/3/sugar-0.9.4.min.js
+/static/3/sugar-1.2.3.min.js
 /static/3/jquery.qrcode.js
 /static/3/qrcode.js
 /static/3/serializeObject.js
@@ -34,7 +34,7 @@ CACHE:
 /static/js/app.js
 
 #MODIFIER
-modified?i=20
+modified?i=22
 
 NETWORK:
 *
