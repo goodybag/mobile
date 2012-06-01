@@ -861,8 +861,12 @@
 
   views.RowLoader = utils.View.extend({
     className: 'gb-row-loader',
+    events: {
+      'click': 'rowClick'
+    },
     initialize: function(options){
       this.$el = $(this.el);
+      this.$el.html("Tap to Load More");
       this.loader = new utils.loader(this.$el, options);
     },
     start: function(){
@@ -875,6 +879,11 @@
     },
     isLoading: function(){
       return this.loader.isLoading();
+    },
+    rowClick: function(e){
+      if (this.options.onClick){
+        this.options.onClick(e, this);
+      }
     }
   });
 
