@@ -16,7 +16,7 @@
       changeHash: false
     },
     theme: 'b'
-  , consumerPicture: "https://s3.amazonaws.com/goodybag-uploads/consumers/{{id}}-85.png"
+  , consumerPicture: "https://s3.amazonaws.com/goodybag-uploads/consumers-secure/{{id}}-85.png"
   , iosLt5: (function(){
       return (/(iPhone|iPod|iPad)/i.test(navigator.userAgent)) && (/OS [1-4]_._. like Mac OS X/i.test(navigator.userAgent));
     })()

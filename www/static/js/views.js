@@ -448,9 +448,6 @@
       window.location.href = '/#!/streams/me';
       return this;
     }
-    , fixImages: function(){
-      this.pageContent.fixImages();
-    }
   });
 
   views.StreamsPage = utils.View.extend({
@@ -498,7 +495,8 @@
       $(this.el).html(app.fragments.activity(this.model.toJSON()));
       if (!this.pictureRendered && !this.pictureSourceNotFound){
         this.picture = document.createElement('img');
-        this.picture.src = app.config.consumerPicture.replace('{{id}}', this.model.attributes.who.id);
+        this.picture.src = app.config.consumerPicture.replace('{{id}}', this.model.attributes.who.id || this.model.attributes.who.screenName);
+        console.log("[Attempting Picture] - " + this.picture.src);
         this.picture.onload = this.renderPicture.bind(this);
         this.picture.onerror = this.pictureLoadError.bind(this);
       }

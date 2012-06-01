@@ -111,7 +111,6 @@
                 return;
               }
               streamsView.renderActivity();
-              streamsView.fixImages();
               // No more data
               if (data.length < optionsAdd.limit){
                 observer.off();
@@ -192,7 +191,6 @@
                 return;
               }
               streamsView.renderActivity();
-              streamsView.fixImages();
               // No more data
               if (data.length < optionsAdd.limit){
                 observer.off();
