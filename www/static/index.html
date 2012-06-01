@@ -1,14 +1,15 @@
 <!DOCTYPE HTML>
-<!--<html manifest="cache.mf">-->
-<html>
+<html manifest="offline.appcache">
+<!-- <html> -->
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, minimum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
 
     <link rel="stylesheet" href="/static/css/reset.css" />
     <link rel="stylesheet" href="/static/css/gb-loader.css" />
     <link rel="stylesheet" href="/static/css/main.css" />
-    <link rel="stylesheet" type="text/css" href="/css/2xDpi.css" media="only screen and (-webkit-min-device-pixel-ratio: 2)" />
-    <link rel="stylesheet" type="text/css" href="/css/1xDpi.css" media="only screen and (-webkit-max-device-pixel-ratio: 1)" />
+    <link rel="stylesheet" type="text/css" href="/static/css/2xDpi.css" media="only screen and (-webkit-min-device-pixel-ratio: 2)" />
+    <link rel="stylesheet" type="text/css" href="/static/css/1xDpi.css" media="only screen and (-webkit-max-device-pixel-ratio: 1)" />
 
     <script>
       window.applicationCache.addEventListener('updateready', function(e) {
@@ -28,6 +29,8 @@
     </script>
 
     <script src="/static/3/head.load.min.js"></script>
+
+    <title>Goodybag</title>
   </head>
   <body id="body">
     <div id="fb-root"></div>
@@ -578,6 +581,7 @@
     {jQuery: "/static/3/jquery-1.7.1.min.js"}
     , {jquerySerialize: "/static/3/serializeObject.js"}
     , {sammy: "/static/3/sammy-latest.min.js"}
+    , {sammy: "/static/3/moment-1.3.0.min.js"}
     , {sugar: "/static/3/sugar-1.2.3.min.js"}
     , {handlebars: "/static/3/handlebars-1.0.0.beta.4.js"}
     , {jQueryQRcode: "/static/3/jquery.qrcode.js"}
