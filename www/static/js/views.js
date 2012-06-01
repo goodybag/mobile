@@ -188,6 +188,7 @@
 
       this.authModel.set(options);
       this.authModel.login();
+
       return false;
     }
     , authenticatedHandler: function(){
@@ -440,44 +441,12 @@
       this.pageContent.renderSingleActivity(activity);
     }
     , loadGlobalActivity: function(){
-      /*var self = this;
-      app.changePage(function(done){
-        $('#streams-activities', this.el).html("");
-        self.collection.fetchGlobal(function(error){
-          if (utils.exists(error)){
-            console.error(error.message);
-            return;
-          }
-          app.router.changeHash("#!/streams/global");
-          app.trigger('leavePage:' + app.previousRoutes.previousRoute());
-          done(self.pageContent);
-        });
-      }, {
-        transition: 'load'
-      });*/
       window.location.href = '/#!/streams/global';
       return this;
     }
     , loadMyActivity: function(){
-      /*var self = this;
-      app.changePage(function(done){
-        $('#streams-activities', this.el).html("");
-        self.collection.fetchSelf(function(error, data){
-          if (utils.exists(error)){
-            console.error(error.message);
-            return;
-          }
-          app.router.changeHash("#!/streams/me");
-          done(self.pageContent);
-        });
-      }, {
-        transition: 'load'
-      });*/
       window.location.href = '/#!/streams/me';
       return this;
-    }
-    , fixImages: function(){
-      this.pageContent.fixImages();
     }
   });
 
@@ -499,14 +468,12 @@
       var models = this.collection.models;
       $('#streams-activities', $(this.el)).html("");
       if (models.length == 0){
-        console.log("G's Blood stain")
         $(this.el).html(app.templates.streamsNone());
         return this;
       }
       for (var i = 0; i < models.length; i++){
         this.renderSingleActivity(models[i]);
       }
-      this.fixImages();
       return this;
     }
     , renderSingleActivity: function(activity){
@@ -516,23 +483,31 @@
       $('#streams-activities', $(this.el)).append(activityView.el);
       return this;
     }
-    , fixImages: function(){
-      $newImages = $("img.picture", $(this.el));
-      $newImages.error(function(){
-        //since profile pictures are assumed to be s3/<id...>.png
-        //if the picture is not found we will replace it with the default goodybag pic
-        $(this).attr('src',"https://goodybag-uploads.s3.amazonaws.com/consumers/000000000000000000000000-85.png");
-      });
-    }
   });
 
   views.Activity = utils.View.extend({
     initialize: function(){
+      this.pictureRendered = false;
+      this.pictureSourceNotFound = false;
       return this;
-    },
-    render: function(){
+    }
+  , render: function(){
       $(this.el).html(app.fragments.activity(this.model.toJSON()));
+      if (!this.pictureRendered && !this.pictureSourceNotFound){
+        this.picture = document.createElement('img');
+        this.picture.src = app.config.consumerPicture.replace('{{id}}', this.model.attributes.who.id || this.model.attributes.who.screenName);
+        console.log("[Attempting Picture] - " + this.picture.src);
+        this.picture.onload = this.renderPicture.bind(this);
+        this.picture.onerror = this.pictureLoadError.bind(this);
+      }
       return this;
+    }
+  , renderPicture: function(){
+      console.log("[Rendering Picture] - " + this.picture.src);
+      $(this.el).find('.picture').attr('src', this.picture.src);
+    }
+  , pictureLoadError: function(){
+      this.pictureSourceNotFound = true;
     }
   });
 
@@ -604,16 +579,12 @@
     className: 'page place-details'
     , events: {
       "click .save" : "createContact"
-    , "click #place-details-business-website": "businessWebsiteClick"
     }
     , initialize: function(){
     }
     , render: function() {
       $(this.el).html(app.templates.placeDetails(this.model.toJSON()));
       return this;
-    }
-    , businessWebsiteClick: function(e){
-      if (utils.exists(PG)) return false;
     }
     , createContact: function(event) {
       console.log("[handler] save contact");
@@ -890,12 +861,8 @@
 
   views.RowLoader = utils.View.extend({
     className: 'gb-row-loader',
-    events: {
-      'click': 'rowClick'
-    },
     initialize: function(options){
       this.$el = $(this.el);
-      this.$el.html("Tap to Load More");
       this.loader = new utils.loader(this.$el, options);
     },
     start: function(){
@@ -908,12 +875,6 @@
     },
     isLoading: function(){
       return this.loader.isLoading();
-    },
-    rowClick: function(e){
-      console.log("CLIIIIIIIIICK");
-      if (this.options.onClick){
-        this.options.onClick(e, this);
-      }
     }
   });
 
