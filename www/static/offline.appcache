@@ -14,16 +14,17 @@ CACHE:
 #JAVASCRIPT
 /static/3/jquery-1.7.1.min.js
 /static/3/sugar-1.2.3.min.js
-/static/3/jquery.qrcode.js
-/static/3/qrcode.js
-/static/3/serializeObject.js
+/static/3/jquery.qrcode.min.js
+/static/3/qrcode.min.js
+/static/3/serializeObject.min.js
+/static/3/moment-1.3.0.min.js
 /static/3/head.load.min.js
 /static/3/sammy-latest.min.js
 /static/3/handlebars-1.0.0.beta.4.js
-/static/3/sprintf-0.7-beta1.js
-/static/3/phonegap-1.4.1.js
-/static/3/pg-plugin-fb-connect.js
-/static/3/facebook_js_sdk.js
+/static/3/sprintf-0.7-beta1.min.js
+/static/3/phonegap-1.4.1.min.js
+/static/3/pg-plugin-fb-connect.min.js
+/static/3/facebook_js_sdk.min.js
 /static/js/handlebar-helpers.js
 /static/js/streamParser.js
 /static/js/models.js
@@ -42,10 +43,11 @@ CACHE:
 #IMAGES
 /static/images/white-stripe-vertical.png
 /static/images/main-sprite.png
+/static/images/main-sprite-hi-res.png
 favicon.ico
 
 #MODIFIER
-modified?i=31
+modified?i=40
 
 NETWORK:
 *
