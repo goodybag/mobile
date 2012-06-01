@@ -263,7 +263,6 @@
         };
         var scrollObserver = new utils.scrolledToEndObserver($(window), scrollListener);
         loader.options.onClick = function(e){
-          console.log("CLEEK!");
           scrollListener(e, scrollObserver);
         };
         // Make sure we remove the scroll listener after leaving this page
