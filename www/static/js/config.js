@@ -14,8 +14,14 @@
         'slideRight'
       ],
       changeHash: false
-    },
-    theme: 'b'
+    }
+  , iscroll: {
+      hScrollbar: false
+    , vScrollbar: false
+    , hscroll: false
+    , bounce: false
+    , snap: true
+    }
   , consumerPicture: "https://s3.amazonaws.com/goodybag-uploads/consumers-secure/{{id}}-85.png"
   , iosLt5: (function(){
       return (/(iPhone|iPod|iPad)/i.test(navigator.userAgent)) && (/OS [1-4]_._. like Mac OS X/i.test(navigator.userAgent));

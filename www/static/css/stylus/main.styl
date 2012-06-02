@@ -1,5 +1,23 @@
 @import 'globals'
 
+// iScroll
+#wrapper {
+  position:absolute;
+  z-index:1;
+  top:0;
+  bottom:0;
+  left:0;
+  width:100%;
+  overflow:auto;
+}
+
+#scroller {
+  position:absolute; z-index:1;
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  width:100%;
+  padding: 50px 0 0 0;
+}
+
 body, html
   fonts()
   background-color #364d72
@@ -11,8 +29,7 @@ body, html
   z-index: 100000;
 
 .outer-container
-  padding-top 49px
-
+  // padding: 49px 0 0 0
 .header-nav
   position fixed
   z-index: 100
@@ -579,7 +596,8 @@ button:active
   padding: 16px 0
   text-align: center
   font-size: 18px
-
+.gb-row-loader:active
+  background: rgba(0,0,0, 0.05)
 
 .columns
   display table

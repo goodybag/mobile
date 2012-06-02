@@ -119,6 +119,7 @@
                 observer.on();
               }
               loader.stop();
+              app.scroller.refresh();
             });
           }
         };
@@ -199,6 +200,7 @@
                 observer.on();
               }
               loader.stop();
+              app.scroller.refresh();
             });
           }
         };
@@ -253,6 +255,7 @@
               }else{
                 observer.on();
                 loader.stop();
+                app.scroller.refresh();
                 // Remove the loader and move it to an appropriate spot
                 loader.$el.remove();
                 $(placesView.el).append(loader.$el);
@@ -292,20 +295,27 @@
   };
 
   routes.tapIn = function() {
-    //consider not using true
-    api.auth.session(true, function(error, data){
-      if(utils.exists(error)){
-        console.log(error);
-        return;
-      };
-      var model = new utils.Model({});
-      if (data){
-        model.set("barcodeId", data.barcodeId);
+    app.changePage(function(done){
+      if (app.user.get('barcodeId')){
+        done(new app.Views.TapIn({
+          barcodeId: app.user.get('barcodeId')
+        }).render());
+      }else{
+        //consider not using true
+        api.auth.session(true, function(error, data){
+          if(utils.exists(error)){
+            console.log(error);
+            done(new app.Views.GenericPage({
+              title: "Something Went Wrong :("
+            , content: "Please go back and try again."
+            }).render());
+            return;
+          };
+          done(new app.Views.TapIn({
+            barcodeId: (data ? data.barcodeId : null)
+          }).render());
+        });
       }
-      var tapInView = new app.Views.TapIn({
-        model: model
-      });
-    $("#content").html(tapInView.render().el);
     });
   };
 
@@ -335,21 +345,6 @@
       app.router.runRoute('get', '#!/dashboard');
     });
   };
-
-  /* Finish implementation
-  routes.logout = function(){
-    var self = this;
-    app.user = {}; //clean up anything left behind in the cache
-    api.auth.logout(function(error,data){
-      if(exists(error))
-        notify.error(error.message);
-      //redirect regardless of error.
-      removeGbModals();
-      //_kmq.push(['clearIdentity']); //kissmetrics - clear ident
-      _kmqRecord('', 'Signed Out');
-      self.redirect('#!/');
-    });
-  };*/
 
   routes.dashboard = function(){
     $('#container').html(app.templates.dashboard());

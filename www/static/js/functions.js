@@ -104,7 +104,15 @@
   functions.clearFbAccessToken = function(){
     localStorage.removeItem("facebook.access_token");
     localStorage.removeItem("facebook.expires");
-  }
+  };
+
+  functions.fitBodyToWindow = function(){
+    $(document.body).css({
+      width: $(window).width() + "px"
+    , height: (app.config.isIos ? (window.innerHeight - 58) : window.innerHeight) + "px"
+    , overflow: 'hidden'
+    });
+  };
 
   // Export
   for (var key in functions){

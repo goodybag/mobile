@@ -42,7 +42,6 @@
       console.log(error.message);
       return;
     };
-
     if (utils.exists(consumer)){
       app.user.set(consumer);
       window.location.href = utils.isRootHash() ? app.config.postLoginUrl : window.location.hash;
@@ -62,47 +61,58 @@
   });
 
   // Position Static fix for inputs on ios
-  if (app.config.isIos){
+  if (app.functions.lacksPositionStatic()){
     app.on('page:change:complete', function(){
-      //$('input').undbind('.position-static-fix');
-      $('input').on('focus.position-static-fix', function(){
-        app.functions.hidePositionStaticElements();
-      }).on('blur.position-static-fix', function(){
-        app.functions.showPositionStaticElements();
-        app.functions.lacksPositionStatic() && app.Views.Main.fixStatics();
-      });
+      app.scroller.refresh();
+      app.scroller.scrollTo(0,0,0);
+      app.functions.showPositionStaticElements();
     });
   }
 
+  // Hide/Show statics on input focus/blur for all devices
+  app.on('page:change:complete', function(){
+    $('input').unbind('.position-static-fix');
+    $('input').on('focus.position-static-fix', function(){
+      app.functions.hidePositionStaticElements();
+    }).on('blur.position-static-fix', function(){
+      app.functions.showPositionStaticElements();
+    });
+  });
+
+  // Setup fake scroller to remove any chance of undefined poop
+  app.scroller = { refresh: function(){}, scrollTo: function(){} };
+
+  app.ready = function(){
+    if (!app.templatesCompiled || !app.scriptsReady) return;
+    app.previousRoutes = new app.Models.PreviousRoutes();
+    app.activeRoute = new app.Models.ActiveRoute();
+    app.Views.Main = app.mainView = new app.Views.Main();
+    app.Views.Main.render();
+    $('#body').append(app.Views.Main.el);
+
+    // Fix position static shtuff
+    if (app.functions.lacksPositionStatic()){
+      $('.main-nav').css('position', 'absolute');
+      $('.header-nav').css('position', 'absolute');
+      setTimeout(function(){ app.scroller = new iScroll('wrapper', app.config.iscroll); }, 1000);
+      $(window).on('resize', function(){
+        app.mainView.fixStatics();
+        app.functions.fitBodyToWindow();
+        app.scroller.refresh();
+      });
+    }
+
+    if (app.functions.lacksInsetShadow()){
+      $('.main-nav .nav-shadow').css('display', 'block');
+    }
+
+    app.router.run('#!/');
+  };
+
   $(document).ready(function(){
     app.compileTemplates(function(){
-      app.previousRoutes = new this.app.Models.PreviousRoutes();
-      app.activeRoute = new this.app.Models.ActiveRoute();
-      app.Views.Main = app.mainView = new this.app.Views.Main();
-      app.Views.Main.render();
-      $('#body').prepend(app.Views.Main.el);
-
-      // Fix position static shtuff
-      if (app.functions.lacksPositionStatic()){
-        $('.main-nav').css('position', 'absolute');
-        $('.header-nav').css('position', 'absolute');
-        window.addEventListener('scroll', function(){
-          app.Views.Main.fixStatics();
-        });
-        document.addEventListener('touchend', function(){
-          app.Views.Main.fixStatics();
-        });
-        app.Views.Main.fixStatics();
-        app.on('page:change:complete', function(){
-          app.Views.Main.fixStatics();
-        });
-      }
-
-      if (app.functions.lacksInsetShadow()){
-        $('.main-nav .nav-shadow').css('display', 'block');
-      }
-
-      app.router.run('#!/');
+      app.templatesCompiled = true;
+      app.ready();
     });
   });
 }).call(this);

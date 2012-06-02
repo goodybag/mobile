@@ -6,8 +6,6 @@
   views.Main = utils.View.extend({
     className: 'outer-container'
     , id: "container"
-    , events : { //for Backbone Views these events are binded to the DOM object, not the view object
-    }
     , initialize: function (){
       this.currentFrame = "landingFrame";
       // Setup sub-views
@@ -21,9 +19,17 @@
     }
     , render: function(){
       $(this.el).html(app.templates.mainFrame());
-      $('#header', this.el).append(this.subViews.headerNav.render().el);
-      $('#header', this.el).append(this.subViews.userHeader.render().el);
-      $('#footer', this.el).html(this.subViews.footerNav.render().el);
+      $('#header').html(this.subViews.headerNav.render().el);
+      $('#footer').html(this.subViews.footerNav.render().el);
+      if (app.functions.lacksPositionStatic()){
+        var $content = $(this.el).find('#content');
+        $content.wrap($('<div id="wrapper"><div id="scroller"></div></div>'));
+        $(this.el).find('#scroller').prepend(this.subViews.userHeader.render().el);
+        $content.css('padding-bottom', '100px');
+      }else{
+        $('#header').append(this.subViews.userHeader.render().el);
+        this.subViews.userHeader.$el.css('margin-top', '50px');
+      }
       return this;
     }
     , authenticatedFrame: function(callback){
@@ -503,7 +509,6 @@
       return this;
     }
   , renderPicture: function(){
-      console.log("[Rendering Picture] - " + this.picture.src);
       $(this.el).find('.picture').attr('src', this.picture.src);
     }
   , pictureLoadError: function(){
@@ -621,11 +626,13 @@
       "click .save" : "saveCode"
       , "click .create" : "createCode"
     }
-    , initialize: function(){
+    , initialize: function(options){
+      this.barcodeId = options.barcodeId;
+      return this;
     }
     , render: function(){
-      $(this.el).html(app.templates.tapIn({barcodeId: this.model.get("barcodeId")}));
-      $(".qrcode", this.el).qrcode({width: 200,height: 200,text: this.model.get("barcodeId")});
+      $(this.el).html(app.templates.tapIn({barcodeId: this.barcodeId}));
+      $(".qrcode", this.el).qrcode({width: 200,height: 200,text: this.barcodeId});
       return this;
     }
     , saveCode: function(){
@@ -637,7 +644,8 @@
           return;
         };
         if(data === true){
-          self.model.set("barcodeId", barcodeId);
+          self.barcodeId = data.barcodeId;
+          app.user.set('barcodeId', self.barcodeId);
           $("#content").html(self.render().el);
         } else {
           alert("There was an error linking your barcode");
@@ -651,7 +659,8 @@
           console.log(error);
           return;
         };
-        self.model.set("barcodeId", barcode.barcodeId);
+        self.barcodeId = barcode.barcodeId;
+        app.user.set('barcodeId', self.barcodeId);
         $("#content").html(self.render().el);
       });
     }
