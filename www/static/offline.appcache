@@ -16,7 +16,7 @@ CACHE:
 /static/3/sugar-1.2.3.min.js
 /static/3/jquery.qrcode.min.js
 /static/3/qrcode.min.js
-/static/3/GloveBox.js
+/static/3/iscroll.min.js
 /static/3/serializeObject.min.js
 /static/3/moment-1.3.0.min.js
 /static/3/head.load.min.js
@@ -48,7 +48,7 @@ CACHE:
 favicon.ico
 
 #MODIFIER
-modified?i=67
+modified?i=68
 
 NETWORK:
 *
