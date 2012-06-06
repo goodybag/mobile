@@ -87,7 +87,7 @@
           <div class="donated">
             Total Donated:
             {{#if funds.donated}}
-              <span class="amount">${{funds.donated}}</span>
+              <span class="amount">{{dollars funds.donated}}</span>
             {{else}}
               <span class="amount">$0.00</span>
             {{/if}}
