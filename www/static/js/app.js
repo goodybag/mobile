@@ -86,14 +86,22 @@
     if (!app.templatesCompiled || !app.scriptsReady) return;
     app.previousRoutes = new app.Models.PreviousRoutes();
     app.activeRoute = new app.Models.ActiveRoute();
+
+    // insert main view
     app.Views.Main = app.mainView = new app.Views.Main();
     app.Views.Main.render();
     $('#body').append(app.Views.Main.el);
+
+    // insert page loader
+    app.pageLoader = new app.Views.PageLoader();
+    app.pageLoader.render();
+    $('#body').append(app.pageLoader.el);
 
     // Fix position static shtuff
     if (app.functions.lacksPositionStatic()){
       $('.main-nav').css('position', 'absolute');
       $('.header-nav').css('position', 'absolute');
+      $('.page-loader').css('position', 'absolute');
       setTimeout(function(){ app.scroller = new iScroll('wrapper', app.config.iscroll); }, 1000);
       $(window).on('resize', function(){
         app.mainView.fixStatics();

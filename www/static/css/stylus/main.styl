@@ -63,9 +63,9 @@ body, html
   position absolute
   left: 50%;
 .header-nav .graphic-wrapper > .accent
-  margin-left: -160px;
-  width 320px
+  width 100%
   height 49px
+  left: 0
 .header-nav .logo
   position: absolute;
   left: 50%
@@ -102,7 +102,7 @@ body, html
   top: 0
   left: 50%
   z-index: 102
-  margin-left: -39px
+  margin-left: -38px
   width: 79px
   height: 61px
 
@@ -112,7 +112,7 @@ body, html
   width: 100%
   height: 45px
   list-style: none
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.55)
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.68)
   display: -webkit-box
 
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(52,82,122,1)), color-stop(100%,rgba(19,33,51,1)));
@@ -620,6 +620,19 @@ button:active
   -webkit-box-flex 1
 
 
+.spinner
+  width: 16px
+  height: 16px
+.play-spinner
+  -webkit-animation: spin 0.5s linear infinite
+
+.page-loader
+  position: static
+  top: 200%;
+  width: 100%;
+  box-shadow: 0 4px 25px
+  -webkit-transition: top 0.5s ease-in-out;
+
 
 @media screen and (max-width: 320px) {
   .sub-header.profile .user-info .picture {
@@ -634,5 +647,14 @@ button:active
 @media screen and (max-height: 180px) {
   #header: {
     display: none
+  }
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
   }
 }

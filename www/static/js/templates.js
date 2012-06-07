@@ -13,6 +13,7 @@
   fragments.pageNav     = "page-nav-fragment";
   fragments.footerNav   = "footer-fragment";
   templates.genericPage = "generic-page-tmpl";
+  fragments.pageLoader  = "page-loader-fragment";
 
   templates.landing       = "landing-tmpl";
   templates.register      = "register-tmpl";

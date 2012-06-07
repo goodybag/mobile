@@ -1,7 +1,7 @@
 .header-nav .graphic-wrapper > .accent {
   background-image: url("/static/images/main-sprite-hi-res.png");
   background-size: 600px 600px;
-  background-position: 102px -42px;
+  background-position: 0 -42px;
 }
 .main-nav > ul {
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.59);

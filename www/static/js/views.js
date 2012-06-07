@@ -929,6 +929,27 @@
     }
   });
 
+  views.PageLoader = utils.Views.extend({
+    className: 'page-loader'
+  , initialize: function(){
+      return this;
+    }
+  , render: function(){
+      $(this.el).html(app.fragments.pageLoader());
+      return this;
+    }
+  , start: function(){
+      $(this.el).css('top', '42%');
+      $(this.el).find('.spinner').addClass('play-spinner');
+      return this;
+    }
+  , stop: function(){
+      $(this.el).css('top', '200%');
+      $(this.el).find('.spinner').removeClass('play-spinner');
+      return this;
+    }
+  });
+
   // Export
   for (var name in views){
     this.app.Views[name] = views[name];
