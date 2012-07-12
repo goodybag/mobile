@@ -53,3 +53,30 @@ Handlebars.registerHelper("moneyToList", function(amount) {
 
   return html;
 });
+
+//separate a dollar amount into it's digits and return them as list items
+Handlebars.registerHelper("centsToList", function(amount) {
+  var dollars = parseInt(amount / 100) + "";
+  var change = parseInt(amount % 100);
+  var html = "";
+
+  if (change < 10) change = "0" + change + "";
+  else change = change + "";
+
+
+  for (var i = 0; i < dollars.length; i++) {
+    html += "<span class='digit'>" + dollars[i] + "</span><span class='separator'></span>";
+  }
+
+  html += "<span class='digit decimal'>.</span><span class='separator'></span>";
+
+  for (i = 0; i < change.length; i++) {
+    if (i == change.length - 1) {
+      html += "<span class='digit'>" + change[i] + "</span>";
+    } else {
+      html += "<span class='digit'>" + change[i] + "</span><span class='separator'></span>";
+    }
+  }
+
+  return html;
+});

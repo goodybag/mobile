@@ -35,7 +35,8 @@
       return;
     }
     app.router.last_location = ["get", hash];
-    window.location.href = hash;
+    // window.location.href = hash;
+    window.location.hash = hash;
     app.previousRoutes.add(hash);
   };
 
