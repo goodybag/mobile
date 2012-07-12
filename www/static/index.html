@@ -364,7 +364,7 @@
     </script>
 
     <script id="activity-action-btTapped-fragment" type="text/x-handlebars-template">
-      tapped in at <!--<a href="{{where.org.id}}">--><span class="link-style">{{where.org.name}}</span><!--</a>-->{{#if data.donationAmount}} and <span class="pink-accent">raised {{dollarsToCents data.donationAmount}}&#162;</span>.{{else}}.{{/if}}
+      tapped in at <!--<a href="{{where.org.id}}">--><span class="link-style">{{where.org.name}}</span><!--</a>-->{{#if data.donationAmount}} and <span class="pink-accent">raised {{data.donationAmount}}¢</span>{{#if data.charity.name}} for {{data.charity.name}}{{/if}}{{else}}.{{/if}}
     </script>
 
     <script id="activity-action-fundsDonated-fragment" type="text/x-handlebars-template">
