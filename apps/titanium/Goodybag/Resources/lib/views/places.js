@@ -16,8 +16,7 @@
       }),
       
       table: Ti.UI.createTableView({
-        data: LocationData
-      , backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff'
       , borderColor: '#eeeeee'
       , separatorColor: '#eeeeee'
       , color: 'black'
@@ -36,8 +35,10 @@
         var i = 0;
 
         if(results.data.length > 1)
-          for (i = 0, i < results.data.length; i++) 
-            $self.places.push(new Place(results.data[i]));
+          for (i = 0; i < results.data.length; i++) 
+            $self.places.push(new gb.models.Place(results.data[i]));
+
+          console.log($self.places);
       }, 1000);
     },
     

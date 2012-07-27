@@ -58,18 +58,18 @@
       consumer = $file.getFile($file.applicationDataDirectory, 'consumer');
 
       // Cookie Data
-      if(cooks.exists()) {
+      if (cooks.exists()) {
         data = cooks.read(); 
         if(data && data.text) cooksPt = sjcl.decrypt(gb.config.secret, data.text);
       }
       
       // Consumer Data
-      if(consumer.exists()) {
+      if (consumer.exists()) {
         data = consumer.read();
         if(data && data.text) consumerPt = sjcl.decrypt(gb.config.secret, data.text);
       }
     
-      if(cooksPt != null && consumerPt != null && consumerPt[0] === "{") {
+      if (cooksPt != null && consumerPt != null && consumerPt[0] === "{") {
         this.data = JSON.parse(consumerPt);
         this.authenticated = true;
         this.data.authMethod = this.data.authMethod;
@@ -93,7 +93,7 @@
       var self = this, $dataMethod = this.data.authMethod;
       
       $http.get.sessioned(gb.config.api.consumer.self, this.session, function (error, results) {
-        if(error) {
+        if (error) {
           gb.utils.warn(error.message);
         } else {
           cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
@@ -118,7 +118,7 @@
      * @return {Null}
      */
     logout: function () {
-      if(this.data.authMethod == gb.models.User.Methods.FACEBOOK)
+      if (this.data.authMethod == gb.models.User.Methods.FACEBOOK)
         $fb.logout();
         
       var consumer = $file.getFile($file.applicationDataDirectory, "consumer");
@@ -151,13 +151,13 @@
     auth: function (callback) {
       var self = this;
       
-      if(this.authenticated) {
+      if (this.authenticated) {
         gb.utils.debug('[User] already authenticated, exiting.');
         callback(null, self);
         return;
       }
       
-      if(this.email === "" || this.password === "") {
+      if (this.email === "" || this.password === "") {
         callback('No email / password given.');
         return;
       }
@@ -172,14 +172,14 @@
         
         gb.utils.debug('[User] Got back results.');
         
-        if(error) {
+        if (error) {
           callback(JSON.parse(error).message);
         } else {
           consumer = JSON.parse(json);
           
           gb.utils.debug('[User] Got back the consumer object.');
           
-          if(consumer.error) {
+          if (consumer.error) {
             callback(consumer.error.message);
             return;
           }
@@ -231,7 +231,7 @@
     facebookAuth: function (callback) {
       var self = this;
 
-      if(this.authenticated) {
+      if (this.authenticated) {
         gb.utils.debug('[User] already authenticated, exiting.');
         callback(null, self);
         return;
@@ -240,12 +240,12 @@
       $http.post(gb.config.api.facebookAuth, {
         accessToken: $fb.getAccessToken()
       }, function (error, json) {
-        if(error) {
+        if (error) {
           callback("Couldn't Connect to Goodybag Account.");
         } else {
           consumer = JSON.parse(json);
           
-          if(consumer.error) {
+          if (consumer.error) {
             callback(consumer.error.message); return;
           }
             
@@ -284,14 +284,14 @@
      * @param  {Function} callback Function to delegate error and results to.
      */
     getAvatar: function (size, callback) {
-      if(!this.data) return;
+      if (!this.data) return;
       
       var url = ((size == 85) ? this.data.media.thumb : this.data.media.url), written = true, $self = this;
-      if(!url) url = 'http://goodybag-uploads.s3.amazonaws.com/consumers/' + this.data._id + '-' + size + '.png';
+      if (!url) url = 'http://goodybag-uploads.s3.amazonaws.com/consumers/' + this.data._id + '-' + size + '.png';
       
-      if(!this.avatar['s' + size].exists()) {
+      if (!this.avatar['s' + size].exists()) {
         $http.get.image(url, function (error, results) { 
-          if($self.avatar['s' + size].write(results) === false) written = false;
+          if ($self.avatar['s' + size].write(results) === false) written = false;
           callback((written) ? $self.avatar['s' + size].read() : url);
         });
       }
@@ -401,10 +401,10 @@
      * @param {String} sessionId node connect session id
      */
     _setSession: function (sessionId) {
-      if(sessionId == null) return;
+      if (sessionId == null) return;
       
-      if(this.session) {
-        if(this.session.get('connect.sid') == sessionId)
+      if (this.session) {
+        if (this.session.get('connect.sid') == sessionId)
           return;
         else {
           this.session.set('connect.sid', sessionId);
@@ -415,8 +415,8 @@
       }
       
       var cookie = $file.getFile($file.applicationDataDirectory, "cooks");
-      if(cookie.exists()) cookie.deleteFile();
-      if(cookie.write(sjcl.encrypt(gb.config.secret, sessionId)) === false) {
+      if (cookie.exists()) cookie.deleteFile();
+      if (cookie.write(sjcl.encrypt(gb.config.secret, sessionId)) === false) {
         console.log('Could not write to cookie file.');
       }
       
@@ -433,12 +433,12 @@
      * @param {Object} obj consumer object.
      */
     _setConsumer: function (obj) {
-      if(obj === null || obj.data === null) return;
+      if (obj === null || obj.data === null) return;
       
       var consumer = $file.getFile($file.applicationDataDirectory, "consumer");
 
       this.data = obj.data;
-      if(consumer.write(sjcl.encrypt(gb.config.secret, JSON.stringify(this.data))) === false) {
+      if (consumer.write(sjcl.encrypt(gb.config.secret, JSON.stringify(this.data))) === false) {
         console.log('Could not write to consumer file.');
       }
       

@@ -96,6 +96,7 @@ GB.Windows.add('main', Window.extend({
     
     // Views
     Titanium.include('/lib/views/qrcode.js');
+    Titanium.include('/lib/views/places.js');
     
     console.log(gb.Views.windows);
     
@@ -128,7 +129,7 @@ GB.Windows.add('main', Window.extend({
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $user = gb.consumer, $url, written = true;
     
     // Direct Pages, then delegate background tasks.
-    GB.Views.show('qrcode');
+    GB.Views.show('places');
     
     // Username
     $el.sidebar.username.setText($user.getUsername());

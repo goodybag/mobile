@@ -18,7 +18,7 @@
       this.data = data;
 
       if (data.locations.length > 1)
-        for (i = 0, i < data.locations; i++)
+        for (i = 0; i < data.locations; i++)
           this.locations.push(new gb.models.Location(data.locations[i]));
 
       this.images.s85 = $file.getFile($file.applicationDataDirectory, 'places/' + data._id + '-85.png');

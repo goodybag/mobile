@@ -19,6 +19,7 @@ gb.qrcode = QRCode({
 
 // Models
 Ti.include('lib/models/user.js');
+Ti.include('lib/models/place.js');
 
 // Create our User
 gb.consumer = new gb.models.User();
@@ -29,7 +30,7 @@ Ti.include('lib/views/main.js');
 
 // Do Authentication Check
 gb.consumer.validate(function (consumer) {
-  if(consumer != null) {
+  if (consumer != null) {
     gb.consumer = consumer;
     GB.Windows.show('main');
     gb.consumer.renew();
