@@ -1,4 +1,4 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/CAXException.cpp \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/CAXException.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/CADebugMacros.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/CAXException.cpp \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/CAXException.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/CADebugMacros.h

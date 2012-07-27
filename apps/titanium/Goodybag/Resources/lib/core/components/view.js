@@ -1,106 +1,64 @@
-gb.Views = function () {
-  var self = this;
+!(function (GB) {
+  var Views = {
+    views: {},
+    current: false
+  };
   
-  // Current Window
-  this.current = false;
-  
-  // Window Object
-  this.views = {};
-  
-  this.addView = function (name, view) {
-    console.log('storing: ' + name);
-    self.views[name] = new view();
-    self.views[name].windowName = name;
+  Views.add = function (name, view) {
+    if(typeof view.extended == 'undefined')
+      view = View.extend(view);
     
-    return self;
-  };
-  
-  this.getView = function (name) {
-    return self.views[name];
-  };
-  
-  this.viewExists = function (name) {
-    return self.views[name] ? true : false;
-  };
-  
-  this.showView = function (name, destroy) {
-    if(gb.config.debug) console.log('[' + name + '] Attempting to show view.');
+    this.views[name] = new view();
+    this.views[name].viewName = name;
     
-    if(self.viewExists(name)) {
-      if(gb.config.debug) console.log('[' + name + '] View exists continuing...');
-      
-      if(self.current) {
-        self.current[((destroy) ? 'destroy' : 'hide')]();
-        
-        if(destroy) {
-          if(gb.config.debug) console.log('[' + self.current.windowName + '] Destroyed current view.');
-          delete self.views[self.current.windowName]
-        }
-      }
-      
-      self.views[name].show();
-      this.current = self.views[name];
-    } else {
-      if(gb.config.debug) console.log('[' + name + '] View missing, ignoring request.');
-    }
+    this.views[name].self.hide();
+  };
+  
+  Views.get = function (name) {
+    return this.views[name];
+  };
+  
+  Views.exists = function (name) {
+    return (this.views[name]) ? true : false;
+  };
+  
+  Views.show = function (name, context) {
+    if(!name) return;
+    if(!this.exists(name)) return;
+    if(this.current) this.hide(this.current);
+    if(typeof this.views[name].onShow != 'undefined') this.views[name].onShow(context);
+  
+    this.views[name].self.show();
+    this.current = name;
+  };
+  
+  Views.hide = function (name, context) {
+    if(!name) return;
+    if(!this.exists(name)) return;
+    if(typeof this.views[name].onHide != 'undefined') this.views[name].onHide(context);
     
-    return self;
+    this.views[name].self.hide();
   };
-  
-  this.hideView = function (name, close) {
-    if(name) {
-      if(self.viewExists(name)) {
-        self.views[name].hide();
-      }
-    }
-  };
-  
-  return this;
-}();
 
+  Views.destroy = function (name) {
+    if(!name) return;
+    if(!this.exists(name)) return;
+    
+    this.views[name].self = null;
+    delete this.views[name];
+  }
+
+  GB.Views = Views;
+})(
+  gb
+);
 
 var View = new Class({
-  created: false,
-  window: false,
-  debug: false,
+  extended: true,
+  showing: false,
+  self: false,
   
-  Constructor: function () { },
-  
-  /**
-   * Add element to current window. 
-   * @param {Object} object
-   */
-  add: function (object) {
-    this.window.add(object);
-  },
-  
-  show: function () {
-    if(this.debug) console.log('[' + this.windowName + '] Attempting to show window.');
-    
-    if(!this.created) {
-      if(this.debug) console.log('[' + this.windowName + '] Window has not yet been created, opening.');
-      
-      this.created = true;
-      this.window.open();
-    }
-    
-    this.window.show();
-  },
-  
-  hide: function () {
-    if(this.debug) console.log('[' + this.windowName + '] Attempting to hide window.');
-    if(this.created) this.window.hide();
-  },
-  
-  destroy: function () {
-    if(this.debug) console.log('[' + this.windowName + '] Attempting to destroy window.');
-    
-    if(this.created) {
-      if(this.debug) console.log('[' + this.windowName + '] Window has been created. We can destroy it.');
-      this.window.close();
-      this.created = false;
-    } else {
-      if(this.debug) console.log('[' + this.windowName + '] Window never created, ignoring request.');
-    }
+  Constructor: function (view) {
+    this.self = view;
   }
 });

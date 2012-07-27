@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/Mimetypes.m \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/Mimetypes.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/Mimetypes.m \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/Mimetypes.h

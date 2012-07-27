@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiThreading.m \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiThreading.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiThreading.m \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiThreading.h

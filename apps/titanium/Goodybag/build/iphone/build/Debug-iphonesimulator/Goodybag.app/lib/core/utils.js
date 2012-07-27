@@ -1,1 +1,1 @@
-/Users/niji/Documents/Titanium Studio Workspace/Goodybag/Resources/lib/core/utils.js
+/goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/utils.js

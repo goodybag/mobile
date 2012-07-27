@@ -1,6 +1,6 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/AQRecorder.mm \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/AQRecorder.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/CAStreamBasicDescription.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/CADebugMacros.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/CAXException.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/AQRecorder.mm \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/AQRecorder.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/CAStreamBasicDescription.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/CADebugMacros.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/CAXException.h

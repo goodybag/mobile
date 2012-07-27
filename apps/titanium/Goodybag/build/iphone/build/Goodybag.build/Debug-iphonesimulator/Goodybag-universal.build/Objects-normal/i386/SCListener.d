@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/SCListener.m \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/SCListener.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/SCListener.m \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/SCListener.h

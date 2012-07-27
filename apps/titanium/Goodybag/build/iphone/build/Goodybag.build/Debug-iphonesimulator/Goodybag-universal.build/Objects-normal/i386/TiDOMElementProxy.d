@@ -1,21 +1,21 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiDOMElementProxy.m \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiDOMElementProxy.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiProxy.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiBase.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiThreading.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiPublicAPI.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiEvaluator.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/KrollContext.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/headers/TiCore/TiCore.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiDOMElementProxy.m \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiDOMElementProxy.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiProxy.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiBase.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiThreading.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiPublicAPI.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiEvaluator.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/KrollContext.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/headers/TiCore/TiCore.h \
   headers/TiCore/Ti.h headers/TiCore/TiBase.h \
   headers/TiCore/TiContextRef.h headers/TiCore/TiObjectRef.h \
   headers/TiCore/TiValueRef.h headers/TiCore/WebKitAvailability.h \
   headers/TiCore/TiStringRef.h headers/TiCore/TiStringRefCF.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/headers/TiCore/TiContextRefPrivate.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/KrollCallback.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/KrollObject.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/GDataXMLNode.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/headers/TiCore/TiContextRefPrivate.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/KrollCallback.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/KrollObject.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/GDataXMLNode.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk/usr/include/libxml2/libxml/tree.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk/usr/include/libxml2/libxml/xmlversion.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk/usr/include/libxml2/libxml/xmlexports.h \
@@ -39,15 +39,15 @@ dependencies: \
   /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk/usr/include/libxml2/libxml/SAX2.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk/usr/include/libxml2/libxml/xpath.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk/usr/include/libxml2/libxml/xpathInternals.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiDOMNodeProxy.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiDOMNodeListProxy.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiDOMAttrProxy.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiDOMNamedNodeMapProxy.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiUtils.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiColor.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiDimension.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/WebFont.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiFile.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiBuffer.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiBlob.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/TiDOMValidator.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiDOMNodeProxy.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiDOMNodeListProxy.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiDOMAttrProxy.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiDOMNamedNodeMapProxy.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiUtils.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiColor.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiDimension.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/WebFont.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiFile.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiBuffer.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiBlob.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/TiDOMValidator.h

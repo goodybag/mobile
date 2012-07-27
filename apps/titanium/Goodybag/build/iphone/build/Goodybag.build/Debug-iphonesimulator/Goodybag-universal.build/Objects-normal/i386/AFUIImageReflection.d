@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/AFOpenFlow/AFUIImageReflection.m \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/AFOpenFlow/AFUIImageReflection.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/AFOpenFlow/AFUIImageReflection.m \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/AFOpenFlow/AFUIImageReflection.h

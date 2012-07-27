@@ -1,4 +1,4 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/JSON/SBJsonWriter.m \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/JSON/SBJsonWriter.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/JSON/SBJsonBase.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/JSON/SBJsonWriter.m \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/JSON/SBJsonWriter.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/JSON/SBJsonBase.h

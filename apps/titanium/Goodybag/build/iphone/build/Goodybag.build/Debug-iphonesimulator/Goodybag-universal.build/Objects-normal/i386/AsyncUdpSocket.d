@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/AsyncUdpSocket.m \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/AsyncUdpSocket.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/AsyncUdpSocket.m \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/AsyncUdpSocket.h

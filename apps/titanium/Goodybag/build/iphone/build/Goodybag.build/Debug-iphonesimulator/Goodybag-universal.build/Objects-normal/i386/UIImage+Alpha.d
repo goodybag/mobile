@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/UIImage+Alpha.m \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/UIImage+Alpha.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/UIImage+Alpha.m \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/UIImage+Alpha.h

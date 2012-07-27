@@ -24,12 +24,13 @@
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
-    <statusbar-style>default</statusbar-style>
+    <statusbar-style>opaque</statusbar-style>
     <statusbar-hidden>false</statusbar-hidden>
     <fullscreen>false</fullscreen>
     <navbar-hidden>true</navbar-hidden>
     <analytics>true</analytics>
     <guid>ab5a4024-ce04-4aa4-8e78-c931005538e2</guid>
+    <property name="ti.facebook.appid">152282721508707</property>
     <property name="ti.ui.defaultunit">system</property>
     <iphone>
         <orientations device="iphone">
@@ -37,9 +38,6 @@
         </orientations>
         <orientations device="ipad">
             <orientation>Ti.UI.PORTRAIT</orientation>
-            <orientation>Ti.UI.UPSIDE_PORTRAIT</orientation>
-            <orientation>Ti.UI.LANDSCAPE_LEFT</orientation>
-            <orientation>Ti.UI.LANDSCAPE_RIGHT</orientation>
         </orientations>
     </iphone>
     

@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/Base64Transcoder.c \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/Base64Transcoder.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/Base64Transcoder.c \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/Base64Transcoder.h

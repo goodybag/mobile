@@ -5,7 +5,7 @@ reporting an issue to help us understand your environment, build settings
 and aid in debugging. Please attach this log to any issue that you report.
 ================================================================================
 
-Starting build at 07/12/12 18:25
+Starting build at 07/25/12 15:45
 
 Build details:
 
@@ -19,7 +19,7 @@ Script arguments:
    /Users/niji/Library/Application Support/Titanium/mobilesdk/osx/2.1.0.GA/iphone/builder.py
    simulator
    5.1
-   /Users/niji/Documents/Titanium Studio Workspace/Goodybag
+   /goodybag/mobile/apps/titanium/Goodybag
    com.goodybag
    Goodybag
    universal
@@ -33,7 +33,7 @@ Xcode path is: /Applications/Xcode.app/Contents/Developer
 
 
 githash=6e3cab6, existing_git_hash=6e3cab6
-writing contents of /Users/niji/Documents/Titanium Studio Workspace/Goodybag/build/iphone/project.xcconfig:
+writing contents of /goodybag/mobile/apps/titanium/Goodybag/build/iphone/project.xcconfig:
 
 TI_VERSION=2.1.0.GA
 TI_SDK_DIR=/Users/niji/Library/Application Support/Titanium/mobilesdk/osx/$(TI_VERSION)/iphone

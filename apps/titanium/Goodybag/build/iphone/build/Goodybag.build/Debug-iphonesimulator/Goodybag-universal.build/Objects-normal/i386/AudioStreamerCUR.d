@@ -1,4 +1,4 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/AudioStreamer/AudioStreamerCUR.m \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/AudioStreamer/AudioStreamerCUR.h \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/AudioStreamer/AudioStreamer.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/AudioStreamer/AudioStreamerCUR.m \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/AudioStreamer/AudioStreamerCUR.h \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/AudioStreamer/AudioStreamer.h

@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/KrollPropertyDelegate.m \
-  /Users/niji/Documents/Titanium\ Studio\ Workspace/Goodybag/build/iphone/Classes/KrollPropertyDelegate.h
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/KrollPropertyDelegate.m \
+  /goodybag/mobile/apps/titanium/Goodybag/build/iphone/Classes/KrollPropertyDelegate.h

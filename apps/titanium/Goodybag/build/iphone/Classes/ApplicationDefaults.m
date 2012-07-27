@@ -20,6 +20,7 @@
     [_property setObject:[TiUtils stringValue:@"BbVi1nwMQfDxiuFoJpZGfVHPlMIjH5Xr"] forKey:@"acs-oauth-secret-development"];
     [_property setObject:[TiUtils stringValue:@"0CwYu23xxazTzddfTGbRXWxt8Uw6J3Yi"] forKey:@"acs-oauth-key-development"];
     [_property setObject:[TiUtils stringValue:@"jvnFGkayWrzHMaJdz1HETgQ8fh9E8dF8"] forKey:@"acs-api-key-development"];
+    [_property setObject:[TiUtils stringValue:@"152282721508707"] forKey:@"ti.facebook.appid"];
     [_property setObject:[TiUtils stringValue:@"system"] forKey:@"ti.ui.defaultunit"];
 
     return _property;
