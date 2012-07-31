@@ -22,7 +22,7 @@ Ti.include('lib/models/user.js');
 Ti.include('lib/models/place.js');
 
 // Create our User
-gb.consumer = new gb.models.User();
+gb.consumer = new GB.Models.User();
 
 // Views
 Ti.include('lib/views/login.js');

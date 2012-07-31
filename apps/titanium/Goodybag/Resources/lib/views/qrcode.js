@@ -5,9 +5,7 @@ GB.Views.add('qrcode', {
     backgroundImage: gb.utils.getImage('screens/main/background_qr.png')
   }),
   
-  Constructor: function () {
-    
-  },
+  Constructor: function () {},
   
   onShow: function (context) {
     var $self = this.self, $user = gb.consumer;

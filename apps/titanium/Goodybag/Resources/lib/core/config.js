@@ -35,7 +35,7 @@ gb.config = function (global, fb, storage) {
   this.api = {};
   this.api.auth = 'http://www.goodybag.com/api/consumers/login';
   this.api.facebookAuth = 'http://www.goodybag.com/api/consumers/fblogin';
-  this.api.participating = '/api/consumers/participatingBusinesses?limit=';
+  this.api.participating = 'http://www.goodybag.com/api/consumers/participatingBusinesses?limit=';
   this.api.consumer = {};
   this.api.consumer.self = 'http://www.goodybag.com/api/consumers/session'
   

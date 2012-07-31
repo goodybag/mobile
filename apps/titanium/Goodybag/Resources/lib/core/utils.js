@@ -43,7 +43,8 @@ gb.utils = function (global) {
     client.onerror = function (e) {
       callback.apply(this, [ e.error ]);
     }
-    
+
+    client.setTimeout(100000);
     client.open('GET', url);
     client.send();
   }

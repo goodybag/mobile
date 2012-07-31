@@ -98,10 +98,11 @@ GB.Windows.add('main', Window.extend({
     Titanium.include('/lib/views/qrcode.js');
     Titanium.include('/lib/views/places.js');
     
-    console.log(gb.Views.windows);
-    
-    // Attach Objects
+    // Attach Views
     $el.views.main.add(gb.Views.get('qrcode').self);
+    $el.views.main.add(gb.Views.get('places').self);
+    
+    // Attach Header
     $el.views.main.add($el.images.header);
     $el.views.main.add($el.buttons.sidebar);
     

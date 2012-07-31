@@ -1,5 +1,12 @@
-!function (global, $fb, storage, $file, $http) {
-  if(!gb.models) gb.models = {};
+if(!GB.Models) 
+  GB.Models = {};
+
+!function () {
+  var $ui = Titanium.UI
+  ,   $fb = Titanium.Facebook
+  ,   $props = Titanium.App.Properties
+  ,   $file = Titanium.Filesystem
+  ,   $http = gb.utils.http;
   
   /**
    * User Model
@@ -7,26 +14,48 @@
    * Delegates all logic and data handling pertaining to a user. All Authentication, 
    * User-Data storage, Session handling, Data-Binding, and User Logic is handled through 
    * this model.
+   * 
+   * @type {Object}
    */
-  gb.models.User = new Class({
+  GB.Models.User = new Class({
+    /**
+     * Consumer Authentication Variable
+     * Keeps track of basic authentication checks.
+     * 
+     * @type {Mixed}
+     * @private
+     */
     authenticated: false,
+    
+    /**
+     * Consumer Email
+     * 
+     * @type {String}
+     * @private
+     */
     email: false,
-
+  
     /**
      * Consumer Object Store
+     * 
      * @type {Mixed}
+     * @private
      */
     data: false,
-
+  
     /**
      * Cookie key-store object for node sessions.
+     * 
      * @type {Mixed}
+     * @private
      */
     session: false,
-
+  
     /**
      * Holds Avatar File Objects
+     * 
      * @type {Object}
+     * @private
      */
     avatar: {},
     
@@ -37,100 +66,11 @@
      * 
      * @param {String} email    quick email storage variable
      * @param {String} password quick password storage variable
+     * @constructor
      */
     Constructor: function (email, password) {
       this.email = gb.utils.trim(email);
       this.password = gb.utils.trim(password);
-    },
-    
-    /**
-     * Checks locally stored authentication data, if that data is 
-     * credible and verified to be complete we then utilize the data 
-     * to setup user-data.
-     * 
-     * @param  {Function} callback Returns `this` if valid, otherwise null.
-     */
-    validate: function (callback) {
-      var data, cooks, consumer, consumerPt, cooksPt;
-      
-      // File Storage
-      cooks = $file.getFile($file.applicationDataDirectory, 'cooks');
-      consumer = $file.getFile($file.applicationDataDirectory, 'consumer');
-
-      // Cookie Data
-      if (cooks.exists()) {
-        data = cooks.read(); 
-        if(data && data.text) cooksPt = sjcl.decrypt(gb.config.secret, data.text);
-      }
-      
-      // Consumer Data
-      if (consumer.exists()) {
-        data = consumer.read();
-        if(data && data.text) consumerPt = sjcl.decrypt(gb.config.secret, data.text);
-      }
-    
-      if (cooksPt != null && consumerPt != null && consumerPt[0] === "{") {
-        this.data = JSON.parse(consumerPt);
-        this.authenticated = true;
-        this.data.authMethod = this.data.authMethod;
-        this.session = new gb.utils.parsers.cookie.storage();
-        this.session.set('connect.sid', cooksPt);
-        this._setAvatar();
-
-        callback(this);
-      } else {
-        callback();
-      }
-      
-      // Cleanup
-      cooks = consumer = data = null;
-    },
-    
-    /**
-     * Renew the current user session and update the current user object model.
-     */
-    renew: function () {
-      var self = this, $dataMethod = this.data.authMethod;
-      
-      $http.get.sessioned(gb.config.api.consumer.self, this.session, function (error, results) {
-        if (error) {
-          gb.utils.warn(error.message);
-        } else {
-          cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
-
-          // Update session and consumer
-          self._setSession(cookie.get('connect.sid'));
-          self._setConsumer(JSON.parse(results));
-          self.data.authMethod = $dataMethod;
-          self.authenticated = true;
-          
-          // Clean Garbage.
-          cookie = null;
-        }
-      });
-    },
-    
-    /**
-     * Removes the currently stored user data, sessions, and user-files. 
-     * Also checks against facebook to determine if we need to log them out of 
-     * that as well.
-     * 
-     * @return {Null}
-     */
-    logout: function () {
-      if (this.data.authMethod == gb.models.User.Methods.FACEBOOK)
-        $fb.logout();
-        
-      var consumer = $file.getFile($file.applicationDataDirectory, "consumer");
-      var cookie = $file.getFile($file.applicationDataDirectory, "cooks");
-      
-      if(consumer.exists()) consumer.deleteFile();
-      if(cookie.exists()) cookie.deleteFile();
-      if(self.avatars.s85 && self.avatars.s85.exists()) self.avatars.s85.deleteFile();
-      if(self.avatars.s128 && self.avatars.s128.exists()) self.avatars.s128.deleteFile();
-      
-      consumer = cookie = null;
-      return null;
     },
     
     /**
@@ -196,7 +136,7 @@
           
           // Store Consumer
           self._setConsumer(consumer);
-          self.data.authMethod = gb.models.User.Methods.EMAIL;
+          self.data.authMethod = GB.Models.User.Methods.EMAIL;
           
           // Setup Avatars
           self._setAvatar();
@@ -211,7 +151,7 @@
         }
       });
     },
-
+  
     /**
      * Facebook Authentication Method
      *
@@ -230,7 +170,7 @@
      */
     facebookAuth: function (callback) {
       var self = this;
-
+  
       if (this.authenticated) {
         gb.utils.debug('[User] already authenticated, exiting.');
         callback(null, self);
@@ -258,7 +198,7 @@
           
           // Store Consumer
           self._setConsumer(consumer);
-          self.data.authMethod = gb.models.User.Methods.FACEBOOK;
+          self.data.authMethod = GB.Models.User.Methods.FACEBOOK;
           
           // Setup Avatars
           self._setAvatar();
@@ -272,6 +212,96 @@
           callback(null, self);
         }
       });
+    },
+    
+    /**
+     * Checks locally stored authentication data, if that data is 
+     * credible and verified to be complete we then utilize the data 
+     * to setup user-data.
+     * 
+     * @param  {Function} callback Returns `this` if valid, otherwise null.
+     */
+    validate: function (callback) {
+      var data, cooks, consumer, consumerPt, cooksPt;
+      
+      // File Storage
+      cooks = $file.getFile($file.applicationDataDirectory, 'cooks');
+      consumer = $file.getFile($file.applicationDataDirectory, 'consumer');
+  
+      // Cookie Data
+      if (cooks.exists()) {
+        data = cooks.read(); 
+        if(data && data.text) cooksPt = sjcl.decrypt(gb.config.secret, data.text);
+      }
+      
+      // Consumer Data
+      if (consumer.exists()) {
+        data = consumer.read();
+        if(data && data.text) consumerPt = sjcl.decrypt(gb.config.secret, data.text);
+      }
+    
+      if (cooksPt != null && consumerPt != null && consumerPt[0] === "{") {
+        this.data = JSON.parse(consumerPt);
+        this.authenticated = true;
+        this.data.authMethod = this.data.authMethod;
+        this.session = new gb.utils.parsers.cookie.storage();
+        this.session.set('connect.sid', cooksPt);
+        this._setAvatar();
+  
+        callback(this);
+      } else {
+        callback();
+      }
+      
+      // Cleanup
+      cooks = consumer = data = null;
+    },
+    
+    /**
+     * Renew the current user session and update the current user object model.
+     */
+    renew: function () {
+      var self = this, $dataMethod = this.data.authMethod;
+      
+      $http.get.sessioned(gb.config.api.consumer.self, this.session, function (error, results) {
+        if (error) {
+          gb.utils.warn(error.message);
+        } else {
+          cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
+  
+          // Update session and consumer
+          self._setSession(cookie.get('connect.sid'));
+          self._setConsumer(JSON.parse(results));
+          self.data.authMethod = $dataMethod;
+          self.authenticated = true;
+          
+          // Clean Garbage.
+          cookie = null;
+        }
+      });
+    },
+    
+    /**
+     * Removes the currently stored user data, sessions, and user-files. 
+     * Also checks against facebook to determine if we need to log them out of 
+     * that as well.
+     * 
+     * @return {Null}
+     */
+    logout: function () {
+      if (this.data.authMethod == GB.Models.User.Methods.FACEBOOK)
+        $fb.logout();
+        
+      var consumer = $file.getFile($file.applicationDataDirectory, "consumer");
+      var cookie = $file.getFile($file.applicationDataDirectory, "cooks");
+      
+      if(consumer.exists()) consumer.deleteFile();
+      if(cookie.exists()) cookie.deleteFile();
+      if(self.avatars.s85 && self.avatars.s85.exists()) self.avatars.s85.deleteFile();
+      if(self.avatars.s128 && self.avatars.s128.exists()) self.avatars.s128.deleteFile();
+      
+      consumer = cookie = null;
+      return null;
     },
     
     /**
@@ -340,7 +370,7 @@
     getCharityId: function () {
       return this.data.charity.id;
     },
-
+  
     /**
      * Returns users selected charities name.
      * @return {[type]} [description]
@@ -348,7 +378,7 @@
     getCharityName: function () {
       return this.data.charity.name;
     },
-
+  
     /**
      * Returns whether the current user has chosen a charity or not.
      * @return {Boolean}
@@ -374,31 +404,35 @@
     isAdmin: function () {
       return !!this.data.gbAdmin;
     },
-
+  
     /**
      * Returns whether or not the current user authenticated through email.
      * @return {Boolean}
      */
     usedEmail: function () {
-      return this.data.authMethod === gb.models.User.Methods.EMAIL;
+      return this.data.authMethod === GB.Models.User.Methods.EMAIL;
     },
-
+  
     /**
      * Returns whether or not the current user authenticated through Facebook.
      * @return {Boolean}
      */
     usedFacebook: function () {
-      return this.data.authMethod === gb.models.User.Methods.FACEBOOK;
+      return this.data.authMethod === GB.Models.User.Methods.FACEBOOK;
     },
     
     /**
-     * Stores latest session.
-     *
      * Updates the current session key-store, and the locally stored 
      * data. Encrypted in AES256.
      * 
-     * @scope private
      * @param {String} sessionId node connect session id
+     * 
+     * @see GB.Models.User#auth
+     * @see GB.Models.User#facebookAuth
+     * @see GB.Models.User#renew
+     * @see GB.Models.User#validate
+     * 
+     * @private
      */
     _setSession: function (sessionId) {
       if (sessionId == null) return;
@@ -426,17 +460,22 @@
     },
     
     /**
-     * Stores latest consumer object.
-     *
-     * Saves the passed consumer object locally. Encrypted in AES256.
+     * Stores latest consumer object locally and encrypted with AES256.
      * 
-     * @param {Object} obj consumer object.
+     * @param {Object} obj Consumer Object
+     * 
+     * @see GB.Models.User#auth
+     * @see GB.Models.User#facebookAuth
+     * @see GB.Models.User#renew
+     * @see GB.Models.User#validate
+     * 
+     * @private
      */
     _setConsumer: function (obj) {
       if (obj === null || obj.data === null) return;
       
       var consumer = $file.getFile($file.applicationDataDirectory, "consumer");
-
+  
       this.data = obj.data;
       if (consumer.write(sjcl.encrypt(gb.config.secret, JSON.stringify(this.data))) === false) {
         console.log('Could not write to consumer file.');
@@ -449,6 +488,13 @@
     
     /**
      * Removes any old avatar files and fetches the new ones.
+     * 
+     * @see GB.Models.User#auth
+     * @see GB.Models.User#facebookAuth
+     * @see GB.Models.User#renew
+     * @see GB.Models.User#validate
+     * 
+     * @private
      */
     _setAvatar: function () {
       this.avatar.s85 = $file.getFile($file.applicationDataDirectory, 'avatar-85.png');
@@ -464,15 +510,15 @@
    * Authentication Method Enum
    * 
    * @type {Object}
+   * 
+   * @see GB.Models.User#auth
+   * @see GB.Models.User#facebookAuth
+   * @see GB.Models.User#logout
+   * @see GB.Models.User#usedEmail
+   * @see GB.Models.User#usedFacebook
    */
-  gb.models.User.Methods = {
+  GB.Models.User.Methods = {
     EMAIL: 1,
     FACEBOOK: 2
   };
-}(
-  this, 
-  Titanium.Facebook, 
-  Titanium.App.Properties,
-  Titanium.Filesystem,
-  gb.utils.http
-);
+}();
