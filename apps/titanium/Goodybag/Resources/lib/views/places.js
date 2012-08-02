@@ -1,14 +1,15 @@
 
-var $http = gb.utils.http,
-    $file = Titanium.Filesystem;
-
+var $http = gb.utils.http
+,   $file = Titanium.Filesystem;
 
 GB.Views.add('places', {
-  self: Titanium.UI.createScrollView({
+  self: Titanium.UI.createView({
     top: '55dp'
   }),
 
-  places: [],
+  places: Titanium.UI.createScrollView({
+    layout: 'vertical'
+  }),
   
   elements: {
     table: Ti.UI.createTableView({
@@ -21,53 +22,145 @@ GB.Views.add('places', {
   },
   
   /**
-   * Grab storage file for places and update with latest data.
+   * Grab and store places location and initialize View.
+   * @constructor
    */
   Constructor: function () {
-    var $self = this;
-
+    var store = $file.getFile($file.applicationDataDirectory, 'places.json');
+    
     this.fetch(function (error, results) {
-      $self.store.write(JSON.stringify(results));
-    }, true);
+      store.deleteFile();
+      store.write(JSON.stringify(results));
+      store = null;
+    }, true, true);
   },
   
+  /**
+   * Called when view opens.
+   * 
+   * @param  {Mixed} context
+   * @private
+   */
   onShow: function (context) {
-    var $this = this, $self = this.self, $el = this.elements, $user = gb.consumer;
+    var $this = this, $el = this.elements;
     
-    console.log(JSON.stringify($self));
+    this.self.add(this.places);
+    
+    this.fetch(function (error, results) {
+      var places = [], sections = {}, place, first, current, section, row, i, iv;
+      
+      $this.data = [];
+      gb.utils.debug('starting conversion to places');
+      
+      for (i = 0; i < results.data.length; i++) {
+        gb.utils.debug('converting item: ' + i + ' of ' + results.data.length);
+        places.push(new GB.Models.Place(results.data[i]));
+      }
 
-    $this.fetch(function (error, results) {
-      var places = [], data = [], current, row;
+      places.sort($this.comparePlaces);
 
-      for (var i = 0; i < results.data.length; i++) {
-        current = new GB.Models.Place(results.data[i]);
-        
-        row = current.toRow(function (e) {
+      for (i = 0; i < places.length; i++) {
+        gb.utils.debug('creating rows: ' + i + ' of ' + places.length);
+        places[i].getImage(85, function () {});
+        row = places[i].toRow(function (e) {
           $this.onClick.apply(this, [ e ]);
         });
-        
-        places.push(row); 
-        $this.places.push(current);
+
+        if (gb.isAndroid) {
+          iv = Titanium.UI.createImageView({
+            left: 5,
+            width: 45,
+            height: 45,
+            borderColor: '#fff',
+            borderWidth: 3,
+            borderRadius: 0
+          });
+          
+          row.model.getImage(85, function (data) {
+            console.log('got image data: ' + data);
+            iv.setImage(data);
+          });
+          
+          row.add(iv);
+        }
+
+        $this.places.add(row);
       }
-      
-      $el.table.setData(places);
-      $self.add($el.table);
+
+      results = null;
+      error = null;
     }, true);
   },
   
+  afterShow: function (context) {
+    var iv, children = this.places.children;
+    
+    for(i = 0; i < children.length; i++) {
+      iv = Titanium.UI.createImageView({
+        left: 5,
+        width: 45,
+        height: 45,
+        borderColor: '#fff',
+        borderWidth: 3,
+        borderRadius: 0
+      });
+      
+      children[i].model.getImage(85, function (data) {
+        console.log('got image data: ' + data);
+        iv.setImage(data);
+      });
+      
+      children[i].add(iv);
+    }
+  },
+  
+  /**
+   * Called when a row is clicked.
+   *
+   * Determines which location has been chosen and opens a view 
+   * with the location information.
+   * 
+   * @param  {Object} evnt Event Handler
+   */
   onClick: function (evnt) {
     console.log('clicked on ' + this.getName());
   },
+
+  /**
+   * Comparator for sorting. Sort by name, alphabetically.
+   * 
+   * @param  {Object} a
+   * @param  {Object} b
+   * @return {Integer}
+   */
+  comparePlaces: function (a, b) {
+    if (a.data.publicName < b.data.publicName)
+      return -1;
+
+    if (a.data.publicName > b.data.publicName)
+      return 1;
+
+    return 0;
+  },
   
-  fetch: function (callback, download) {
+  /**
+   * Check local cache, return if exists, in the background 
+   * fetch and download latest data and update local cache.
+   * 
+   * @param  {Function} callback called upon datasource obtained.
+   * @param  {Boolean}  download delegates whether or not to download new data.
+   * @private
+   */
+  fetch: function (callback, download, force) {
     var limit = 1000, called = false;
+    var store = $file.getFile($file.applicationDataDirectory, 'places.json');
     
-    this.store = $file.getFile($file.applicationDataDirectory, 'places.json');
-    
-    if (this.store.exists()) {
-      callback(null, JSON.parse(this.store.read()));
+    if (store.exists() && !force) {
+      callback(null, JSON.parse(store.read()));
       called = true;
     }
+    
+    store = null;
     
     if (download) {
       $http.get(gb.config.api.participating + limit, function (error, results) {

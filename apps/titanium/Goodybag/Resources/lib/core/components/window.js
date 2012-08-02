@@ -10,9 +10,9 @@
     this.windows[name] = new window();
     this.windows[name].windowName = name;
     
-    if(typeof this.windows[name].onAndroid != 'undefined' && gb.utils.isAndroid)
+    if(typeof this.windows[name].onAndroid != 'undefined' && gb.isAndroid)
       this.windows[name].onAndroid();
-    else if(typeof this.windows[name].onIOS != 'undefined' && gb.utils.isIOS)
+    else if(typeof this.windows[name].onIOS != 'undefined' && gb.isIOS)
       this.windows[name].onIOS();
   };
   

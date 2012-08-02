@@ -91,6 +91,8 @@ Views.show = function (name, context) {
   
   this.views[name].self.show();
   this.current = name;
+  
+  if(typeof this.views[name].afterShow != 'undefined' && gb.isIOS) this.views[name].afterShow(context);
 };
 
 /**

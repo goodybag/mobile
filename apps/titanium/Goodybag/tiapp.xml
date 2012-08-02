@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org">
+    <property name="ti.android.runtime">v8</property>
     <property name="acs-oauth-secret-production" type="string">mfpKS7sp6AxZw2NEadHnqY4CaRudMLr7</property>
     <property name="acs-oauth-key-production" type="string">D6szJfAvTzwUcPAJCdL6BkmUAHzBWG49</property>
     <property name="acs-api-key-production" type="string">Fgg3h53Zw1vzFlC6Bu703jyvS7ctMj2c</property>
@@ -13,7 +14,7 @@
         <target device="android">true</target>
         <target device="blackberry">false</target>
     </deployment-targets>
-    <sdk-version>2.1.0.GA</sdk-version>
+    <sdk-version>2.1.1.GA</sdk-version>
     <id>com.goodybag</id>
     <name>Goodybag</name>
     <version>1.0</version>
@@ -40,8 +41,7 @@
             <orientation>Ti.UI.PORTRAIT</orientation>
         </orientations>
     </iphone>
-    
-    <android xmlns:android="http://schemas.android.com/apk/res/android" />
+    <android xmlns:android="http://schemas.android.com/apk/res/android"/>
     <mobileweb>
         <precache/>
         <splash>

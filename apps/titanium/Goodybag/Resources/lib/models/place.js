@@ -38,6 +38,20 @@ if(!GB.Models)
      * Row variable that becomes used once #toRow is called.
      */
     row: null,
+
+    /**
+     * Creates new instance of Place, stores given data while creating instances 
+     * of GB.Models#Location for later usage.
+     * 
+     * @param {Object} data raw data fetched from api.
+     * @type {Object}
+     * @constructor
+     */
+    Constructor: function (data) {
+      this.data = data;
+      
+      return this;
+    },
   
     /**
      * Results in the current place's object id.
@@ -89,19 +103,20 @@ if(!GB.Models)
      */
     getImage: function (size, callback) {
       if(!this.data) return;
-      var url, written = true, $self = this;
-  
+      var url, written = true, $self = this, image, dir = $file.getFile($file.applicationDataDirectory, 'places/');
+      image = $file.getFile($file.applicationDataDirectory, 'places/' + this.data._id + '-' + size + '.png');
+      if (!dir.exists()) dir.createDirectory(), dir = null;
       if (this.data.media) url = (size == 85) ? this.data.media.thumb : this.data.media.url;
       if (!url) url = 'http://goodybag-uploads.s3.amazonaws.com/businesses/' + this.data._id + '-' + size + '.png';
-      
-      if (!this.images['s' + size].exists()) {
-        return url;
-        
+      if (!image.exists()) {
         $http.get.image(url, function (error, results) { 
-          if($self.images['s' + size].write(results) === false) written = false;
+          console.log(error);
+          console.log('attempting to write: ' + image.write(results));
+          callback(image.read());
         });
       } else {
-        return this.images['s' + size].read();
+        callback(image.read());
+        image = null;
       }
     },
   
@@ -112,7 +127,22 @@ if(!GB.Models)
      * @method
      */
     getLocations: function () {
+      var i;
+      
+      if (this.locations.length < 1 && this.data.locations.length > 1)
+        for (i = 0; i < data.locations; i++)
+          this.locations.push(new GB.Models.Location(this.data.locations[i]));
+      
       return this.locations;
+    },
+    
+    /**
+     * Returns the amount of locations that exist for this place.
+     * 
+     * @return {Integer}
+     */
+    getLocationCount: function () {
+      return this.data.locations.length;
     },
     
     /**
@@ -135,40 +165,29 @@ if(!GB.Models)
      * @method
      */
     toRow: function (row, callback) {
-      var $row = this.row, $self = this;
+      var $self = this;
   
       if(Object.prototype.toString.call(row).toLowerCase() !== '[object function]') {
-        this.row = row;
+        row = row;
       } else {
         callback = row;
-        this.row = null;
+        row = null;
       }
   
-      if(!this.row) {
-        this.row = $ui.createTableViewRow({
+      if(!row) {
+        row = $ui.createView({
           color: 'black',
-          borderColor: '#ece',
+          borderColor: '#eceece',
+          borderWidth: '0.5dp',
           background: 'white',
-          hasChild: true,
-          className: 'place'
+          height: 50
         });
       }
-      
-      // Business Image
-      this.row.add($ui.createImageView({
-        image: this.getImage(85),
-        left: 5,
-        width: 45,
-        height: 45,
-        borderColor: '#fff',
-        borderWidth: 3,
-        borderRadius: 0
-      }));
   
       // Label
-      this.row.add($ui.createLabel({
+      row.add($ui.createLabel({
         left: 60,
-        text: this.getName(),
+        text: this.data.publicName,
         color: '#888',
         font: {
           fontSize: 12,
@@ -177,33 +196,13 @@ if(!GB.Models)
         }
       }));
   
-      this.row.addEventListener('click', function (e) {
+      row.addEventListener('click', function (e) {
         callback.apply($self, [ e ]);
       });
+      
+      row.model = this;
   
-      return this.row;
-    },
-    
-    /**
-     * Creates new instance of Place, stores given data while creating instances 
-     * of GB.Models#Location for later usage.
-     * 
-     * @param {Object} data raw data fetched from api.
-     * @type {Object}
-     * @constructor
-     */
-    Constructor: function (data) {
-      var i;
-  
-      this.data = data;
-      if (data.locations.length > 1)
-        for (i = 0; i < data.locations; i++)
-          this.locations.push(new GB.Models.Location(data.locations[i]));
-  
-      this.images.s85 = $file.getFile($file.applicationDataDirectory, 'places/' + data._id + '-85.png');
-      this.images.s128 = $file.getFile($file.applicationDataDirectory, 'places/' + data._id + '-128.png');
-  
-      return this;
+      return row;
     }
   });
   
@@ -233,7 +232,7 @@ if(!GB.Models)
     Constructor: function (obj) {
       this.id = obj._id;
       this.name = obj.name;
-      this.address = obj.street1 + ", " + obj.city + ", " + obj.state.toUpperCase() + " "  + obj.zip;
+      this.address = [ obj.street1, obj.city, obj.state.toUpperCase() ].join(', ') + " " + obj.zip;
   
       this.position = {
         lat: obj.lat,

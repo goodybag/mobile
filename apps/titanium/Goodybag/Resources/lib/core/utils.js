@@ -63,7 +63,6 @@ gb.utils = function (global) {
     }
     
     client.onerror = function (e) {
-      console.log(e);
       callback.apply(this, [ e.error ]);
     }
     

@@ -225,7 +225,7 @@ static NSDictionary* TI_filterableItemProperties;
 		if (popoverViewProxy!=nil)
 		{
 			poView = [popoverViewProxy view];
-			poFrame = [poView frame];
+			poFrame = [poView bounds];
 		}
 		else
 		{

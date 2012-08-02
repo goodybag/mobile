@@ -8,13 +8,6 @@
 gb.config = function (global, fb, storage) {
   var self = this;
   
-  // debugging modes
-  this.debug = true;
-  this.development = true;
-  
-  // Secret passphrase for files.
-  this.secret = 'G00D13B4GR0X!!';
-  
   // Facebook
   fb.forceDialogAuth = false;
   fb.appid = '152282721508707';
@@ -32,12 +25,21 @@ gb.config = function (global, fb, storage) {
   ];
 
   // Api URLS
-  this.api = {};
-  this.api.auth = 'http://www.goodybag.com/api/consumers/login';
-  this.api.facebookAuth = 'http://www.goodybag.com/api/consumers/fblogin';
-  this.api.participating = 'http://www.goodybag.com/api/consumers/participatingBusinesses?limit=';
-  this.api.consumer = {};
-  this.api.consumer.self = 'http://www.goodybag.com/api/consumers/session'
+  var api = {};
+  api.auth = 'http://www.goodybag.com/api/consumers/login';
+  api.facebookAuth = 'http://www.goodybag.com/api/consumers/fblogin';
+  api.participating = 'http://www.goodybag.com/api/consumers/participatingBusinesses?limit=';
+  api.consumer = {};
+  api.consumer.self = 'http://www.goodybag.com/api/consumers/session'
+  
+  this.api = api;
+  
+  // debugging modes
+  this.debug = true;
+  this.development = true;
+  
+  // Secret passphrase for files.
+  this.secret = 'G00D13B4GR0X!!';
   
   return this;
 }(

@@ -14,6 +14,7 @@
 {
     NSMutableDictionary * _property = [[NSMutableDictionary alloc] init];
 
+    [_property setObject:[TiUtils stringValue:@"v8"] forKey:@"ti.android.runtime"];
     [_property setObject:[TiUtils stringValue:@"mfpKS7sp6AxZw2NEadHnqY4CaRudMLr7"] forKey:@"acs-oauth-secret-production"];
     [_property setObject:[TiUtils stringValue:@"D6szJfAvTzwUcPAJCdL6BkmUAHzBWG49"] forKey:@"acs-oauth-key-production"];
     [_property setObject:[TiUtils stringValue:@"Fgg3h53Zw1vzFlC6Bu703jyvS7ctMj2c"] forKey:@"acs-api-key-production"];
