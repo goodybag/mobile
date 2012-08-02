@@ -105,9 +105,11 @@ if(!GB.Models)
       if(!this.data) return;
       var url, written = true, $self = this, image, dir = $file.getFile($file.applicationDataDirectory, 'places/');
       image = $file.getFile($file.applicationDataDirectory, 'places/' + this.data._id + '-' + size + '.png');
+      
       if (!dir.exists()) dir.createDirectory(), dir = null;
       if (this.data.media) url = (size == 85) ? this.data.media.thumb : this.data.media.url;
       if (!url) url = 'http://goodybag-uploads.s3.amazonaws.com/businesses/' + this.data._id + '-' + size + '.png';
+      
       if (!image.exists()) {
         $http.get.image(url, function (error, results) { 
           console.log(error);
@@ -159,38 +161,30 @@ if(!GB.Models)
     /**
      * Converts this model down into a Titanium Table Row
      * 
-     * @param {Object} row Titanium TableRow (Optional)
+     * @param {Boolean} row Titanium TableRow (Optional)
      * @param {Object} callback called when a user clicks on this row
      * @return {Object} Built Titanium TableRow
      * @method
      */
-    toRow: function (row, callback) {
+    toRow: function (border, callback) {
       var $self = this;
-  
-      if(Object.prototype.toString.call(row).toLowerCase() !== '[object function]') {
-        row = row;
-      } else {
-        callback = row;
-        row = null;
-      }
-  
-      if(!row) {
-        row = $ui.createView({
-          color: 'black',
-          borderColor: '#eceece',
-          borderWidth: '0.5dp',
-          background: 'white',
-          height: 50
-        });
-      }
+
+      row = $ui.createView({
+        color: 'black',
+        borderColor: '#eceece',
+        borderWidth: border ? 1 : 0,
+        background: 'white',
+        height: 50
+      });
   
       // Label
       row.add($ui.createLabel({
-        left: 60,
+        left: 5,
+        top: 5,
         text: this.data.publicName,
-        color: '#888',
+        color: '#555',
         font: {
-          fontSize: 12,
+          fontSize: 14,
           fontStyle: 'normal',
           fontWeight: 'bold'
         }
@@ -199,8 +193,6 @@ if(!GB.Models)
       row.addEventListener('click', function (e) {
         callback.apply($self, [ e ]);
       });
-      
-      row.model = this;
   
       return row;
     }
@@ -215,12 +207,7 @@ if(!GB.Models)
    * @type {Object}
    */
   GB.Models.Location = new Class({
-    id: false,
-    name: false,
-    address: false,
-    position: false,
-    number: false,
-    fax: false,
+    data: false,
   
     /**
      * Creates a new Location and takes given data and re-organizes it into 
@@ -230,19 +217,54 @@ if(!GB.Models)
      * @constructor
      */
     Constructor: function (obj) {
-      this.id = obj._id;
-      this.name = obj.name;
-      this.address = [ obj.street1, obj.city, obj.state.toUpperCase() ].join(', ') + " " + obj.zip;
-  
-      this.position = {
-        lat: obj.lat,
-        lng: obj.lng
-      };
-  
-      this.number = obj.phone;
-      this.fax = obj.fax;
+      this.data = obj;
   
       return this;
+    },
+    
+    /**
+     * Get location Object Id
+     */
+    getId: function () {
+      return this.data.id;
+    },
+    
+    /**
+     * Get location name
+     */
+    getName: function () {
+      return this.data.name;
+    },
+    
+    /**
+     * Get location address
+     */
+    getAddress: function () {
+      return [ this.data.street1, this.data.city, this.data.state.toUpperCase() ].join(', ') + ' ' + this.data.zip;
+    },
+    
+    /**
+     * Get location position
+     */
+    getPosition: function () {
+      return {
+        lat: this.data.lat,
+        lng: this.data.lng
+      };
+    },
+    
+    /**
+     * Get location number
+     */
+    getNumber: function () {
+      return this.data.phone;
+    },
+    
+    /**
+     * Get location fax
+     */
+    getFax: function () {
+      return this.data.fax;
     }
   });
 })();
