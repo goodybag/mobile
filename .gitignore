@@ -36,3 +36,7 @@ gen/
 
 # Local configuration file (sdk path, etc)
 local.properties
+
+#Titanium
+apps/titanium/Goodybag/build/
+apps/titanium/Goodybag/build.log
