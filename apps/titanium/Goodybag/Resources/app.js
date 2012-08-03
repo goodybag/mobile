@@ -1,11 +1,50 @@
 // App Namespacing.
 var gb = {}, GB = gb;
 
+var testActivity = {
+  "data":{
+    "amount":0.05
+  },
+  "_id":"4fd4b9809c0886ea0700887b",
+  "events":[
+    "fundsDonated"
+  ],
+  "when":"2012-06-10T15:13:00.658Z",
+  "feedSpecificData":{
+    "involved":{
+      "charity":{
+        "type":"business",
+        "id":"4f512cf31ce79ee36e00000f",
+        "name":"Austin Children's Shelter"
+      }
+    }
+  },
+  "dates":{
+    "lastModified":"2012-06-10T15:13:04.653Z",
+    "created":"2012-06-10T15:13:04.653Z"
+  },
+  "what":{
+    "id":"4fd4b97e9c0886ea07008878",
+    "type":"donationLog"
+  },
+  "who":{
+    "id":"4f373ad3c7f60c96120003c3",
+    "type":"consumer",
+    "name":"John Fawcett",
+    "screenName":"john.awesome"
+  }
+};
+
+var moment = require('lib/core/moment');
+
+
 // Common JS Requires, Very Useful stuff.
 Ti.include('lib/core/components/class.js');
 Ti.include('lib/core/config.js');
 Ti.include('lib/core/utils.js');
 Ti.include('lib/core/aes.js');
+
+gb.streamParser = require('lib/core/stream-parser');
 
 // Components
 Ti.include('lib/core/components/view.js');
@@ -19,13 +58,15 @@ gb.qrcode = QRCode({
 
 // Models
 Ti.include('lib/models/user.js');
-Ti.include('lib/models/place.js');
+Ti.include('lib/models/place.js')
+Ti.include('lib/models/activity.js');
 
 // Create our User
 gb.consumer = new GB.Models.User();
 
 // Views
 Ti.include('lib/views/login.js');
+Ti.include('lib/views/activity.js');
 Ti.include('lib/views/main.js');
 
 // Do Authentication Check

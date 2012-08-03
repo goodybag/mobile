@@ -3,7 +3,7 @@
  * For any questions, comments, or complains contact Lalit Kapoor
  */
 
-var streamParser = function(){};
+var streamParser = {};
 
 streamParser._formatDate = function(date){
   var originalCalendar = moment.calendar;
@@ -155,4 +155,4 @@ streamParser.fundsDonated = function(activity){
   return sentence;
 };
 
-module.exports = streamParser;
+exports = streamParser;

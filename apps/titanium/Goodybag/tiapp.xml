@@ -18,10 +18,10 @@
     <id>com.goodybag</id>
     <name>Goodybag</name>
     <version>1.0</version>
-    <publisher>Nijiko Yonskai</publisher>
+    <publisher>Goodybag</publisher>
     <url>http://goodybag.com</url>
     <description>not specified</description>
-    <copyright>2012 by Nijiko Yonskai</copyright>
+    <copyright>Goodybag</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
@@ -50,7 +50,5 @@
         </splash>
         <theme>default</theme>
     </mobileweb>
-    <modules>
-        <module platform="commonjs" version="2.0.5">ti.cloud</module>
-    </modules>
+    <modules/>
 </ti:app>

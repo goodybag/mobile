@@ -9,12 +9,12 @@
 
 NSString * const TI_APPLICATION_DEPLOYTYPE = @"development";
 NSString * const TI_APPLICATION_ID = @"com.goodybag";
-NSString * const TI_APPLICATION_PUBLISHER = @"Nijiko Yonskai";
+NSString * const TI_APPLICATION_PUBLISHER = @"Goodybag";
 NSString * const TI_APPLICATION_URL = @"http://goodybag.com";
 NSString * const TI_APPLICATION_NAME = @"Goodybag";
 NSString * const TI_APPLICATION_VERSION = @"1.0";
 NSString * const TI_APPLICATION_DESCRIPTION = @"not specified";
-NSString * const TI_APPLICATION_COPYRIGHT = @"2012 by Nijiko Yonskai";
+NSString * const TI_APPLICATION_COPYRIGHT = @"Goodybag";
 NSString * const TI_APPLICATION_GUID = @"ab5a4024-ce04-4aa4-8e78-c931005538e2";
 BOOL const TI_APPLICATION_ANALYTICS = true;
 

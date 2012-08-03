@@ -2,31 +2,32 @@
  * Model.Activty
  */
 
-var streamParser  = require('./../stream-parser')
-,   moment        = require('./../moment');
+if(!GB.Models) 
+  GB.Models = {};
 
-var Activity = function(attributes){
+GB.Models.Activity = function(attributes){
   this.attributes = attributes;
-  this.attributes.action = streamParser.renderSentence(attributes);
-  this.attributes.timestamp = moment(Date.create(attributes.dates.lastModified)).from();
-};
-
-Activity.prototype = {
-  /*
-   * Returns the activity we need to render the view
-   */
-  toJSON: function(){
-    var attr = this.attributes;
-    return {
-      who: {
-        id: attr.who.id
-      , name: attr.who.name
-      , screenName: attr.who.screenName
-      }
-    , action: attr.action
-    , timestamp: attr.timestamp
-    };
+  if (attributes.events.indexOf('eventRsvped') > -1){
+    this.attributes.timestamp = moment(Date.create(this.attributes.dates.lastModified)).from();
+    this._formatDate(); 
   }
 };
 
-module.exports = Activity;
+GB.Models.Activity.prototype = {
+  /*
+   * Sets the this.when date for event rsvps
+   */
+  _formatDate: function(){
+    var originalCalendar = moment.calendar;
+    moment.calendar = {
+      lastDay : '[Yesterday at] LT',
+      sameDay : '[Today at] LT',
+      nextDay : '[Tomorrow at] LT',
+      lastWeek : '[last] dddd [at] LT',
+      nextWeek : '[on the upcoming] dddd [at] LT',
+      sameElse : '[on] L'
+    };
+    this.when = moment(Date.create(this.attributes.data.event.dates.actual)).calendar();
+    moment.calendar = originalCalendar;
+  }
+};
