@@ -43,7 +43,7 @@ var Views = {
  * @type {Method}
  */
 Views.add = function (name, view) {
-  if(typeof view.extended === 'undefined') {
+  if (typeof view.extended === 'undefined') {
     view.viewName = name;
     view = View.extend(view);
   }
@@ -84,15 +84,15 @@ Views.exists = function (name) {
  * @type {Method}
  */
 Views.show = function (name, context) {
-  if(!name) return;
-  if(!this.exists(name)) return;
-  if(this.current) this.hide(this.current);
-  if(typeof this.views[name].onShow != 'undefined') this.views[name].onShow(context);
+  if (!name) return;
+  if (!this.exists(name)) return;
+  if (this.current) this.hide(this.current);
+  if (typeof this.views[name].onShow != 'undefined') this.views[name].onShow(context);
   
   this.views[name].self.show();
   this.current = name;
   
-  if(typeof this.views[name].afterShow != 'undefined' && gb.isIOS) this.views[name].afterShow(context);
+  if (typeof this.views[name].afterShow != 'undefined' && gb.isIOS) this.views[name].afterShow(context);
 };
 
 /**
@@ -103,9 +103,9 @@ Views.show = function (name, context) {
  * @type {Method}
  */
 Views.hide = function (name, context) {
-  if(!name) return;
-  if(!this.exists(name)) return;
-  if(typeof this.views[name].onHide != 'undefined') this.views[name].onHide(context);
+  if (!name) return;
+  if (!this.exists(name)) return;
+  if (typeof this.views[name].onHide != 'undefined') this.views[name].onHide(context);
   
   this.views[name].self.hide();
 };
@@ -117,8 +117,8 @@ Views.hide = function (name, context) {
  * @type {Method}
  */
 Views.destroy = function (name) {
-  if(!name) return;
-  if(!this.exists(name)) return;
+  if (!name) return;
+  if (!this.exists(name)) return;
   
   this.views[name].self = null;
   delete this.views[name];

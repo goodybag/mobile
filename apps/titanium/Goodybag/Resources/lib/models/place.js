@@ -102,7 +102,7 @@ if(!GB.Models)
      * @method
      */
     getImage: function (size, callback) {
-      if(!this.data) return;
+      if (!this.data) return;
       var url, written = true, $self = this, image, dir = $file.getFile($file.applicationDataDirectory, 'places/');
       image = $file.getFile($file.applicationDataDirectory, 'places/' + this.data._id + '-' + size + '.png');
       
@@ -129,13 +129,18 @@ if(!GB.Models)
      * @method
      */
     getLocations: function () {
-      var i;
+      var locations = [], locs = this.data.locations, length = locs.length;
       
-      if (this.locations.length < 1 && this.data.locations.length > 1)
-        for (i = 0; i < data.locations; i++)
-          this.locations.push(new GB.Models.Location(this.data.locations[i]));
-      
-      return this.locations;
+      if (this.locations.length < 1) {
+        console.log('Making Locations');
+        for (var i = 0; i < length; i++) {
+          locations.push(new GB.Models.Location(locs[i], this));
+          console.log('created location');
+        }
+      } else locations = this.locations;
+        
+      this.locations = locations;
+      return locations;
     },
     
     /**
@@ -159,7 +164,9 @@ if(!GB.Models)
     },
   
     /**
-     * Converts this model down into a Titanium Table Row
+     * Converts this model down into a Titanium Row
+     * 
+     * Seperated View Logic, this can be utilized in areas outside of a specific view.
      * 
      * @param {Boolean} row Titanium TableRow (Optional)
      * @param {Object} callback called when a user clicks on this row
@@ -179,8 +186,8 @@ if(!GB.Models)
   
       // Label
       row.add($ui.createLabel({
-        left: 5,
-        top: 5,
+        left: '10dp',
+        top: '5dp',
         text: this.data.publicName,
         color: '#555',
         font: {
@@ -189,6 +196,20 @@ if(!GB.Models)
           fontWeight: 'bold'
         }
       }));
+      
+      if (this.data.locations.length > 1) {
+        row.add($ui.createLabel({
+          left: '15dp',
+          top: '24dp',
+          text: this.data.locations.length + ' locations',
+          color: '#aaaaaa',
+          font: {
+            fontSize: 12,
+            fontStyle: 'normal',
+            fontWeight: 'bold'
+          }
+        }));
+      }
   
       row.addEventListener('click', function (e) {
         callback.apply($self, [ e ]);
@@ -208,6 +229,7 @@ if(!GB.Models)
    */
   GB.Models.Location = new Class({
     data: false,
+    parent: false,
   
     /**
      * Creates a new Location and takes given data and re-organizes it into 
@@ -216,9 +238,10 @@ if(!GB.Models)
      * @type {Object}
      * @constructor
      */
-    Constructor: function (obj) {
+    Constructor: function (obj, parent) {
       this.data = obj;
-  
+      this.parent = parent;
+      
       return this;
     },
     
@@ -240,7 +263,11 @@ if(!GB.Models)
      * Get location address
      */
     getAddress: function () {
-      return [ this.data.street1, this.data.city, this.data.state.toUpperCase() ].join(', ') + ' ' + this.data.zip;
+      return [ 
+        this.data.street1, 
+        this.data.city, 
+        this.data.state.toUpperCase() 
+      ].join(', ') + ' ' + this.data.zip;
     },
     
     /**
@@ -265,6 +292,35 @@ if(!GB.Models)
      */
     getFax: function () {
       return this.data.fax;
+    },
+    
+    /**
+     * 
+     */
+    toRow: function () {
+      
+    },
+    
+    /**
+     * Creates and returns annotation for map views.
+     * 
+     * Separated View logic that can be utilized anywhere a map is needed.
+     *  
+     * @param {Object} onClick
+     */
+    toAnnotation: function (onClick) {
+      var pin = Titanium.Map.createAnnotation({
+        latitude: this.data.lat,
+        longitude: this.data.lng,
+        title: this.data.name,
+        subtitle: this.getAddress(),
+        animate: true,
+        pincolor: Ti.Map.ANNOTATION_RED
+      });
+      
+      pin.addEventListener('click', function (e) { 
+        onClick.apply(this.location, [ e, this.parent ]);
+      });
     }
   });
 })();

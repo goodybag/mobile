@@ -150,7 +150,7 @@ GB.Windows.add('main', Window.extend({
   toggleSidebar: function (e) {
     var $el = this.elements;
     
-    if(!this.animated) {
+    if (!this.animated) {
       this.animated = !0;
       $el.views.main.animate({ left: Titanium.Platform.displayCaps.platformWidth-70, duration: 250 });
       $el.buttons.sidebar.setImage(gb.utils.getImage('screens/main/buttons/sidebar.png'));

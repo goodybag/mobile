@@ -176,7 +176,7 @@ gb.utils = function (global) {
   this.getImage = function (path) {
     path = (gb.isAndroid ? '/images/' : '') + path;
     
-    if(gb.config.debug) 
+    if (gb.config.debug) 
       console.log('[gb.utils.getImage] ' + path);
     
     return path;
@@ -207,7 +207,7 @@ gb.utils = function (global) {
     if (Object.prototype.toString.call(obj) === '[object Array]') {
       var i;
       for (i = 0; i < obj.length; i++) {
-        if(Object.prototype.toString.call(obj[i]) === '[object Array]')
+        if (Object.prototype.toString.call(obj[i]) === '[object Array]')
           obj[i] = this.trim(obj[i]);
         else if (Object.prototype.toString.call(obj[i]) === '[object String]')
           obj[i] = t(obj[i]);
@@ -250,8 +250,8 @@ gb.utils = function (global) {
     this.toString = function () {
       var string = "";
       
-      for(var i in this._store) {
-        if(!this._store.hasOwnProperty(i) || i == null) continue;
+      for (var i in this._store) {
+        if (!this._store.hasOwnProperty(i) || i == null) continue;
         
         if(this._store[i] == null)
           string += i + "; ";
@@ -278,21 +278,21 @@ gb.utils = function (global) {
   this.parsers.cookie.parser = function (string) {
     var segments, section, storage = {};
     
-    if(string === null || self.trim(string) === '') {
+    if (string === null || self.trim(string) === '') {
       return null;
     };
     
     segments = string.split(';');
     
-    if(segments.length > 1 && (segments[segments.length] === null || self.trim(segments[segments.length]) === '')) 
+    if (segments.length > 1 && (segments[segments.length] === null || self.trim(segments[segments.length]) === '')) 
       segments.pop();
     
     for(var i in segments) {
-      if(!segments.hasOwnProperty(i)) continue;
+      if (!segments.hasOwnProperty(i)) continue;
       section = null;
       section = self.trim(segments[i]);
       
-      if(section != null) {
+      if (section != null) {
         if(section.indexOf('=') !== -1) {
           section = section.split('=');
           storage[section.shift()] = section.join('=');
@@ -311,9 +311,9 @@ gb.utils = function (global) {
    * @param debug boolean depicting a separate debugger instance
    */
   this.debug = function (s, debug) {
-    if(debug != null) {
-      if(debug) return Ti.API.info(s);
-    } else if(gb.config.debug) 
+    if (debug != null) {
+      if (debug) return Ti.API.info(s);
+    } else if (gb.config.debug) 
       return Ti.API.info(s);
   };
   
@@ -353,7 +353,7 @@ gb.utils = function (global) {
    * Returns screen density based on platform.
    */
   this.densityPixels = function (densityPixels) {
-    if(gb.isIOS) return densityPixels;
+    if (gb.isIOS) return densityPixels;
     return (densityPixels * Titanium.Platform.displayCaps.dpi / 160); // Medium DPI is 160, this scales to it.
   }
   

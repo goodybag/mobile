@@ -24,10 +24,10 @@ var Class = function (properties) {
   };
 
   this.extend = function (properties) {
-    var parent = this.prototype || Class, 
-        proto  = Object.create(parent), 
-        target = clone(properties, proto), 
-        body   = target.Constructor;
+    var parent = this.prototype || Class
+    ,   proto  = Object.create(parent)
+    ,   target = clone(properties, proto)
+    ,   body   = target.Constructor;
 
     if (!(body instanceof Function)) {
       throw new Error("Constructor missing in a class!");

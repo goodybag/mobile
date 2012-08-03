@@ -23,6 +23,7 @@
     [_property setObject:[TiUtils stringValue:@"jvnFGkayWrzHMaJdz1HETgQ8fh9E8dF8"] forKey:@"acs-api-key-development"];
     [_property setObject:[TiUtils stringValue:@"152282721508707"] forKey:@"ti.facebook.appid"];
     [_property setObject:[TiUtils stringValue:@"system"] forKey:@"ti.ui.defaultunit"];
+    [_property setObject:[TiUtils stringValue:@"0paDZmV0rlfWwU9_rCTHFS2-IdKw1RhjYmFr1gQ"] forKey:@"ti.android.google.map.api.key.production"];
 
     return _property;
 }

@@ -4,13 +4,13 @@ gb.Windows.add('login', Window.extend({
   
   elements: {
     view: Titanium.UI.createScrollView({
-      contentWidth: 'auto'
-    , contentHeight: 'auto'
-    , top: 0
-    , width: 320
-    , backgroundImage: gb.utils.getImage('background.png')
-    , showVerticalScrollIndicator: true
-    , showHorizontalScrollIndicator: false
+      contentWidth: 'auto',
+      contentHeight: 'auto',
+      top: 0,
+      width: 320,
+      backgroundImage: gb.utils.getImage('background.png'),
+      showVerticalScrollIndicator: true,
+      showHorizontalScrollIndicator: false
     }),
     
     background: Titanium.UI.createImageView({
@@ -19,53 +19,53 @@ gb.Windows.add('login', Window.extend({
     
     buttons: {
       facebook: Titanium.UI.createImageView({
-        top: '150dp'
-      , image: gb.utils.getImage('screens/login/facebook.png')
+        top: '150dp',
+        image: gb.utils.getImage('screens/login/facebook.png')
       }),
       
       submit: Titanium.UI.createImageView({
-        top: '320dp'
-      , image: gb.utils.getImage('screens/login/login.png')
+        top: '320dp',
+        image: gb.utils.getImage('screens/login/login.png')
       }),
       
       register: Titanium.UI.createImageView({
-        top: '408dp'
-      , image: gb.utils.getImage('screens/login/register.png')
+        top: '408dp',
+        image: gb.utils.getImage('screens/login/register.png')
       })
     },
     
     inputs: {
       background: Titanium.UI.createImageView({
-        top: '220dp'
-      , image: gb.utils.getImage('screens/login/inputs.png')
+        top: '220dp',
+        image: gb.utils.getImage('screens/login/inputs.png')
       }),
       
       email: Titanium.UI.createTextField({
-        top: '228dp'
-      , left: '80dp'
-      , width: '195dp'
-      , height: '40dp'
-      , backgroundImage: gb.utils.getImage('screens/login/transparent.png')
-      , hintText: 'Email'
-      , color: '#888'
-      , keyboardType: Titanium.UI.KEYBOARD_EMAIL
-      , borderStyle: Ti.UI.INPUT_BORDERSTYLE_NONE
-      , autocorrect: false
-      , autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_NONE
+        top: '228dp',
+        left: '80dp',
+        width: '195dp',
+        height: '40dp',
+        backgroundImage: gb.utils.getImage('screens/login/transparent.png'),
+        hintText: 'Email',
+        color: '#888',
+        keyboardType: Titanium.UI.KEYBOARD_EMAIL,
+        borderStyle: Ti.UI.INPUT_BORDERSTYLE_NONE,
+        autocorrect: false,
+        autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_NONE
       }),
       
       password: Titanium.UI.createTextField({
-        top: '270dp'
-      , left: '80dp'
-      , width: '195dp'
-      , height: '40dp'
-      , backgroundImage: gb.utils.getImage('screens/login/transparent.png')
-      , hintText: 'Password'
-      , color: '#888'
-      , borderStyle: Ti.UI.INPUT_BORDERSTYLE_NONE
-      , autocorrect: false
-      , autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_NONE
-      , passwordMask: true
+        top: '270dp',
+        left: '80dp',
+        width: '195dp',
+        height: '40dp',
+        backgroundImage: gb.utils.getImage('screens/login/transparent.png'),
+        hintText: 'Password',
+        color: '#888',
+        borderStyle: Ti.UI.INPUT_BORDERSTYLE_NONE,
+        autocorrect: false,
+        autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_NONE,
+        passwordMask: true,
       })
     }
   },
@@ -139,7 +139,7 @@ gb.Windows.add('login', Window.extend({
           GB.Windows.show('main');
         });
       } else {
-        if(!e.cancelled) {
+        if (!e.cancelled) {
           alert('Could not login to Facebook, Try Again!');
         }
       }

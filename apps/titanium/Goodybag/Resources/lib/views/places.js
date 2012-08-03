@@ -7,14 +7,10 @@ GB.Views.add('places', {
     top: '55dp'
   }),
   
+  location: 'Places',
   models: [],
   views: [],
-  
-  elements: {
-    places: Titanium.UI.createScrollView({
-      layout: 'vertical'
-    })
-  },
+  elements: {},
   
   /**
    * Grab and store places location and initialize View.
@@ -40,33 +36,124 @@ GB.Views.add('places', {
     var $this = this, $el = this.elements;
     
     this.fetch(function (error, results) {
-      var places = [], row, i;
+      var i;
       
-      $this.self.add($el.places);
       for (i = 0; i < results.data.length; i++) {
-        places.push(new GB.Models.Place(results.data[i]));
+        $this.models.push(new GB.Models.Place(results.data[i]));
       }
-
-      places.sort($this.comparePlaces);
       
-      for (i = 0; i < places.length; i++) {
-        $el.places.add(places[i].toRow(i%2, $this.onClick));
-      }
+      $this.models.sort($this.comparePlaces);
+      $this['show' + $this.location]();
     }, true);
   },
   
   afterShow: function (context) {},
   
+  showPlaces: function () {
+    var $this = this, $el = this.elements;
+    
+    $el.places = Titanium.UI.createScrollView({
+      layout: 'vertical'
+    });
+    
+    $this.self.add($el.places);
+    
+    for (i = 0; i < $this.models.length; i++) {
+      $el.places.add($this.models[i].toRow(i%2, function (e) { $this.onPlaceClick.apply($this, [ this ]); }));
+    }
+    
+    $this.location = 'places';
+  },
+  
+  showPlace: function (place, location) {
+    var $this = this, $el = this.elements, $ui = Titanium.UI, $save = $this.self.children[0];
+    var back;
+    
+    $this.self.remove($save);
+    $el.place = $ui.createScrollView();
+    
+    back = $ui.createLabel({
+      left: '10dp',
+      top: '10dp',
+      text: 'Back',
+      color: '#aaa',
+      font: {
+        fontSize: 14,
+        fontStyle: 'normal',
+        fontWeight: 'bold'
+      }
+    });
+    
+    back.addEventListener('click', function (e) {
+      $this.self.remove($el.place);
+      $this.self.add($save);
+    });
+    
+    $el.place.add(back);
+    place.getImage(128, function (data) {
+      $el.place.add($ui.createImageView({
+        image: data,
+        top: '30dp',
+        left: '10dp'
+      }));
+    });
+    
+    if(place.getLocationCount() < 2) {
+      
+    } else {
+      
+    }
+    
+    $this.self.add($el.place);
+  },
+  
+  showMap: function () {
+    var $this = this, $el = this.elements, locations;
+    
+    $this.annotations = [];
+    for (var i = 0; i < $this.models.length; i++) {
+      locations = $this.models[i].getLocations();
+      for(var x = 0; x < locations.length; x++) {
+        $this.annotations.push(locations[x].toAnnotation());
+      }
+    }
+
+    $el.map = Titanium.Map.createView({
+      region: {
+        latitude: 30.266703,
+        longitude: -97.73798,
+        latitudeDelta: .07,
+        longitudeDelta: .07
+      },
+      animate: true,
+      regionFit: true,
+      userLocation: true,
+      annotations: $this.annotations
+    });
+    
+    $this.self.add($el.map);
+  },
+  
   /**
-   * Called when a row is clicked.
+   * Called when a place row is clicked.
    *
    * Determines which location has been chosen and opens a view 
    * with the location information.
    * 
-   * @param  {Object} evnt Event Handler
+   * @param  {Object} e Event Handler
    */
-  onClick: function (evnt) {
-    console.log('clicked on ' + this.getName());
+  onPlaceClick: function (place) {
+    this.showPlace(place);
+  },
+  
+  /**
+   * Called whenever an annotation is clicked.
+   * 
+   * @param {Object} e Event Handler
+   * @param {Object} parent Place Object for Pin Location
+   */
+  onPinClick: function (e, parent) {
+    this.showPlace(parent, this);
   },
 
   /**

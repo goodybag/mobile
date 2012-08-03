@@ -6,7 +6,7 @@ Logfile initialized
 [DEBUG] Waiting for device to be ready ...
 [TRACE] adb devices returned 1 devices/emulators
 [DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.012010 seconds on emulator to get ready
+[DEBUG] waited 0.011655 seconds on emulator to get ready
 [DEBUG] com.goodybag installed? True
 [INFO] Fastdev server running, deploying in Fastdev mode
 [INFO] Copying CommonJS modules...
@@ -29,3 +29,5 @@ Logfile initialized
 [INFO] Launching application ... Goodybag
 [TRACE] Launch output: Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.goodybag/.GoodybagActivity }
 
+[INFO] Relaunched Goodybag ... Application should be running.
+[INFO] Android Emulator has exited

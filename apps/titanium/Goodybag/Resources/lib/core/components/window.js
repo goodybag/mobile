@@ -10,9 +10,9 @@
     this.windows[name] = new window();
     this.windows[name].windowName = name;
     
-    if(typeof this.windows[name].onAndroid != 'undefined' && gb.isAndroid)
+    if (typeof this.windows[name].onAndroid != 'undefined' && gb.isAndroid)
       this.windows[name].onAndroid();
-    else if(typeof this.windows[name].onIOS != 'undefined' && gb.isIOS)
+    else if (typeof this.windows[name].onIOS != 'undefined' && gb.isIOS)
       this.windows[name].onIOS();
   };
   
@@ -25,13 +25,13 @@
   };
   
   Windows.show = function (name, destroy) {
-    if(!name) return;
-    if(!this.exists(name)) return;
+    if (!name) return;
+    if (!this.exists(name)) return;
 
-    if(this.current) {
+    if (this.current) {
       this.windows[this.current][((destroy) ? 'destroy' : 'hide')]();
       
-      if(destroy) {
+      if (destroy) {
         delete this.windows[this.current];
       }
     }
@@ -41,8 +41,8 @@
   };
   
   Windows.hide = function (name, close) {
-    if(!name) return;
-    if(!this.exists(name)) return;
+    if (!name) return;
+    if (!this.exists(name)) return;
 
     this.windows[name].hide();
   };
@@ -70,14 +70,14 @@ var Window = new Class({
   show: function () {
     gb.utils.debug('[' + this.windowName + '] Attempting to show window.', this.debug);
     
-    if(!this.created) {
+    if (!this.created) {
       gb.utils.debug('[' + this.windowName + '] Window has not yet been created, opening.', this.debug);
       
       this.created = true;
       this.window.open();
     }
     
-    if(typeof this.onShow != 'undefined')
+    if (typeof this.onShow != 'undefined')
       this.onShow();
     
     this.window.show();
@@ -86,17 +86,17 @@ var Window = new Class({
   hide: function () {
     gb.utils.debug('[' + this.windowName + '] Attempting to hide window.', this.debug);
     
-    if(typeof this.onHide != 'undefined' && this.created) this.onHide();
-    if(this.created) this.window.hide();
+    if (typeof this.onHide != 'undefined' && this.created) this.onHide();
+    if (this.created) this.window.hide();
   },
   
   destroy: function () {
     gb.utils.debug('[' + this.windowName + '] Attempting to destroy window.', this.debug);
     
-    if(this.created) {
+    if (this.created) {
       gb.utils.debug('[' + this.windowName + '] Window has been created. We can destroy it.', this.debug);
       
-      if(typeof this.onDestroy != 'undefined')
+      if (typeof this.onDestroy != 'undefined')
         this.onDestroy();
         
       this.window.close();
