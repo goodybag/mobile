@@ -105,8 +105,8 @@ if(!GB.Models)
       gb.utils.debug('[User] Creating http post request.');
       
       $http.post(gb.config.api.auth, {
-        email: this.email
-      , password: this.password
+        email: this.email,
+        password: this.password
       }, function (error, json) {
         var cookie, segments;
         
@@ -295,10 +295,10 @@ if(!GB.Models)
       var consumer = $file.getFile($file.applicationDataDirectory, "consumer");
       var cookie = $file.getFile($file.applicationDataDirectory, "cooks");
       
-      if(consumer.exists()) consumer.deleteFile();
-      if(cookie.exists()) cookie.deleteFile();
-      if(self.avatars.s85 && self.avatars.s85.exists()) self.avatars.s85.deleteFile();
-      if(self.avatars.s128 && self.avatars.s128.exists()) self.avatars.s128.deleteFile();
+      if (consumer.exists()) consumer.deleteFile();
+      if (cookie.exists()) cookie.deleteFile();
+      if (self.avatars.s85 && self.avatars.s85.exists()) self.avatars.s85.deleteFile();
+      if (self.avatars.s128 && self.avatars.s128.exists()) self.avatars.s128.deleteFile();
       
       consumer = cookie = null;
       return null;

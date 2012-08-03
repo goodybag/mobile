@@ -6,27 +6,18 @@ GB.Views.add('places', {
   self: Titanium.UI.createView({
     top: '55dp'
   }),
-
-  places: Titanium.UI.createScrollView({
-    layout: 'vertical'
-  }),
   
-  elements: {
-    table: Ti.UI.createTableView({
-      backgroundColor: '#ffffff'
-    , borderColor: '#eeeeee'
-    , separatorColor: '#eeeeee'
-    , color: 'black'
-    , top: 0
-    })
-  },
+  location: 'Places',
+  models: [],
+  views: [],
+  elements: {},
   
   /**
    * Grab and store places location and initialize View.
    * @constructor
    */
   Constructor: function () {
-    var store = $file.getFile($file.applicationDataDirectory, 'places.json');
+    var $this = this, store = $file.getFile($file.applicationDataDirectory, 'places.json');
     
     this.fetch(function (error, results) {
       store.deleteFile();
@@ -44,86 +35,125 @@ GB.Views.add('places', {
   onShow: function (context) {
     var $this = this, $el = this.elements;
     
-    this.self.add(this.places);
-    
     this.fetch(function (error, results) {
-      var places = [], sections = {}, place, first, current, section, row, i, iv;
-      
-      $this.data = [];
-      gb.utils.debug('starting conversion to places');
+      var i;
       
       for (i = 0; i < results.data.length; i++) {
-        gb.utils.debug('converting item: ' + i + ' of ' + results.data.length);
-        places.push(new GB.Models.Place(results.data[i]));
+        $this.models.push(new GB.Models.Place(results.data[i]));
       }
-
-      places.sort($this.comparePlaces);
-
-      for (i = 0; i < places.length; i++) {
-        gb.utils.debug('creating rows: ' + i + ' of ' + places.length);
-        places[i].getImage(85, function () {});
-        row = places[i].toRow(function (e) {
-          $this.onClick.apply(this, [ e ]);
-        });
-
-        if (gb.isAndroid) {
-          iv = Titanium.UI.createImageView({
-            left: 5,
-            width: 45,
-            height: 45,
-            borderColor: '#fff',
-            borderWidth: 3,
-            borderRadius: 0
-          });
-          
-          row.model.getImage(85, function (data) {
-            console.log('got image data: ' + data);
-            iv.setImage(data);
-          });
-          
-          row.add(iv);
-        }
-
-        $this.places.add(row);
-      }
-
-      results = null;
-      error = null;
+      
+      $this.models.sort($this.comparePlaces);
+      $this['show' + $this.location]();
     }, true);
   },
   
-  afterShow: function (context) {
-    var iv, children = this.places.children;
+  afterShow: function (context) {},
+  
+  showPlaces: function () {
+    var $this = this, $el = this.elements;
     
-    for(i = 0; i < children.length; i++) {
-      iv = Titanium.UI.createImageView({
-        left: 5,
-        width: 45,
-        height: 45,
-        borderColor: '#fff',
-        borderWidth: 3,
-        borderRadius: 0
-      });
-      
-      children[i].model.getImage(85, function (data) {
-        console.log('got image data: ' + data);
-        iv.setImage(data);
-      });
-      
-      children[i].add(iv);
+    $el.places = Titanium.UI.createScrollView({
+      layout: 'vertical'
+    });
+    
+    $this.self.add($el.places);
+    
+    for (i = 0; i < $this.models.length; i++) {
+      $el.places.add($this.models[i].toRow(i%2, function (e) { $this.onPlaceClick.apply($this, [ this ]); }));
     }
+    
+    $this.location = 'places';
+  },
+  
+  showPlace: function (place, location) {
+    var $this = this, $el = this.elements, $ui = Titanium.UI, $save = $this.self.children[0];
+    var back;
+    
+    $this.self.remove($save);
+    $el.place = $ui.createScrollView();
+    
+    back = $ui.createLabel({
+      left: '10dp',
+      top: '10dp',
+      text: 'Back',
+      color: '#aaa',
+      font: {
+        fontSize: 14,
+        fontStyle: 'normal',
+        fontWeight: 'bold'
+      }
+    });
+    
+    back.addEventListener('click', function (e) {
+      $this.self.remove($el.place);
+      $this.self.add($save);
+    });
+    
+    $el.place.add(back);
+    place.getImage(128, function (data) {
+      $el.place.add($ui.createImageView({
+        image: data,
+        top: '30dp',
+        left: '10dp'
+      }));
+    });
+    
+    if(place.getLocationCount() < 2) {
+      
+    } else {
+      
+    }
+    
+    $this.self.add($el.place);
+  },
+  
+  showMap: function () {
+    var $this = this, $el = this.elements, locations;
+    
+    $this.annotations = [];
+    for (var i = 0; i < $this.models.length; i++) {
+      locations = $this.models[i].getLocations();
+      for(var x = 0; x < locations.length; x++) {
+        $this.annotations.push(locations[x].toAnnotation());
+      }
+    }
+
+    $el.map = Titanium.Map.createView({
+      region: {
+        latitude: 30.266703,
+        longitude: -97.73798,
+        latitudeDelta: .07,
+        longitudeDelta: .07
+      },
+      animate: true,
+      regionFit: true,
+      userLocation: true,
+      annotations: $this.annotations
+    });
+    
+    $this.self.add($el.map);
   },
   
   /**
-   * Called when a row is clicked.
+   * Called when a place row is clicked.
    *
    * Determines which location has been chosen and opens a view 
    * with the location information.
    * 
-   * @param  {Object} evnt Event Handler
+   * @param  {Object} e Event Handler
    */
-  onClick: function (evnt) {
-    console.log('clicked on ' + this.getName());
+  onPlaceClick: function (place) {
+    this.showPlace(place);
+  },
+  
+  /**
+   * Called whenever an annotation is clicked.
+   * 
+   * @param {Object} e Event Handler
+   * @param {Object} parent Place Object for Pin Location
+   */
+  onPinClick: function (e, parent) {
+    this.showPlace(parent, this);
   },
 
   /**

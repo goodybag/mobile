@@ -1,1 +1,0 @@
-/goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/qrcode.js
