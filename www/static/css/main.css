@@ -655,6 +655,14 @@ button:active {
 .flex-columns > .column {
   -webkit-box-flex: 1;
 }
+.fade-out {
+  -webkit-transition: opacity linear 0.5s;
+  opacity: 0;
+}
+.fade-in {
+  -webkit-transition: opacity linear 0.5s;
+  opacity: 1;
+}
 @media screen and (max-width: 320px) {
   .sub-header.profile .user-info .picture {
     width: 25px;
