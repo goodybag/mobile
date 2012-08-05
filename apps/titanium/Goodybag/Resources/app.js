@@ -66,7 +66,6 @@ gb.consumer = new GB.Models.User();
 
 // Views
 Ti.include('lib/views/login.js');
-Ti.include('lib/views/activity.js');
 Ti.include('lib/views/main.js');
 
 // Do Authentication Check

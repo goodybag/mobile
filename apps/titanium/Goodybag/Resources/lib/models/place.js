@@ -176,7 +176,7 @@ if(!GB.Models)
     toRow: function (border, callback) {
       var $self = this;
 
-      row = $ui.createView({
+      var row = $ui.createView({
         color: 'black',
         borderColor: '#eceece',
         borderWidth: border ? 1 : 0,
@@ -218,7 +218,7 @@ if(!GB.Models)
       return row;
     }
   });
-  
+
   /**
    * Location Model
    *

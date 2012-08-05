@@ -97,10 +97,15 @@ GB.Windows.add('main', Window.extend({
     // Views
     Titanium.include('/lib/views/qrcode.js');
     Titanium.include('/lib/views/places.js');
+    Titanium.include('/lib/views/activity.js');
+    Titanium.include('/lib/views/stream.js');
+    Titanium.include('/lib/views/stream-no-data.js');
     
     // Attach Views
     $el.views.main.add(gb.Views.get('qrcode').self);
     $el.views.main.add(gb.Views.get('places').self);
+    $el.views.main.add(gb.Views.get('stream').self);
+    $el.views.main.add(gb.Views.get('stream-no-data').self);
     
     // Attach Header
     $el.views.main.add($el.images.header);
@@ -130,7 +135,7 @@ GB.Windows.add('main', Window.extend({
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $user = gb.consumer, $url, written = true;
     
     // Direct Pages, then delegate background tasks.
-    GB.Views.show('stream');
+    GB.Views.show('stream-no-data');
     
     // Username
     $el.sidebar.username.setText($user.getUsername());
