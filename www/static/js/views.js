@@ -500,6 +500,8 @@
   , render: function(){
       $(this.el).html(app.fragments.activity(this.model.toJSON()));
       if (!this.pictureRendered && !this.pictureSourceNotFound){
+        var src = this.model.attributes.who.id || this.model.attributes.who.screenName;
+        if (typeof src === "undefined") return this.pictureLoadError();
         this.picture = document.createElement('img');
         this.picture.src = app.config.consumerPicture.replace('{{id}}', this.model.attributes.who.id || this.model.attributes.who.screenName);
         console.log("[Attempting Picture] - " + this.picture.src);
@@ -510,9 +512,11 @@
     }
   , renderPicture: function(){
       $(this.el).find('.picture').attr('src', this.picture.src);
+      return this;
     }
   , pictureLoadError: function(){
       this.pictureSourceNotFound = true;
+      return this;
     }
   });
 
