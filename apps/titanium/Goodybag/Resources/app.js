@@ -1,6 +1,10 @@
 // App Namespacing.
 var gb = {}, GB = gb;
 
+console.log(Ti.Platform.displayCaps.density);
+console.log(Ti.Platform.displayCaps.dpi);
+console.log(Ti.Platform.displayCaps.platformWidth);
+
 var testActivity = {
   "data":{
     "amount":0.05
@@ -47,6 +51,7 @@ Ti.include('lib/core/aes.js');
 gb.streamParser = require('lib/core/stream-parser');
 
 // Components
+Ti.include('lib/core/components/ui.js');
 Ti.include('lib/core/components/view.js');
 Ti.include('lib/core/components/window.js');
 Ti.include('lib/core/components/qrcode.js');

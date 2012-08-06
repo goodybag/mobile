@@ -350,6 +350,13 @@ gb.utils = function (global) {
   }
   
   /**
+   * Absolute width of the display in relation to UI orientation
+   */
+  this.deviceWidth = function () {
+    return Ti.Platform.displayCaps.platformWidth;
+  }
+  
+  /**
    * Returns screen density based on platform.
    */
   this.densityPixels = function (densityPixels) {

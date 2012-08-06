@@ -5,8 +5,11 @@ var $http = gb.utils.http
 GB.Views.add('stream', {
   self: Titanium.UI.createView({
     top: '55dp'
-  , layout: 'vertical'
-  , contentHeight: 'auto'
+  , contentWidth:'auto'
+  , contentHeight:'auto'
+  , layout: "vertical"
+  , showVerticalScrollIndicator: false
+  , showHorizontalScrollIndicator: true
   }),
   
   wrapper: $ui.createScrollView({
@@ -25,6 +28,10 @@ GB.Views.add('stream', {
    */
   Constructor: function () {
     this.self.add(this.wrapper);
+    this.wrapper.add($ui.createView({
+      width: '100%'
+    , height: '1dp'
+    }))
   },
   
   onShow: function() {

@@ -12,8 +12,7 @@
     // Main view wrapper
     this.view = Titanium.UI.createView({
       width: '100%'
-    , height: "80dp"
-    , contentHeight: 'auto'
+    , layout: 'horizontal'
     });
   };
   GB.Views.ActivityView.prototype = {
@@ -23,32 +22,35 @@
       , pictureContainer = Titanium.UI.createView({
           width: "16%"
         , height: "auto"
+        , contentHeight: "auto"
         , left: 0
         , top: 0
         })
       , textContainer = Titanium.UI.createView({
-          width: "84%"
+          width: "82%" // -2% padding for the right side
         , height: "auto"
+        , contentHeight: "auto"
         , left: "16%"
         , top: 0
         })
       , borderBottom = Titanium.UI.createView({
           bottom: 0
+        , width: "100%"
         , height: "1dp"
         , backgroundColor: '#ccc'
         })
       , sentence = attr.who.screenName || "Someone"
       , event
       ;
-      console.log(attr);
+
       // Add profile picture
       pictureContainer.add(Titanium.UI.createImageView({
         image: "https://goodybag-uploads.s3.amazonaws.com/consumers/" + attr.who.id + "-85.png"
       , title: attr.who.screenName
-      , top: 0
+      , top: "0dp"
       , left: "10dp"
-      , width: "auto"
-      , contentHeight: 'auto'
+      , width: "50dp"
+      , height: "50dp"
       }));
       
       // Determine sentence
@@ -81,10 +83,10 @@
       // Add stream text
       textContainer.add(Titanium.UI.createLabel({
         text: sentence
-      , width: "auto"
-      , contentHeight: "auto"
+      , width: "100%"
+      , height: "auto"
       , textAlign: Titanium.UI.TEXT_ALIGNMENT_LEFT
-      , top: "28dp"
+      , top: "8dp"
       , left: "10dp"
       , font: {
           fontSize: 14
@@ -94,7 +96,7 @@
       
       this.view.add(pictureContainer);
       this.view.add(textContainer);
-      if (this.options.suppressBorder) this.view.add(borderBottom);
+      if (!this.options.suppressBorder) this.view.add(borderBottom);
       console.log(this.view);
       return this;
     }

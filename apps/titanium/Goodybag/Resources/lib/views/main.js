@@ -135,7 +135,7 @@ GB.Windows.add('main', Window.extend({
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $user = gb.consumer, $url, written = true;
     
     // Direct Pages, then delegate background tasks.
-    GB.Views.show('stream-no-data');
+    GB.Views.show('stream');
     
     // Username
     $el.sidebar.username.setText($user.getUsername());
