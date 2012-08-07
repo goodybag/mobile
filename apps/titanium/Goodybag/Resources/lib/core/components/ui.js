@@ -3,6 +3,18 @@ var $ui = Titanium.UI;
 if (!gb.ui)
   gb.ui = {};
   
+  
+gb.ui.color = {
+  base: '#444'
+};
+
+gb.ui.font = {
+  base: {
+    fontSize: 14
+  , fontWeight: "normal"
+  }
+};
+  
 gb.ui.header1 = function(text){
   return $ui.createLabel({
     text: text
@@ -43,6 +55,9 @@ gb.ui.header4 = function(text){
   });
 };
 
+/* Well this isnt really necessary now that I use
+ * Ti.UI.SIZE and Ti.UI.FILL
+ 
 gb.columns2 = function(width1, width2, gutter){
   gutter || (gutter = 0);
   var
@@ -85,4 +100,4 @@ gb.columns2 = function(width1, width2, gutter){
   }));
   
   return columns;
-}
+}*/

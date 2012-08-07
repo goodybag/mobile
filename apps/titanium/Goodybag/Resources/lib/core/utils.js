@@ -364,6 +364,15 @@ gb.utils = function (global) {
     return (densityPixels * Titanium.Platform.displayCaps.dpi / 160); // Medium DPI is 160, this scales to it.
   }
   
+  this.extend = function(obj) {
+    forEach(slice.call(arguments, 1), function(source) {
+      for (var prop in source) {
+        obj[prop] = source[prop];
+      }
+    });
+    return obj
+  }
+  
   return this;
 }(
   this

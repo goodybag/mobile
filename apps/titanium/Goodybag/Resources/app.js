@@ -55,6 +55,7 @@ Ti.include('lib/core/components/ui.js');
 Ti.include('lib/core/components/view.js');
 Ti.include('lib/core/components/window.js');
 Ti.include('lib/core/components/qrcode.js');
+Ti.include('lib/core/components/infini-scroll.js');
 
 gb.qrcode = QRCode({
   typeNumber: 4,
