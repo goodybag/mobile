@@ -1,5 +1,36 @@
+
+
+
+
+var win = Ti.UI.createWindow({ backgroundColor: 'white' });
+var row = Ti.UI.createView({
+  layout: 'horizontal'
+, width: Ti.UI.FILL
+, height: "100dp"
+, background:  "#fff"
+});
+row.add(Ti.UI.createLabel({
+  width: Ti.UI.SIZE
+, height: Ti.UI.SIZE
+, top: 0
+, textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT
+, text: 'I am just testing this stuff'
+}));
+row.add(Ti.UI.createLabel({
+  width: Ti.UI.FILL
+, height: Ti.UI.SIZE
+, top: 0
+, color: "pink"
+, textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT
+, text: ' to see if it wraps correctly'
+}));
+win.add(row);
+win.open();
+
+
+
 // App Namespacing.
-var gb = {}, GB = gb;
+/*var gb = {}, GB = gb;
 
 console.log(Ti.Platform.displayCaps.density);
 console.log(Ti.Platform.displayCaps.dpi);
@@ -83,4 +114,4 @@ gb.consumer.validate(function (consumer) {
   } else {
     GB.Windows.show('login');
   }
-});
+});*/
