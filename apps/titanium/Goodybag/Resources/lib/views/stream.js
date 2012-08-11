@@ -1,133 +1,180 @@
 
 var $http = gb.utils.http
-,   $ui = Titanium.UI;
+,   $ui = Titanium.UI
+,   createButton = function(text){
+      var btn = $ui.createButton({
+        width: '150dp'
+      , height: '33dp'
+      , left: '10dp'
+      , backgroundImage: gb.utils.getImage('screens/stream/buttons/Activity.default.png')
+      });
+      btn.add($ui.createLabel({
+        
+      }))
+    };
 
 GB.Views.add('stream', {
   self: Titanium.UI.createView({
     top: '55dp'
-  , layout: "vertical"
+  , backgroundColor: '#ddd'
   }),
+  
+  scrollWrapper: $ui.createView({
+    top: 0
+  , width: $ui.FILL
+  , height: $ui.FILL
+  , left: '5dp'
+  , right: '5dp'
+  , bottom: '55dp'
+  }),
+  
+  nav: {
+    container: $ui.createView({
+      layout: 'horizontal'
+    , width: $ui.FILL
+    , height: '44dp'
+    , bottom: 0
+    , backgroundImage: "iphone/screens/stream/Menu.png"
+    }),
+    global: new GB.StreamButton('Global Activity'),
+    my: new GB.StreamButton('My Activity')
+  },
+  
+  states: {
+    my: {
+      limit: 15
+    , page: 0
+    , view: null
+    },
+    global: {
+      limit: 15
+    , page: 0
+    , view: null
+    }
+  },
   
   limit: 15,
   page: 1,
   
-  current: 'global',
+  current: null,
   
   /**
    * Grab and store places location and initialize View.
    * @constructor
    */
   Constructor: function () {
+    console.log(gb.utils.getImage('screens/stream/Main.png'));
     var self = this;
-    
     // Nav Group
-    this.nav = $ui.createView({
-      layout: 'horizontal'
-    , width: $ui.FILL
-    // , height: $ui.SIZE
-    , bottom: 0
-    });
-    this.navGlobal = $ui.createButton({
-      title: 'Global Activity'
-    });
-    this.navMy = $ui.createButton({
-      title: 'My Activity'
-    });
-    this.navGlobal.addEventLisntener('click', function(e){
+    this.nav.global.addEventListener('click', function(e){
+      console.log("current: ", self.current);
       if (self.current !== "global") self.showGlobalView();
     });
-    this.navMy.addEventLisntener('click', function(e){
+    this.nav.my.addEventListener('click', function(e){
+      console.log("current: ", self.current);
       if (self.current !== "my") self.showMyView();
     });
-    this.nav.add(this.navGlobal);
-    this.nav.add(this.navMy);
+    // Top property isn't working for padding in nav view, so add a filler
+    this.nav.container.add($ui.createView({ width: $ui.FILL, height: '6dp'}));
+    this.nav.container.add(this.nav.global.button);
+    this.nav.container.add(this.nav.my.button);
     
     // Global Stream View
-    this.globalView = new gb.Views.InfiniScroll(
+    this.states.global.view = new gb.Views.InfiniScroll(
       {
         showVerticalScrollIndicator: true
       },
       {
         triggerAt: '82%'
       , onScrollToEnd: function(){
+          console.log("GLOBAl scroll to end");
           self.onScrollToEnd(false);
         }
+      , name: "Global Scroll"
       }
     );
     
     // My Stream View
-    this.myView = new gb.Views.InfiniScroll(
+    this.states.my.view = new gb.Views.InfiniScroll(
       {
         showVerticalScrollIndicator: true
       },
       {
         triggerAt: '82%'
       , onScrollToEnd: function(){
+          console.log("MY scroll to end");
           self.onScrollToEnd(true);
         }
+      , name: "My Scroll"
       }
     );
     
-    this.globalView.view.hide();
-    this.myView.view.hide();
+    this.refresher = new GB.PullToRefresh(this.states.global.view.view);
     
-    this.self.add(this.globalView.view);
-    this.self.add(this.myView.view);
-    this.self.add(this.nav);
+    this.scrollWrapper.add(this.states.global.view.view);
+    this.scrollWrapper.add(this.states.my.view.view);
+    this.self.add(this.nav.container);
+    this.self.add(this.scrollWrapper);
+    this.states.global.view.view.hide();
+    this.states.my.view.view.hide();
   },
   
   onShow: function () {
-    this["show" + this.current[0].toUppercase() + this.current.substring(1) + "View"]();
+    var curr = this.current = this.current || 'global';
+    this["show" + curr[0].toUpperCase() + curr.substring(1) + "View"]();
   },
   
   showGlobalView: function(){
-    var self = this;
-    this.globalView.view.show();
-    if (this.globalView.view.children.length !== 0) return;
-    console.log("[stream view] - fetching data");
-    this.fetchGlobalStream(function(error, data){
+    var self = this, state = this.states.global;
+    console.log("hiding MY view showing GLOBAL");
+    this.states.my.view.hide();
+    state.view.show();
+    this.current = "global";
+    this.nav.global.activate();
+    this.nav.my.deactivate();
+    if (this.states.global.view.view.children.length > 1) return;
+    console.log("[stream view] - GLOBAL fetching data");
+    this.fetchGlobalStream(state.limit, state.limit * ++state.page, function(error, data){
       if (error) return console.log(error);
       if (!data) return gb.Views.show('stream-no-data');
-      self.showItems(this.globalView.view, data);
+      self.showItems(self.states.global.view.view, data);
     });
   },
   
   showMyView: function(){
-    var self = this;
-    this.myView.view.show();
-    if (this.myView.view.children.length !== 0) return;
-    console.log("[stream view] - fetching data");
-    this.fetchMyStream(function(error, data){
+    var self = this, state = this.states.my;
+    this.states.global.view.hide();
+    console.log("hiding GLOBAL view showing MY");
+    state.view.show();
+    this.current = "my";
+    this.nav.global.deactivate();
+    this.nav.my.activate();
+    if (this.states.my.view.view.children.length > 0) return;
+    console.log("[stream view] - MY - fetching data");
+    this.fetchMyStream(state.limit, state.limit * ++state.page, function(error, data){
       if (error) return console.log(error);
       if (!data) return gb.Views.show('stream-no-data');
-      self.showItems(this.myView.view, data);
+      self.showItems(state.view.view, data);
     });
   },
   
   showItems: function(scrollView, data){
     console.log("[stream view] - show items");
-    var options = {}, view;
     for (var i = 0; i < data.length; i++){
-      view = data[i];
-      // Suppress border isn't working yet for some reason. However, if it were
-      // working, then when we load in new items, we'd ahve to keep track of the
-      // last item so that we can add a border to the view when it's no longer
-      // the last item.
-      if (i === (data.length - 1)) options.suppressBorder = true;
-      console.log("adding item", i);
-      scrollView.add(new GB.Views.ActivityView(
-        new GB.Models.Activity(data[i])
-      , options
-      ).render().view);
+      scrollView.add(
+        new GB.Views.Activity(
+          new GB.Models.Activity(data[i])
+        ).render().view
+      );
     }
   },
   
   onScrollToEnd: function(fetchMe){
     console.log("[stream view] - on scroll to end FETCHING NEW ITEMS")
-    var self = this;
-    this.fetchStream(fetchMe, this.limit, this.limit * ++this.page, function(error, data){
+    var self = this, state = this.states[fetchMe ? 'my' : 'global'];
+    this.fetchStream(fetchMe, state.limit, state.limit * ++state.page, function(error, data){
       if (error) return console.log(error);
-      self.showItems(data);
+      self.showItems(fetchMe ? self.states.my.view : self.states.global.view, data);
     });
   },
   
@@ -142,15 +189,21 @@ GB.Views.add('stream', {
   fetchStream: function(fetchMe, limit, skip, cb){
     if (this.isFetching) return;
     this.isFetching = true;
-    var self = this;
+    var self = this, url = fetchMe ? gb.config.api.stream.me : gb.config.api.stream.global;
     if (typeof limit === "function"){
       cb = limit;
       limit = 15;
       skip = 0;
     }
-
+    
+    // test data
+    // self.isFetching = false;
+    // cb(null, streamData);
+    // return;
+    // Test DAta
+    
     $http.get.sessioned(
-      'http://www.goodybag.com/api/consumers' + (fetchMe ? '/me/' : '') + '/streams'
+      url
     + '?limit='   + limit
     + '&offset='  + skip
     , gb.consumer.session

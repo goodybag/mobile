@@ -5,12 +5,23 @@ if (!gb.ui)
   
   
 gb.ui.color = {
-  base: '#444'
+  white: '#fff'
+, black: '#000'
+, grayDarker: '#444'
+, grayDark: '#666'
+, gray: '#888'
+, grayLight: '#9c9c9c'
+, grayLighter: '#bbb'
+
+, pink: '#d357ba'
+, blue: '#57a0d3'
 };
+
+gb.ui.color.base = gb.ui.color.gray;
 
 gb.ui.font = {
   base: {
-    fontSize: 14
+    fontSize: 12
   , fontWeight: "normal"
   }
 };

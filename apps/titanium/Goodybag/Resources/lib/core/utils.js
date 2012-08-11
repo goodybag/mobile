@@ -112,6 +112,7 @@ gb.utils = function (global) {
    * @param  {Function}         callback Returns errors or request results.
    */
   this.http.get.sessioned = function (url, session, callback) {
+    console.log(url);
     var client = Titanium.Network.createHTTPClient();
     
     client.onload = function () {

@@ -1,26 +1,16 @@
 Logfile initialized
 [INFO] logfile = /goodybag/mobile/apps/titanium/Goodybag/build.log
-[DEBUG] /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/builder.py simulator Goodybag /Volumes/storage/android-sdk /goodybag/mobile/apps/titanium/Goodybag com.goodybag 1 WVGA854 
+[DEBUG] /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/builder.py simulator Goodybag /Volumes/storage/android-sdk /goodybag/mobile/apps/titanium/Goodybag com.goodybag 14 WVGA854 /127.0.0.1:57541
 [INFO] Building Goodybag for Android ... one moment
 [INFO] Titanium SDK version: 2.1.1 (07/27/12 14:01 0fd84a2)
 [DEBUG] Waiting for device to be ready ...
-<<<<<<< HEAD
-[TRACE] adb devices returned 0 devices/emulators
-[TRACE] adb devices returned 0 devices/emulators
-[TRACE] adb devices returned 0 devices/emulators
-[TRACE] adb devices returned 0 devices/emulators
-[TRACE] adb devices returned 0 devices/emulators
-[TRACE] adb devices returned 0 devices/emulators
-[ERROR] Timed out waiting for emulator to be ready, you may need to close the emulator and try again
-=======
 [TRACE] adb devices returned 1 devices/emulators
 [DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.011655 seconds on emulator to get ready
+[DEBUG] waited 0.012613 seconds on emulator to get ready
 [DEBUG] com.goodybag installed? True
 [INFO] Fastdev server running, deploying in Fastdev mode
 [INFO] Copying CommonJS modules...
 [INFO] Copying project resources..
-[TRACE] COPYING MODIFIED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/places.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/places.js
 [INFO] Tiapp.xml unchanged, skipping class generation
 [DEBUG] Processing Android resource drawables
 [DEBUG] found drawable-long-land-hdpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-long-land-hdpi/default.png
@@ -38,6 +28,5 @@ Logfile initialized
 [INFO] Launching application ... Goodybag
 [TRACE] Launch output: Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.goodybag/.GoodybagActivity }
 
-[INFO] Relaunched Goodybag ... Application should be running.
+[INFO] Forwarding host port 57541 to device for debugging.
 [INFO] Android Emulator has exited
->>>>>>> 3af60b65caf2711a880e91c82f3e13531cbca30e

@@ -31,6 +31,9 @@ gb.config = function (global, fb, storage) {
   this.api.participating = 'http://www.goodybag.com/api/consumers/participatingBusinesses?limit=';
   this.api.consumer = {};
   this.api.consumer.self = 'http://www.goodybag.com/api/consumers/session'
+  this.api.stream = {};
+  this.api.stream.me = 'http://www.goodybag.com/api/consumers/me/stream';
+  this.api.stream.global = 'http://www.goodybag.com/api/consumers/streams';
   
   // debugging modes
   this.debug = true;
