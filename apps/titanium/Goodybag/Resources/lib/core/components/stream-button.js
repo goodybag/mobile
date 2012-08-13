@@ -70,8 +70,8 @@
       this.stateOptions = this.options[this.active ? 'activeState' : 'inactiveState'];
       this.button.setBackgroundImage(this.stateOptions.background);
       this.label.setColor(this.stateOptions.color);
-      this.label.setShadowColor(this.stateOptions.shadowColor);
-      this.label.setShadowOffset(this.stateOptions.shadowOffset);
+      if (!Ti.Android) this.label.setShadowColor(this.stateOptions.shadowColor);
+      if (!Ti.Android) this.label.setShadowOffset(this.stateOptions.shadowOffset);
       return this;
     }
   , addEventListener: function(fn, prop){

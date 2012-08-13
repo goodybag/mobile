@@ -220,8 +220,7 @@
       if (this.pulling && !this.reloading){
         var $this = this;
         this.enterLoadingMode(e.y);
-        // Bind hasn't been working for me, so we'll curry
-        this.options.onLoad(function(done){
+        this.options.onLoad(function(){
           $this._onDoneLoading();
         });
       }

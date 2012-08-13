@@ -1,13 +1,13 @@
 Logfile initialized
 [INFO] logfile = /goodybag/mobile/apps/titanium/Goodybag/build.log
-[DEBUG] /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/builder.py simulator Goodybag /Volumes/storage/android-sdk /goodybag/mobile/apps/titanium/Goodybag com.goodybag 14 WVGA854 /127.0.0.1:57541
+[DEBUG] /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/builder.py simulator Goodybag /Volumes/storage/android-sdk /goodybag/mobile/apps/titanium/Goodybag com.goodybag 14 HVGA 
 [INFO] Building Goodybag for Android ... one moment
 [INFO] Titanium SDK version: 2.1.1 (07/27/12 14:01 0fd84a2)
 [DEBUG] Waiting for device to be ready ...
 [TRACE] adb devices returned 1 devices/emulators
 [DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.012613 seconds on emulator to get ready
-[DEBUG] com.goodybag installed? True
+[DEBUG] waited 0.012624 seconds on emulator to get ready
+[DEBUG] com.goodybag installed? False
 [INFO] Fastdev server running, deploying in Fastdev mode
 [INFO] Copying CommonJS modules...
 [INFO] Copying project resources..
@@ -22,11 +22,277 @@ Logfile initialized
 [DEBUG] found drawable-notlong-land-mdpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-land-mdpi/default.png
 [DEBUG] found drawable-notlong-port-hdpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-port-hdpi/default.png
 [DEBUG] found drawable-notlong-port-ldpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-port-ldpi/default.png
-[DEBUG] found drawable-notlong-port-mdpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-port-mdpi/default.png
 [INFO] Waiting for SDCard to become available..
-[INFO] Re-launching application ... Goodybag
+[DEBUG] creating unsigned apk: /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/app-unsigned.apk
+[DEBUG] from resource zip => assets/Resources/images/background.png
+[DEBUG] from resource zip => assets/Resources/lib/core/components/pull-to-refresh/images/white-arrow.png
+[DEBUG] from resource zip => assets/Resources/lib/core/components/pull-to-refresh/pull-to-refresh.js
+[DEBUG] from resource zip => assets/Resources/lib/core/components/class.js
+[DEBUG] from resource zip => assets/Resources/lib/core/components/events.js
+[DEBUG] from resource zip => assets/Resources/lib/core/components/infini-scroll.js
+[DEBUG] from resource zip => assets/Resources/lib/core/components/instorage.js
+[DEBUG] from resource zip => assets/Resources/lib/core/components/qrcode.js
+[DEBUG] from resource zip => assets/Resources/lib/core/components/stream-button.js
+[DEBUG] from resource zip => assets/Resources/lib/core/components/ui.js
+[DEBUG] from resource zip => assets/Resources/lib/core/components/view.js
+[DEBUG] from resource zip => assets/Resources/lib/core/components/window.js
+[DEBUG] from resource zip => assets/Resources/lib/core/aes.js
+[DEBUG] from resource zip => assets/Resources/lib/core/config.js
+[DEBUG] from resource zip => assets/Resources/lib/core/moment.js
+[DEBUG] from resource zip => assets/Resources/lib/core/stream-parser.js
+[DEBUG] from resource zip => assets/Resources/lib/core/utils.js
+[DEBUG] from resource zip => assets/Resources/lib/models/activity.js
+[DEBUG] from resource zip => assets/Resources/lib/models/place.js
+[DEBUG] from resource zip => assets/Resources/lib/models/test.js
+[DEBUG] from resource zip => assets/Resources/lib/models/user.js
+[DEBUG] from resource zip => assets/Resources/lib/views/activity.js
+[DEBUG] from resource zip => assets/Resources/lib/views/login.js
+[DEBUG] from resource zip => assets/Resources/lib/views/main.js
+[DEBUG] from resource zip => assets/Resources/lib/views/places.js
+[DEBUG] from resource zip => assets/Resources/lib/views/qrcode.js
+[DEBUG] from resource zip => assets/Resources/lib/views/stream-no-data.js
+[DEBUG] from resource zip => assets/Resources/lib/views/stream.js
+[DEBUG] from resource zip => assets/Resources/working/base.psd
+[DEBUG] from resource zip => assets/Resources/working/base2.psd
+[DEBUG] from resource zip => assets/Resources/KS_nav_ui.png
+[DEBUG] from resource zip => assets/Resources/KS_nav_views.png
+[DEBUG] from resource zip => assets/Resources/app.js
+[DEBUG] from resource zip => assets/Resources/appicon.png
+[DEBUG] from resource zip => assets/Resources/default.png
+[DEBUG] from resource zip => assets/Resources/login.png
+[DEBUG] from resource zip => assets/app.json
+[DEBUG] from resource zip => assets/index.json
+[DEBUG] from resource zip => assets/tiapp.xml
+[DEBUG] from resource zip => res/drawable/appicon.png
+[DEBUG] from resource zip => res/drawable/background.png
+[DEBUG] from resource zip => res/drawable/close.png
+[DEBUG] from resource zip => res/drawable/facebook_login.png
+[DEBUG] from resource zip => res/drawable/facebook_login_down.png
+[DEBUG] from resource zip => res/drawable/facebook_login_wide.png
+[DEBUG] from resource zip => res/drawable/facebook_login_wide_down.png
+[DEBUG] from resource zip => res/drawable/facebook_logout.png
+[DEBUG] from resource zip => res/drawable/facebook_logout_down.png
+[DEBUG] from resource zip => res/layout/titanium_tabgroup.xml
+[DEBUG] from resource zip => AndroidManifest.xml
+[DEBUG] from resource zip => resources.arsc
+[DEBUG] from resource zip => res/drawable-hdpi/close.png
+[DEBUG] from resource zip => res/drawable-ldpi/close.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/background.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/background_9c1385517c.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/login_background_f32e853f4b.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/login_facebook_d24d04e5dd.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/login_inputs_7b4e122681.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/login_login_221b2a0149.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/login_register_00047d2fee.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/login_transparent_80a89cfb08.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/main_background_97bed00c1a.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/main_background_qr_d717b903b8.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/main_buttons_sidebar_26ee053491.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/main_buttons_sidebar_default_ed537dff6a.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/main_header_70ac9bb526.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/sidebar_avatar_background_9b3e9d900e.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/sidebar_background_872e3d4471.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/stream_buttons_activity_active_10534e970e.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/stream_buttons_activity_default_7943ea211f.png
+[DEBUG] from resource zip => res/drawable-long-land-hdpi/stream_menu_cc58316555.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/background.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/background_9c1385517c.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/login_background_f32e853f4b.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/login_facebook_d24d04e5dd.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/login_inputs_7b4e122681.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/login_login_221b2a0149.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/login_register_00047d2fee.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/login_transparent_80a89cfb08.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/main_background_97bed00c1a.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/main_background_qr_d717b903b8.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/main_buttons_sidebar_26ee053491.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/main_buttons_sidebar_default_ed537dff6a.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/main_header_70ac9bb526.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/sidebar_avatar_background_9b3e9d900e.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/sidebar_background_872e3d4471.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/stream_buttons_activity_active_10534e970e.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/stream_buttons_activity_default_7943ea211f.png
+[DEBUG] from resource zip => res/drawable-long-land-ldpi/stream_menu_cc58316555.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/background.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/background_9c1385517c.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/login_background_f32e853f4b.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/login_facebook_d24d04e5dd.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/login_inputs_7b4e122681.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/login_login_221b2a0149.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/login_register_00047d2fee.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/login_transparent_80a89cfb08.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/main_background_97bed00c1a.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/main_background_qr_d717b903b8.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/main_buttons_sidebar_26ee053491.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/main_buttons_sidebar_default_ed537dff6a.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/main_header_70ac9bb526.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/sidebar_avatar_background_9b3e9d900e.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/sidebar_background_872e3d4471.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/stream_buttons_activity_active_10534e970e.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/stream_buttons_activity_default_7943ea211f.png
+[DEBUG] from resource zip => res/drawable-long-port-hdpi/stream_menu_cc58316555.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/background.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/background_9c1385517c.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/login_background_f32e853f4b.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/login_facebook_d24d04e5dd.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/login_inputs_7b4e122681.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/login_login_221b2a0149.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/login_register_00047d2fee.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/login_transparent_80a89cfb08.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/main_background_97bed00c1a.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/main_background_qr_d717b903b8.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/main_buttons_sidebar_26ee053491.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/main_buttons_sidebar_default_ed537dff6a.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/main_header_70ac9bb526.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/sidebar_avatar_background_9b3e9d900e.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/sidebar_background_872e3d4471.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/stream_buttons_activity_active_10534e970e.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/stream_buttons_activity_default_7943ea211f.png
+[DEBUG] from resource zip => res/drawable-long-port-ldpi/stream_menu_cc58316555.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/background.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/background_9c1385517c.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/login_background_f32e853f4b.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/login_facebook_d24d04e5dd.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/login_inputs_7b4e122681.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/login_login_221b2a0149.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/login_register_00047d2fee.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/login_transparent_80a89cfb08.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/main_background_97bed00c1a.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/main_background_qr_d717b903b8.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/main_buttons_sidebar_26ee053491.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/main_buttons_sidebar_default_ed537dff6a.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/main_header_70ac9bb526.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/sidebar_avatar_background_9b3e9d900e.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/sidebar_background_872e3d4471.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/stream_buttons_activity_active_10534e970e.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/stream_buttons_activity_default_7943ea211f.png
+[DEBUG] from resource zip => res/drawable-notlong-land-hdpi/stream_menu_cc58316555.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/background.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/background_9c1385517c.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/login_background_f32e853f4b.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/login_facebook_d24d04e5dd.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/login_inputs_7b4e122681.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/login_login_221b2a0149.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/login_register_00047d2fee.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/login_transparent_80a89cfb08.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/main_background_97bed00c1a.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/main_background_qr_d717b903b8.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/main_buttons_sidebar_26ee053491.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/main_buttons_sidebar_default_ed537dff6a.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/main_header_70ac9bb526.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/sidebar_avatar_background_9b3e9d900e.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/sidebar_background_872e3d4471.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/stream_buttons_activity_active_10534e970e.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/stream_buttons_activity_default_7943ea211f.png
+[DEBUG] from resource zip => res/drawable-notlong-land-ldpi/stream_menu_cc58316555.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/background.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/background_9c1385517c.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/login_background_f32e853f4b.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/login_facebook_d24d04e5dd.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/login_inputs_7b4e122681.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/login_login_221b2a0149.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/login_register_00047d2fee.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/login_transparent_80a89cfb08.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/main_background_97bed00c1a.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/main_background_qr_d717b903b8.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/main_buttons_sidebar_26ee053491.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/main_buttons_sidebar_default_ed537dff6a.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/main_header_70ac9bb526.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/sidebar_avatar_background_9b3e9d900e.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/sidebar_background_872e3d4471.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/stream_buttons_activity_active_10534e970e.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/stream_buttons_activity_default_7943ea211f.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/stream_menu_cc58316555.png
+[DEBUG] from resource zip => res/drawable-notlong-land-mdpi/working_base_4eba62c105.psd
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/appicon_e5fbaffc57.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/background.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/background_9c1385517c.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/login_d9fa31af72.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_login_background_5aa2993b5a.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_login_facebook_866e35a754.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_login_inputs_24ceda3c46.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_login_login_601a8ce6f8.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_login_register_d4c843e569.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_login_transparent_88f952821a.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_main_background_388bcfeeaa.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_main_background_qr_ab71235ee9.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_main_buttons_sidebar_2fab86ca95.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_main_buttons_sidebar_default_b556e396f9.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_main_header_a8c0d04a85.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_sidebar_avatar_background_cf097b9cb3.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_sidebar_background_5be6bfa41d.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_stream_buttons_activity_active_9c9024581f.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_stream_buttons_activity_default_bd4ad9b566.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/screens_stream_menu_b90e9dbc59.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/working_base2_7d2cec33d5.psd
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/working_base_4eba62c105.psd
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/working_login_cebfa7a522.png
+[DEBUG] from resource zip => res/drawable-notlong-port-hdpi/working_untitled_2_0898adea64.psd
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/background.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/background_9c1385517c.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_login_background_5aa2993b5a.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_login_facebook_866e35a754.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_login_inputs_24ceda3c46.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_login_login_601a8ce6f8.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_login_register_d4c843e569.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_login_transparent_88f952821a.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_main_background_388bcfeeaa.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_main_background_qr_ab71235ee9.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_main_buttons_sidebar_2fab86ca95.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_main_buttons_sidebar_default_b556e396f9.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_main_header_a8c0d04a85.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_sidebar_avatar_background_cf097b9cb3.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_sidebar_background_5be6bfa41d.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_stream_buttons_activity_active_9c9024581f.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_stream_buttons_activity_default_bd4ad9b566.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/screens_stream_menu_b90e9dbc59.png
+[DEBUG] from resource zip => res/drawable-notlong-port-ldpi/working_base_4eba62c105.psd
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/background_9c1385517c.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_login_background_5aa2993b5a.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_login_facebook_866e35a754.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_login_inputs_24ceda3c46.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_login_login_601a8ce6f8.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_login_register_d4c843e569.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_login_transparent_88f952821a.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_main_background_388bcfeeaa.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_main_background_qr_ab71235ee9.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_main_buttons_sidebar_2fab86ca95.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_main_buttons_sidebar_default_b556e396f9.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_main_header_a8c0d04a85.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_sidebar_avatar_background_cf097b9cb3.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_sidebar_background_5be6bfa41d.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_stream_buttons_activity_active_9c9024581f.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_stream_buttons_activity_default_bd4ad9b566.png
+[DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_stream_menu_b90e9dbc59.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-facebook.jar => ti/modules/titanium/facebook/LICENSE
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/binding.js
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/binding.min.js
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/json2.js
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/polling.js
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/polling.min.js
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/build.properties
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/background.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/btn_check_buttonless_on.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/btn_check_buttonless_on_18.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/btn_check_buttonless_on_48.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/btn_more.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/btn_more_18.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/btn_more_48.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/btn_picker_normal.9.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/btn_picker_pressed.9.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/btn_picker_selected.9.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/default_icon.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/photoDefault.png
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/thirdparty.jar => org/apache/Commons-NOTICE.txt
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/thirdparty.jar => org/apache/HttpComponents-NOTICE.txt
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/thirdparty.jar => org/apache/mime4j-NOTICE.txt
+[DEBUG] installing native SDK libs
+[DEBUG] Waiting for device to be ready ...
+[TRACE] adb devices returned 1 devices/emulators
+[DEBUG] Device connected... (waited 0 seconds)
+[DEBUG] waited 0.012245 seconds on emulator to get ready
+[INFO] Installing application on emulator
 [INFO] Launching application ... Goodybag
 [TRACE] Launch output: Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.goodybag/.GoodybagActivity }
 
-[INFO] Forwarding host port 57541 to device for debugging.
-[INFO] Android Emulator has exited
+[INFO] Deployed Goodybag ... Application should be running.

@@ -30,7 +30,6 @@ gb.qrcode = QRCode({
 Ti.include('lib/models/user.js');
 Ti.include('lib/models/place.js')
 Ti.include('lib/models/activity.js');
-
 // Create our User
 gb.consumer = new GB.Models.User();
 

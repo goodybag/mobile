@@ -1,17 +1,6 @@
 
 var $http = gb.utils.http
-,   $ui = Titanium.UI
-,   createButton = function(text){
-      var btn = $ui.createButton({
-        width: '150dp'
-      , height: '33dp'
-      , left: '10dp'
-      , backgroundImage: gb.utils.getImage('screens/stream/buttons/Activity.default.png')
-      });
-      btn.add($ui.createLabel({
-        
-      }))
-    };
+,   $ui = Titanium.UI;
 
 GB.Views.add('stream', {
   self: Titanium.UI.createView({
@@ -25,7 +14,7 @@ GB.Views.add('stream', {
   , height: $ui.FILL
   , left: '5dp'
   , right: '5dp'
-  , bottom: '55dp'
+  , bottom: '44dp'
   }),
   
   nav: {
@@ -45,11 +34,13 @@ GB.Views.add('stream', {
       limit: 15
     , page: 0
     , view: null
+    , hasData: false
     },
     global: {
       limit: 15
     , page: 0
     , view: null
+    , hasData: false
     }
   },
   
@@ -65,6 +56,7 @@ GB.Views.add('stream', {
   Constructor: function () {
     console.log(gb.utils.getImage('screens/stream/Main.png'));
     var self = this;
+    
     // Nav Group
     this.nav.global.addEventListener('click', function(e){
       console.log("current: ", self.current);
@@ -108,8 +100,17 @@ GB.Views.add('stream', {
       , name: "My Scroll"
       }
     );
-    
-    this.refresher = new GB.PullToRefresh(this.states.global.view.view);
+    // Pull to Refresh
+    // this.states.global.refresher = new GB.PullToRefresh(this.states.global.view.view, {
+      // onLoad: function(done){
+        // self.onRefresh(done);
+      // }
+    // });
+    // this.states.my.refresher = new GB.PullToRefresh(this.states.my.view.view, {
+      // onLoad: function(done){
+        // self.onRefresh(done);
+      // }
+    // });
     
     this.scrollWrapper.add(this.states.global.view.view);
     this.scrollWrapper.add(this.states.my.view.view);
@@ -119,8 +120,24 @@ GB.Views.add('stream', {
     this.states.my.view.view.hide();
   },
   
+  onRefresh: function (done) {
+    var
+      curr  = this.current = this.current || 'global'
+    , state = this.states[curr]
+    , self  = this
+    ;
+    curr = curr[0].toUpperCase() + curr.substring(1);
+    this["fetch" + curr + "Stream"](state.limit = 15, state.page = 0, function(error, data){
+      if (error) return console.log(error);
+      if (!data) return gb.Views.show('stream-no-data');
+      self.showItems(state.view.view, data);
+      done();
+    });
+  },
+  
   onShow: function () {
     var curr = this.current = this.current || 'global';
+    if (this.states[this.current].hasData) return;
     this["show" + curr[0].toUpperCase() + curr.substring(1) + "View"]();
   },
   
@@ -132,11 +149,12 @@ GB.Views.add('stream', {
     this.current = "global";
     this.nav.global.activate();
     this.nav.my.deactivate();
-    if (this.states.global.view.view.children.length > 1) return;
+    if (state.hasData) return;
     console.log("[stream view] - GLOBAL fetching data");
     this.fetchGlobalStream(state.limit, state.limit * ++state.page, function(error, data){
       if (error) return console.log(error);
       if (!data) return gb.Views.show('stream-no-data');
+      state.hasData = true;
       self.showItems(self.states.global.view.view, data);
     });
   },
@@ -149,11 +167,12 @@ GB.Views.add('stream', {
     this.current = "my";
     this.nav.global.deactivate();
     this.nav.my.activate();
-    if (this.states.my.view.view.children.length > 0) return;
+    if (state.hasData) return;
     console.log("[stream view] - MY - fetching data");
     this.fetchMyStream(state.limit, state.limit * ++state.page, function(error, data){
       if (error) return console.log(error);
       if (!data) return gb.Views.show('stream-no-data');
+      state.hasData = true;
       self.showItems(state.view.view, data);
     });
   },

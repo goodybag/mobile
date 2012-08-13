@@ -9,6 +9,8 @@
      */
     this.viewOptions = {
       layout: "vertical"
+    , width: $ui.FILL
+    , height: $ui.FILL
     };
 
     /**
