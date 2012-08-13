@@ -296,3 +296,4 @@ Logfile initialized
 [TRACE] Launch output: Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.goodybag/.GoodybagActivity }
 
 [INFO] Deployed Goodybag ... Application should be running.
+[INFO] Android Emulator has exited
