@@ -6,6 +6,7 @@ GB.Views.add('stream', {
   self: Titanium.UI.createView({
     top: '55dp'
   , backgroundColor: '#ddd'
+  , width: $ui.FILL
   }),
   
   scrollWrapper: $ui.createView({

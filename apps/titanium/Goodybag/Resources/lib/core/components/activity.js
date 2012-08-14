@@ -17,10 +17,12 @@
     this.model = model;
     console.log(this.model.getSentence());
     var
-      attr = this.model.attributes
-    , imgSrc = (attr.who.id || attr.who.screenName)
-             ? ("-secure/" + escape(attr.who.id || attr.who.screenName))
-             : "/000000000000000000000000"
+      attr    = this.model.attributes
+    , $this   = this
+    , post    = 0
+    , imgSrc  = (attr.who.id || attr.who.screenName)
+              ? ("-secure/" + escape(attr.who.id || attr.who.screenName))
+              : "/000000000000000000000000"
     ;
 
    this.views = {
@@ -43,6 +45,11 @@
       , left: "-3dp"
       , zIndex: 1
       , borderRadius: 5
+      , events: {
+          error: function(e){
+            $this.setToDefaultImage();
+          }
+        }
       })
       
     , container: {
@@ -53,18 +60,32 @@
         , borderColor: '#ccc'
         , borderWidth: 1
         , borderRadius: 5
-        , layout: 'vertical'
+        , layout: 'horizontal'
         , left: '5dp'
         , right: '5dp'
+        // , events: {
+            // postlayout: function(e){
+              // console.log("#################################################");
+              // console.log(++post);
+              // console.log(e.source.children.length);
+            // }
+          // }
         })
         
       , fillerTop: getVerticalGap()
+         
+      , fillerLeft: $ui.createView({
+          width: '42dp'
+        , height: '52dp'
+        , top: 0
+        , left: 0
+        })
         
       , sentence: $ui.createLabel({
           text: this.model.getSentence()
         , width: $ui.FILL
         , height: $ui.SIZE
-        , left: '42dp'
+        , right: '6dp'
         , top: 0
         , color: gb.ui.color.base
         , font: {
@@ -76,11 +97,6 @@
       }
     };
     
-    var $this = this;
-    this.views.image.addEventListener('error', function(e){
-      $this.setToDefaultImage();
-    });
-
     gb.utils.compoundViews(this.views);
   };
   
