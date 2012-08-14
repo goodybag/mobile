@@ -397,13 +397,21 @@ gb.utils = function (global) {
     var base = tree.base, item;
     if (typeof base === "undefined") throw new Error("Base is undefined");
     for (var key in tree){
-      if (key === "base") continue;
       item = tree[key];
+      if (key === "base"){
+        for (var eventType in item.events){
+          item.addEventListener(eventType, item.events[eventType]);
+        }
+        continue;  
+      }
       if (typeof item === "object" && item.base){
         base.add(self.compoundViews(item));
         // maybe get a little more granular with this check with:
         // Object.prototype.toString.call(item).indexOf('TI') > -1
       }else if (typeof item === "object"){
+        for (var eventType in item.events){
+          item.addEventListener(eventType, item.events[eventType]);
+        }
         base.add(item);
       }
     }
