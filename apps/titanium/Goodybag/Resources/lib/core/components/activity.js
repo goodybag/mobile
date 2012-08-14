@@ -1,47 +1,92 @@
 /**
- * Let's just make this damn thing a factory
+ * Activity View
  */
 
 (function(){
-  var $ui = Ti.UI;
+  var
+    $ui = Titanium.UI
+  , getVerticalGap = function(){
+      return $ui.createView({
+        width: $ui.FILL
+      , height: '11dp'
+      });
+    }
+  ;
   
   var constructor = function(model){
     this.model = model;
-    this.setViews();
-  };
-  constructor.prototype = {
-    setViews: function(){
-      this.views = {
+    console.log(this.model.getSentence());
+    var
+      attr = this.model.attributes
+    , imgSrc = (attr.who.id || attr.who.screenName)
+             ? ("-secure/" + escape(attr.who.id || attr.who.screenName))
+             : "/000000000000000000000000"
+    ;
+
+   this.views = {
       // Main view wrapper
+      base: $ui.createView({
+        width: $ui.FILL
+      , height: $ui.SIZE
+      , top: '6dp'
+      })
+      
+      // Profile picture
+    , image: $ui.createImageView({
+        image: "https://s3.amazonaws.com/goodybag-uploads/consumers" + imgSrc + "-85.png"
+      , width: "42dp"
+      , height: "42dp"
+      , title: attr.who.screenName
+      , borderWidth: 1
+      , borderColor: '#ededed'
+      , top: "16dp"
+      , left: "-3dp"
+      , zIndex: 1
+      , borderRadius: 5
+      })
+      
+    , container: {
         base: $ui.createView({
-          width: Ti.UI.FILL
-        , height: Ti.UI.SIZE
-        , top: '6dp'
+          width: $ui.FILL
+        , height: $ui.SIZE
         , backgroundColor: '#fff'
         , borderColor: '#ccc'
         , borderWidth: 1
         , borderRadius: 5
-        , layout: 'horizontal'
-        })
-        // Profile picture
-      , image: createImageView({
-          image: "https://s3.amazonaws.com/goodybag-uploads/consumers" + imgSrc + "-85.png"
-        , title: attr.who.screenName
-        , width: "42dp"
-        , height: "42dp"
-        // For now, I'm getting rid of border due to the uncertainty of whether or not
-        // A user even has a profile picture
-        // , borderWidth: 1
-        // , borderColor: isUnknown ? '#ededed' : '#ccc'
-        , borderRadius: 5
-        , top: '4dp'
-        , left: "-3dp"
+        , layout: 'vertical'
+        , left: '5dp'
+        , right: '5dp'
         })
         
-      , rightSide: {
-          
-        }
-      };
+      , fillerTop: getVerticalGap()
+        
+      , sentence: $ui.createLabel({
+          text: this.model.getSentence()
+        , width: $ui.FILL
+        , height: $ui.SIZE
+        , left: '42dp'
+        , top: 0
+        , color: gb.ui.color.base
+        , font: {
+            fontSize: gb.ui.font.base.size
+          }
+        })
+        
+      , fillerBottom: getVerticalGap()
+      }
+    };
+    
+    var $this = this;
+    this.views.image.addEventListener('error', function(e){
+      $this.setToDefaultImage();
+    });
+
+    gb.utils.compoundViews(this.views);
+  };
+  
+  constructor.prototype = {
+    setToDefaultImage: function(){
+      this.views.image.setImage("https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-85.png");
     }
   };
   

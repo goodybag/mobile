@@ -1,14 +1,12 @@
 Logfile initialized
 [INFO] logfile = /goodybag/mobile/apps/titanium/Goodybag/build.log
-[DEBUG] /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/builder.py simulator Goodybag /Volumes/storage/android-sdk /goodybag/mobile/apps/titanium/Goodybag com.goodybag 14 HVGA 
-[INFO] Building Goodybag for Android ... one moment
+[DEBUG] /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/builder.py install Goodybag /Volumes/storage/android-sdk /goodybag/mobile/apps/titanium/Goodybag com.goodybag 7
 [INFO] Titanium SDK version: 2.1.1 (07/27/12 14:01 0fd84a2)
 [DEBUG] Waiting for device to be ready ...
-[TRACE] adb devices returned 1 devices/emulators
+[TRACE] adb devices returned 2 devices/emulators
 [DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.012624 seconds on emulator to get ready
+[DEBUG] waited 0.012505 seconds on emulator to get ready
 [DEBUG] com.goodybag installed? False
-[INFO] Fastdev server running, deploying in Fastdev mode
 [INFO] Copying CommonJS modules...
 [INFO] Copying project resources..
 [INFO] Tiapp.xml unchanged, skipping class generation
@@ -22,11 +20,12 @@ Logfile initialized
 [DEBUG] found drawable-notlong-land-mdpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-land-mdpi/default.png
 [DEBUG] found drawable-notlong-port-hdpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-port-hdpi/default.png
 [DEBUG] found drawable-notlong-port-ldpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-port-ldpi/default.png
-[INFO] Waiting for SDCard to become available..
 [DEBUG] creating unsigned apk: /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/app-unsigned.apk
 [DEBUG] from resource zip => assets/Resources/images/background.png
 [DEBUG] from resource zip => assets/Resources/lib/core/components/pull-to-refresh/images/white-arrow.png
 [DEBUG] from resource zip => assets/Resources/lib/core/components/pull-to-refresh/pull-to-refresh.js
+[DEBUG] from resource zip => assets/Resources/lib/core/components/activity-old.js
+[DEBUG] from resource zip => assets/Resources/lib/core/components/activity.js
 [DEBUG] from resource zip => assets/Resources/lib/core/components/class.js
 [DEBUG] from resource zip => assets/Resources/lib/core/components/events.js
 [DEBUG] from resource zip => assets/Resources/lib/core/components/infini-scroll.js
@@ -264,12 +263,6 @@ Logfile initialized
 [DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_stream_buttons_activity_active_9c9024581f.png
 [DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_stream_buttons_activity_default_bd4ad9b566.png
 [DEBUG] from resource zip => res/drawable-notlong-port-mdpi/screens_stream_menu_b90e9dbc59.png
-[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-facebook.jar => ti/modules/titanium/facebook/LICENSE
-[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/binding.js
-[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/binding.min.js
-[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/json2.js
-[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/polling.js
-[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/polling.min.js
 [DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/build.properties
 [DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/background.png
 [DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/titanium.jar => org/appcelerator/titanium/res/drawable/btn_check_buttonless_on.png
@@ -286,14 +279,11 @@ Logfile initialized
 [DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/thirdparty.jar => org/apache/Commons-NOTICE.txt
 [DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/thirdparty.jar => org/apache/HttpComponents-NOTICE.txt
 [DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/thirdparty.jar => org/apache/mime4j-NOTICE.txt
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-facebook.jar => ti/modules/titanium/facebook/LICENSE
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/binding.js
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/binding.min.js
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/json2.js
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/polling.js
+[DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/polling.min.js
 [DEBUG] installing native SDK libs
-[DEBUG] Waiting for device to be ready ...
-[TRACE] adb devices returned 1 devices/emulators
-[DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.012245 seconds on emulator to get ready
-[INFO] Installing application on emulator
-[INFO] Launching application ... Goodybag
-[TRACE] Launch output: Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.goodybag/.GoodybagActivity }
-
-[INFO] Deployed Goodybag ... Application should be running.
-[INFO] Android Emulator has exited
+[DEBUG] signal caught: 15

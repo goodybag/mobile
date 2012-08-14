@@ -12,8 +12,6 @@ GB.Views.add('stream', {
     top: 0
   , width: $ui.FILL
   , height: $ui.FILL
-  , left: '5dp'
-  , right: '5dp'
   , bottom: '44dp'
   }),
   
@@ -23,7 +21,7 @@ GB.Views.add('stream', {
     , width: $ui.FILL
     , height: '44dp'
     , bottom: 0
-    , backgroundImage: "iphone/screens/stream/Menu.png"
+    , backgroundImage: gb.utils.getImage("screens/stream/Menu.png")
     }),
     global: new GB.StreamButton('Global Activity'),
     my: new GB.StreamButton('My Activity')
@@ -68,8 +66,8 @@ GB.Views.add('stream', {
     });
     // Top property isn't working for padding in nav view, so add a filler
     this.nav.container.add($ui.createView({ width: $ui.FILL, height: '6dp'}));
-    this.nav.container.add(this.nav.global.button);
-    this.nav.container.add(this.nav.my.button);
+    this.nav.container.add(this.nav.global.base);
+    this.nav.container.add(this.nav.my.base);
     
     // Global Stream View
     this.states.global.view = new gb.Views.InfiniScroll(
@@ -183,7 +181,7 @@ GB.Views.add('stream', {
       scrollView.add(
         new GB.Views.Activity(
           new GB.Models.Activity(data[i])
-        ).render().view
+        ).views.base
       );
     }
   },

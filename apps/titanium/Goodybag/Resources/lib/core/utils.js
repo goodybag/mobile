@@ -374,6 +374,42 @@ gb.utils = function (global) {
     return obj
   }
   
+  /**
+   * Returns a single view given an object where every view is added to its sibling "base" view
+   * And each base view is added to the top-level base view 
+   * Each level MUST have a base property
+   * 
+   * @Example
+   * {
+   *   base: Ti.UI.createView(...)
+   * , left: {
+   *     base: Ti.UI.createView(...)
+   *   , picutre: Ti.UI.createImageView(...)
+   *   }
+   * , right: {
+   *     base: Ti.UI.createView(...)
+   *   , text: Ti.UI.createLabel(...)
+   *   , border: Ti.UI.createView(...)
+   *   }
+   * }
+   */
+  this.compoundViews = function(tree){
+    var base = tree.base, item;
+    if (typeof base === "undefined") throw new Error("Base is undefined");
+    for (var key in tree){
+      if (key === "base") continue;
+      item = tree[key];
+      if (typeof item === "object" && item.base){
+        base.add(self.compoundViews(item));
+        // maybe get a little more granular with this check with:
+        // Object.prototype.toString.call(item).indexOf('TI') > -1
+      }else if (typeof item === "object"){
+        base.add(item);
+      }
+    }
+    return base;
+  }
+  
   return this;
 }(
   this

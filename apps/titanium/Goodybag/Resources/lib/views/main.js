@@ -97,7 +97,6 @@ GB.Windows.add('main', Window.extend({
     // Views
     Titanium.include('/lib/views/qrcode.js');
     Titanium.include('/lib/views/places.js');
-    Titanium.include('/lib/views/activity.js');
     Titanium.include('/lib/views/stream.js');
     Titanium.include('/lib/views/stream-no-data.js');
     

@@ -33,10 +33,15 @@
     this.active = this.options.isActive;
     this.stateOptions = this.options[this.active ? 'activeState' : 'inactiveState'];
     
-    this.button = $ui.createButton({
+    this.base = $ui.createView({
       width: this.options.width
     , height: this.options.height
     , left: this.options.left
+    });
+    
+    this.button = $ui.createButton({
+      width: $ui.FILL
+    , height: $ui.FILL
     , backgroundImage: this.stateOptions.background
     });
     
@@ -50,7 +55,10 @@
     , shadowOffset: this.stateOptions.shadowOffset
     , shadowColor: this.stateOptions.shadowColor
     });
-    this.button.add(this.label);
+    
+    this.base.add(this.button);
+    this.base.add(this.label);
+    
     return this;
   };
   constructor.prototype = {
@@ -75,10 +83,10 @@
       return this;
     }
   , addEventListener: function(fn, prop){
-      return this.button.addEventListener(fn, prop);
+      return this.base.addEventListener(fn, prop);
     }
   , removeEventListener: function(fn, prop){
-      return this.button.removeEventListener(fn, prop);
+      return this.base.removeEventListener(fn, prop);
     }
   };
   GB.StreamButton = constructor;
