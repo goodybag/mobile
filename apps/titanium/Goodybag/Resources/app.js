@@ -11,9 +11,9 @@ Ti.include('lib/core/components/class.js');
 Ti.include('lib/core/config.js');
 Ti.include('lib/core/utils.js');
 Ti.include('lib/core/aes.js');
+Ti.include('lib/core/ui.js');
 
 // Components
-Ti.include('lib/core/components/ui.js');
 Ti.include('lib/core/components/view.js');
 Ti.include('lib/core/components/window.js');
 Ti.include('lib/core/components/qrcode.js');
