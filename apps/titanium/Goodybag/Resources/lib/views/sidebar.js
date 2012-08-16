@@ -98,12 +98,12 @@ GB.Views.add('sidebar', {
     
     this.clearActive();
     this.active = area;
-    $el.items[area].image = gb.utils.getImage('screens/sidebar/items/' + nearby + '_active.png');
+    $el.list[area].image = gb.utils.getImage('screens/sidebar/items/' + area + '_active.png');
   },
   
   clearActive: function () {
     var $el = this.elements;
-    
-    $el.items[this.active].image = gb.utils.getImage('screens/sidebar/items/' + this.active + '.png');
+    if (!this.active) return;
+    $el.list[this.active].image = gb.utils.getImage('screens/sidebar/items/' + this.active + '.png');
   }
 });
