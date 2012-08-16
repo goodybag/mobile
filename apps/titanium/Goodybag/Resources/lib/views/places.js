@@ -7,10 +7,18 @@ GB.Views.add('places', {
     top: '55dp'
   }),
   
-  location: 'Places',
+  location: 'Nearby',
+  
   models: [],
+  locations: [],
   views: [],
+  
   elements: {},
+  
+  position: {
+    lat: 30.266703,
+    lon: -97.73798
+  },
   
   /**
    * Grab and store places location and initialize View.
@@ -33,7 +41,7 @@ GB.Views.add('places', {
    * @private
    */
   onShow: function (context) {
-    var $this = this, $el = this.elements;
+    var $this = this, $el = this.elements, locations;
     
     this.fetch(function (error, results) {
       var i;
@@ -42,24 +50,28 @@ GB.Views.add('places', {
         $this.models.push(new GB.Models.Place(results.data[i]));
       }
       
-      $this.models.sort($this.comparePlaces);
       $this['show' + $this.location]();
     }, true);
   },
   
-  afterShow: function (context) {},
-  
-  showPlaces: function () {
-    var $this = this, $el = this.elements;
+  showNearby: function () {
+    var $this = this, $el = this.elements, i, x, locations;
     
+    for(i = 0; i < $this.models.length; i++) {
+      locations = $this.models[i].getLocations();
+      for(x = 0; x < locations.length; x++) {
+        $this.locations.push(locations[x]);
+      }
+    }
+
     $el.places = Titanium.UI.createScrollView({
       layout: 'vertical'
     });
     
     $this.self.add($el.places);
-    
-    for (i = 0; i < $this.models.length; i++) {
-      $el.places.add($this.models[i].toRow(i%2, function (e) { $this.onPlaceClick.apply($this, [ this ]); }));
+    $this.locations.sort(function (a, b) { return $this.compareLocations.apply($this, [a, b]); });
+    for (i = 0; i < $this.locations.length; i++) {
+      $el.places.add($this.locations[i].toRow(i%2, function (e) { $this.onPlaceClick.apply($this, [ this ]); }));
     }
     
     $this.location = 'places';
@@ -97,12 +109,6 @@ GB.Views.add('places', {
         left: '10dp'
       }));
     });
-    
-    if(place.getLocationCount() < 2) {
-      
-    } else {
-      
-    }
     
     $this.self.add($el.place);
   },
@@ -143,7 +149,7 @@ GB.Views.add('places', {
    * @param  {Object} e Event Handler
    */
   onPlaceClick: function (place) {
-    this.showPlace(place);
+    this.showPlace(place.parent);
   },
   
   /**
@@ -163,13 +169,13 @@ GB.Views.add('places', {
    * @param  {Object} b
    * @return {Integer}
    */
-  comparePlaces: function (a, b) {
-    if (a.data.publicName < b.data.publicName)
-      return -1;
-
-    if (a.data.publicName > b.data.publicName)
-      return 1;
-
+  compareLocations: function (a, b) {
+    var e = a.getPosition(), f = b.getPosition();
+    if (!e.lat && !e.lon) return 1;
+    if (!f.lat && !f.lon) return -1;
+    var c = a.getDistanceFrom(this.position), d = b.getDistanceFrom(this.position);
+    if (c < d) return -1;
+    if (c > d) return 1;
     return 0;
   },
   

@@ -1,5 +1,6 @@
 Logfile initialized
 [INFO] logfile = /goodybag/mobile/apps/titanium/Goodybag/build.log
+<<<<<<< HEAD
 [DEBUG] /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/builder.py install Goodybag /Volumes/storage/android-sdk /goodybag/mobile/apps/titanium/Goodybag com.goodybag 7
 [INFO] Titanium SDK version: 2.1.1 (07/27/12 14:01 0fd84a2)
 [DEBUG] Waiting for device to be ready ...
@@ -287,3 +288,16 @@ Logfile initialized
 [DEBUG] from JAR /Users/awesome/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/modules/titanium-ui.jar => ti/modules/titanium/ui/widget/webview/polling.min.js
 [DEBUG] installing native SDK libs
 [DEBUG] signal caught: 15
+=======
+[DEBUG] /Users/niji/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/builder.py simulator Goodybag /Users/niji/android-sdks/Titanium /goodybag/mobile/apps/titanium/Goodybag com.goodybag 15 HVGA 
+[INFO] Building Goodybag for Android ... one moment
+[INFO] Titanium SDK version: 2.1.1 (07/27/12 14:01 0fd84a2)
+[DEBUG] Waiting for device to be ready ...
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[ERROR] Timed out waiting for emulator to be ready, you may need to close the emulator and try again
+>>>>>>> f3b7145b0f343b3a7a64dc3fcb76676b582a5a55

@@ -38,5 +38,5 @@ gen/
 local.properties
 
 #Titanium
-apps/titanium/Goodybag/build/
+apps/titanium/Goodybag/build/*
 apps/titanium/Goodybag/build.log

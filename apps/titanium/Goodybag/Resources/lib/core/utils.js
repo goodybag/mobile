@@ -17,6 +17,7 @@ gb.utils = function (global) {
    * @type {Boolean}
    */
   gb.isIOS = (Ti.Android) ? false : true;
+  gb.isRetina = (Ti.Android) ? false : (Ti.Platform.displayCaps.density === 'high');
   
   /**
    * Base Path
@@ -112,7 +113,6 @@ gb.utils = function (global) {
    * @param  {Function}         callback Returns errors or request results.
    */
   this.http.get.sessioned = function (url, session, callback) {
-    console.log(url);
     var client = Titanium.Network.createHTTPClient();
     
     client.onload = function () {
@@ -363,6 +363,67 @@ gb.utils = function (global) {
   this.densityPixels = function (densityPixels) {
     if (gb.isIOS) return densityPixels;
     return (densityPixels * Titanium.Platform.displayCaps.dpi / 160); // Medium DPI is 160, this scales to it.
+  }
+  
+  /**
+   * Convert degrees to radians for utilization in spherical trigonometry
+   */
+  this.toRad = function (number) {
+    return number * Math.PI / 180;
+  }
+  
+  /**
+   * Determine the haversine distance from two points.
+   */
+  this.haversine = function (a, b, R) {
+    var dlat, dlon, as, c, d, lt1, lt2;
+    R    = R || 3960; // 3960 is the Earth Mean for Miles, 6937 is the mean for kilometers.
+    dlat = this.toRad(b.lat - a.lat);
+    dlon = this.toRad(b.lon - a.lon);
+    lt1  = this.toRad(a.lat);
+    lt2  = this.toRad(b.lat);
+    as   = Math.sin(dlat/2) * Math.sin(dlat/2) +
+           Math.sin(dlon/2) * Math.sin(dlon/2) *
+           Math.cos(lt1) * Math.cos(lt2);
+    c    = 2 * Math.atan2(Math.sqrt(as), Math.sqrt(1-as));
+    d    = R * c;
+    return (d < 0.01) ? 0.01 : (Math.round(d * 100) / 100);
+  }
+  
+  this.clone = function (o) {
+    return JSON.parse(JSON.stringify(o));
+  }
+  
+  /**
+   * Merge two objects together.
+   */
+  this.merge = function (d, o, p, de, oe) {
+    if (typeof o != 'object' || o == null) return this.clone(d);
+    if (d.events) de = d.events;
+    if (o.events) oe = o.events;
+    d = this.clone(d); o = this.clone(o);
+    if (d.events) d.events = de;
+    if (o.events) o.events = oe;
+       
+    for (p in o) {
+      if (o == undefined) continue;
+      if (!o.hasOwnProperty(p)) continue;
+      if (o[p] == undefined) continue;
+      if (typeof o[p] != 'object' || o[p] == null)  d[p] = o[p];
+      else if (({}).toString.call(d[p]) == '[object Function]' && !o[p]) continue; 
+      else if (typeof d[p] != 'object' || d[p] == null) d[p] = this.merge(o[p].constructor === Array ? [] : {}, o[p]);
+      else d[p] = this.merge(d[p], o[p]);
+    }
+    
+    return d;
+  }
+  
+  this.index = function (o, i) {
+    return (o) ? o[i] : null;
+  }
+  
+  this.ref = function (o, s) {
+    return (s.indexOf('.') != -1) ? s.split('.').reduce(this.index, o) : [ s ].reduce(this.index, o);
   }
   
   this.extend = function(obj) {
