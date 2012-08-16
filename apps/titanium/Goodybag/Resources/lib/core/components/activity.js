@@ -39,8 +39,6 @@
       , width: "42dp"
       , height: "42dp"
       , title: attr.who.screenName
-      // , borderWidth: 1
-      // , borderColor: '#ededed'
       , top: "16dp"
       , left: "-3dp"
       , zIndex: 1
@@ -63,13 +61,6 @@
         , layout: 'horizontal'
         , left: '5dp'
         , right: '5dp'
-        // , events: {
-            // postlayout: function(e){
-              // console.log("#################################################");
-              // console.log(++post);
-              // console.log(e.source.children.length);
-            // }
-          // }
         })
         
       , fillerTop: getVerticalGap()
