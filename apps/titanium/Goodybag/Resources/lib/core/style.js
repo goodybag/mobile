@@ -15,7 +15,7 @@ gb.style = {
    * @param {Object} style
    * @param {Object} options
    */
-  get: function (name, style, options) {
+  get: function (name, style, options, context) {
     var dest = null, base = null, build = true;
     
     if (style == null) 
@@ -27,8 +27,10 @@ gb.style = {
     if (typeof object === 'boolean') 
       build = object, object = null;
       
-    if (({}).toString.call(style) === '[object Object]') 
+    if (({}).toString.call(style) === '[object Object]') {
+      if (options) context = options, options = null;
       options = style, style = name, name = gb.style.type();
+    }
 
     if (!gb.style[name]) 
       return null;
@@ -74,7 +76,7 @@ gb.style = {
         dest.build.later = false;
       } else if (dest.build && (!dest.build.later || dest.build.later == null || dest.build.later == undefined)) {
         var type = dest.build.type; delete dest.build; dest = $ui[type](dest);
-        if (dest.events) for (var e in events) dest.addEventListener(e, events[e]);
+        if (dest.events) for (var e in events) dest.addEventListener(e, (context) ? function () { return events[e].apply(context, arguments); } : events[e]);
       }
     }
 
