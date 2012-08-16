@@ -12,6 +12,14 @@ GB.Views.add('stream-no-data', {
    * @constructor
    */
   Constructor: function () {
-    this.self.add(gb.ui.header1("There doesn't seem to be any activity"));
+    this.self.add($ui.createLabel({
+      width: $ui.FILL
+    , height: $ui.SIZE
+    , color: gb.ui.color.base
+    , font: {
+        fontSize: 14
+      }
+    , text: "There doesn't seem to be anything going on here :/"
+    }));
   }
 });
