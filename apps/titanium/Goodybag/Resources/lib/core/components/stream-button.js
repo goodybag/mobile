@@ -82,11 +82,11 @@
       if (!Ti.Android) this.label.setShadowOffset(this.stateOptions.shadowOffset);
       return this;
     }
-  , addEventListener: function(fn, prop){
-      return this.base.addEventListener(fn, prop);
+  , addEventListener: function(name, fn){
+      return this.base.addEventListener(name, fn);
     }
-  , removeEventListener: function(fn, prop){
-      return this.base.removeEventListener(fn, prop);
+  , removeEventListener: function(name, fn){
+      return this.base.removeEventListener(name, fn);
     }
   };
   GB.StreamButton = constructor;

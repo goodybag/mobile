@@ -6,7 +6,7 @@ if (!gb.ui)
   
 gb.ui.color = {
   white: '#fff'
-, black: '#000'
+, black: '#111'
 , grayDarker: '#444'
 , grayDark: '#666'
 , gray: '#888'
@@ -15,6 +15,7 @@ gb.ui.color = {
 
 , pink: '#d357ba'
 , blue: '#57a0d3'
+, blueBright: '#35c8f6'
 };
 
 gb.ui.color.base = gb.ui.color.gray;

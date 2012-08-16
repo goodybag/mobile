@@ -70,8 +70,8 @@ GB.Windows.add('main', Window.extend({
       avatar: Titanium.UI.createImageView({
         top: '4dp',
         left: '4dp',
-        width: '46px',
-        height: '46px'
+        width: '46dp',
+        height: '46dp'
       }),
       
       avatarBack: Titanium.UI.createImageView({
@@ -99,12 +99,14 @@ GB.Windows.add('main', Window.extend({
     Titanium.include('/lib/views/places.js');
     Titanium.include('/lib/views/stream.js');
     Titanium.include('/lib/views/stream-no-data.js');
+    Titanium.include('/lib/views/charities.js');
     
     // Attach Views
     $el.views.main.add(gb.Views.get('qrcode').self);
     $el.views.main.add(gb.Views.get('places').self);
     $el.views.main.add(gb.Views.get('stream').self);
     $el.views.main.add(gb.Views.get('stream-no-data').self);
+    $el.views.main.add(gb.Views.get('charities').self);
     
     // Attach Header
     $el.views.main.add($el.images.header);
@@ -134,7 +136,7 @@ GB.Windows.add('main', Window.extend({
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $user = gb.consumer, $url, written = true;
     
     // Direct Pages, then delegate background tasks.
-    GB.Views.show('stream');
+    GB.Views.show('charities');
     
     // Username
     $el.sidebar.username.setText($user.getUsername());

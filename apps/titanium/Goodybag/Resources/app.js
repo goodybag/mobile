@@ -21,6 +21,7 @@ Ti.include('lib/core/components/infini-scroll.js');
 Ti.include('lib/core/components/activity.js');
 Ti.include('lib/core/components/stream-button.js');
 Ti.include('lib/core/components/pull-to-refresh/pull-to-refresh.js');
+Ti.include('lib/core/components/charity-view.js');
 
 gb.qrcode = QRCode({
   typeNumber: 4,

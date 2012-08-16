@@ -35,12 +35,12 @@
       
       // Profile picture
     , image: $ui.createImageView({
-        image: "https://s3.amazonaws.com/goodybag-uploads/consumers" + imgSrc + "-85.png"
+        image: "https://s3.amazonaws.com/goodybag-uploads/consumers" + imgSrc + "-128.png"
       , width: "42dp"
       , height: "42dp"
       , title: attr.who.screenName
-      , borderWidth: 1
-      , borderColor: '#ededed'
+      // , borderWidth: 1
+      // , borderColor: '#ededed'
       , top: "16dp"
       , left: "-3dp"
       , zIndex: 1

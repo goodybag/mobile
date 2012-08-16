@@ -143,7 +143,6 @@
           this.height += parseInt(child.getTop())         || 0;
           this.height += parseInt(child.getBottom())      || 0;
         }
-        console.log("[InfiniScroll] - height: ", this.height);
         this.nextChild = children.length;
         this.triggerNewHeight();
       }
