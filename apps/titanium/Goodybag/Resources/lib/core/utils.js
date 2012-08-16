@@ -351,6 +351,13 @@ gb.utils = function (global) {
   }
   
   /**
+   * Absolute width of the display in relation to UI orientation
+   */
+  this.deviceWidth = function () {
+    return Ti.Platform.displayCaps.platformWidth;
+  }
+  
+  /**
    * Returns screen density based on platform.
    */
   this.densityPixels = function (densityPixels) {
@@ -417,6 +424,59 @@ gb.utils = function (global) {
   
   this.ref = function (o, s) {
     return (s.indexOf('.') != -1) ? s.split('.').reduce(this.index, o) : [ s ].reduce(this.index, o);
+  }
+  
+  this.extend = function(obj) {
+    forEach(slice.call(arguments, 1), function(source) {
+      for (var prop in source) {
+        obj[prop] = source[prop];
+      }
+    });
+    return obj
+  }
+  
+  /**
+   * Returns a single view given an object where every view is added to its sibling "base" view
+   * And each base view is added to the top-level base view 
+   * Each level MUST have a base property
+   * 
+   * @Example
+   * {
+   *   base: Ti.UI.createView(...)
+   * , left: {
+   *     base: Ti.UI.createView(...)
+   *   , picutre: Ti.UI.createImageView(...)
+   *   }
+   * , right: {
+   *     base: Ti.UI.createView(...)
+   *   , text: Ti.UI.createLabel(...)
+   *   , border: Ti.UI.createView(...)
+   *   }
+   * }
+   */
+  this.compoundViews = function(tree){
+    var base = tree.base, item;
+    if (typeof base === "undefined") throw new Error("Base is undefined");
+    for (var key in tree){
+      item = tree[key];
+      if (key === "base"){
+        for (var eventType in item.events){
+          item.addEventListener(eventType, item.events[eventType]);
+        }
+        continue;  
+      }
+      if (typeof item === "object" && item.base){
+        base.add(self.compoundViews(item));
+        // maybe get a little more granular with this check with:
+        // Object.prototype.toString.call(item).indexOf('TI') > -1
+      }else if (typeof item === "object"){
+        for (var eventType in item.events){
+          item.addEventListener(eventType, item.events[eventType]);
+        }
+        base.add(item);
+      }
+    }
+    return base;
   }
   
   return this;

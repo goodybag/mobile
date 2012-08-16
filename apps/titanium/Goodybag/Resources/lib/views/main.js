@@ -33,10 +33,16 @@ GB.Windows.add('main', Window.extend({
     Titanium.include('/lib/views/qrcode.js');
     Titanium.include('/lib/views/nearby.js');
     Titanium.include('/lib/views/sidebar.js');
+    Titanium.include('/lib/views/stream.js');
+    Titanium.include('/lib/views/stream-no-data.js');
+    Titanium.include('/lib/views/charities.js');
     
     // Attach Views
     $el.views.main.add(GB.Views.get('qrcode').self);
     $el.views.main.add(GB.Views.get('nearby').self);
+    $el.views.main.add(gb.Views.get('stream').self);
+    $el.views.main.add(gb.Views.get('stream-no-data').self);
+    $el.views.main.add(gb.Views.get('charities').self);
     
     // Attach Header
     $el.views.main.add($el.header.background);

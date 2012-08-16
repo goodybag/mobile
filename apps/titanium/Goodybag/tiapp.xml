@@ -18,10 +18,10 @@
     <id>com.goodybag</id>
     <name>Goodybag</name>
     <version>1.0</version>
-    <publisher>Nijiko Yonskai</publisher>
+    <publisher>Goodybag</publisher>
     <url>http://goodybag.com</url>
     <description>not specified</description>
-    <copyright>2012 by Nijiko Yonskai</copyright>
+    <copyright>Goodybag</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
@@ -42,7 +42,12 @@
             <orientation>Ti.UI.PORTRAIT</orientation>
         </orientations>
     </iphone>
-    <android xmlns:android="http://schemas.android.com/apk/res/android"/>
+    <android xmlns:android="http://schemas.android.com/apk/res/android">
+       <tool-api-level>8</tool-api-level>
+       <manifest android:installLocation="preferExternal">
+          <uses-sdk android:minSdkVersion="7" />
+       </manifest>
+    </android>
     <mobileweb>
         <precache/>
         <splash>
@@ -51,7 +56,5 @@
         </splash>
         <theme>default</theme>
     </mobileweb>
-    <modules>
-        <module platform="commonjs" version="2.0.5">ti.cloud</module>
-    </modules>
+    <modules/>
 </ti:app>

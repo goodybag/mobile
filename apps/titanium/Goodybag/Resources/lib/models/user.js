@@ -315,7 +315,8 @@ if(!GB.Models)
      */
     getAvatar: function (size, callback) {
       if (!this.data) return;
-      
+      // Hack for now to fix users with no media
+      if (!this.data.media) return;
       var url = ((size == 85) ? this.data.media.thumb : this.data.media.url), written = true, $self = this;
       if (!url) url = 'http://goodybag-uploads.s3.amazonaws.com/consumers/' + this.data._id + '-' + size + '.png';
       
@@ -419,6 +420,25 @@ if(!GB.Models)
      */
     usedFacebook: function () {
       return this.data.authMethod === GB.Models.User.Methods.FACEBOOK;
+    },
+    
+    /**
+     * Sets the charity on the user object and the server
+     * @return {null}
+     */
+    setCharity: function (charity, callback) {
+      var $this = this;
+      callback || (callback = function(){});
+      $http.post(gb.config.api.selectCharity + charity.id, {}, function(error, data){
+        if (error) return console.log(error);
+        data = JSON.parse(data);
+        if (data.error) return callback(data.error);
+        $this.data.charity = {
+          id: charity.id
+        , name: charity.publicName
+        };
+        $this._setConsumer($this);
+      });
     },
     
     /**

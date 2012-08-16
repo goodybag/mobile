@@ -197,7 +197,7 @@ if(!GB.Models)
       return row;
     }
   });
-  
+
   /**
    * Location Model
    *
