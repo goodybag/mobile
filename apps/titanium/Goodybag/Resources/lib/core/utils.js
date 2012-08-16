@@ -390,15 +390,20 @@ gb.utils = function (global) {
   /**
    * Merge two objects together.
    */
-  this.merge = function (d, o, p) {
+  this.merge = function (d, o, p, de, oe) {
     if (typeof o != 'object' || o == null) return this.clone(d);
+    if (d.events) de = d.events;
+    if (o.events) oe = o.events;
     d = this.clone(d); o = this.clone(o);
-    
+    if (d.events) d.events = de;
+    if (o.events) o.events = oe;
+       
     for (p in o) {
       if (o == undefined) continue;
       if (!o.hasOwnProperty(p)) continue;
       if (o[p] == undefined) continue;
       if (typeof o[p] != 'object' || o[p] == null)  d[p] = o[p];
+      else if (({}).toString.call(d[p]) == '[object Function]' && !o[p]) continue; 
       else if (typeof d[p] != 'object' || d[p] == null) d[p] = this.merge(o[p].constructor === Array ? [] : {}, o[p]);
       else d[p] = this.merge(d[p], o[p]);
     }

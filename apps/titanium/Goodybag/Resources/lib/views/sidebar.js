@@ -34,20 +34,29 @@ GB.Views.add('sidebar', {
         "15": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.ffteen')),
         "16": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.sxteen'))
       }
-    }
+    },
+    
+    list: { }
   },
   
   Constructor: function () { 
     var $el = this.elements, $self = this.self;
+    
+    $el.list.nearby     = gb.style.get('sidebar.list.base', gb.style.get('sidebar.list.nearby'), this);
+    $el.list.sponsored  = gb.style.get('sidebar.list.base', gb.style.get('sidebar.list.sponsored'), this);
+    $el.list.activity   = gb.style.get('sidebar.list.base', gb.style.get('sidebar.list.activity'), this);
+    $el.list.settings   = gb.style.get('sidebar.list.base', gb.style.get('sidebar.list.settings'), this);
     
     $self.add($el.header.background);
     $self.add($el.header.avatar.background);
     $self.add($el.header.username);
     $self.add($el.bank.background);
     
-    for (var slot in $el.bank.slots) {
+    for (var slot in $el.bank.slots)
       $self.add($el.bank.slots[slot]);
-    }
+    
+    for (var item in $el.list)
+      $self.add($el.list[item]);
     
     return this;
   },
@@ -85,10 +94,16 @@ GB.Views.add('sidebar', {
   },
   
   setActive: function (area) {
+    var $el = this.elements;
     
+    this.clearActive();
+    this.active = area;
+    $el.items[area].image = gb.utils.getImage('screens/sidebar/items/' + nearby + '_active.png');
   },
   
   clearActive: function () {
+    var $el = this.elements;
     
+    $el.items[this.active].image = gb.utils.getImage('screens/sidebar/items/' + this.active + '.png');
   }
 });

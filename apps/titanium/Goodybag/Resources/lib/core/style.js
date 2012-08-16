@@ -75,8 +75,14 @@ gb.style = {
       if (dest.build.later) {
         dest.build.later = false;
       } else if (dest.build && (!dest.build.later || dest.build.later == null || dest.build.later == undefined)) {
-        var type = dest.build.type; delete dest.build; dest = $ui[type](dest);
-        if (dest.events) for (var e in events) dest.addEventListener(e, (context) ? function () { return events[e].apply(context, arguments); } : events[e]);
+        var type = dest.build.type, events = dest.events ? dest.events : null; delete dest.build;
+        dest = $ui[type](dest);
+        if (events) {
+          for (var e in events) {
+            if (context) dest.addEventListener(e, function () { return events[e].apply(context, arguments); });
+            else dest.addEventListener(e, events[e]);
+          }
+        }
       }
     }
 

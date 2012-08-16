@@ -102,10 +102,38 @@ gb.style.iphone.sidebar = {
   },
   
   list: {
-    places: {},
-    charities: {},
-    activity: {},
-    settings: {}
+    base: {
+      build: { type: 'createImageView' },
+      events: {
+        click: function (o) {
+          this.setActive(o.source.name);
+        }
+      }
+    },
+    
+    nearby: {
+      top: 88,
+      image: 'screens/sidebar/items/nearby.png',
+      name: 'nearby'
+    },
+    
+    sponsored: {
+      top: 124,
+      image: 'screens/sidebar/items/sponsored.png',
+      name: 'sponsored'
+    },
+    
+    activity: {
+      top: 160,
+      image: 'screens/sidebar/items/activity.png',
+      name: 'activity'
+    },
+    
+    settings: {
+      top: 196,
+      image: 'screens/sidebar/items/settings.png',
+      name: 'settings'
+    }
   }
 };
 
