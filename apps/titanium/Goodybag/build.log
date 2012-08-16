@@ -1,33 +1,13 @@
 Logfile initialized
 [INFO] logfile = /goodybag/mobile/apps/titanium/Goodybag/build.log
-[DEBUG] /Users/niji/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/builder.py simulator Goodybag /Users/niji/android-sdks/Titanium /goodybag/mobile/apps/titanium/Goodybag com.goodybag 4 HVGA 
+[DEBUG] /Users/niji/Library/Application Support/Titanium/mobilesdk/osx/2.1.1.GA/android/builder.py simulator Goodybag /Users/niji/android-sdks/Titanium /goodybag/mobile/apps/titanium/Goodybag com.goodybag 15 HVGA 
 [INFO] Building Goodybag for Android ... one moment
 [INFO] Titanium SDK version: 2.1.1 (07/27/12 14:01 0fd84a2)
 [DEBUG] Waiting for device to be ready ...
-[TRACE] adb devices returned 1 devices/emulators
-[DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.011655 seconds on emulator to get ready
-[DEBUG] com.goodybag installed? True
-[INFO] Fastdev server running, deploying in Fastdev mode
-[INFO] Copying CommonJS modules...
-[INFO] Copying project resources..
-[TRACE] COPYING MODIFIED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/places.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/places.js
-[INFO] Tiapp.xml unchanged, skipping class generation
-[DEBUG] Processing Android resource drawables
-[DEBUG] found drawable-long-land-hdpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-long-land-hdpi/default.png
-[DEBUG] found drawable-long-land-ldpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-long-land-ldpi/default.png
-[DEBUG] found drawable-long-port-hdpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-long-port-hdpi/default.png
-[DEBUG] found drawable-long-port-ldpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-long-port-ldpi/default.png
-[DEBUG] found drawable-notlong-land-hdpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-land-hdpi/default.png
-[DEBUG] found drawable-notlong-land-ldpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-land-ldpi/default.png
-[DEBUG] found drawable-notlong-land-mdpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-land-mdpi/default.png
-[DEBUG] found drawable-notlong-port-hdpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-port-hdpi/default.png
-[DEBUG] found drawable-notlong-port-ldpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-port-ldpi/default.png
-[DEBUG] found drawable-notlong-port-mdpi splash screen at /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-notlong-port-mdpi/default.png
-[INFO] Waiting for SDCard to become available..
-[INFO] Re-launching application ... Goodybag
-[INFO] Launching application ... Goodybag
-[TRACE] Launch output: Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.goodybag/.GoodybagActivity }
-
-[INFO] Relaunched Goodybag ... Application should be running.
-[INFO] Android Emulator has exited
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[ERROR] Timed out waiting for emulator to be ready, you may need to close the emulator and try again

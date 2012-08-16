@@ -3,88 +3,21 @@ GB.Windows.add('main', Window.extend({
   debug: true,
   animated: false,
   
-  window: Titanium.UI.createWindow({
-    title: 'Main',
-    top: 0,
-    backgroundImage: gb.utils.getImage('background.png')
-  }),
+  window: $ui.createWindow(gb.style.get('main.self')),
   
   elements: {
-    view: Titanium.UI.createView({
-      layout: 'horizontal',
-      scrollType: 'horizontal',
-      horizontalWrap: false,
-      disableBounce: true,
-      horizontalBounce: false,
-      focusable: false,
-      contentWidth: 'auto'
-    }),
-    
     views: {
-      sidebar: Titanium.UI.createView({
-        right: -Titanium.Platform.displayCaps.platformWidth,
-        bottom: 0,
-        width: Titanium.Platform.displayCaps.platformWidth,
-        backgroundImage: gb.utils.getImage('screens/sidebar/background.png')
-      }),
-      
-      main: Titanium.UI.createView({
-        width: Titanium.Platform.displayCaps.platformWidth,
-        backgroundColor: 'white'
-      })
+      holder: $ui.createView(gb.style.get('main.views.holder')),
+      main: $ui.createView(gb.style.get('main.views.main'))
     },
     
-    buttons: {
-      sidebar: Titanium.UI.createImageView({
-        top: '10dp',
-        left: '10dp',
-        width: 'auto',
-        height: 'auto',
-        canScale: false,
-        zIndex: 2,
-        image: gb.utils.getImage('screens/main/buttons/sidebar_default.png')
-      })
-    },
-    
-    sidebar: {
-      username: Titanium.UI.createLabel({
-        top: '14dp',
-        left: '58dp',
-        color: '#FFFFFF',
-        shadowColor: '#27333e',
-        shadowOffset: { x: -1, y: 0 },
-        font: { fontSize: '18dip', fontFamily: 'Helvetica Neue', fontStyle: 'normal', fontWeight: 'bold' }
-      }),
+    header: {
+      background: $ui.createImageView(gb.style.get('main.header.background')),
+      logo: $ui.createImageView(gb.style.get('main.header.logo')),
       
-      back: Titanium.UI.createLabel({
-        top: '12dp',
-        right: '10dp',
-        color: '#FFFFFF',
-        shadowColor: '#27333e',
-        shadowOffset: { x: -1, y: 0 },
-        font: { fontSize: '18dip', fontFamily: 'Helvetica Neue', fontStyle: 'normal', fontWeight: 'bold' }
-      })
-    },
-    
-    images: {
-      avatar: Titanium.UI.createImageView({
-        top: '4dp',
-        left: '4dp',
-        width: '46px',
-        height: '46px'
-      }),
-      
-      avatarBack: Titanium.UI.createImageView({
-        top: '3dp',
-        left: '3dp',
-        image: gb.utils.getImage('screens/sidebar/avatar_background.png')
-      }),
-      
-      header: Titanium.UI.createImageView({
-        top: '0dp',
-        image: gb.utils.getImage('screens/main/header.png'),
-        zIndex: 1
-      }),
+      buttons: {
+        sidebar: $ui.createImageView(gb.style.get('main.header.buttons.sidebar'))
+      }
     }
   },
   
@@ -97,31 +30,29 @@ GB.Windows.add('main', Window.extend({
     // Views
     Titanium.include('/lib/views/qrcode.js');
     Titanium.include('/lib/views/places.js');
+    Titanium.include('/lib/views/sidebar.js');
     
     // Attach Views
-    $el.views.main.add(gb.Views.get('qrcode').self);
-    $el.views.main.add(gb.Views.get('places').self);
+    $el.views.main.add(GB.Views.get('qrcode').self);
+    $el.views.main.add(GB.Views.get('places').self);
     
     // Attach Header
-    $el.views.main.add($el.images.header);
-    $el.views.main.add($el.buttons.sidebar);
-    
-    // Sidebar Attachments
-    $el.views.sidebar.add($el.images.avatarBack);
-    $el.views.sidebar.add($el.sidebar.username);
+    $el.views.main.add($el.header.background);
+    $el.views.main.add($el.header.logo);
+    $el.views.main.add($el.header.buttons.sidebar);
     
     // Events
-    $el.buttons.sidebar.addEventListener('click', function (e) {
+    $el.header.buttons.sidebar.addEventListener('click', function (e) {
       $self.toggleSidebar.apply($self, [ e ]);
     });
     
-    // Add views to scrollable view.
-    $el.view.add($el.views.sidebar);
-    $el.view.add($el.views.main);
-    // $el.view.scrollToView(1);
+    // Add views to scrollable view
+    GB.Views.get('sidebar').self.setVisible(true);
+    $el.views.holder.add(GB.Views.get('sidebar').self);
+    $el.views.holder.add($el.views.main);
     
     // Add scrollable to window.
-    this.add($el.view);
+    this.add($el.views.holder);
     
     return this;
   },
@@ -130,18 +61,10 @@ GB.Windows.add('main', Window.extend({
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $user = gb.consumer, $url, written = true;
     
     // Direct Pages, then delegate background tasks.
-    GB.Views.show('places');
+    GB.Views.show('qrcode');
     
-    // Username
-    $el.sidebar.username.setText($user.getUsername());
-    
-    // If it doesn't write the first time we use the url, it will write the next time.
-    $user.getAvatar(85, function (image) {
-      console.log(image);
-      
-      $el.images.avatar.setImage(image);
-      $el.views.sidebar.add($el.images.avatar);
-    });
+    // User setup
+    GB.Views.get('sidebar').setDetails($user);
   },
   
   /**
@@ -152,12 +75,12 @@ GB.Windows.add('main', Window.extend({
     
     if (!this.animated) {
       this.animated = !0;
-      $el.views.main.animate({ left: Titanium.Platform.displayCaps.platformWidth-70, duration: 250 });
-      $el.buttons.sidebar.setImage(gb.utils.getImage('screens/main/buttons/sidebar.png'));
+      $el.views.main.animate(gb.style.get('main.animations.right'));
+      $el.header.buttons.sidebar.setImage(gb.utils.getImage('screens/main/buttons/sidebar_active.png'));
     } else {
       this.animated = !1;
-      $el.views.main.animate({ left: 0, duration: 250 });
-      $el.buttons.sidebar.setImage(gb.utils.getImage('screens/main/buttons/sidebar_default.png'));
+      $el.views.main.animate(gb.style.get('main.animations.left'));
+      $el.header.buttons.sidebar.setImage(gb.utils.getImage('screens/main/buttons/sidebar_default.png'));
     }
   }
 }));

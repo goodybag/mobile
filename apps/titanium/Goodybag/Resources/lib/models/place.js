@@ -6,7 +6,8 @@ if(!GB.Models)
   ,   $fb = Titanium.Facebook
   ,   $props = Titanium.App.Properties
   ,   $file = Titanium.Filesystem
-  ,   $http = gb.utils.http;
+  ,   $http = gb.utils.http
+  ,   $haversine = gb.utils.haversine;
   
   /**
    * Place Model
@@ -132,10 +133,8 @@ if(!GB.Models)
       var locations = [], locs = this.data.locations, length = locs.length;
       
       if (this.locations.length < 1) {
-        console.log('Making Locations');
         for (var i = 0; i < length; i++) {
           locations.push(new GB.Models.Location(locs[i], this));
-          console.log('created location');
         }
       } else locations = this.locations;
         
@@ -276,8 +275,21 @@ if(!GB.Models)
     getPosition: function () {
       return {
         lat: this.data.lat,
-        lng: this.data.lng
+        lon: this.data.lng || this.data.lon
       };
+    },
+    
+    /**
+     * Return miles from position given.
+     * Haversine distance.
+     *              
+     * @param {Object} position Latitude and Longitude of questioned position.
+     * @return {Integer}
+     * @see gb.utils#haversine
+     */
+    getDistanceFrom: function (pos) {
+      this.data.distance = $haversine(pos, this.getPosition());
+      return this.data.distance;
     },
     
     /**
@@ -295,10 +307,58 @@ if(!GB.Models)
     },
     
     /**
+     * Converts this model down into a Titanium Row
      * 
+     * Seperated View Logic, this can be utilized in areas outside of a specific view.
+     * 
+     * @param {Boolean} row Titanium TableRow (Optional)
+     * @param {Object} callback called when a user clicks on this row
+     * @return {Object} Built Titanium TableRow
+     * @method
      */
-    toRow: function () {
+    toRow: function (border, callback) {
+      var $self = this, row;
+
+      row = $ui.createView({
+        color: 'black',
+        borderColor: '#eceece',
+        borderWidth: border ? 1 : 0,
+        background: 'white',
+        height: 50
+      });
+  
+      // Label
+      row.add($ui.createLabel({
+        left: '10dp',
+        top: '5dp',
+        text: this.parent.data.publicName,
+        color: '#555',
+        font: {
+          fontSize: 14,
+          fontStyle: 'normal',
+          fontWeight: 'bold'
+        }
+      }));
       
+      if (this.data.distance) {
+        row.add($ui.createLabel({
+          left: '15dp',
+          top: '24dp',
+          text: this.data.distance + " miles",
+          color: '#aaaaaa',
+          font: {
+            fontSize: 12,
+            fontStyle: 'normal',
+            fontWeight: 'bold'
+          }
+        }));
+      }
+  
+      row.addEventListener('click', function (e) {
+        callback.apply($self, [ e ]);
+      });
+  
+      return row;
     },
     
     /**

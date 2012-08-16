@@ -1,16 +1,22 @@
 // App Namespacing.
-var gb = {}, GB = gb;
+var gb = {}, GB = gb, $ui = Titanium.UI, $dp = Titanium.Platform.displayCaps;
 
 // Common JS Requires, Very Useful stuff.
 Ti.include('lib/core/components/class.js');
 Ti.include('lib/core/config.js');
 Ti.include('lib/core/utils.js');
 Ti.include('lib/core/aes.js');
+Ti.include('lib/core/style.js');
 
 // Components
 Ti.include('lib/core/components/view.js');
 Ti.include('lib/core/components/window.js');
 Ti.include('lib/core/components/qrcode.js');
+
+// Styles
+Ti.include('lib/styles/main.js');
+Ti.include('lib/styles/sidebar.js');
+Ti.include('lib/styles/qrcode.js');
 
 gb.qrcode = QRCode({
   typeNumber: 4,
