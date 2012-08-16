@@ -1,9 +1,10 @@
 
 gb.style = {
-  iphone: {},
-  retina: {},
+  base:    {},
+  iphone:  {},
+  retina:  {},
   android: {},
-  web: {},
+  web:     {},
   
   /**
    * It's magical. That's all there is to it.
@@ -15,35 +16,56 @@ gb.style = {
    * @param {Object} style
    * @param {Object} options
    */
-  get: function (name, style, options, context) {
-    var dest = null, base = null, build = true;
+  get: function (platform, style, options, context) {
+    var dest = null, base = null, build = true, name = 'base';
+    
+    function merger (n, str, o, swap) {
+      var x, y;
+      if(str.indexOf(' ') != -1) {
+        str = str.split(' ')
+        for (var i = 0; i < str.length; i++)
+        swap = swap ? true : i > 0 ? true : false,
+           x = (swap ? o : gb.utils.ref(gb.style[n], str[i])) || {}, 
+           y = (swap ? gb.utils.ref(gb.style[n], str[i]) : o) || {},
+           o = gb.utils.merge(x, y);
+      } else {
+        x = (swap ? o : gb.utils.ref(gb.style[n], str)) || {};
+        y = (swap ? gb.utils.ref(gb.style[n], str) : o) || {};
+        o = gb.utils.merge(x, y);
+      }
+      
+      return o;
+    }
     
     if (style == null) 
-      style = name, name = gb.style.type();
+      style = platform, platform = gb.style.type();
     
     if (typeof style === 'boolean') 
-      build = style, style = name, name = gb.style.type();
+      build = style, style = platform, platform = gb.style.type();
       
     if (typeof object === 'boolean') 
       build = object, object = null;
       
+    if (typeof context === 'boolean')
+      build = context, context = null;
+      
     if (({}).toString.call(style) === '[object Object]') {
       if (options) context = options, options = null;
-      options = style, style = name, name = gb.style.type();
+      options = style, style = platform, platform = gb.style.type();
     }
 
     if (!gb.style[name]) 
       return null;
-    else
-      orig = gb.utils.ref(gb.style[name], style);
+    else 
+      orig = merger(name, style, {}), orig = merger(platform, style, orig, true);
 
-    if (name == 'retina') 
-      base = gb.utils.ref(gb.style['iphone'], style), orig = gb.utils.merge(base, orig || {});
+    if (platform == 'retina') 
+      orig = merger('iphone', style, orig || {});
       
     if (!orig || orig == undefined) 
       return null;
     else
-      dest = gb.utils.merge(orig, options);
+      dest = gb.utils.merge(orig, options || {});
 
     if (!dest || dest == undefined) 
       return null;
@@ -64,9 +86,9 @@ gb.style = {
           dest[type] = dest[type] + 'dp';
         else if (dest[type] && dest[type] === 'platform')
           if (type == 'width') 
-            dest[type] = Titanium.Platform.displayCaps.platformWidth;
+            dest[type] = $dp.platformWidth;
           else if (type == 'height') 
-            dest[type] = Titanium.Platform.displayCaps.platformHeight;
+            dest[type] = $dp.platformHeight;
       });
     } else if (dest.nomagic) 
       delete dest.nomagic;
@@ -79,7 +101,7 @@ gb.style = {
         dest = $ui[type](dest);
         if (events) {
           for (var e in events) {
-            if (context) dest.addEventListener(e, function () { return events[e].apply(context, arguments); });
+            if (context) dest.addEventListener(e, function (evt) { events[e].call(this, evt, context); });
             else dest.addEventListener(e, events[e]);
           }
         }

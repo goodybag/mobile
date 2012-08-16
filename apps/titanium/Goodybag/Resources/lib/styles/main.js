@@ -1,5 +1,5 @@
 
-gb.style.iphone.main = {
+gb.style.base.main = {
   self: {
     top: 0,
     title: 'Main',

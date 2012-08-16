@@ -1,5 +1,5 @@
 
-gb.style.iphone.sidebar = {
+gb.style.base.sidebar = {
   self: {
     right: -$dp.platformWidth,
     width: 'platform',
@@ -105,8 +105,8 @@ gb.style.iphone.sidebar = {
     base: {
       build: { type: 'createImageView' },
       events: {
-        click: function (o) {
-          this.setActive(o.source.name);
+        click: function (args, ctx) {
+          ctx.setActive(args.source.name);
         }
       }
     },

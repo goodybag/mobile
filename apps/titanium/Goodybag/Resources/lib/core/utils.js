@@ -395,8 +395,8 @@ gb.utils = function (global) {
     if (d.events) de = d.events;
     if (o.events) oe = o.events;
     d = this.clone(d); o = this.clone(o);
-    if (d.events) d.events = de;
-    if (o.events) o.events = oe;
+    if (de) d.events = de;
+    if (oe) o.events = oe;
        
     for (p in o) {
       if (o == undefined) continue;

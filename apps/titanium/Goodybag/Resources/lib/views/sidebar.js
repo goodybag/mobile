@@ -17,22 +17,22 @@ GB.Views.add('sidebar', {
       background: gb.style.get('sidebar.bank.background'),
       
       slots: {
-        "01": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.one')),
-        "02": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.two')),
-        "03": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.three')),
-        "04": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.four')),
-        "05": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.five')),
-        "06": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.six')),
-        "07": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.seven')),
-        "08": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.eight')),
-        "09": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.nine')),
-        "10": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.ten')),
-        "11": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.eleven')),
-        "12": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.twelve')),
-        "13": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.thteen')),
-        "14": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.frteen')),
-        "15": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.ffteen')),
-        "16": gb.style.get('sidebar.bank.slots.base', gb.style.get('sidebar.bank.slots.sxteen'))
+        "01": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.one'),
+        "02": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.two'),
+        "03": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.three'),
+        "04": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.four'),
+        "05": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.five'),
+        "06": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.six'),
+        "07": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.seven'),
+        "08": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.eight'),
+        "09": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.nine'),
+        "10": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.ten'),
+        "11": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.eleven'),
+        "12": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.twelve'),
+        "13": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.thteen'),
+        "14": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.frteen'),
+        "15": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.ffteen'),
+        "16": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.sxteen')
       }
     },
     
@@ -42,10 +42,10 @@ GB.Views.add('sidebar', {
   Constructor: function () { 
     var $el = this.elements, $self = this.self;
     
-    $el.list.nearby     = gb.style.get('sidebar.list.base', gb.style.get('sidebar.list.nearby'), this);
-    $el.list.sponsored  = gb.style.get('sidebar.list.base', gb.style.get('sidebar.list.sponsored'), this);
-    $el.list.activity   = gb.style.get('sidebar.list.base', gb.style.get('sidebar.list.activity'), this);
-    $el.list.settings   = gb.style.get('sidebar.list.base', gb.style.get('sidebar.list.settings'), this);
+    $el.list.nearby     = gb.style.get('sidebar.list.base sidebar.list.nearby',     null, null, this);
+    $el.list.sponsored  = gb.style.get('sidebar.list.base sidebar.list.sponsored',  null, null, this);
+    $el.list.activity   = gb.style.get('sidebar.list.base sidebar.list.activity',   null, null, this);
+    $el.list.settings   = gb.style.get('sidebar.list.base sidebar.list.settings',   null, null, this);
     
     $self.add($el.header.background);
     $self.add($el.header.avatar.background);
@@ -96,9 +96,17 @@ GB.Views.add('sidebar', {
   setActive: function (area) {
     var $el = this.elements;
     
+    // General Cleanup
     this.clearActive();
     this.active = area;
+    $prop.setString('location', area);
+    
+    // Show The Area
+    GB.Views.show(area);
+    
+    // Swap and close the sidebar
     $el.list[area].image = gb.utils.getImage('screens/sidebar/items/' + area + '_active.png');
+    this.parent.toggleSidebar();
   },
   
   clearActive: function () {

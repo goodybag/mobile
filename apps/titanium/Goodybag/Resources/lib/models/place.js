@@ -175,38 +175,18 @@ if(!GB.Models)
     toRow: function (border, callback) {
       var $self = this;
 
-      row = $ui.createView({
-        color: 'black',
-        borderColor: '#eceece',
-        borderWidth: border ? 1 : 0,
-        background: 'white',
-        height: 50
+      var row = gb.style.get('nearby.place.row.view', {
+        borderWidth: border ? 1 : 0
       });
   
       // Label
-      row.add($ui.createLabel({
-        left: '10dp',
-        top: '5dp',
+      row.add(gb.style.get('nearby.place.row.name', {
         text: this.data.publicName,
-        color: '#555',
-        font: {
-          fontSize: 14,
-          fontStyle: 'normal',
-          fontWeight: 'bold'
-        }
       }));
       
       if (this.data.locations.length > 1) {
-        row.add($ui.createLabel({
-          left: '15dp',
-          top: '24dp',
-          text: this.data.locations.length + ' locations',
-          color: '#aaaaaa',
-          font: {
-            fontSize: 12,
-            fontStyle: 'normal',
-            fontWeight: 'bold'
-          }
+        row.add(gb.style.get('nearby.place.row.locations', {
+          text: this.data.locations.length + ' locations'
         }));
       }
   
@@ -319,38 +299,18 @@ if(!GB.Models)
     toRow: function (border, callback) {
       var $self = this, row;
 
-      row = $ui.createView({
-        color: 'black',
-        borderColor: '#eceece',
-        borderWidth: border ? 1 : 0,
-        background: 'white',
-        height: 50
+      row = gb.style.get('nearby.location.row.view', {
+        borderWidth: border ? 1 : 0
       });
   
       // Label
-      row.add($ui.createLabel({
-        left: '10dp',
-        top: '5dp',
-        text: this.parent.data.publicName,
-        color: '#555',
-        font: {
-          fontSize: 14,
-          fontStyle: 'normal',
-          fontWeight: 'bold'
-        }
+      row.add(gb.style.get('nearby.location.row.name', {
+        text: this.parent.data.publicName
       }));
       
       if (this.data.distance) {
-        row.add($ui.createLabel({
-          left: '15dp',
-          top: '24dp',
-          text: this.data.distance + " miles",
-          color: '#aaaaaa',
-          font: {
-            fontSize: 12,
-            fontStyle: 'normal',
-            fontWeight: 'bold'
-          }
+        row.add(gb.style.get('nearby.location.row.distance', {
+          text: this.data.distance + " miles"
         }));
       }
   

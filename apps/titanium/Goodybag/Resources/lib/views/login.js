@@ -3,82 +3,27 @@ gb.Windows.add('login', Window.extend({
   debug: true,
   
   elements: {
-    view: Titanium.UI.createScrollView({
-      contentWidth: 'auto',
-      contentHeight: 'auto',
-      top: 0,
-      width: 320,
-      backgroundImage: gb.utils.getImage('background.png'),
-      showVerticalScrollIndicator: true,
-      showHorizontalScrollIndicator: false
-    }),
-    
-    background: Titanium.UI.createImageView({
-      image: gb.utils.getImage('screens/login/background.png')
-    }),
+    view: gb.style.get('login.view'),
+    background: gb.style.get('login.background'),
     
     buttons: {
-      facebook: Titanium.UI.createImageView({
-        top: '150dp',
-        image: gb.utils.getImage('screens/login/facebook.png')
-      }),
-      
-      submit: Titanium.UI.createImageView({
-        top: '320dp',
-        image: gb.utils.getImage('screens/login/login.png')
-      }),
-      
-      register: Titanium.UI.createImageView({
-        top: '408dp',
-        image: gb.utils.getImage('screens/login/register.png')
-      })
+      facebook: gb.style.get('login.buttons.facebook'),
+      submit: gb.style.get('login.buttons.submit'),
+      register: gb.style.get('login.buttons.register')
     },
     
     inputs: {
-      background: Titanium.UI.createImageView({
-        top: '220dp',
-        image: gb.utils.getImage('screens/login/inputs.png')
-      }),
-      
-      email: Titanium.UI.createTextField({
-        top: '228dp',
-        left: '80dp',
-        width: '195dp',
-        height: '40dp',
-        backgroundImage: gb.utils.getImage('screens/login/transparent.png'),
-        hintText: 'Email',
-        color: '#888',
-        keyboardType: Titanium.UI.KEYBOARD_EMAIL,
-        borderStyle: Ti.UI.INPUT_BORDERSTYLE_NONE,
-        autocorrect: false,
-        autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_NONE
-      }),
-      
-      password: Titanium.UI.createTextField({
-        top: '270dp',
-        left: '80dp',
-        width: '195dp',
-        height: '40dp',
-        backgroundImage: gb.utils.getImage('screens/login/transparent.png'),
-        hintText: 'Password',
-        color: '#888',
-        borderStyle: Ti.UI.INPUT_BORDERSTYLE_NONE,
-        autocorrect: false,
-        autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_NONE,
-        passwordMask: true,
-      })
+      background: gb.style.get('login.fields.background'),
+      email: gb.style.get('login.fields.base login.fields.email'),
+      password: gb.style.get('login.fields.base login.fields.password')
     }
   },
   
-  window: Titanium.UI.createWindow({
-    title: 'Login',
-    top: 0.1,
-    backgroundImage: gb.utils.getImage('background.png')
-  }),
+  window: gb.style.get('login.window'),
   
   Constructor: function () {
     var $self = this, $el = this.elements;
-    
+
     // Background
     $el.view.add($el.background);
     

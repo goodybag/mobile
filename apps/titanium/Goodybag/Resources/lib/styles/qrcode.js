@@ -1,5 +1,5 @@
 
-gb.style.iphone.qrcode = {
+gb.style.base.qrcode = {
   self: {
     top: 54,
     backgroundImage: 'screens/main/background.png',
