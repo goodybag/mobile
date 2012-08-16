@@ -1652,7 +1652,7 @@ var QRCode = (function(global) {
     var cellSize;
 
     if (width === null && height === null) {
-      cellSize = 2;
+      cellSize = 1;
 
       if (!options.margin) {
         margin = cellSize * 4;

@@ -8,12 +8,8 @@ gb.style.iphone.qrcode = {
   
   code: {
     top: 54,
-    width: 250,
-    height: 250,
-    margin: 4
-  },
-  
-  label: {
-    
+    width: 280,
+    height: 280,
+    margin: 10
   }
 };
