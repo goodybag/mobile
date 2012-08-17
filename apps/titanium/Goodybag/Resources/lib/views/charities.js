@@ -9,7 +9,7 @@
     "base": $ui.createView({
       width: $ui.FILL
     , height: $ui.FILL
-    , top: '55dp'
+    , top: '54dp'
     , backgroundColor: '#ddd'
     , layout: 'vertical'
     })

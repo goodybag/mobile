@@ -9,7 +9,15 @@ GB.Views.add('nearby', {
   models: [],
   views: [],
   
-  elements: {},
+  elements: {
+    holder: gb.style.get('nearby.holder'),
+    
+    menu: {
+      base: gb.style.get('nearby.menu.base'),
+      nearby: new GB.StreamButton('Nearby Places'),
+      map: new GB.StreamButton('Map View')
+    }
+  },
   
   position: {
     lat: 30.266703,
@@ -21,7 +29,31 @@ GB.Views.add('nearby', {
    * @constructor
    */
   Constructor: function () {
-    var $this = this, store = $file.getFile($file.applicationDataDirectory, 'places.json');
+    var store = $file.getFile($file.applicationDataDirectory, 'places.json')
+    ,   $this = this
+    ,   $el = this.elements;
+    
+    this.self.add(this.elements.holder);
+    
+    $el.menu.nearby.addEventListener('click', function () { 
+      if ($el.places) $el.places.visible = true; else $this.showNearby(); 
+      if ($el.map) $el.map.visible = false;
+      $el.menu.nearby.activate();
+      $el.menu.map.deactivate();
+    });
+    
+    $el.menu.map.addEventListener('click', function () {
+      if ($el.places) $el.places.visible = false;
+      if ($el.map) $el.map.visible = true; else $this.showMap();
+      $el.menu.nearby.deactivate();
+      $el.menu.map.activate();
+    })
+    
+    $el.menu.base.add($ui.createView({ width: $ui.FILL, height: '6dp'}));
+    $el.menu.base.add($el.menu.nearby.base);
+    $el.menu.base.add($el.menu.map.base);
+    this.self.add($el.menu.base);
+    this.self.add($el.holder);
     
     this.fetch(function (error, results) {
       store.deleteFile();
@@ -39,9 +71,10 @@ GB.Views.add('nearby', {
   onShow: function (context) {
     var $this = this, $el = this.elements, locations;
     
+    if (this.location == 'Place') this.location = 'Nearby';
     this.fetch(function (error, results) {
       var i;
-      
+      $this.models = [];
       for (i = 0; i < results.data.length; i++) {
         $this.models.push(new GB.Models.Place(results.data[i]));
       }
@@ -51,20 +84,27 @@ GB.Views.add('nearby', {
   },
   
   showNearby: function () {
-    var $this = this, $el = this.elements, i, x, locations;
-    if($el.places) $this.self.remove($el.places);
-    $this.locations = [];
-    for(i = 0; i < $this.models.length; i++) {
-      locations = $this.models[i].getLocations();
+    var $this = this
+    ,   $el = this.elements
+    ,   i
+    ,   x
+    ,   locations;
+    
+    if($el.places) $el.holder.remove($el.places);
+    this.locations = [];
+    for(i = 0; i < this.models.length; i++) {
+      locations = this.models[i].getLocations();
       for(x = 0; x < locations.length; x++) {
-        $this.locations.push(locations[x]);
+        this.locations.push(locations[x]);
       }
     }
 
     $el.places = gb.style.get('nearby.places');
-    $this.self.add($el.places);
+    $el.holder.add($el.places);
+    $el.menu.nearby.activate();
+    $el.menu.map.deactivate();
     
-    $this.locations.sort(function (a, b) { 
+    this.locations.sort(function (a, b) { 
       return $this.compareLocations.apply($this, [a, b]); 
     });
     
@@ -74,14 +114,17 @@ GB.Views.add('nearby', {
       }));
     }
     
-    $this.location = 'Nearby';
+    this.location = 'Nearby';
   },
   
   showPlace: function (place, location) {
-    var $this = this, $el = this.elements, $ui = Titanium.UI, $save = $this.self.children[0];
-    var back;
+    var $this = this
+    ,   $el = this.elements
+    ,   $save = $this.self.children
+    ,   back;
     
-    $this.self.remove($save);
+    this.self.remove($save[0]);
+    this.self.remove($save[1]);
     $el.place = $ui.createScrollView();
     
     $el.place.add(gb.style.get('nearby.location.buttons.back', {}, {
@@ -100,14 +143,14 @@ GB.Views.add('nearby', {
   },
   
   showMap: function () {
-    var $this = this, $el = this.elements, locations;
+    var $this = this
+    ,   $el = this.elements
+    ,   annotations = [];
     
-    $this.annotations = [];
-    for (var i = 0; i < $this.models.length; i++) {
-      locations = $this.models[i].getLocations();
-      for(var x = 0; x < locations.length; x++) {
-        $this.annotations.push(locations[x].toAnnotation());
-      }
+    if ($el.map) $el.holder.remove($el.map);
+
+    for (i = 0; i < this.locations.length; i++) {
+      annotations.push(this.locations[i].toAnnotation(function () {}));
     }
 
     $el.map = Titanium.Map.createView({
@@ -120,10 +163,12 @@ GB.Views.add('nearby', {
       animate: true,
       regionFit: true,
       userLocation: true,
-      annotations: $this.annotations
+      annotations: annotations
     });
     
-    $this.self.add($el.map);
+    $el.holder.add($el.map);
+    $el.menu.nearby.deactivate();
+    $el.menu.map.activate();
   },
   
   /**

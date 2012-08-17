@@ -4,7 +4,7 @@ var $http = gb.utils.http
 
 GB.Views.add('stream', {
   self: Titanium.UI.createView({
-    top: '55dp'
+    top: '54dp'
   , backgroundColor: '#ddd'
   , width: $ui.FILL
   }),
@@ -24,6 +24,7 @@ GB.Views.add('stream', {
     , bottom: 0
     , backgroundImage: gb.utils.getImage("screens/stream/Menu.png")
     }),
+    
     global: new GB.StreamButton('Global Activity'),
     my: new GB.StreamButton('My Activity')
   },

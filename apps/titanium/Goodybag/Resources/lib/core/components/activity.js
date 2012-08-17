@@ -15,7 +15,8 @@
   
   var constructor = function(model){
     this.model = model;
-    console.log(this.model.getSentence());
+    this.tries = 0;
+    
     var
       attr    = this.model.attributes
     , $this   = this
@@ -24,8 +25,12 @@
               ? ("-secure/" + escape(attr.who.id || attr.who.screenName))
               : "/000000000000000000000000"
     ;
-
-   this.views = {
+    
+    this.id = (attr.who.id || attr.who.screenName)
+    ? escape(attr.who.id || attr.who.screenName)
+    : '000000000000000000000000';
+    
+    this.views = {
       // Main view wrapper
       base: $ui.createView({
         width: $ui.FILL
@@ -36,6 +41,8 @@
       // Profile picture
     , image: $ui.createImageView({
         image: "https://s3.amazonaws.com/goodybag-uploads/consumers" + imgSrc + "-128.png"
+      , decodeRetries: 1
+      , defaultImage: gb.utils.getImage('avatar.png')
       , width: "42dp"
       , height: "42dp"
       , title: attr.who.screenName
@@ -44,8 +51,12 @@
       , zIndex: 1
       , borderRadius: 5
       , events: {
-          error: function(e){
-            $this.setToDefaultImage();
+          error: function (e) {
+            if ($this.tries == 2) return $this.setToDefaultImage();
+            if ($this.tries == 1) $this.setInsecureSubdomainImage($this.id);
+            if ($this.tries == 0) $this.setSubdomainImage($this.id);
+            
+            $this.tries++;
           }
         }
       })
@@ -93,7 +104,19 @@
   
   constructor.prototype = {
     setToDefaultImage: function(){
-      this.views.image.setImage("https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-85.png");
+      this.views.image.setImage("https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-128.png");
+    },
+    
+    setSubdomainImage: function (id) {
+      this.views.image.setImage("https://goodybag-uploads.s3.amazonaws.com/consumers-secure/" + id + "-128.png");
+    },
+    
+    setInsecureSubdomainImage: function (id) {
+      this.views.image.setImage("https://goodybag-uploads.s3.amazonaws.com/consumers/" + id + "-128.png");
+    },
+    
+    setInsecureImage: function (id) {
+      this.views.image.setImage("https://s3.amazonaws.com/goodybag-uploads/consumers/" + id + "-128.png");
     }
   };
   

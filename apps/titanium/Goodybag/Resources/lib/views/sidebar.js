@@ -94,15 +94,18 @@ GB.Views.add('sidebar', {
   },
   
   setActive: function (area) {
-    var $el = this.elements;
+    var $el = this.elements, view;
     
     // General Cleanup
     this.clearActive();
+    if (area == 'activity') view = 'stream';
+    else if (area == 'sponsored') view = 'charities';
+    else view = area;
     this.active = area;
     $prop.setString('location', area);
     
     // Show The Area
-    GB.Views.show(area);
+    GB.Views.show(view);
     
     // Swap and close the sidebar
     $el.list[area].image = gb.utils.getImage('screens/sidebar/items/' + area + '_active.png');

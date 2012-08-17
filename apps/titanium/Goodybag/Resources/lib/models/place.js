@@ -341,6 +341,8 @@ if(!GB.Models)
       pin.addEventListener('click', function (e) { 
         onClick.apply(this.location, [ e, this.parent ]);
       });
+      
+      return pin;
     }
   });
 })();

@@ -6,10 +6,26 @@ gb.style.base.nearby = {
     build: { type: 'createView' }
   },
   
+  holder: {
+    backgroundColor: 'white',
+    build: { type: 'createView' }
+  },
+  
   places: {
     backgroundColor: 'white',
     layout: 'vertical',
     build: { type: 'createScrollView' }
+  },
+  
+  menu: {
+    base: {
+      layout: 'horizontal',
+      height: 44,
+      bottom: 0,
+      zIndex: 4,
+      backgroundImage: 'screens/stream/Menu.png',
+      build: { type: 'createView' }
+    }
   },
   
   place: {
@@ -66,7 +82,8 @@ gb.style.base.nearby = {
         events: {
           click: function (args, ctx) {
             ctx.$this.self.remove(ctx.$this.elements.place);
-            ctx.$this.self.add(ctx.save);
+            ctx.$this.self.add(ctx.save[0]);
+            ctx.$this.self.add(ctx.save[1]);
           }
         }
       }
