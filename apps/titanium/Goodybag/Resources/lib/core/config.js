@@ -27,19 +27,21 @@ gb.config = function (global, fb, storage) {
   // debugging modes
   this.debug = true;
   this.development = false;
+  var domain = this.development ? 'local' : 'www';
 
   // Api URLS
   this.api = {};
-  this.api.auth = 'http://' + (this.development ? 'local' : 'www') + '.goodybag.com/api/consumers/login';
-  this.api.facebookAuth = 'http://' + (this.development ? 'local' : 'www') + '.goodybag.com/api/consumers/fblogin';
-  this.api.participating = 'http://' + (this.development ? 'local' : 'www') + '.goodybag.com/api/consumers/participatingBusinesses?limit=';
+  this.api.auth = 'http://' + domain + '.goodybag.com/api/consumers/login';
+  this.api.register = 'http://' + domain + '.goodybag.com/api/consumers/register';
+  this.api.facebookAuth = 'http://' + domain + '.goodybag.com/api/consumers/fblogin';
+  this.api.participating = 'http://' + domain + '.goodybag.com/api/consumers/participatingBusinesses?limit=';
   this.api.consumer = {};
-  this.api.consumer.self = 'http://' + (this.development ? 'local' : 'www') + '.goodybag.com/api/consumers/session'
+  this.api.consumer.self = 'http://' + domain + '.goodybag.com/api/consumers/session'
   this.api.stream = {};
-  this.api.stream.me = 'http://' + (this.development ? 'local' : 'www') + '.goodybag.com/api/consumers/me/stream';
-  this.api.stream.global = 'http://' + (this.development ? 'local' : 'www') + '.goodybag.com/api/consumers/streams';
-  this.api.charities = 'http://' + (this.development ? 'local' : 'www') + '.goodybag.com/api/consumers/businesses?charity=1'
-  this.api.selectCharity = 'http://' + (this.development ? 'local' : 'www') + '.goodybag.com/api/consumers/self/charity/'
+  this.api.stream.me = 'http://' + domain + '.goodybag.com/api/consumers/me/stream';
+  this.api.stream.global = 'http://' + domain + '.goodybag.com/api/consumers/streams';
+  this.api.charities = 'http://' + domain + '.goodybag.com/api/consumers/businesses?charity=1'
+  this.api.selectCharity = 'http://' + domain + '.goodybag.com/api/consumers/self/charity/'
   
   // Secret passphrase for files.
   this.secret = 'G00D13B4GR0X!!';

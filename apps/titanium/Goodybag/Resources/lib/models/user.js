@@ -115,7 +115,7 @@ if(!GB.Models)
         if (error) {
           callback(JSON.parse(error).message);
         } else {
-          consumer = JSON.parse(json);
+          var consumer = JSON.parse(json);
           
           gb.utils.debug('[User] Got back the consumer object.');
           
@@ -151,6 +151,54 @@ if(!GB.Models)
         }
       });
     },
+    
+    /**
+     * Register Via Email
+     * 
+     * @param {Object}    data Consumer data
+     * @param {Function}  Callback when server responds
+     */
+    
+    register: function (user, callback) {
+      var self = this;
+      gb.utils.debug('[User] Attempting to register.');
+      $http.post(gb.config.api.register, user, function(error, json){
+        if (error) return callback(JSON.parse(error).message);
+        var consumer = JSON.parse(json);
+          
+        gb.utils.debug('[User] Got back the data object.');
+        
+        if (consumer.error) return callback(consumer.error);
+        
+        gb.utils.debug('[User] No errors, attempting to parse cookies and setup files.');
+        
+        // Grab Cookies and store session
+        cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
+        self._setSession(cookie.get('connect.sid'));
+        
+        // Store here
+        self.authenticated = true;
+        gb.utils.debug('[User] Creating consumer file with encrypted data.');
+        
+        // Store Consumer
+        self._setConsumer(consumer);
+        self.data.authMethod = GB.Models.User.Methods.EMAIL;
+        
+        // Setup Avatars
+        self._setAvatar();
+        
+        gb.utils.debug('[User] Success, returning to callback.');
+        
+        // Cleanup
+        cookie = null;
+        
+        // For new user specific state
+        self.newlyRegistered = true;
+        
+        // Callback
+        callback(null, self);
+      });
+    },
   
     /**
      * Facebook Authentication Method
@@ -183,7 +231,7 @@ if(!GB.Models)
         if (error) {
           callback("Couldn't Connect to Goodybag Account.");
         } else {
-          consumer = JSON.parse(json);
+          var consumer = JSON.parse(json);
           
           if (consumer.error) {
             callback(consumer.error.message); return;
@@ -369,7 +417,7 @@ if(!GB.Models)
      * @return {String}
      */
     getCharityId: function () {
-      return this.data.charity.id;
+      return this.data.charity ? this.data.charity.id : null;
     },
   
     /**
