@@ -34,6 +34,7 @@
     , top: 10
     , layout: 'vertical'
     , borderRadius: 10
+    , borderWidth: '1dp'
     , borderColor: '#2e6284'
     , backgroundColor: '#fff'
     }

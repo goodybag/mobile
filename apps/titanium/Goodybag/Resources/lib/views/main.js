@@ -69,6 +69,8 @@ GB.Windows.add('main', Window.extend({
   onShow: function () {
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $user = gb.consumer, $url, written = true;
     
+    if (gb.consumer.newlyRegistered) this.location = "charities";
+    
     // Direct Pages, then delegate background tasks.
     GB.Views.show(this.location);
     

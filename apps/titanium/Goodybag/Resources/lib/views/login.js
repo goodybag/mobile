@@ -3,37 +3,11 @@ gb.Windows.add('login', Window.extend({
   debug: true,
   
   elements: {
-<<<<<<< HEAD
     view: gb.style.get('login.view'),
     background: gb.style.get('login.background'),
-=======
-    view: Titanium.UI.createView({
-      contentWidth: 'auto',
-      contentHeight: 'auto',
-      top: 0,
-      width: 320
-    }),
     
-    loginWrapper: Titanium.UI.createScrollView({
-      width: Titanium.UI.FILL,
-      height: Titanium.UI.FILL,
-      showVerticalScrollIndicator: true,
-      showHorizontalScrollIndicator: false,
-      zIndex: 2,
-      backgroundImage: gb.utils.getImage('background.png')
-    }),
-    
-    background: Titanium.UI.createImageView({
-      image: gb.utils.getImage('screens/login/background.png')
-    }),
->>>>>>> register
-    
-    registerWrapper: Titanium.UI.createView({
-      width: Titanium.UI.FILL
-    , height: Titanium.UI.SIZE
-    , top: 0
-    , zIndex: 1
-    }),
+    loginWrapper: gb.style.get('login.loginWrapper'),
+    registerWrapper: gb.style.get('login.registerWrapper'),
     
     buttons: {
       facebook: gb.style.get('login.buttons.facebook'),
@@ -52,9 +26,6 @@ gb.Windows.add('login', Window.extend({
   
   Constructor: function () {
     var $self = this, $el = this.elements;
-<<<<<<< HEAD
-
-=======
     
     $el.view.add($el.loginWrapper)
     
@@ -69,7 +40,6 @@ gb.Windows.add('login', Window.extend({
       gb.Windows.show('main');
     });
     
->>>>>>> register
     // Background
     $el.loginWrapper.add($el.background);
     
