@@ -7,5 +7,17 @@
     , layout: 'vertical'
     , showVerticalScrollIndicator: true
     }
+    
+  , animation: {
+      "fadeIn": {
+        opacity: 1
+      , duration: 600
+      }
+      
+    , "fadeOut": {
+        opacity: 0
+      , duration: 600
+      }
+    }
   };
 })();
