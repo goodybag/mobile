@@ -21,7 +21,7 @@
     , $this   = this
     , post    = 0
     , imgSrc  = (attr.who.id || attr.who.screenName)
-              ? ("-secure/" + escape(attr.who.id || attr.who.screenName))
+              ? ("-secure/" + escape(attr.who.screenName))
               : "/000000000000000000000000"
     ;
 

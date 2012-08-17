@@ -3,18 +3,31 @@ gb.Windows.add('login', Window.extend({
   debug: true,
   
   elements: {
-    view: Titanium.UI.createScrollView({
+    view: Titanium.UI.createView({
       contentWidth: 'auto',
       contentHeight: 'auto',
       top: 0,
-      width: 320,
-      backgroundImage: gb.utils.getImage('background.png'),
+      width: 320
+    }),
+    
+    loginWrapper: Titanium.UI.createScrollView({
+      width: Titanium.UI.FILL,
+      height: Titanium.UI.FILL,
       showVerticalScrollIndicator: true,
-      showHorizontalScrollIndicator: false
+      showHorizontalScrollIndicator: false,
+      zIndex: 2,
+      backgroundImage: gb.utils.getImage('background.png')
     }),
     
     background: Titanium.UI.createImageView({
       image: gb.utils.getImage('screens/login/background.png')
+    }),
+    
+    registerWrapper: Titanium.UI.createView({
+      width: Titanium.UI.FILL
+    , height: Titanium.UI.SIZE
+    , top: 0
+    , zIndex: 1
     }),
     
     buttons: {
@@ -79,18 +92,31 @@ gb.Windows.add('login', Window.extend({
   Constructor: function () {
     var $self = this, $el = this.elements;
     
+    $el.view.add($el.loginWrapper)
+    
+    // Registration
+    gb.Views.get('register').self.setVisible(true);
+    this.elements.registerWrapper.add(gb.Views.get('register').self);
+    $el.view.add(this.elements.registerWrapper);
+    gb.Views.get('register').setOnBackCallback(function(){
+      $self.hideRegistration();
+    });
+    gb.Views.get('register').setOnRegisterCallback(function(){
+      gb.Windows.show('main');
+    });
+    
     // Background
-    $el.view.add($el.background);
+    $el.loginWrapper.add($el.background);
     
     // Login Form
-    $el.view.add($el.inputs.background);
-    $el.view.add($el.inputs.email);
-    $el.view.add($el.inputs.password);
+    $el.loginWrapper.add($el.inputs.background);
+    $el.loginWrapper.add($el.inputs.email);
+    $el.loginWrapper.add($el.inputs.password);
     
     // Buttons
-    $el.view.add($el.buttons.facebook);
-    $el.view.add($el.buttons.submit);
-    $el.view.add($el.buttons.register);
+    $el.loginWrapper.add($el.buttons.facebook);
+    $el.loginWrapper.add($el.buttons.submit);
+    $el.loginWrapper.add($el.buttons.register);
     
     // Button Events
     $el.buttons.facebook.addEventListener('click', function (e) {
@@ -148,24 +174,36 @@ gb.Windows.add('login', Window.extend({
     // Input Events
     $el.inputs.email.addEventListener('return', function (e) {
       $el.inputs.password.focus();
-      $el.view.scrollTo(0, 80);
+      $el.loginWrapper.scrollTo(0, 80);
     });
     
     $el.inputs.password.addEventListener('return', function (e) {
-      $el.view.scrollTo(0, 0);
+      $el.loginWrapper.scrollTo(0, 0);
     });
     
     $el.inputs.password.addEventListener('blur', function (e) {
-      $el.view.scrollTo(0, 0);
+      $el.loginWrapper.scrollTo(0, 0);
     });
     
-    // Add Scroll View to window
+    $el.buttons.register.addEventListener('click', function (e) {
+      $self.showRegistration();
+    });
+    
+    // Add Main View to window
     this.add($el.view);
     
     // Force Orientation
     this.window.orientationModes = [ Ti.UI.PORTRAIT ];
     
     return this;
+  },
+  
+  showRegistration: function () {
+    this.elements.registerWrapper.setZIndex(3);
+  },
+  
+  hideRegistration: function () {
+    this.elements.registerWrapper.setZIndex(1);
   },
   
   onHide: function () {

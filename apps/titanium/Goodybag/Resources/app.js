@@ -25,9 +25,11 @@ Ti.include('lib/core/components/pull-to-refresh/pull-to-refresh.js');
 Ti.include('lib/core/components/charity-view.js');
 
 // Styles
+Ti.include('lib/styles/common.js');
 Ti.include('lib/styles/main.js');
 Ti.include('lib/styles/sidebar.js');
 Ti.include('lib/styles/qrcode.js');
+Ti.include('lib/styles/register.js');
 
 gb.qrcode = QRCode({
   typeNumber: 4,
@@ -42,6 +44,7 @@ Ti.include('lib/models/activity.js');
 gb.consumer = new GB.Models.User();
 
 // Views
+Ti.include('lib/views/register.js');
 Ti.include('lib/views/login.js');
 Ti.include('lib/views/main.js');
 
