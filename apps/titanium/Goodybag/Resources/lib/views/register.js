@@ -28,6 +28,9 @@
     Constructor: function () {
       var $this = this;
       
+      this.backBtn = new GB.Button('Back');
+      this.registerBtn = new GB.Button('Register');
+      
       this.onBackCallback = function(){};
       this.onRegisterCallback = function(){};
       
@@ -61,24 +64,8 @@
           
         , "nav": {
             "base": $ui.createView(gb.style.get('register.nav'))
-          , "back": $ui.createButton({
-              title: "Back"
-            , style: $ui.iPhone.SystemButtonStyle.BORDERED
-            , events: {
-                click: function(e){
-                  $this.triggerOnBack(e)
-                }
-              }
-            })
-          , "register": $ui.createButton({
-              title: "Register"
-            , style: $ui.iPhone.SystemButtonStyle.BORDERED
-            , events: {
-                click: function(e){
-                  $this.register()
-                }
-              }
-            })
+          , "back": this.backBtn.views.base
+          , "register": this.registerBtn.views.base
           }
         }
       };

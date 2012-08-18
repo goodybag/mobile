@@ -3,20 +3,7 @@
   
   gb.style.iphone.welcome = {
     "base": {
-      width: $ui.FILL
-    , height: $ui.FILL
-    , backgroundImage: 'background.png'
-    // , backgroundGradient: {
-        // type: 'radial'
-      // , startPoint: { x: 50, y: 50 }
-      // , endPoint: { x: 50, y: 50 }
-      // , colors: [ 'transparent', 'white']
-      // , startRadius: '90%'
-      // , endRadius: 0
-      // , backfillStart: true
-      // }
-    , zIndex: 10
-    , layout: 'vertical'
+      layout: 'vertical'
     }
     
   , "header": {

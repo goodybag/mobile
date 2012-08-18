@@ -18,16 +18,6 @@ Ti.include('lib/core/aes.js');
 Ti.include('lib/core/ui.js');
 Ti.include('lib/core/style.js');
 
-// Components
-Ti.include('lib/core/components/view.js');
-Ti.include('lib/core/components/window.js');
-Ti.include('lib/core/components/qrcode.js');
-Ti.include('lib/core/components/infini-scroll.js');
-Ti.include('lib/core/components/activity.js');
-Ti.include('lib/core/components/stream-button.js');
-Ti.include('lib/core/components/pull-to-refresh/pull-to-refresh.js');
-Ti.include('lib/core/components/charity-view.js');
-
 // Styles
 Ti.include('lib/styles/common.js');
 Ti.include('lib/styles/login.js');
@@ -37,6 +27,17 @@ Ti.include('lib/styles/qrcode.js');
 Ti.include('lib/styles/register.js');
 Ti.include('lib/styles/nearby.js');
 Ti.include('lib/styles/welcome.js');
+
+// Components
+Ti.include('lib/core/components/view.js');
+Ti.include('lib/core/components/window.js');
+Ti.include('lib/core/components/qrcode.js');
+Ti.include('lib/core/components/infini-scroll.js');
+Ti.include('lib/core/components/activity.js');
+Ti.include('lib/core/components/stream-button.js');
+Ti.include('lib/core/components/pull-to-refresh/pull-to-refresh.js');
+Ti.include('lib/core/components/charity-view.js');
+Ti.include('lib/core/components/button.js');
 
 gb.qrcode = QRCode({
   typeNumber: 4,
