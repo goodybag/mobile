@@ -15,6 +15,7 @@ gb.ui.color = {
 , pink:         '#D357BA'
 , blue:         '#57A0D3'
 , blueBright:   '#35C8F6'
+, blueDark:     '#062F49'
 };
 
 gb.ui.color.base = gb.ui.color.gray;

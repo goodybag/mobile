@@ -8,14 +8,29 @@ gb.style.base.login = {
   },
   
   view: {
-    top: 0,
-    width: 320,
     contentWidth: 'auto',
     contentHeight: 'auto',
-    backgroundImage: 'background.png',
+    top: 0,
+    width: 320,
+    build: { type: 'createView' }
+  },
+  
+  loginWrapper: {
+    width: Titanium.UI.FILL,
+    height: Titanium.UI.FILL,
     showVerticalScrollIndicator: true,
     showHorizontalScrollIndicator: false,
+    zIndex: 2,
+    backgroundImage: 'background.png',
     build: { type: 'createScrollView' }
+  },
+  
+  registerWrapper: {
+    width: Titanium.UI.FILL,
+    height: Titanium.UI.SIZE,
+    top: 0,
+    zIndex: 1,
+    build: { type: 'createView' }
   },
   
   background: {

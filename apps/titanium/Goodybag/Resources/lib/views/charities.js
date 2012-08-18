@@ -200,11 +200,6 @@
         $this.hasLoaded = true;
         $this.showData(data);
       });
-      
-      // setTimeout(function(){
-        // $this.views.charityList.base.hide();
-        // $this.views.charityDetails.base.show();
-      // }, 6000);
     },
     
     onCharitySelect: function(charity){

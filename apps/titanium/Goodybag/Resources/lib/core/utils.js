@@ -437,11 +437,16 @@ gb.utils = function (global) {
   }
   
   this.extend = function(obj) {
-    forEach(slice.call(arguments, 1), function(source) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    console.log(args);
+    for (var i = args.length - 1, source; i >= 0; i--){
+      source = args[i];
+      console.log(source);
       for (var prop in source) {
         obj[prop] = source[prop];
       }
-    });
+    }
     return obj
   }
   
