@@ -28,11 +28,17 @@
     Constructor: function () {
       var $this = this;
       
-      this.backBtn = new GB.Button('Back');
-      this.registerBtn = new GB.Button('Register');
-      
       this.onBackCallback = function(){};
       this.onRegisterCallback = function(){};
+      
+      this.backBtn = new GB.Button('Back');
+      this.registerBtn = new GB.Button('Register');
+      this.backBtn.addEventListener('click', function(e){
+        $this.triggerOnBack(e);
+      });
+      this.registerBtn.addEventListener('click', function(e){
+        $this.triggerOnBack(e);
+      })
       
       this.regs = {
         alpha: /[^a-z]/i
