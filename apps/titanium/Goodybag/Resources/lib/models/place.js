@@ -93,6 +93,26 @@ if(!GB.Models)
     getUrl: function () {
       return this.data.url;
     },
+    
+    getGoodies: function (callback) {
+      var url = "https://biz.goodybag.com/api/businesses/" + this.data._id + "/goodies";
+      $http.get(url, function (error, results) {
+        if (error) return callback(null);
+        results = JSON.parse(results).data;
+        return callback(results);
+      });
+    },
+    
+    getPointsEarned: function (barcode, callback) {
+      var url = "https://biz.goodybag.com/api/businesses/"+ this.data._id +"/barcodes/" + barcode + "/statistics/karmaPoints";
+      $http.get(url, function (error, results) {
+        if (error) return callback(null);
+        results = JSON.parse(results).data;
+        if (!results.data) return callback(0);
+        results = results.data;
+        return callback(results.karmaPoints.earned);
+      });
+    },
   
     /**
      * Fetches or grabs the currently stored business image, if the image does not exist fetch and store the correct 
@@ -299,17 +319,17 @@ if(!GB.Models)
     toRow: function (border, callback) {
       var $self = this, row;
 
-      row = gb.style.get('nearby.location.row.view', {
+      row = gb.style.get('nearby.loc.row.view', {
         borderWidth: border ? 1 : 0
       });
   
       // Label
-      row.add(gb.style.get('nearby.location.row.name', {
+      row.add(gb.style.get('nearby.loc.row.name', {
         text: this.parent.data.publicName
       }));
       
       if (this.data.distance) {
-        row.add(gb.style.get('nearby.location.row.distance', {
+        row.add(gb.style.get('nearby.loc.row.distance', {
           text: this.data.distance + " miles"
         }));
       }
@@ -329,6 +349,8 @@ if(!GB.Models)
      * @param {Object} onClick
      */
     toAnnotation: function (onClick) {
+      var $this = this;
+      
       var pin = Titanium.Map.createAnnotation({
         latitude: this.data.lat,
         longitude: this.data.lng,
@@ -339,7 +361,7 @@ if(!GB.Models)
       });
       
       pin.addEventListener('click', function (e) { 
-        onClick.apply(this.location, [ e, this.parent ]);
+        onClick.call($this, e);
       });
       
       return pin;

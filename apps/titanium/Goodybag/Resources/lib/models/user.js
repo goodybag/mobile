@@ -369,7 +369,7 @@ if(!GB.Models)
      * @return {String}
      */
     getCharityId: function () {
-      return this.data.charity.id;
+      return (this.data.charity) ? this.data.charity.id : null;
     },
   
     /**
@@ -377,7 +377,7 @@ if(!GB.Models)
      * @return {[type]} [description]
      */
     getCharityName: function () {
-      return this.data.charity.name;
+      return (this.data.charity) ? this.data.charity.name : null;
     },
   
     /**
@@ -385,7 +385,7 @@ if(!GB.Models)
      * @return {Boolean}
      */
     hasCharity: function () {
-      return !!(this.data.charity.id);
+      return (this.data.charity) ? !!(this.data.charity.id) : null;
     },
     
     /**

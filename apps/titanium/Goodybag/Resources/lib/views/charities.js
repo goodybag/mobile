@@ -194,6 +194,7 @@
     onShow: function () {
       if (this.hasLoaded) return;
       var $this = this;
+      
       this.fetchData(function(error, data){
         if (error) return console.log(error);
         $this.hasLoaded = true;
@@ -254,12 +255,16 @@
     
     showData: function (data) {
       var charity, list = this.views.charityList.base, $this = this;
+      console.log('showing charities');
       for (var i = 0; i < data.length; i++) {
         charity = new GB.CharityView(data[i], {
           onSelect: function(charity, e){ $this.onCharitySelect(charity, e) }
         , onDetails: function(charity, e){ $this.onCharityDetails(charity, e) }
         , selected: data[i]._id === gb.consumer.getCharityId()
         });
+        
+        console.log(charity);
+        
         if (charity.selected) this.selected = charity;
         list.add(charity.views.base);
       }

@@ -21,14 +21,10 @@
       attr    = this.model.attributes
     , $this   = this
     , post    = 0
-    , imgSrc  = (attr.who.id || attr.who.screenName)
-              ? ("-secure/" + escape(attr.who.id || attr.who.screenName))
+    , imgSrc  = attr.who.screenName
+              ? "-secure/" + escape(attr.who.screenName)
               : "/000000000000000000000000"
     ;
-    
-    this.id = (attr.who.id || attr.who.screenName)
-    ? escape(attr.who.id || attr.who.screenName)
-    : '000000000000000000000000';
     
     this.views = {
       // Main view wrapper
@@ -52,11 +48,7 @@
       , borderRadius: 5
       , events: {
           error: function (e) {
-            if ($this.tries == 2) return $this.setToDefaultImage();
-            if ($this.tries == 1) $this.setInsecureSubdomainImage($this.id);
-            if ($this.tries == 0) $this.setSubdomainImage($this.id);
-            
-            $this.tries++;
+            return $this.setToDefaultImage();
           }
         }
       })

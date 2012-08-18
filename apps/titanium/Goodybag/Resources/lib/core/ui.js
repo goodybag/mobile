@@ -5,17 +5,16 @@ if (!gb.ui)
   
   
 gb.ui.color = {
-  white: '#fff'
-, black: '#111'
-, grayDarker: '#444'
-, grayDark: '#666'
-, gray: '#888'
-, grayLight: '#9c9c9c'
-, grayLighter: '#bbb'
-
-, pink: '#d357ba'
-, blue: '#57a0d3'
-, blueBright: '#35c8f6'
+  white:        '#FFFFFF'
+, black:        '#111111'
+, grayDarker:   '#444444'
+, grayDark:     '#666666'
+, gray:         '#888888'
+, grayLight:    '#9C9C9C'
+, grayLighter:  '#BBBBBB'
+, pink:         '#D357BA'
+, blue:         '#57A0D3'
+, blueBright:   '#35C8F6'
 };
 
 gb.ui.color.base = gb.ui.color.gray;
