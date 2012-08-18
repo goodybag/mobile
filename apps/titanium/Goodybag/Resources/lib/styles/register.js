@@ -10,7 +10,7 @@
     , height: $ui.SIZE
     , left: 10
     , right: 10
-    , top: 126
+    , top: 140
     , layout: 'vertical'
     }
     
@@ -79,10 +79,21 @@
     }
     
   , "nav": {
-      width: $ui.FILL
-    , height: $ui.SIZE
-    , top: 8
-    , layout: 'horizontal'
+      "base": {
+        width: $ui.FILL
+      , height: $ui.SIZE
+      , top: 10
+      }     
+    , "left": {
+        left: 0
+      , width: $ui.SIZE
+      , height: $ui.SIZE
+      }
+    , "right": {
+        right: 0
+      , width: $ui.SIZE
+      , height: $ui.SIZE
+      }
     }
   };
 })();

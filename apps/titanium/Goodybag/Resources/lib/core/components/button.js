@@ -207,6 +207,7 @@
         , height: $ui.SIZE
         , text: this.text
         , textAlign: 'center'
+        , font: base.font
         , color: base.color
         , shadowOffset: base.shadowOffset
         , shadowColor: base.shadowColor

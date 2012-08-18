@@ -31,13 +31,15 @@
       this.onBackCallback = function(){};
       this.onRegisterCallback = function(){};
       
-      this.backBtn = new GB.Button('Back');
+      this.backBtn = new GB.Button('Back', gb.utils.extend(
+        { width: 80 }
+      , gb.style.get('common.buttons.gray')));
       this.registerBtn = new GB.Button('Register');
       this.backBtn.addEventListener('click', function(e){
         $this.triggerOnBack(e);
       });
       this.registerBtn.addEventListener('click', function(e){
-        $this.triggerOnBack(e);
+        $this.register(e);
       })
       
       this.regs = {
@@ -69,9 +71,15 @@
           }
           
         , "nav": {
-            "base": $ui.createView(gb.style.get('register.nav'))
-          , "back": this.backBtn.views.base
-          , "register": this.registerBtn.views.base
+            "base": $ui.createView(gb.style.get('register.nav.base'))
+          , "left": {
+              "base": $ui.createView(gb.style.get('register.nav.left'))
+            , "btn": this.backBtn.views.base
+            }
+          , "right": {
+              "base": $ui.createView(gb.style.get('register.nav.right'))
+            , "btn": this.registerBtn.views.base
+            }
           }
         }
       };
@@ -171,10 +179,10 @@
           if (!this.regs.email.test(value))
                                  errors.push({ field: key, message: "Invalid email address" });
         break;
-        case 'password':
+        case 'password': case 'passwordConfirm': 
           if (value.length < 5)  errors.push({ field: key, message: "Password must be at least 5 characters" });
         break;
-        case 'passwordConfirm': default: break;
+        default: break;
       }
       callback(errors);
     },

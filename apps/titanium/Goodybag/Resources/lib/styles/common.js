@@ -68,7 +68,7 @@
         , borderColor: '#165b87'
         , color: '#fff'
         , font: {
-            fontSize: 12
+            fontSize: 13
           , fontWeight: 'bold'
           }
         , shadowOffset: { x: 0, y: -1 }
@@ -82,11 +82,11 @@
           }
         , topShadow: {
             color: '#fff'
-          , opacity: 0.1
+          , opacity: 0.2
           }
         , bottomShadow: {
             color: '#fff'
-          , opacity: 0.07
+          , opacity: 0.08
           }
         }
       , "active": {
@@ -99,6 +99,50 @@
         , topShadow: {
             color: '#0667a0'
           , opacity: 1
+          }
+        , opacity: 1
+        }
+      , "disabled": {
+          opacity: 0.4
+        }
+      }
+      
+    , "gray": {
+        "default": {
+          width: '100dp'
+        , height: '40dp'
+        , borderRadius: 5
+        , borderWidth: 1
+        , borderColor: '#1d70a5'
+        , color: gb.ui.color.grayDark
+        , font: {
+            fontSize: 13
+          , fontWeight: 'bold'
+          }
+        , shadowOffset: { x: 0, y: 1 }
+        , shadowColor: gb.ui.color.white
+        , opacity: 1
+        , backgroundGradient: {
+            type: 'linear'
+          , startPoint: { x: 0, y: 0 }
+          , endPoint:   { x: 0, y: '100%' }
+          , colors: [{ color: '#ffffff', offset: 0.0 }, { color: '#b3c8d9', offset: 1.0 }]
+          }
+        , topShadow: {
+            color: '#fff'
+          , opacity: 1
+          }
+        , bottomShadow: {
+            color: '#1c73aa'
+          , opacity: 1
+          }
+        }
+      , "active": {
+          backgroundGradient: {
+            type: 'linear'
+          , startPoint: { x: 0, y: 0 }
+          , endPoint:   { x: 0, y: '100%' }
+          , colors: [{ color: '#b3c8d9', offset: 0.0 }, { color: '#b3c8d9', offset: 1.0 }]
           }
         , opacity: 1
         }
