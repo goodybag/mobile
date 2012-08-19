@@ -59,12 +59,25 @@
 (function(){
   var $ui = Ti.UI;
   
-  var constructor = function(text, options){
+  var constructor = function(text){
     this.text = text;
     this.state = "default";
-    this.options = options || GB.style.get('common.buttons.blue');
-    console.log(this.options);
+    // Apply Options
+    this.options = {};
+    var args = Array.prototype.slice.call(arguments, 1), states = "default,disabled,active";
+    for (var i = args.length - 1, arg; i >= 0; i--){
+      arg = args[i];
+      for (var key in arg){
+          this.options[key] = (states.indexOf(key) > -1) 
+                            ? gb.utils.extend(this.options[key] || {}, arg[key])
+                            : arg[key];
+        
+      }
+    }
+    if (args.length === 0) this.options = gb.style.get('common.bluePage.buttons.blue');
+    
     this._setupViews();
+    this._delegateEvents();
     this._mapStyles();
   };
   constructor.prototype = {
@@ -76,7 +89,7 @@
       if (this.state === state) return;
       var changed = this.styles[this.state === "default" ? state : this.state], fn, viewStyles;
       this.state = state;
-      // Iterate through whatever properties changed and reset them back to default
+      // Apply new properties
       for (var view in changed){
         viewStyles = changed[view];
         for (var styleType in viewStyles){
@@ -84,8 +97,12 @@
           this.views[view][fn](this.styles[state][view][styleType]);
         }
       }
-      console.log(this.views.topShadow.getOpacity());
-      console.log('poop');
+    }
+    
+  , _delegateEvents: function(){
+      for (var event in this.options.events){
+        this.views.base.addEventListener(event, this.options.events[event]);
+      }
     }
     
     /**
