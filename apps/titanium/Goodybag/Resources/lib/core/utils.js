@@ -397,14 +397,24 @@ gb.utils = function (global) {
   /**
    * Merge two objects together.
    */
-  this.merge = function (d, o, p, de, oe) {
+  this.merge = function (d, o, p, e) {
+    var cd = {}, co = {}, oe, de;
     if (typeof o != 'object' || o == null) return this.clone(d);
-    if (d.events) de = d.events;
-    if (o.events) oe = o.events;
+    
+    // Extract functions
+    de = d.events || null, oe = o.events || null;
+    for (var i in d) if (typeof d[i] == 'function') cd[i] = d[i];
+    for (var i in o) if (typeof o[i] == 'function') co[i] = o[i];
+    
+    // Clone
     d = this.clone(d); o = this.clone(o);
+    
+    // Put them back
     if (de) d.events = de;
     if (oe) o.events = oe;
-       
+    for (var i in cd) if (typeof cd[i] == 'function') d[i] = cd[i];
+    for (var i in co) if (typeof co[i] == 'function') o[i] = co[i];
+    
     for (p in o) {
       if (o == undefined) continue;
       if (!o.hasOwnProperty(p)) continue;
@@ -414,7 +424,7 @@ gb.utils = function (global) {
       else if (typeof d[p] != 'object' || d[p] == null) d[p] = this.merge(o[p].constructor === Array ? [] : {}, o[p]);
       else d[p] = this.merge(d[p], o[p]);
     }
-    
+    console.log(d);
     return d;
   }
   
@@ -439,6 +449,19 @@ gb.utils = function (global) {
       }
     }
     return obj
+  }
+  
+  this.compound = function () {
+    var args = [].slice.call(arguments);
+    
+    function add (base) {
+      var args = [].slice.call(arguments, 1);
+      args.forEach(function (item) { base.add(item); });
+    }
+        
+    args.forEach(function (item) {
+      return add.apply(this, item);
+    });
   }
   
   /**

@@ -33,28 +33,6 @@ GB.Views.add('nearby', {
     ,   $this = this
     ,   $el = this.elements;
     
-    this.self.add(this.elements.holder);
-    
-    $el.menu.nearby.addEventListener('click', function () { 
-      if ($el.places) $el.places.visible = true; else $this.showNearby(); 
-      if ($el.map) $el.map.visible = false;
-      $el.menu.nearby.activate();
-      $el.menu.map.deactivate();
-    });
-    
-    $el.menu.map.addEventListener('click', function () {
-      if ($el.places) $el.places.visible = false;
-      if ($el.map) $el.map.visible = true; else $this.showMap();
-      $el.menu.nearby.deactivate();
-      $el.menu.map.activate();
-    })
-    
-    $el.menu.base.add($ui.createView({ width: $ui.FILL, height: '6dp'}));
-    $el.menu.base.add($el.menu.nearby.base);
-    $el.menu.base.add($el.menu.map.base);
-    this.self.add($el.menu.base);
-    this.self.add($el.holder);
-    
     this.fetch(function (error, results) {
       store.deleteFile();
       store.write(JSON.stringify(results));
@@ -72,6 +50,30 @@ GB.Views.add('nearby', {
     var $this = this, $el = this.elements, locations;
     
     if (this.location == 'Place') this.location = 'Nearby';
+    
+    if($el.menu.base.children.length < 1) {
+      $el.menu.nearby.addEventListener('click', function () { 
+        if ($el.places) $el.places.visible = true; else $this.showNearby(); 
+        if ($el.map) $el.map.visible = false;
+        $el.menu.nearby.activate();
+        $el.menu.map.deactivate();
+      });
+      
+      $el.menu.map.addEventListener('click', function () {
+        if ($el.places) $el.places.visible = false;
+        if ($el.map) $el.map.visible = true; else $this.showMap();
+        $el.menu.nearby.deactivate();
+        $el.menu.map.activate();
+      })
+      
+      $el.menu.base.add($ui.createView({ width: $ui.FILL, height: '6dp'}));
+      $el.menu.base.add($el.menu.nearby.base);
+      $el.menu.base.add($el.menu.map.base);
+    }
+    
+    this.self.add($el.menu.base);
+    this.self.add($el.holder);
+    
     this.fetch(function (error, results) {
       var i;
       $this.models = [];
@@ -119,27 +121,124 @@ GB.Views.add('nearby', {
   
   showPlace: function (place, location) {
     var $this = this
-    ,   $el = this.elements
-    ,   $save = $this.self.children
-    ,   back;
+    ,   $el = this.elements;
     
-    this.self.remove($save[0]);
-    this.self.remove($save[1]);
-    $el.place = $ui.createScrollView();
+    if ($el.place) $this.self.remove($el.place), $el.place.close();
     
-    $el.place.add(gb.style.get('nearby.location.buttons.back', {}, {
-      $this: this,
-      save: $save
-    }));
-
-    place.getImage(128, function (data) {
-      var logo = gb.style.get('nearby.location.image');
-      logo.image = data;
-      $el.place.add(logo);
-      logo = null;
+    $el.place  = $ui.createWindow();
+    var modal  = $ui.createWindow();
+    modal.back = $ui.createButton({ title: 'Back' });
+    modal.back.addEventListener('click', function (e) {
+      modal.close();
+    })
+    
+    var holder = $ui.createView({ layout: 'vertical' });
+    var menu   = gb.style.get('nearby.menu.base');
+    var header = gb.style.get('nearby.loc.header.base');
+    var points = gb.style.get('nearby.loc.header.points.base');
+    var goodies = gb.style.get('nearby.loc.goodies.base');
+    menu.back  = new GB.StreamButton('Back');
+    menu.blank = $ui.createView({ width: $ui.FILL, height: '6dp'})
+    header.left = gb.style.get('nearby.loc.header.left');
+    header.right = gb.style.get('nearby.loc.header.right');
+    points.amount = gb.style.get('nearby.loc.header.points.amount');
+    points.text = gb.style.get('nearby.loc.header.points.text');
+    goodies.err = gb.style.get('nearby.loc.goodies.error');
+   
+    menu.back.addEventListener('click', function (e) {
+      menu.back.activate();
+      if (modal) modal.close();
+      $el.place.setVisible(false);
+      $this.self.remove($el.place);
+      $el.place.close();
+      $el.holder.setVisible(true);
+      $el.menu.base.setVisible(true);
     });
     
-    $this.self.add($el.place);
+    gb.utils.compound(
+      [ menu, menu.blank, menu.back.base ], 
+      [ header, header.left, header.right ], 
+      [ header.right,
+        
+        gb.style.get('nearby.loc.header.sideLabel nearby.loc.header.details', {
+          text: place.getAddress().replace(/,\s/, "\n")
+        }),
+        
+        gb.style.get('nearby.loc.header.sideLabel nearby.loc.header.number', {
+          text: place.getNumber()
+        }),
+        
+        gb.style.get('nearby.loc.header.sideLabel nearby.loc.header.url', {
+          text: place.parent.getUrl(),
+          events: {
+            click: function (e) {
+              var webview = $ui.createWebView({ url: place.parent.getUrl() });
+              modal.setLeftNavButton(modal.back);
+              modal.add(webview);
+              modal.open(gb.style.get('nearby.loc.modal'));
+            }
+          }
+        }),
+        
+        points
+      ], 
+      [ points, points.amount, points.text ],
+      [ holder, 
+      
+        gb.style.get('nearby.loc.header.sideLabel nearby.loc.header.name', {
+          text: place.parent.getName()
+        }),
+        
+        header,
+        gb.style.get('nearby.loc.goody.spacer'),
+        goodies
+      ], 
+      [ $el.place, menu, holder ]
+    );
+    
+    place.parent.getPointsEarned(gb.consumer.getCode(), function (data) {
+      if (data == null) return;
+      points.amount.text = data;
+      points.text.text = 'karma points';
+    });
+    
+    place.parent.getGoodies(function (data) {
+      if (data == null) return goodies.add(goodies.err);
+      for (var i = 0; i < data.length; i++) {
+        var goody = data[i];
+        if (!goody.active) continue;
+        var place = gb.style.get('nearby.loc.goody.base');
+        
+        place.desc = gb.style.get('nearby.loc.goody.label', {
+          text: goody.name
+        });
+        
+        place.icon = gb.style.get('nearby.loc.goody.icon', {
+          text: goody.karmaPointsRequired
+        });
+        
+        if (i == data.length-1) place.bottom = 44;
+        
+        GB.utils.compound([
+          place,
+          place.icon,
+          place.desc
+        ],[
+          goodies, place
+        ]);
+      }
+    })
+
+    place.parent.getImage(128, function (data) {
+      var logo = gb.style.get('nearby.loc.header.image');
+      logo.image = data;
+      header.left.add(logo);
+
+      $el.holder.setVisible(false);
+      $el.menu.base.setVisible(false);
+      $el.place.show();
+      $this.self.add($el.place);
+    });
   },
   
   showMap: function () {
@@ -150,7 +249,9 @@ GB.Views.add('nearby', {
     if ($el.map) $el.holder.remove($el.map);
 
     for (i = 0; i < this.locations.length; i++) {
-      annotations.push(this.locations[i].toAnnotation(function () {}));
+      annotations.push(this.locations[i].toAnnotation(function (e, parent) {
+        $this.onPlaceClick(this);
+      }));
     }
 
     $el.map = Titanium.Map.createView({
@@ -180,19 +281,9 @@ GB.Views.add('nearby', {
    * @param  {Object} e Event Handler
    */
   onPlaceClick: function (place) {
-    this.showPlace(place.parent);
+    this.showPlace(place);
   },
   
-  /**
-   * Called whenever an annotation is clicked.
-   * 
-   * @param {Object} e Event Handler
-   * @param {Object} parent Place Object for Pin Location
-   */
-  onPinClick: function (e, parent) {
-    this.showPlace(parent, this);
-  },
-
   /**
    * Comparator for sorting. Sort by name, alphabetically.
    * 

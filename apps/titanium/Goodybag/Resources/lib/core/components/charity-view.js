@@ -124,6 +124,7 @@
     
     gb.utils.compoundViews(this.views);
   };
+  
   constructor.prototype = {
     triggerOnDetails: function(e){
       this.options.onDetails(this, e);

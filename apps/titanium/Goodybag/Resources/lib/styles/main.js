@@ -20,7 +20,7 @@ gb.style.base.main = {
     
     main: {
       width: 'platform',
-      backgroundColor: 'black'
+      backgroundColor: 'white'
     }
   },
   
@@ -28,7 +28,8 @@ gb.style.base.main = {
     background: {
       top: 0,
       zIndex: 1,
-      image: 'screens/main/header.png'
+      image: 'screens/main/header.png',
+      backgroundColor: 'black'
     },
     
     logo: {

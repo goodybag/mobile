@@ -5,7 +5,7 @@ GB.Windows.add('main', Window.extend({
   
   window: $ui.createWindow(gb.style.get('main.self')),
   
-  location: 'qrcode',
+  location: 'nearby',
   
   elements: {
     views: {
