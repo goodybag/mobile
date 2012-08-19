@@ -156,8 +156,8 @@
               styleState.bottomShadow.backgroundColor = props.bottomShadow.color;
               styleState.bottomShadow.opacity = props.bottomShadow.opacity;
             break;
-            case 'opacity':
-              styleState.base.opacity = props.opacity;
+            case 'opacity': case 'backgroundColor':
+              styleState.base[styleType] = props[styleType];
             break;
           }
         }

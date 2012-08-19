@@ -37,6 +37,8 @@ GB.Windows.add('main', Window.extend({
     Titanium.include('/lib/views/stream-no-data.js');
     Titanium.include('/lib/views/charities.js');
     Titanium.include('/lib/views/welcome.js');
+    Titanium.include('/lib/views/set-screen-name.js');
+    Titanium.include('/lib/views/enter-tapin-id.js');
     
     // Attach Views
     $el.views.main.add(GB.Views.get('qrcode').self);
@@ -45,6 +47,8 @@ GB.Windows.add('main', Window.extend({
     $el.views.main.add(gb.Views.get('stream-no-data').self);
     $el.views.main.add(gb.Views.get('charities').self);
     $el.views.main.add(gb.Views.get('welcome').self);
+    $el.views.main.add(gb.Views.get('set-screen-name').self);
+    $el.views.main.add(gb.Views.get('enter-tapin-id').self);
     
     // Attach Header
     $el.views.main.add($el.header.background);
@@ -83,6 +87,8 @@ GB.Windows.add('main', Window.extend({
     if (!gb.consumer.getCharityId()){
       this.location = "charities";
     }
+    
+    this.location = "enter-tapin-id";
     
     // Direct Pages, then delegate background tasks.
     GB.Views.show(this.location);
@@ -128,7 +134,7 @@ GB.Windows.add('main', Window.extend({
     var welcome = GB.Views.get('welcome').views.base;
     welcome.setOpacity(0);
     welcome.show();
-    welcome.animate(gb.style.get('common.animation.fadeIn'), callback || function(){});
+    welcome.animate({ opacity: 0.8 }, callback || function(){});
   },
   
   /**

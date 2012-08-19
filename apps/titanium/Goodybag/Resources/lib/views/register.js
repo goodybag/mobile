@@ -33,7 +33,7 @@
       
       this.backBtn = new GB.Button('Back', gb.utils.extend(
         { width: 80 }
-      , gb.style.get('common.buttons.gray')));
+      , gb.style.get('common.bluePage.buttons.gray')));
       this.registerBtn = new GB.Button('Register');
       this.backBtn.addEventListener('click', function(e){
         $this.triggerOnBack(e);

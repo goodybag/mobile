@@ -426,10 +426,11 @@ gb.utils = function (global) {
     return (s.indexOf('.') != -1) ? s.split('.').reduce(this.index, o) : [ s ].reduce(this.index, o);
   }
   
+  /**
+   * Extend on object with an arbitrary amount of other objects
+   */
   this.extend = function(obj) {
     var args = Array.prototype.slice.call(arguments, 1);
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-    console.log(args);
     for (var i = args.length - 1, source; i >= 0; i--){
       source = args[i];
       console.log(source);

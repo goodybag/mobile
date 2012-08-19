@@ -27,6 +27,8 @@ Ti.include('lib/styles/qrcode.js');
 Ti.include('lib/styles/register.js');
 Ti.include('lib/styles/nearby.js');
 Ti.include('lib/styles/welcome.js');
+Ti.include('lib/styles/set-screen-name.js');
+Ti.include('lib/styles/enter-tapin-id.js');
 
 // Components
 Ti.include('lib/core/components/view.js');

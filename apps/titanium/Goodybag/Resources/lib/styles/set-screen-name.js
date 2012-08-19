@@ -1,29 +1,29 @@
 (function(){
   var $ui = Ti.UI;
   
-  gb.style.iphone.welcome = {
+  gb.style.iphone.setScreenName = {
     "base": {
-      layout: 'vertical'
+      zIndex: 10
+    }
+    
+  , "wrapper": {
+      width: $ui.FILL
+    , height: $ui.SIZE
+    , layout: 'vertical'
     }
     
   , "header": {
-      width: $ui.FILL
-    , height: $ui.SIZE
-    , top: 120
-    , textAlign: "center"
-    , color: gb.ui.color.white
-    , shadowOffset: { x: 0, y: -1 }
-    , shadowColor: gb.ui.color.blueDark
-    , font: {
-        fontSize: 28
-      }
+      textAlign: "center"
     }
     
-  , "smiley": {
-      top: 30
-    , font: {
-        fontSize: 72
-      }
+  , "subHeader": {
+      textAlign: "center"
+    }
+    
+  , "nav": {
+      width: $ui.FILL
+    , height: $ui.SIZE
+    , top: '13dp'
     }
   };
 })();

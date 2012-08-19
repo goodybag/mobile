@@ -5,8 +5,6 @@
     self: $ui.createView(gb.style.get('welcome.base'))
     
   , Constructor: function(){
-      var btn = new GB.Button('Hello');
-    
       this.views = {
         "base": this.self
       , "header": $ui.createLabel(gb.utils.extend(
@@ -18,7 +16,6 @@
         , gb.style.get('welcome.smiley')
         , gb.style.get('welcome.header')
         ))
-      , "button": btn.views.base
       };
       gb.utils.compoundViews(this.views);
     }

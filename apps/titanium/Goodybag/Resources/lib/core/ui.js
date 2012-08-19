@@ -12,6 +12,7 @@ gb.ui.color = {
 , gray: '#888'
 , grayLight: '#9c9c9c'
 , grayLighter: '#bbb'
+, grayLightest: '#ddd'
 
 , pink: '#d357ba'
 , blue: '#57a0d3'
@@ -23,7 +24,7 @@ gb.ui.color.base = gb.ui.color.gray;
 
 gb.ui.font = {
   base: {
-    fontSize: 12
+    fontSize: 14
   , fontWeight: "normal"
   }
 };
