@@ -40,6 +40,7 @@ Ti.include('lib/core/components/stream-button.js');
 Ti.include('lib/core/components/pull-to-refresh/pull-to-refresh.js');
 Ti.include('lib/core/components/charity-view.js');
 Ti.include('lib/core/components/button.js');
+Ti.include('lib/core/components/island.js');
 
 gb.qrcode = QRCode({
   typeNumber: 4,
