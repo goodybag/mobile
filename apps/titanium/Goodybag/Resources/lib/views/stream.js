@@ -151,7 +151,7 @@ GB.Views.add('stream', {
     this.nav.my.deactivate();
     if (state.hasData) return;
     console.log("[stream view] - GLOBAL fetching data");
-    this.fetchGlobalStream(state.limit, state.limit * ++state.page, function(error, data){
+    this.fetchGlobalStream(state.limit, state.limit * state.page++, function(error, data){
       if (error) return console.log(error);
       if (!data) return gb.Views.show('stream-no-data');
       state.hasData = true;
@@ -169,7 +169,7 @@ GB.Views.add('stream', {
     this.nav.my.activate();
     if (state.hasData) return;
     console.log("[stream view] - MY - fetching data");
-    this.fetchMyStream(state.limit, state.limit * ++state.page, function(error, data){
+    this.fetchMyStream(state.limit, state.limit * state.page++, function(error, data){
       if (error) return console.log(error);
       if (!data) return gb.Views.show('stream-no-data');
       state.hasData = true;
@@ -191,7 +191,7 @@ GB.Views.add('stream', {
   onScrollToEnd: function(fetchMe){
     console.log("[stream view] - on scroll to end FETCHING NEW ITEMS")
     var self = this, state = this.states[fetchMe ? 'my' : 'global'];
-    this.fetchStream(fetchMe, state.limit, state.limit * ++state.page, function(error, data){
+    this.fetchStream(fetchMe, state.limit, state.limit * state.page++, function(error, data){
       if (error) return console.log(error);
       self.showItems(fetchMe ? self.states.my.view : self.states.global.view, data);
     });

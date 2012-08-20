@@ -11,6 +11,7 @@
   , Constructor: function(){
       var $this = this;
       
+      this.hasCalledOnComplete = false;
       this.onComplete = function(){};
       this.completeBtn = new GB.Button('Complete');
       
@@ -19,7 +20,7 @@
         
       , "wrapper": {
           "base": $ui.createView(gb.style.get('enterTapinId.wrapper'))
-          
+
         , "submitTapinIdIsland": {
             "base": $ui.createView(gb.utils.extend(
               {}
@@ -82,7 +83,7 @@
                       'Submit'
                     , gb.style.get('enterTapinId.form.submit')
                     , gb.style.get('common.grayPage.island.buttons.gray')
-                    , { events: { click: function(e){ $this.submitTapinId(e); } } }
+                    , { events: { click: function(e){ $this.submitTapinId(); } } }
                     ).views.base
                   }
                 }
@@ -105,17 +106,42 @@
                 'Make One For Me'
               , gb.style.get('enterTapinId.makeBtn')
               , gb.style.get('common.bluePage.buttons.blue')
-              , { events: { click: function(e){ $this.submitTapinId(e); } } }
+              , { events: { click: function(e){ $this.generateTapinId(e); } } }
               ).views.base
             }
           }
         }
       };
       gb.utils.compoundViews(this.views);
+      // FUCK we need selectors
+      this.tapinIdInput = this.views.wrapper.submitTapinIdIsland.fill.wrapper.form.row.inputWrapper.input;
     }
     
-  , complete: function(){
-      
+  , generateTapinId: function(){
+      var $this = this;
+      gb.consumer.createBarcodeId(function(error, id){
+        if (error) return alert(error);
+        alert(id);
+        $this.triggerOnComplete();
+      });
     }
+    
+  , submitTapinId: function(){
+      var value = this.tapinIdInput.getValue(), $this = this;
+      gb.consumer.setBarcodeId(value, function(error){
+        if (error) return alert(error);
+        $this.triggerOnComplete();
+      });
+    }
+    
+  , triggerOnComplete: function(){
+      if (this.hasCalledOnComplete) return;
+      this.onComplete();
+      this.hasCalledOnComplete = true;
+    },
+    
+    setOnComplete: function(fn){
+      this.onComplete = fn;
+    },
   });
 })();

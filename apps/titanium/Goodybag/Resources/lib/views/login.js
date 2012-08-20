@@ -37,7 +37,8 @@ gb.Windows.add('login', Window.extend({
       $self.hideRegistration();
     });
     gb.Views.get('register').setOnRegisterCallback(function(){
-      gb.Windows.show('main');
+      if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
+      else GB.Windows.show('complete-registration');
     });
     
     // Background
@@ -74,7 +75,8 @@ gb.Windows.add('login', Window.extend({
           gb.consumer = consumer;
         }
         
-        GB.Windows.show('main');
+        if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
+        else GB.Windows.show('complete-registration');
       });
     });
     
@@ -97,7 +99,8 @@ gb.Windows.add('login', Window.extend({
             gb.consumer = consumer;
           }
           
-          GB.Windows.show('main');
+          if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
+          else GB.Windows.show('complete-registration');
         });
       } else {
         if (!e.cancelled) {

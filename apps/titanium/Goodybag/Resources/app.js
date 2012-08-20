@@ -55,14 +55,28 @@ gb.consumer = new GB.Models.User();
 
 // Views
 Ti.include('lib/views/register.js');
+Titanium.include('/lib/views/qrcode.js');
+Titanium.include('/lib/views/nearby.js');
+Titanium.include('/lib/views/sidebar.js');
+Titanium.include('/lib/views/stream.js');
+Titanium.include('/lib/views/stream-no-data.js');
+Titanium.include('/lib/views/charities.js');
+Titanium.include('/lib/views/welcome.js');
+Titanium.include('/lib/views/set-screen-name.js');
+Titanium.include('/lib/views/enter-tapin-id.js');
+    
+// Windows
 Ti.include('lib/views/login.js');
 Ti.include('lib/views/main.js');
+Ti.include('lib/views/complete-registration.js');
 
 // Do Authentication Check
 gb.consumer.validate(function (consumer) {
   if (consumer != null) {
     gb.consumer = consumer;
-    GB.Windows.show('main');
+    
+    if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
+    else GB.Windows.show('complete-registration');
     gb.consumer.renew();
   } else {
     GB.Windows.show('login');

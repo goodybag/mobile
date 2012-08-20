@@ -10,7 +10,7 @@
     , height: $ui.SIZE
     , left: 10
     , right: 10
-    , top: 140
+    , top: 136
     , layout: 'vertical'
     }
     
@@ -82,7 +82,7 @@
       "base": {
         width: $ui.FILL
       , height: $ui.SIZE
-      , top: 10
+      , top: 14
       }     
     , "left": {
         left: 0

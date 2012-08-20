@@ -183,6 +183,8 @@
       this.isFetching = false;
       this.hasLoaded = false;
       this.views = views;
+      this.hasCalledOnComplete = false;
+      this.onComplete = function(){};
       
       this.views.charityDetails.base.hide();
       
@@ -208,6 +210,16 @@
     
     onCharityDetails: function(charity){
       this.showCharityDetails(charity);
+    },
+    
+    triggerOnComplete: function(){
+      if (this.hasCalledOnComplete) return;
+      this.onComplete();
+      this.hasCalledOnComplete = true;
+    },
+    
+    setOnComplete: function(fn){
+      this.onComplete = fn;
     },
     
     showCharityList: function(){
@@ -266,6 +278,7 @@
     },
     
     selectCharity: function(charity, callback){
+      var $this = this;
       if (this.selected) this.selected.deselect();
       this.selected = charity;
       callback || (callback = function(){});
@@ -274,6 +287,7 @@
       , name: charity.model.publicName
       }, function(error){
         if (error) return console.log(error);
+        $this.triggerOnComplete(); // Registration step complete
         callback();
       });
     },

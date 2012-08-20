@@ -419,6 +419,10 @@ if(!GB.Models)
     getCharityId: function () {
       return this.data.charity ? this.data.charity.id : null;
     },
+    
+    getBarcodeID: function () {
+      return this.data.barcodeId;
+    },
   
     /**
      * Returns users selected charities name.
@@ -471,6 +475,56 @@ if(!GB.Models)
     },
     
     /**
+     * Determines whether the user has completed registration
+     * @return {Boolean}
+     */
+    hasCompletedRegistration: function(){
+      return this.hasSetScreenName() && this.hasCharity() && this.getBarcodeID();
+    },
+    
+    /**
+     * Determines whether the user has set their screen name
+     * @return {Boolean}
+     */
+    hasSetScreenName: function(){
+      return this.data.setScreenName;
+    },
+    
+    /**
+     * Sets the TapIn/Barcode ID
+     * @return {null}
+     */
+    setBarcodeId: function (id, callback) {
+      var $this = this;
+      callback || (callback = function(){});
+      $http.post(gb.config.api.setBarcodeId, { barcodeId: id }, function(error, data){
+        if (error) return console.log(error);
+        data = JSON.parse(data);
+        if (data.error) return callback(data.error);
+        $this.data.barcodeId = id;
+        $this._setConsumer($this);
+        callback(null, data.data);
+      });
+    },
+    
+    /**
+     * Creates and sets a barcode ID
+     * @return {null}
+     */
+    createBarcodeId: function (callback) {
+      var $this = this;
+      callback || (callback = function(){});
+      $http.get(gb.config.api.createBarcodeId, function(error, data){
+        if (error) return console.log(error);
+        data = JSON.parse(data);
+        if (data.error) return callback(data.error);
+        $this.data.barcodeId = data.data.barcodeId;
+        $this._setConsumer($this);
+        callback(null, data.data);
+      });
+    },
+    
+    /**
      * Sets the charity on the user object and the server
      * @return {null}
      */
@@ -486,6 +540,25 @@ if(!GB.Models)
         , name: charity.publicName
         };
         $this._setConsumer($this);
+        callback(null, data.data);
+      });
+    },
+    
+    /**
+     * Sets the screen name on the user object and the server
+     * @return {null}
+     */
+    setScreenName: function (value, callback) {
+      var $this = this;
+      callback || (callback = function(){});
+      $http.post(gb.config.api.setScreenName, { screenName: value }, function(error, data){
+        if (error) return console.log(error);
+        data = JSON.parse(data);
+        if (data.error) return callback(data.error);
+        $this.data.screenName = value;
+        $this.data.setScreenName = true;
+        $this._setConsumer($this);
+        callback(null, data.data);
       });
     },
     
