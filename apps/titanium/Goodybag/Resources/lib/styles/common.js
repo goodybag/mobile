@@ -33,6 +33,15 @@
         }
       }
       
+    , "wrapper": {
+        width: $ui.FILL
+      , height: $ui.SIZE
+      , layout: 'vertical'
+      , left: 8
+      , right: 8
+      , bottom: 12
+      }
+      
     , "island": {
         "base": {
           width: $ui.FILL
@@ -178,6 +187,60 @@
           , "disabled": {
               opacity: 0.4
             }
+          }
+        }
+      }
+        
+    , "buttons": {
+        "red": {
+          "default": {
+            width: $ui.FILL
+          , height: '40dp'
+          , borderRadius: 5
+          , borderWidth: 1
+          , borderColor: '#802420'
+          , color: gb.ui.color.white
+          , font: {
+              fontSize: 13
+            , fontWeight: 'bold'
+            }
+          , shadowOffset: { x: 0, y: -1 }
+          , shadowColor: '#9f342e'
+          , opacity: 1
+          , backgroundGradient: {
+              type: 'linear'
+            , startPoint: { x: 0, y: 0 }
+            , endPoint:   { x: 0, y: '100%' }
+            , colors: [{ color: '#EE5F5B', offset: 0.0 }, { color: '#BD362F', offset: 1.0 }]
+            }
+          , topShadow: {
+              color: '#f38b88'
+            , opacity: 1
+            }
+          , bottomShadow: {
+              color: '#fff'
+            , opacity: 1
+            }
+          }
+        , "active": {
+            backgroundGradient: {
+              type: 'linear'
+            , startPoint: { x: 0, y: 0 }
+            , endPoint:   { x: 0, y: '100%' }
+            , colors: [{ color: '#BD362F', offset: 0.0 }, { color: '#BD362F', offset: 1.0 }]
+            }
+          , topShadow: {
+              color: '#BD362F'
+            , opacity: 1
+            }
+          , bottomShadow: {
+              color: '#fff'
+            , opacity: 1
+            }
+          , opacity: 1
+          }
+        , "disabled": {
+            opacity: 0.4
           }
         }
       }

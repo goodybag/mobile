@@ -488,6 +488,7 @@ gb.utils = function (global) {
     if (typeof base === "undefined") throw new Error("Base is undefined");
     for (var key in tree){
       item = tree[key];
+      if (item === null) continue;
       if (key === "base"){
         for (var eventType in item.events){
           item.addEventListener(eventType, item.events[eventType]);

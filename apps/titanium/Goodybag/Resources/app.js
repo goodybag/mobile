@@ -29,6 +29,7 @@ Ti.include('lib/styles/nearby.js');
 Ti.include('lib/styles/welcome.js');
 Ti.include('lib/styles/set-screen-name.js');
 Ti.include('lib/styles/enter-tapin-id.js');
+Ti.include('lib/styles/settings.js');
 
 // Components
 Ti.include('lib/core/components/view.js');
@@ -51,6 +52,7 @@ gb.qrcode = QRCode({
 Ti.include('lib/models/user.js');
 Ti.include('lib/models/place.js')
 Ti.include('lib/models/activity.js');
+
 // Create our User
 gb.consumer = new GB.Models.User();
 
@@ -65,6 +67,7 @@ Titanium.include('/lib/views/charities.js');
 Titanium.include('/lib/views/welcome.js');
 Titanium.include('/lib/views/set-screen-name.js');
 Titanium.include('/lib/views/enter-tapin-id.js');
+Titanium.include('/lib/views/settings.js');
     
 // Windows
 Ti.include('lib/views/login.js');

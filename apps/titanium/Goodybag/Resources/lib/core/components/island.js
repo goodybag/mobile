@@ -1,7 +1,8 @@
 (function(){
   var $ui = Ti.UI;
   
-  var constructor = function(options){
+    // Just structure, doesn't merit a constructor or instance vars
+  /*var constructor = function(options){
     this.views = {
       "base": $ui.createView(gb.utils.extend(
         options || {}
@@ -30,5 +31,24 @@
     }
   };
   GB.Island = constructor;
-  exports = constructor;
+  exports = constructor;*/
+ 
+  GB.getIsland = function(options){
+    return {
+      "base": $ui.createView(gb.utils.extend(
+        options || {}
+      , gb.style.get('common.grayPage.island.base')
+      ))
+    
+    , "shadow": $ui.createView(gb.style.get('common.grayPage.island.shadow'))
+    
+    , "fill": {
+        "base":  $ui.createView(gb.style.get('common.grayPage.island.fill'))
+                                                  
+      , "wrapper": {
+          "base": $ui.createView(gb.style.get('common.grayPage.island.wrapper'))
+        }
+      }
+    };
+  }
 })();

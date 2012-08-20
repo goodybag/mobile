@@ -156,7 +156,7 @@
               styleState.bottomShadow.backgroundColor = props.bottomShadow.color;
               styleState.bottomShadow.opacity = props.bottomShadow.opacity;
             break;
-            case 'opacity': case 'backgroundColor':
+            case 'opacity': case 'backgroundColor': case 'top':
               styleState.base[styleType] = props[styleType];
             break;
           }
@@ -179,12 +179,17 @@
           width: base.width
         , height: parseInt(base.height) + 1 + 'dp'
         , borderRadius: base.borderRadius + 1
+        , top: base.top
         , events: {
             touchstart: function(e){
               if ($this.state === "disabled") return;
               $this.set('active');
             }
           , touchend: function(e){
+              if ($this.state === "disabled") return;
+              $this.set('default');
+            }
+          , touchcancel: function(e){
               if ($this.state === "disabled") return;
               $this.set('default');
             }

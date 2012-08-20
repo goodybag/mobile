@@ -35,6 +35,7 @@ GB.Windows.add('main', Window.extend({
     $el.views.main.add(gb.Views.get('stream').self);
     $el.views.main.add(gb.Views.get('stream-no-data').self);
     $el.views.main.add(gb.Views.get('charities').self);
+    $el.views.main.add(gb.Views.get('settings').self);
     
     // Attach Header
     $el.views.main.add($el.header.background);
@@ -63,7 +64,7 @@ GB.Windows.add('main', Window.extend({
   
   onShow: function () {
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $user = gb.consumer, $url, written = true;
-    
+    this.location = "settings";
     // Direct Pages, then delegate background tasks.
     GB.Views.show(this.location);
     
