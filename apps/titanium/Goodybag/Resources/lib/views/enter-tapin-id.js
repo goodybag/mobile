@@ -121,7 +121,6 @@
       var $this = this;
       gb.consumer.createBarcodeId(function(error, id){
         if (error) return alert(error);
-        alert(id);
         $this.triggerOnComplete();
       });
     }

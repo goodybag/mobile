@@ -14,6 +14,7 @@ GB.Views.add('stream', {
   , width: $ui.FILL
   , height: $ui.FILL
   , bottom: '44dp'
+  , zIndex: 1
   }),
   
   nav: {
@@ -100,6 +101,62 @@ GB.Views.add('stream', {
       , name: "My Scroll"
       }
     );
+    
+    // No Tapins
+    this.noTapins = {
+      "base": $ui.createView({
+        width: $ui.FILL
+      , height: $ui.SIZE
+      , layout: 'vertical'
+      , left: '8dp'
+      , right: '8dp'
+      })
+      
+    , "submitTapinIdIsland": {
+        "base": $ui.createView(gb.utils.extend(
+          {}
+        , gb.style.get('common.grayPage.island.base')
+        ))
+      
+      , "shadow": $ui.createView(gb.style.get('common.grayPage.island.shadow'))
+      
+      , "fill": {
+          "base":  $ui.createView(gb.style.get('common.grayPage.island.fill'))
+          
+        , "wrapper": {
+            "base": $ui.createView(gb.style.get('common.grayPage.island.wrapper'))
+            
+            /**
+             * Header and sub-header
+             */
+          , "header:already": $ui.createLabel(gb.utils.extend(
+              { text: "You haven't Tapped In anywhere yet" }
+            , gb.style.get('enterTapinId.header:already')
+            , gb.style.get('common.grayPage.island.header1')
+            ))
+            
+          , "header:enter": $ui.createLabel(gb.utils.extend(
+              { text: "Press the button below to see our participating businesses" }
+            , gb.style.get('enterTapinId.header:enter')
+            , gb.style.get('common.grayPage.island.paragraph')
+            ))
+
+          , "submitWrapper": {
+              "base": $ui.createView(gb.style.get('enterTapinId.form.submitWrapper'))
+            
+            , "submit": new GB.Button(
+                'Participating Businesses'
+              , gb.style.get('enterTapinId.form.submit')
+              , gb.style.get('common.grayPage.island.buttons.gray')
+              , { events: { click: function(e){  } } }
+              ).views.base
+            }
+          }
+        }
+      }
+    };
+    gb.utils.compoundViews(this.noTapins);
+    
     // Pull to Refresh
     // this.states.global.refresher = new GB.PullToRefresh(this.states.global.view.view, {
       // onLoad: function(done){
@@ -173,7 +230,9 @@ GB.Views.add('stream', {
       if (error) return console.log(error);
       if (!data) return gb.Views.show('stream-no-data');
       state.hasData = true;
-      self.showItems(state.view.view, data);
+      if (data.length > 0) return self.showItems(state.view.view, data);
+      // No Tapins - Finish later
+      // self.noTapins.base.setZIndex(2);
     });
   },
   
