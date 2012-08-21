@@ -87,7 +87,7 @@
                       'edit'
                     , gb.style.get('settings.setting.edit')
                     , gb.style.get('common.grayPage.island.buttons.gray')
-                    , { events: { click: function(){ $this.editField() } } }
+                    , { events: { click: function(){ $this.editField('name') } } }
                     ).views.base
                   }
                 }
@@ -107,7 +107,7 @@
                       'edit'
                     , gb.style.get('settings.setting.edit')
                     , gb.style.get('common.grayPage.island.buttons.gray')
-                    , { events: { click: function(){ $this.editField() } } }
+                    , { events: { click: function(){ $this.editField('screenName') } } }
                     ).views.base
                   }
                 }
@@ -127,7 +127,7 @@
                       'edit'
                     , gb.style.get('settings.setting.edit')
                     , gb.style.get('common.grayPage.island.buttons.gray')
-                    , { events: { click: function(){ $this.editField() } } }
+                    , { events: { click: function(){ $this.editField('email') } } }
                     ).views.base
                   }
                 }
@@ -148,7 +148,7 @@
                       'edit'
                     , gb.style.get('settings.setting.edit')
                     , gb.style.get('common.grayPage.island.buttons.gray')
-                    , { events: { click: function(){ $this.editField() } } }
+                    , { events: { click: function(){ $this.editField('barcodeId') } } }
                     ).views.base
                   }
                 }
@@ -169,7 +169,7 @@
                       'edit'
                     , gb.style.get('settings.setting.edit')
                     , gb.style.get('common.grayPage.island.buttons.gray')
-                    , { events: { click: function(){ $this.editField() } } }
+                    , { events: { click: function(){ $this.editField('password') } } }
                     ).views.base
                   }
                 }
@@ -198,8 +198,9 @@
       this._displayUserData();
     }
     
-  , editField: function(){
-      
+  , editField: function(field){
+      GB.Views.get('edit-setting').setField(field);
+      GB.Views.show('edit-setting');
     }
     
   , onFacebookClick: function(){
@@ -216,7 +217,6 @@
       settings['setting:name'].field.setText(gb.consumer.getName());
       settings['setting:screenName'].field.setText(gb.consumer.data.screenName);
       settings['setting:email'].field.setText(gb.consumer.data.email);
-      // settings['setting:tapinId'].field.setText(gb.consumer.data.barcodeId);
     }
   });
 })();

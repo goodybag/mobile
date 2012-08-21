@@ -96,6 +96,39 @@
     , height: $ui.SIZE
     , top: 8
     }
+    
+    /**
+     * Edit Settings
+     */
+  , "edit": {
+    
+      "fields": {
+        "base": {
+          width: $ui.FILL
+        , height: $ui.SIZE
+        , layout: 'vertical'
+        }
+        
+      , "field": {
+          top: 4
+        , bottom: 4
+        }
+      } // End Fields
+        
+    , "backBtn": {
+        "default": {
+          width: 100
+        , left: 0
+        }
+      }
+      
+    , "saveBtn": {
+        "default": {
+          width: 100
+        , right: 0
+        }
+      }
+    } // End Edit
   };
   
 })();

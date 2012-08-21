@@ -156,7 +156,7 @@
               styleState.bottomShadow.backgroundColor = props.bottomShadow.color;
               styleState.bottomShadow.opacity = props.bottomShadow.opacity;
             break;
-            case 'opacity': case 'backgroundColor': case 'top':
+            case 'opacity': case 'backgroundColor': case 'top': case 'right': case 'bottom': case 'left':
               styleState.base[styleType] = props[styleType];
             break;
           }
@@ -180,6 +180,9 @@
         , height: parseInt(base.height) + 1 + 'dp'
         , borderRadius: base.borderRadius + 1
         , top: base.top
+        , left: base.left
+        , right: base.right
+        , bottom: base.bottom
         , events: {
             touchstart: function(e){
               if ($this.state === "disabled") return;

@@ -36,6 +36,7 @@ GB.Windows.add('main', Window.extend({
     $el.views.main.add(gb.Views.get('stream-no-data').self);
     $el.views.main.add(gb.Views.get('charities').self);
     $el.views.main.add(gb.Views.get('settings').self);
+    $el.views.main.add(gb.Views.get('edit-setting').self);
     
     // Attach Header
     $el.views.main.add($el.header.background);

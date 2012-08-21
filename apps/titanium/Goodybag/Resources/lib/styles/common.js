@@ -39,9 +39,12 @@
       , layout: 'vertical'
       , left: 8
       , right: 8
-      , bottom: 12
+      , bottom: 8
       }
       
+      /**
+       * Island
+       */
     , "island": {
         "base": {
           width: $ui.FILL
@@ -95,14 +98,43 @@
       , "input": {
           width: $ui.FILL
         , height: $ui.SIZE
-        , top: 8
-        , bottom: 8
+        , top: 9
+        , bottom: 9
         , left: 6
         , right: 5
         , color: gb.ui.color.grayDark
         , font: {
             fontSize: gb.ui.font.base.fontSize
           }
+        }
+        
+      , "input:indicated": {
+          width: $ui.FILL
+        , height: $ui.SIZE
+        , top: 10
+        , bottom: 10
+        , left: 6
+        , right: 50
+        , color: gb.ui.color.grayDark
+        , font: {
+            fontSize: gb.ui.font.base.fontSize
+          }
+        }
+        
+      , "indicator": {
+          width: $ui.SIZE
+        , height: $ui.SIZE
+        , right: 10
+        , bottom: -10
+        , text: "*"
+        , shadowOffset: { x: 0, y: 1 }
+        , color: gb.ui.color.green
+        , font: {
+            fontSize: 36
+          , fontWeight: 'bold'
+          }
+        , opacity: 0
+        , build: { type: "createLabel" }
         }
         
       , "wrapper": {
@@ -140,6 +172,16 @@
         , opacity: 0.05
         }
         
+      , "bottomNavWrapper": {
+          width: $ui.FILL
+        , height: $ui.SIZE
+        , top: 8
+        // , layout: 'horizontal'
+        }
+        
+        /**
+         * Island Buttons
+         */
       , "buttons": {
           "gray": {
             "default": {
@@ -187,10 +229,13 @@
           , "disabled": {
               opacity: 0.4
             }
-          }
+          } // Gray
         }
       }
-        
+       
+     /**
+      * Gray page buttons
+      */ 
     , "buttons": {
         "red": {
           "default": {
@@ -219,7 +264,7 @@
             }
           , bottomShadow: {
               color: '#fff'
-            , opacity: 1
+            , opacity: 0.4
             }
           }
         , "active": {
@@ -235,14 +280,117 @@
             }
           , bottomShadow: {
               color: '#fff'
-            , opacity: 1
+            , opacity: 0.4
             }
           , opacity: 1
           }
         , "disabled": {
             opacity: 0.4
           }
-        }
+        } // Red
+        
+      , "green": {
+          "default": {
+            width: $ui.FILL
+          , height: '40dp'
+          , borderRadius: 5
+          , borderWidth: 1
+          , borderColor: '#387038'
+          , color: gb.ui.color.white
+          , font: {
+              fontSize: 13
+            , fontWeight: 'bold'
+            }
+          , shadowOffset: { x: 0, y: -1 }
+          , shadowColor: '#4b904b'
+          , opacity: 1
+          , backgroundGradient: {
+              type: 'linear'
+            , startPoint: { x: 0, y: 0 }
+            , endPoint:   { x: 0, y: '100%' }
+            , colors: [{ color: '#62C462', offset: 0.0 }, { color: '#51A351', offset: 1.0 }]
+            }
+          , topShadow: {
+              color: '#8dd58d'
+            , opacity: 1
+            }
+          , bottomShadow: {
+              color: '#fff'
+            , opacity: 0.4
+            }
+          }
+        , "active": {
+            backgroundGradient: {
+              type: 'linear'
+            , startPoint: { x: 0, y: 0 }
+            , endPoint:   { x: 0, y: '100%' }
+            , colors: [{ color: '#51A351', offset: 0.0 }, { color: '#51A351', offset: 1.0 }]
+            }
+          , topShadow: {
+              color: '#51A351'
+            , opacity: 1
+            }
+          , bottomShadow: {
+              color: '#fff'
+            , opacity: 0.4
+            }
+          , opacity: 1
+          }
+        , "disabled": {
+            opacity: 0.4
+          }
+        } // Green
+        
+          /**
+           * Gray Page gray has a less pronounced bottom shadow
+           */
+        , "gray": {
+            "default": {
+              width: '100dp'
+            , height: '40dp'
+            , borderRadius: 5
+            , borderWidth: 1
+            , borderColor: '#ccc'
+            , color: gb.ui.color.grayDark
+            , font: {
+                fontSize: 13
+              , fontWeight: 'bold'
+              }
+            , shadowOffset: { x: 0, y: 1 }
+            , shadowColor: gb.ui.color.white
+            , opacity: 1
+            , backgroundGradient: {
+                type: 'linear'
+              , startPoint: { x: 0, y: 0 }
+              , endPoint:   { x: 0, y: '100%' }
+              , colors: [{ color: '#fafafa', offset: 0.0 }, { color: '#e3e3e3', offset: 1.0 }]
+              }
+            , topShadow: {
+                color: '#fff'
+              , opacity: 1
+              }
+            , bottomShadow: {
+                color: '#fff'
+              , opacity: 0.4
+              }
+            }
+          , "active": {
+              backgroundGradient: {
+                type: 'linear'
+              , startPoint: { x: 0, y: 0 }
+              , endPoint:   { x: 0, y: '100%' }
+              , colors: [{ color: '#e3e3e3', offset: 0.0 }, { color: '#e3e3e3', offset: 1.0 }]
+              }
+            , topShadow: {
+                color: '#e3e3e3'
+              , opacity: 1
+              }
+            , opacity: 1
+            }
+          , "disabled": {
+              opacity: 0.4
+            }
+          } // Gray
       }
     }
     
@@ -324,6 +472,9 @@
         }
       }
       
+      /**
+       * Blue Page Buttons
+       */
     , "buttons": {
         "blue": {
           "default": {

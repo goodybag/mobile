@@ -18,6 +18,10 @@ gb.ui.color = {
 , blue: '#57a0d3'
 , blueBright: '#35c8f6'
 , blueDark: '#062f49'
+, green: '#8dd58d'
+, greenDark: '#44af44'
+, salmon: '#f87476'
+, salmonDark: '#af4444'
 };
 
 gb.ui.color.base = gb.ui.color.gray;

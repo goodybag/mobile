@@ -41,7 +41,7 @@ Ti.include('lib/core/components/stream-button.js');
 Ti.include('lib/core/components/pull-to-refresh/pull-to-refresh.js');
 Ti.include('lib/core/components/charity-view.js');
 Ti.include('lib/core/components/button.js');
-Ti.include('lib/core/components/island.js');
+Ti.include('lib/core/components/validate.js');
 
 gb.qrcode = QRCode({
   typeNumber: 4,
@@ -68,6 +68,7 @@ Titanium.include('/lib/views/welcome.js');
 Titanium.include('/lib/views/set-screen-name.js');
 Titanium.include('/lib/views/enter-tapin-id.js');
 Titanium.include('/lib/views/settings.js');
+Titanium.include('/lib/views/edit-setting.js');
     
 // Windows
 Ti.include('lib/views/login.js');
