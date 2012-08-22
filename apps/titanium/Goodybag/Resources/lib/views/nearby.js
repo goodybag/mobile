@@ -116,7 +116,7 @@ GB.Views.add('nearby', {
       }));
     }
     
-    this.location = 'Nearby';
+    this.location git = 'Nearby';
   },
   
   showPlace: function (place, location) {

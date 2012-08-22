@@ -55,7 +55,8 @@
 	<string>UIStatusBarStyleBlackOpaque</string>
 	<key>UIAppFonts</key>
   <array>
-    <string>fontawesome-webfont.ttf</string>
+    <string>FontAwesome.ttf</string>
+    <string>LigatureSymbols.ttf</string>
   </array>
 </dict>
 </plist>
