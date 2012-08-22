@@ -427,7 +427,7 @@ if(!GB.Models)
      * @return {String}
      */
     getCharityId: function () {
-      return this.data.charity ? this.data.charity.id : null;
+      return (this.data.charity) ? this.data.charity.id : null;
     },
     
     getBarcodeID: function () {

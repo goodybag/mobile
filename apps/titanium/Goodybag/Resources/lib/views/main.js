@@ -1,15 +1,15 @@
 GB.Windows.add('main', Window.extend({
-  debug : true,
-  animated : false,
-
-  window : $ui.createWindow(gb.style.get('main.self')),
-
-  location : 'nearby',
-
-  elements : {
-    views : {
-      holder : $ui.createView(gb.style.get('main.views.holder')),
-      main : $ui.createView(gb.style.get('main.views.main'))
+  debug: true,
+  animated: false,
+  
+  window: $ui.createWindow(gb.style.get('main.self')),
+  
+  location: 'nearby',
+  
+  elements: {
+    views: {
+      holder: $ui.createView(gb.style.get('main.views.holder')),
+      main: $ui.createView(gb.style.get('main.views.main'))
     },
 
     header : {
