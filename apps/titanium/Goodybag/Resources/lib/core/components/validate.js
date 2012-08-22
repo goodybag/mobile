@@ -35,12 +35,19 @@
         if (!regs.email.test(value))
           errors.push({ field: key, message: "Invalid email address" });
       break;
+      case 'barcodeId':
+        // I really don't know what's valid :/
+        if (value.length < 5 || value.length > 13){
+          errors.push({ field: key, message: "Invalid Tap-In ID" });
+          break;
+        }
+      break;
       case 'password': case 'passwordConfirm': 
         if (value.length < 5)
           errors.push({ field: key, message: "Password must be at least 5 characters" });
       break;
       default: break;
     }
-    callback(errors);
+    return callback ? callback(errors) : errors;
   }
 })();

@@ -56,8 +56,8 @@
                   ))
                   
                 , "field": $ui.createImageView(gb.utils.extend(
-                    gb.style.get('settings.setting.avatar')
-                  , gb.style.get('settings.setting.field')
+                    gb.style.get('settings.setting.field')
+                  , gb.style.get('settings.setting:avatar.field')
                   ))
                   
                 , "edit": {
@@ -67,7 +67,7 @@
                     , gb.style.get('settings.setting:picture.edit')
                     , gb.style.get('settings.setting.edit')
                     , gb.style.get('common.grayPage.island.buttons.gray')
-                    , { events: { click: function(){ $this.editField() } } }
+                    , { events: { click: function(){ $this.editAvatar() } } }
                     ).views.base
                   }
                 }
@@ -190,6 +190,19 @@
         }
       };
       gb.utils.compoundViews(this.views);
+      
+      this.settings = this.views.pageWrapper.island.fill.wrapper;
+      
+      // Events
+      gb.consumer.on('change:name', function(){
+        $this.updateSetting('name', gb.consumer.getName());
+      });
+      gb.consumer.on('change:screenName', function(){
+        $this.updateSetting('screenName',  gb.consumer.getScreenName());
+      });
+      // gb.consumer.on('change:email', function(email){
+        // $this.updateSetting('email', gb.consumer.getEmail());
+      // });
     }
     
   , onShow: function(){
@@ -198,9 +211,28 @@
       this._displayUserData();
     }
     
+  , updateSetting: function(name, value){
+      this.settings['setting:' + name].field.setText(value);
+    }
+    
   , editField: function(field){
       GB.Views.get('edit-setting').setField(field);
       GB.Views.show('edit-setting');
+    }
+    
+  , editAvatar: function(){
+      var avatar = this.views.pageWrapper.island.fill.wrapper['setting:avatar'].field;
+      Ti.Media.openPhotoGallery({
+        allowEditing: true
+      , success: function(item){
+          if (item.mediaType === Ti.Media.MEDIA_TYPE_VIDEO) return alert("Get out of there, video. You don't belong in a profile picture you are a video.")
+          // Update settings avatar
+          avatar.setImage(item.media);
+          // Update sidebar
+          GB.Views.get('sidebar').elements.header.avatar.image.setImage(item.media);
+          gb.consumer.setAvatar(item.media);
+        }
+      });
     }
     
   , onFacebookClick: function(){
@@ -208,12 +240,15 @@
     }
     
   , onSignOut: function(){
-      
+      gb.consumer.logout();
+      GB.Windows.show('login');
     }
     
   , _displayUserData: function(){
-      var settings = this.views.pageWrapper.island.fill.wrapper;
-      settings['setting:avatar'].field.setImage('http://goodybag-uploads.s3.amazonaws.com/consumers/' + gb.consumer.data._id + '-85.png');
+      var settings = this.settings;
+      gb.consumer.getAvatar(128, function(image){
+        settings['setting:avatar'].field.setImage(image);
+      });
       settings['setting:name'].field.setText(gb.consumer.getName());
       settings['setting:screenName'].field.setText(gb.consumer.data.screenName);
       settings['setting:email'].field.setText(gb.consumer.data.email);

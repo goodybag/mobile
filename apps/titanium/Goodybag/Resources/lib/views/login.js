@@ -67,6 +67,7 @@ gb.Windows.add('login', Window.extend({
       
       gb.consumer.email = gb.utils.trim($el.inputs.email.getValue());
       gb.consumer.password = gb.utils.trim($el.inputs.password.getValue());
+      $el.inputs.password.setValue("");
       
       gb.consumer.auth(function(error, consumer) {
         if (error) {

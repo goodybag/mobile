@@ -17,7 +17,7 @@ if(!GB.Models)
    * 
    * @type {Object}
    */
-  GB.Models.User = new Class({
+  GB.Models.User = new Class(gb.utils.extend({
     /**
      * Consumer Authentication Variable
      * Keeps track of basic authentication checks.
@@ -336,7 +336,7 @@ if(!GB.Models)
      * 
      * @return {Null}
      */
-    logout: function () {
+    logout: function (callback) {
       if (this.data.authMethod == GB.Models.User.Methods.FACEBOOK)
         $fb.logout();
         
@@ -345,10 +345,14 @@ if(!GB.Models)
       
       if (consumer.exists()) consumer.deleteFile();
       if (cookie.exists()) cookie.deleteFile();
-      if (self.avatars.s85 && self.avatars.s85.exists()) self.avatars.s85.deleteFile();
-      if (self.avatars.s128 && self.avatars.s128.exists()) self.avatars.s128.deleteFile();
+      if (this.avatar.s85 && this.avatar.s85.exists()) this.avatar.s85.deleteFile();
+      if (this.avatar.s128 && this.avatar.s128.exists()) this.avatar.s128.deleteFile();
       
       consumer = cookie = null;
+      $http.get(gb.config.api.logout, function(error){
+        if (error) alert(error);
+        if (callback) callback();
+      });
       return null;
     },
     
@@ -361,18 +365,24 @@ if(!GB.Models)
      * @param  {Integer}  size     Integer determining image size, 85 or 128 is accepted.
      * @param  {Function} callback Function to delegate error and results to.
      */
-    getAvatar: function (size, callback) {
-      if (!this.data) return;
+    getAvatar: function (size, forceNew, callback) {
+      if (typeof forceNew === "function"){
+        callback = forceNew;
+        forceNew = false;
+      }
+      if (!this.data)  return callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
       // Hack for now to fix users with no media
-      if (!this.data.media) return;
+      if (!this.data.media)  return callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
       var url = ((size == 85) ? this.data.media.thumb : this.data.media.url), written = true, $self = this;
       if (!url) url = 'http://goodybag-uploads.s3.amazonaws.com/consumers/' + this.data._id + '-' + size + '.png';
-      
-      if (!this.avatar['s' + size].exists()) {
+      if (!this.avatar['s' + size].exists() || forceNew) {
         $http.get.image(url, function (error, results) { 
+          if (error) return callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
           if ($self.avatar['s' + size].write(results) === false) written = false;
           callback((written) ? $self.avatar['s' + size].read() : url);
         });
+      } else {
+        callback(this.avatar['s' + size].read());
       }
     },
     
@@ -508,6 +518,20 @@ if(!GB.Models)
     },
     
     /**
+     * Sets the Password
+     * @return {null}
+     */
+    setPassword: function (password, newPassword, callback) {
+      var $this = this;
+      callback || (callback = function(){});
+      $http.post(gb.config.api.setPassword, { password: password, newPassword: newPassword }, function(error, data){
+        if (error) return console.log(error);
+        data = JSON.parse(data);
+        callback(data.error);
+      });
+    },
+    
+    /**
      * Creates and sets a barcode ID
      * @return {null}
      */
@@ -549,17 +573,87 @@ if(!GB.Models)
      * @return {null}
      */
     setScreenName: function (value, callback) {
+      this.data.screenName = value;
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setScreenName, { screenName: value }, function(error, data){
         if (error) return console.log(error);
         data = JSON.parse(data);
         if (data.error) return callback(data.error);
-        $this.data.screenName = value;
         $this.data.setScreenName = true;
         $this._setConsumer($this);
         callback(null, data.data);
       });
+      this.trigger('change:screenName', value, this);
+    },
+    
+    /**
+     * Sets the name on the user object and the server
+     * @return {null}
+     */
+    setName: function (values, callback) {
+      this.data.firstName = values.firstName;
+      this.data.lastName = values.lastName;
+      var $this = this;
+      callback || (callback = function(){});
+      $http.post(gb.config.api.setName, values, function(error, data){
+        if (error) return console.log(error);
+        data = JSON.parse(data);
+        if (data.error) return callback(data.error);
+        $this._setConsumer($this);
+        callback(null, data.data);
+      });
+      this.trigger('change:name', values, this);
+    },
+    
+    /**
+     * Sets the email on the user object and the server
+     * @return {null}
+     */
+    setEmail: function (email, callback) {
+      this.data.email = email
+      var $this = this;
+      callback || (callback = function(){});
+      $http.post(gb.config.api.setEmail, { email: email }, function(error, data){
+        if (error) return console.log(error);
+        data = JSON.parse(data);
+        if (data.error) return callback(data.error);
+        $this._setConsumer($this);
+        callback(null, data.data);
+      });
+      this.trigger('change:email', email, this);
+    },
+    
+    /**
+     * Uploads avatar and writes it to our app
+     * We could probably re-factor this to not do 3 requests :/
+     * 
+     * @param {FileBlob} The file to upload
+     * @param {Function} Called when the initial request is complete
+     * @param {Function} Called when the onSendStream event is triggered
+     */
+    setAvatar: function (blob, callback, onProgress) {
+      var $this = this, options = {
+        media: blob
+      , params: JSON.stringify({
+          'auth': { 'key': gb.config.transloadit.key }
+        , 'template_id': gb.config.transloadit.template_id
+        , 'notify_url': gb.config.transloadit.notify_url
+        , 'steps': {
+            'export85': { "path": "consumers/" + this.data._id + "-85.png" }
+          , 'export128': { "path": "consumers/" + this.data._id + "-128.png" }
+          , 'export85Secure': { 'path': "consumers-secure/" + this.data.screenName + "-85.png" }
+          , 'export128Secure': { 'path': "consumers-secure/" + this.data.screenName + "-128.png" }
+          }
+        })
+      };
+      // Write file once we know the server got it
+      $http.post.generic(gb.config.transloadit.upload_url, options, function(error, response){
+        if (error) return alert(error);
+        // Just callback when the initial request is done
+        $this._setAvatar();
+        callback();
+      }, onProgress);
     },
     
     /**
@@ -645,7 +739,7 @@ if(!GB.Models)
       this.getAvatar(85, function () {});
       this.getAvatar(128, function () {});
     }
-  });
+  }, gb.Events));
   
   /**
    * Authentication Method Enum

@@ -49,6 +49,7 @@ GB.Views.add('sidebar', {
     
     $self.add($el.header.background);
     $self.add($el.header.avatar.background);
+    $self.add($el.header.avatar.image);
     $self.add($el.header.username);
     $self.add($el.bank.background);
     
@@ -57,6 +58,11 @@ GB.Views.add('sidebar', {
     
     for (var item in $el.list)
       $self.add($el.list[item]);
+      
+    // Events
+    gb.consumer.on('change:avatar', function(){ $self.setAvatar(); });
+    gb.consumer.on('change:name', function(){ $el.header.username.setText(gb.consumer.getUsername()); });
+    gb.consumer.on('change:screenName', function(){ $el.header.username.setText(gb.consumer.getUsername()); });
     
     return this;
   },
@@ -87,9 +93,13 @@ GB.Views.add('sidebar', {
       $el.bank.slots["16"].text = "0";
     }
     
-    $user.getAvatar(85, function (image) {
-      $el.header.avatar.image.setImage(image);
-      $self.add($el.header.avatar.image);
+    this.setAvatar();
+  },
+  
+  setAvatar: function () {
+    var $self = this;
+    gb.consumer.getAvatar(128, function (image) {
+      $self.elements.header.avatar.image.setImage(image);
     });
   },
   

@@ -42,6 +42,7 @@ Ti.include('lib/core/components/pull-to-refresh/pull-to-refresh.js');
 Ti.include('lib/core/components/charity-view.js');
 Ti.include('lib/core/components/button.js');
 Ti.include('lib/core/components/validate.js');
+Ti.include('lib/core/components/events.js');
 
 gb.qrcode = QRCode({
   typeNumber: 4,
@@ -57,7 +58,7 @@ Ti.include('lib/models/activity.js');
 gb.consumer = new GB.Models.User();
 
 // Views
-Ti.include('lib/views/register.js');
+Titanium.include('lib/views/register.js');
 Titanium.include('/lib/views/qrcode.js');
 Titanium.include('/lib/views/nearby.js');
 Titanium.include('/lib/views/sidebar.js');
@@ -69,6 +70,7 @@ Titanium.include('/lib/views/set-screen-name.js');
 Titanium.include('/lib/views/enter-tapin-id.js');
 Titanium.include('/lib/views/settings.js');
 Titanium.include('/lib/views/edit-setting.js');
+Titanium.include('/lib/views/email-change-request.js');
     
 // Windows
 Ti.include('lib/views/login.js');

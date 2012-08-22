@@ -69,20 +69,17 @@
       , backgroundColor: gb.ui.color.grayLightest
       , top: 6
       }
-      
-    , "avatar": {
-        width: 85
-      , height: $ui.SIZE
-      }
     }
     
     // Sub-pixel rendering was messing up the button render clarity
   , "setting:avatar": {
       "base": {
-        top: 2        
+        top: 2
       }
     , "field": {
         left: 0
+      , width: 85
+      , height: 85
       }
     , "edit": {
         "default": {

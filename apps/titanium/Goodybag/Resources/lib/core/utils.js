@@ -100,6 +100,35 @@ gb.utils = function (global) {
   };
   
   /**
+   * HTTP POST without using json
+   *
+   * Options are actually parameters (values) that you wish to 
+   * be pass along with the request
+   * 
+   * @param  {String}   url      POST URI
+   * @param  {Object}   options  Post Parameters
+   * @param  {Function} callback Returns error or request results.
+   * @param  {Function} progress Optional callback for the onsendstream event
+   */
+  this.http.post.generic = function (url, options, callback, progress) {
+    var client = Ti.Network.createHTTPClient();
+    
+    client.onload = function () {
+      callback.apply(this, [ null, this.responseText]);
+    }
+    
+    client.onerror = function (e) {
+      callback.apply(this, [ e.error ]);
+    }
+    
+    if (progress) client.onsendstream = progress;
+    
+    client.timeout = 10000;
+    client.open('POST', url);
+    client.send(options);
+  };
+  
+  /**
    * Authenticated HTTP GET Request
    *
    * Utilize this method when wanting to send a GET request to a 

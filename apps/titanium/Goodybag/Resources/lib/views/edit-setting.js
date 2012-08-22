@@ -81,7 +81,7 @@
        */
       wrapper.base.setHeight('1000dp');
       // Remove Previous fields
-      if (this.currentFields) wrapper.base.remove(this.currentFields);
+      if (this.currentFields) wrapper.base.remove(this.currentFields.base);
       switch(which){
         case 'name':
           // Set Title
@@ -113,10 +113,9 @@
           // Set new Fields
           this.currentFields = this.getPasswordFields();
         break;
-        
         default: break;
       }
-      wrapper.base.add(this.currentFields);
+      wrapper.base.add(gb.utils.compoundViews(this.currentFields));
       wrapper.base.setHeight($ui.SIZE); // Bug height resolution
     }
     
@@ -183,48 +182,123 @@
     }
     
   , getNameFields: function(){
-      return gb.utils.compoundViews({
+      return {
         "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
       , "field:firstName": this.getValidatedField('firstName', 'First Name', gb.consumer.data.firstName)
       , "field:lastName": this.getValidatedField('lastName', 'Last Name', gb.consumer.data.lastName)
-      });
+      };
     }
     
   , getEmailFields: function(){
-      return gb.utils.compoundViews({
+      return {
         "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
       , "field:email": this.getValidatedField('email', 'Email', gb.consumer.data.email)
       , "field:emailConfirm": this.getValidatedField('email', 'Confirm Email')
-      });
+      };
     }
     
   , getScreenNameFields: function(){
-      return gb.utils.compoundViews({
+      return {
         "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
       , "field:email": this.getValidatedField('screenName', 'Alias', gb.consumer.data.setScreenName ? gb.consumer.data.screenName : "")
-      });
+      };
     }
     
   , getBarcodeIdFields: function(){
-      return gb.utils.compoundViews({
+      return {
         "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
       , "field:barcodeId": this.getValidatedField('barcodeId', 'Tap-In ID', gb.consumer.data.barcodeId || "")
-      });
+      };
     }
     
   , getPasswordFields: function(){
-      return gb.utils.compoundViews({
+      return {
         "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
       , "field:password": this.getField('Current Password', "", true)
       , "field:newPassword": this.getValidatedField('password', 'New Password', "", true)
       , "field:confirmPassword": this.getValidatedField('password', 'Confirm', "", true)
-      });
+      };
     }
     
   , save: function(){
       switch (this.which){
-        
+      case 'name':
+        var
+          firstName = this.currentFields['field:firstName'].input.getValue()
+        , lastName = this.currentFields['field:lastName'].input.getValue()
+        , errors = []
+        ;
+        if (gb.consumer.data.facebook) return this.reportErrors(['Facebook users must change their name from facebook']);
+        if (firstName === gb.consumer.data.firstName && lastName === gb.consumer.data.lastName) return;
+        if (firstName !== gb.consumer.data.firstName){
+          gb.validate('firstName', firstName, function(_errors){
+            if (_errors.length > 0) errors = errors.join(_errors);
+          });
+        }
+        if (lastName !== gb.consumer.data.lastName){
+          gb.validate('lastName', firstName, function(_errors){
+            if (_errors.length > 0) errors = errors.join(_errors);
+          });
+        }
+        if (errors.length > 0) return this.reportErrors(errors);
+        gb.consumer.setName({ firstName: firstName, lastName: lastName }, function(error){
+          if (error) return alert(error);
+        });
+      break;
+      case 'email':
+        var
+          email = this.currentFields['field:email'].input.getValue()
+        , confirm = this.currentFields['field:emailConfirm'].input.getValue()
+        , errors = []
+        ;
+        gb.validate('email', email, function(_errors){
+          if (_errors.length > 0) errors = errors.join(_errors);
+        });
+        if (email !== confirm) errors.push('Emails do not match');
+        if (errors.length > 0) return this.reportErrors(errors);
+        gb.consumer.setEmail(email, function(error){
+          if (error) return alert(error);
+        });
+        return GB.Views.show('email-change-request');
+      break;
+      case 'screenName':
+      break;
+      case 'barcodeId':
+        var
+          barcodeId = this.currentFields['field:barcodeId'].input.getValue()
+        , errors = gb.validate('barcodeId', barcodeId)
+        ;
+        if (errors.length > 0) return this.reportErrors(errors);
+        gb.consumer.setBarcodeId(barcodeId, function(error){
+          if (error) return alert(error);
+        });
+      break;
+      case 'password':
+        var
+          password = this.currentFields['field:password'].input.getValue()
+        , newPassword = this.currentFields['field:newPassword'].input.getValue()
+        , confirmPassword = this.currentFields['field:confirmPassword'].input.getValue()
+        , errors = gb.validate('password', newPassword)
+        ;
+        if (newPassword !== confirmPassword) errors.push('Passwords do not match');
+        if (errors.length > 0) return this.reportErrors(errors);
+        gb.consumer.setPassword(password, newPassword, function(error){
+          if (error) return alert(error);
+        });
+      break;
+      default: break;
+    }
+    this.onBack();
+  }
+  
+  , reportErrors: function(errors){
+      if (typeof errors === "string") return alert(errors);
+      var msg = "";
+      for (var i = errors.length - 1, error; i >= 0; i--){
+        error = errors[i];
+        msg += (typeof error === "object") ? error.message : error;
       }
+      alert(msg);
     }
     
   , onBack: function(){
