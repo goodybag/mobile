@@ -47,13 +47,12 @@ Views.add = function (name, view) {
     view.viewName = name;
     view = View.extend(view);
   }
-  console.log("instantiating " + name);
+  // gb.utils.debug("instantiating " + name);
   this.views[name] = new view();
-  console.log("instantiated " + name);
+  // gb.utils.debug("instantiated " + name);
   this.views[name].viewName = name;
-  console.log("hiding " + name);
+  // gb.utils.debug("hiding " + name);
   this.views[name].self.hide();
-  console.log("hid " + name);
 };
 
 /**
@@ -91,9 +90,9 @@ Views.show = function (name, context) {
   if (!this.exists(name)) return;
   if (this.current) this.hide(this.current);
   if (typeof this.views[name].onShow != 'undefined') this.views[name].onShow(context);
-  console.log("showing " + name);
+  gb.utils.debug("showing " + name);
   this.views[name].self.show();
-  console.log("showed " + name);
+  gb.utils.debug("showed " + name);
   this.current = name;
   
   if (typeof this.views[name].afterShow != 'undefined' && gb.isIOS) this.views[name].afterShow(context);

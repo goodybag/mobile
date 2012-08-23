@@ -3,7 +3,8 @@ gb.style.base.main = {
   self: {
     top: 0,
     title: 'Main',
-    backgroundImage: 'background.png'
+    backgroundImage: 'background.png',
+    backgroundColor: 'white'
   },
   
   views: {

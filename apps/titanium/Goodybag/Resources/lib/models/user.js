@@ -224,13 +224,16 @@ if(!GB.Models)
         callback(null, self);
         return;
       }
-    
+      
+      console.log('sending request');
       $http.post(gb.config.api.facebookAuth, {
         accessToken: $fb.getAccessToken()
       }, function (error, json) {
         if (error) {
           callback("Couldn't Connect to Goodybag Account.");
         } else {
+          console.log(error);
+          console.log(json);
           var consumer = JSON.parse(json);
           
           if (consumer.error) {
@@ -251,7 +254,7 @@ if(!GB.Models)
           // Setup Avatars
           self._setAvatar();
           
-          console.log(JSON.stringify(self));
+          gb.utils.debug(JSON.stringify(self));
           
           // Cleanup
           cookie = null;
@@ -356,6 +359,53 @@ if(!GB.Models)
       return null;
     },
     
+    getPosition: function (callback) {
+      var $this = this;
+      
+      Titanium.Geolocation.purpose = 'Get Current Location';
+      Titanium.Geolocation.getCurrentPosition(function(e) {
+        var coords = e.coords;
+        Titanium.Geolocation.reverseGeocoder(coords.latitude, coords.longitude, function (e) {
+          callback.apply($this, [ e ]);
+        });
+      });
+    },
+    
+    getProfile: function (callback) {
+      var profile = this.data.profile || null, $this = this, $data = this.data;
+      
+      $http.get.sessioned(gb.config.api.consumer.profile, this.session, function (error, results) {
+        if (error) return callback(profile); else results = JSON.parse(results);
+        if (results.error) return callback(profile); else $data.profile = results.data;
+        callback($data.profile);
+        $this._setConsumer($data);
+      });
+    },
+    
+    getLocationsByTapins: function (callback) {
+      var locations = this.data.locations || null, $this = this, $data = this.data;
+      
+      $http.get.sessioned(gb.config.api.consumer.locations, this.session, function (error, results) {
+        if (error) return callback(locations); else results = JSON.parse(results);
+        if (results.error) return callback(locations); else $data.locations = results.data;
+        callback($data.locations);
+        $this._setConsumer($data);
+      });
+    },
+    
+    getTapinCount: function (callback) {
+      var count = this.data.tapinCount || null, $this = this, $data = this.data;
+      
+      $http.get.sessioned(gb.config.api.consumer.count, this.session, function (error, results) {
+        gb.utils.debug(error);
+        gb.utils.debug(results);
+        if (error) return callback(count); else results = JSON.parse(results);
+        if (results.error) return callback(count); else $data.tapinCount = results.data;
+        callback($data.tapinCount);
+        $this._setConsumer($data);
+      });
+    },
+    
     /**
      * Determines whether the user is authenticated
      * @return {Boolean}
@@ -418,6 +468,10 @@ if(!GB.Models)
       return this.data.email;
     },
     
+    getJoinDate: function () {
+      return this.data.created ? new Date(this.data.created) : null;
+    },
+    
     /**
      * Returns users tapin-code.
      *
@@ -435,7 +489,7 @@ if(!GB.Models)
      * @return {String}
      */
     getCharityId: function () {
-      return this.data.charity ? this.data.charity.id : null;
+      return (this.data.charity) ? this.data.charity.id : null;
     },
     
     getBarcodeID: function () {
@@ -448,6 +502,16 @@ if(!GB.Models)
      */
     getCharityName: function () {
       return (this.data.charity) ? this.data.charity.name : null;
+    },
+    
+    /**
+     * Returns total accumulated amount the user has donated to charity.
+     */
+    getTotalDonated: function () {
+      if (!this.data.funds) return 0;
+      if (!this.data.funds.donated) return 0;
+      var donated = parseInt(this.data.funds.donated);
+      return Math.round(donated*100)/100;
     },
   
     /**
@@ -564,7 +628,7 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.selectCharity + charity.id, {}, function(error, data){
-        if (error) return console.log(error);
+        if (error) return gb.utils.debug(error);
         data = JSON.parse(data);
         if (data.error) return callback(data.error);
         $this.data.charity = {
@@ -694,7 +758,7 @@ if(!GB.Models)
       var cookie = $file.getFile($file.applicationDataDirectory, "cooks");
       if (cookie.exists()) cookie.deleteFile();
       if (cookie.write(sjcl.encrypt(gb.config.secret, sessionId)) === false) {
-        console.log('Could not write to cookie file.');
+        gb.utils.debug('Could not write to cookie file.');
       }
       
       cookie = null;
@@ -721,7 +785,7 @@ if(!GB.Models)
   
       this.data = obj.data;
       if (consumer.write(sjcl.encrypt(gb.config.secret, JSON.stringify(this.data))) === false) {
-        console.log('Could not write to consumer file.');
+        gb.utils.debug('Could not write to consumer file.');
       }
       
       consumer = null;

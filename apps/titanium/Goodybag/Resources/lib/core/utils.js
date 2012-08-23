@@ -205,10 +205,8 @@ gb.utils = function (global) {
    */
   this.getImage = function (path) {
     path = (gb.isAndroid ? '/images/' : '') + path;
-    
-    if (gb.config.debug) 
-      console.log('[gb.utils.getImage] ' + path);
-    
+    this.debug('[gb.utils.getImage] ' + path);
+  
     return path;
   }
   
@@ -453,7 +451,7 @@ gb.utils = function (global) {
       else if (typeof d[p] != 'object' || d[p] == null) d[p] = this.merge(o[p].constructor === Array ? [] : {}, o[p]);
       else d[p] = this.merge(d[p], o[p]);
     }
-    console.log(d);
+    
     return d;
   }
   
@@ -470,13 +468,15 @@ gb.utils = function (global) {
    */
   this.extend = function(obj) {
     var args = Array.prototype.slice.call(arguments, 1);
+    
     for (var i = args.length - 1, source; i >= 0; i--){
       source = args[i];
-      console.log(source);
+      
       for (var prop in source) {
         obj[prop] = source[prop];
       }
     }
+    
     return obj
   }
   
@@ -512,29 +512,31 @@ gb.utils = function (global) {
    *   }
    * }
    */
-  this.compoundViews = function(tree){
+  this.compoundViews = function (tree) {
     var base = tree.base, item;
     if (typeof base === "undefined") throw new Error("Base is undefined");
+    if (!base.add) throw new Error("Base must be a Titanium Object!");
+    
     for (var key in tree){
       item = tree[key];
       if (item === null) continue;
       if (key === "base"){
-        for (var eventType in item.events){
+        for (var eventType in item.events)
           item.addEventListener(eventType, item.events[eventType]);
-        }
         continue;  
       }
-      if (typeof item === "object" && item.base){
+      
+      if (typeof item === "object" && item.base) {
         base.add(self.compoundViews(item));
         // maybe get a little more granular with this check with:
         // Object.prototype.toString.call(item).indexOf('TI') > -1
-      }else if (typeof item === "object"){
-        for (var eventType in item.events){
+      } else if (typeof item === "object") {
+        for (var eventType in item.events)
           item.addEventListener(eventType, item.events[eventType]);
-        }
         base.add(item);
       }
     }
+    
     return base;
   }
   
