@@ -357,6 +357,14 @@ if(!GB.Models)
     },
     
     /**
+     * Determines whether the user is authenticated
+     * @return {Boolean}
+     */
+    isAuthenticated: function () {
+      return this.authenticated;
+    },
+    
+    /**
      * Fetches or grabs the currently stored avatar image.
      * 
      * If the image does not exist fetch and store the correct image size based on request and return 
@@ -370,9 +378,9 @@ if(!GB.Models)
         callback = forceNew;
         forceNew = false;
       }
-      if (!this.data)  return callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
+      if (!this.data) return callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
       // Hack for now to fix users with no media
-      if (!this.data.media)  return callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
+      if (!this.data.media) return callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
       var url = ((size == 85) ? this.data.media.thumb : this.data.media.url), written = true, $self = this;
       if (!url) url = 'http://goodybag-uploads.s3.amazonaws.com/consumers/' + this.data._id + '-' + size + '.png';
       if (!this.avatar['s' + size].exists() || forceNew) {

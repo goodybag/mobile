@@ -203,6 +203,14 @@
       // gb.consumer.on('change:email', function(email){
         // $this.updateSetting('email', gb.consumer.getEmail());
       // });
+      
+      // Facebook stuff
+      // this.views.pageWrapper.facebook.addEventListener('click', function(){
+        // Ti.Facebook.authorize();
+      // });
+      Ti.Facebook.addEventListener('login', function(e){
+        
+      });
     }
     
   , onShow: function(){

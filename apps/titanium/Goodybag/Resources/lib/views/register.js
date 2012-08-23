@@ -20,7 +20,7 @@
   };
   
   GB.Views.add('register', {
-    self: $ui.createScrollView(gb.utils.extend(
+    self: Titanium.UI.createView(gb.utils.extend(
       gb.style.get('common.scrollView')
     , gb.style.get('register.self')
     )),

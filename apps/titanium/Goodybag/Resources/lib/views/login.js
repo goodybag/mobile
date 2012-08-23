@@ -82,6 +82,7 @@ gb.Windows.add('login', Window.extend({
     });
     
     Titanium.Facebook.addEventListener('login', function(e) {
+      if (gb.consumer.isAuthenticated()) return;
       console.log('signing in with facebook.');
       console.log(JSON.stringify(e));
       
