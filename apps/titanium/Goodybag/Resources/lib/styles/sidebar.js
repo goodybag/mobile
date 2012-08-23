@@ -13,7 +13,13 @@ gb.style.base.sidebar = {
       top: 0,
       zIndex: 1,
       image: 'screens/sidebar/header.png',
-      build: { type: 'createImageView' }
+      build: { type: 'createImageView' },
+      events: {
+        click: function (e) {
+          gb.Views.show('profile');
+          gb.Windows.get('main').toggleSidebar();
+        }
+      }
     },
     
     username: {

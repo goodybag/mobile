@@ -27,28 +27,34 @@ gb.config = function (global, fb, storage) {
   // debugging modes
   this.debug = true;
   this.development = false;
-  var domain = this.development ? 'local' : 'www';
-
+  
+  // Api Domain
+  var domain = (this.development ? 'local' : 'www') + '.goodybag.com';
+      domain = '192.168.1.6:3001';
+      
   // Api URLS
   this.api = {};
-  this.api.auth             = 'http://' + domain + '.goodybag.com/api/consumers/login';
-  this.api.logout           = 'http://' + domain + '.goodybag.com/api/consumers/logout';
-  this.api.register         = 'http://' + domain + '.goodybag.com/api/consumers/register';
-  this.api.facebookAuth     = 'http://' + domain + '.goodybag.com/api/consumers/fblogin';
-  this.api.participating    = 'http://' + domain + '.goodybag.com/api/consumers/participatingBusinesses?limit=';
   this.api.consumer = {};
-  this.api.consumer.self    = 'http://' + domain + '.goodybag.com/api/consumers/session'
   this.api.stream = {};
-  this.api.stream.me        = 'http://' + domain + '.goodybag.com/api/consumers/me/stream';
-  this.api.stream.global    = 'http://' + domain + '.goodybag.com/api/consumers/streams';
-  this.api.charities        = 'http://' + domain + '.goodybag.com/api/consumers/businesses?charity=1'
-  this.api.selectCharity    = 'http://' + domain + '.goodybag.com/api/consumers/self/charity/'
-  this.api.setScreenName    = 'http://' + domain + '.goodybag.com/api/consumers/updateScreenName/'
-  this.api.setName          = 'http://' + domain + '.goodybag.com/api/consumers/self/name'
-  this.api.setBarcodeId     = 'http://' + domain + '.goodybag.com/api/consumers/self/barcodeId'
-  this.api.setPassword      = 'http://' + domain + '.goodybag.com/api/consumers/self/password'
-  this.api.setEmail         = 'http://' + domain + '.goodybag.com/api/consumers/self/email'
-  this.api.createBarcodeId  = 'http://' + domain + '.goodybag.com/api/consumers/barcodes'
+  this.api.auth               = 'http://' + domain + '/api/consumers/login';
+  this.api.logout             = 'http://' + domain + '/api/consumers/logout';
+  this.api.register           = 'http://' + domain + '/api/consumers/register';
+  this.api.facebookAuth       = 'http://' + domain + '/api/consumers/fblogin';
+  this.api.participating      = 'http://' + domain + '/api/consumers/participatingBusinesses?limit=';
+  this.api.consumer.self      = 'http://' + domain + '/api/consumers/session';
+  this.api.consumer.profile   = 'http://' + domain + '/api/consumers/self';
+  this.api.consumer.locations = 'http://' + domain + '/api/consumers/locationsByTapins';
+  this.api.consumer.count     = 'http://' + domain + '/api/consumers/self/tapinCount';
+  this.api.stream.me          = 'http://' + domain + '/api/consumers/me/stream';
+  this.api.stream.global      = 'http://' + domain + '/api/consumers/streams';
+  this.api.charities          = 'http://' + domain + '/api/consumers/businesses?charity=1'
+  this.api.selectCharity      = 'http://' + domain + '/api/consumers/self/charity/'
+  this.api.setScreenName      = 'http://' + domain + '/api/consumers/updateScreenName/'
+  this.api.setName            = 'http://' + domain + '/api/consumers/self/name'
+  this.api.setBarcodeId       = 'http://' + domain + '/api/consumers/self/barcodeId'
+  this.api.setPassword        = 'http://' + domain + '/api/consumers/self/password'
+  this.api.setEmail           = 'http://' + domain + '/api/consumers/self/email'
+  this.api.createBarcodeId    = 'http://' + domain + '/api/consumers/barcodes'
   
   // Secret passphrase for files.
   this.secret = 'G00D13B4GR0X!!';

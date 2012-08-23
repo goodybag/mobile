@@ -198,7 +198,7 @@
       var $this = this;
       
       this.fetchData(function(error, data){
-        if (error) return console.log(error);
+        if (error) return gb.utils.debug(error);
         $this.hasLoaded = true;
         $this.showData(data);
       });
@@ -262,7 +262,7 @@
     
     showData: function (data) {
       var charity, list = this.views.charityList.base, $this = this;
-      console.log('showing charities');
+      gb.utils.debug('showing charities');
       for (var i = 0; i < data.length; i++) {
         charity = new GB.CharityView(data[i], {
           onSelect: function(charity, e){ $this.onCharitySelect(charity, e) }
@@ -270,7 +270,7 @@
         , selected: data[i]._id === gb.consumer.getCharityId()
         });
         
-        console.log(charity);
+        gb.utils.debug(charity);
         
         if (charity.selected) this.selected = charity;
         list.add(charity.views.base);
@@ -297,7 +297,7 @@
       if (this.isFetching) return;
       this.isFetching = true;
       $http.get(gb.config.api.charities, function(error, data){
-        if (error) return console.log(error);
+        if (error) return gb.utils.debug(error);
         data = JSON.parse(data);
         $this.isFetching = false;
         callback(data.error, data.data);

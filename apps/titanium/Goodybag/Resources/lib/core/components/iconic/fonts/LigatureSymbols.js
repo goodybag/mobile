@@ -186,7 +186,7 @@ function LigatureSymbols (options) {
     linkedin: 0xe083,
     mixi: 0xe090,
     skype: 0xe11b,
-    forsquare: 0xe04d,
+    foursquare: 0xe04d,
     pinterest: 0xe104,
     flickr: 0xe04b,
     tumblr: 0xe12e,
@@ -210,6 +210,5 @@ LigatureSymbols.prototype.getCharCode = function (code) {
   if (code === 'delete') code = 'del';
   return this.codes[code];
 };
-
 
 module.exports = LigatureSymbols;

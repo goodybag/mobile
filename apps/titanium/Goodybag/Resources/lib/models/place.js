@@ -97,9 +97,11 @@ if(!GB.Models)
     getGoodies: function (callback) {
       var url = "https://biz.goodybag.com/api/businesses/" + this.data._id + "/goodies";
       $http.get(url, function (error, results) {
-        if (error) return callback(null);
-        results = JSON.parse(results).data;
-        return callback(results);
+        if (error || !results) return callback(null);
+        results = JSON.parse(results);
+        if(results.data && results.data.length > 0)
+          return callback(results.data);
+        return callback(null);
       });
     },
     
@@ -133,8 +135,8 @@ if(!GB.Models)
       
       if (!image.exists()) {
         $http.get.image(url, function (error, results) { 
-          console.log(error);
-          console.log('attempting to write: ' + image.write(results));
+          gb.utils.debug(error);
+          gb.utils.debug('attempting to write: ' + image.write(results));
           callback(image.read());
         });
       } else {

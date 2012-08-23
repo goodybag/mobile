@@ -72,7 +72,7 @@ GB.Views.add('sidebar', {
     
     $el.header.username.setText($user.getUsername());
     
-    if ($user.data.funds.donated > 0) {
+    if (parseInt($user.data.funds.donated) > 0) {
       for (var i = 16; i > 3; i--) {
         if (i == 6 || i == 10 || i == 14) continue;
         list.push(i < 10 ? "0" + i : "" + i);
@@ -86,7 +86,7 @@ GB.Views.add('sidebar', {
         $el.bank.slots[item].visible = true;
         item == "13" && ($el.bank.slots['14'].visible = true);
         item == "09" && ($el.bank.slots['10'].visible = true);
-        item == "05" && ($el.bank.slots['06'].visible = true);        
+        item == "05" && ($el.bank.slots['06'].visible = true);
       }
     } else {
       $el.bank.slots["16"].visible = true;

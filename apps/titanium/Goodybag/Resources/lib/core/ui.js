@@ -12,9 +12,9 @@ gb.ui.color = {
 , gray:         '#888888'
 , grayLight:    '#9C9C9C'
 , grayLighter:  '#BBBBBB'
-<<<<<<< Updated upstream
 , silver:       '#CCCCCC'
-, platinum:     '#EDEDEF'
+, platinum:     '#E5E4E2'
+, offWhite:     '#F5F5F5'
 , pink:         '#D357BA'
 , blue:         '#57A0D3'
 , blueBright:   '#35C8F6'
@@ -23,11 +23,9 @@ gb.ui.color = {
 , greenDark:    '#44af44'
 , salmon:       '#f87476'
 , salmonDark:   '#af4444'
-=======
 , pink:         '#D357BA'
 , blue:         '#57A0D3'
 , blueBright:   '#35C8F6'
->>>>>>> Stashed changes
 };
 
 gb.ui.color.base = gb.ui.color.gray;

@@ -55,16 +55,16 @@ GB.Views.add('stream', {
    * @constructor
    */
   Constructor: function () {
-    console.log(gb.utils.getImage('screens/stream/Main.png'));
+    gb.utils.debug(gb.utils.getImage('screens/stream/Main.png'));
     var self = this;
     
     // Nav Group
     this.nav.global.addEventListener('click', function(e){
-      console.log("current: ", self.current);
+      gb.utils.debug("current: ", self.current);
       if (self.current !== "global") self.showGlobalView();
     });
     this.nav.my.addEventListener('click', function(e){
-      console.log("current: ", self.current);
+      gb.utils.debug("current: ", self.current);
       if (self.current !== "my") self.showMyView();
     });
     // Top property isn't working for padding in nav view, so add a filler
@@ -80,7 +80,7 @@ GB.Views.add('stream', {
       {
         triggerAt: '82%'
       , onScrollToEnd: function(){
-          console.log("GLOBAl scroll to end");
+          gb.utils.debug("GLOBAl scroll to end");
           self.onScrollToEnd(false);
         }
       , name: "Global Scroll"
@@ -95,7 +95,7 @@ GB.Views.add('stream', {
       {
         triggerAt: '82%'
       , onScrollToEnd: function(){
-          console.log("MY scroll to end");
+          gb.utils.debug("MY scroll to end");
           self.onScrollToEnd(true);
         }
       , name: "My Scroll"
@@ -185,7 +185,7 @@ GB.Views.add('stream', {
     ;
     curr = curr[0].toUpperCase() + curr.substring(1);
     this["fetch" + curr + "Stream"](state.limit = 15, state.page = 0, function(error, data){
-      if (error) return console.log(error);
+      if (error) return gb.utils.debug(error);
       if (!data) return gb.Views.show('stream-no-data');
       self.showItems(state.view.view, data);
       done();
@@ -200,16 +200,16 @@ GB.Views.add('stream', {
   
   showGlobalView: function(){
     var self = this, state = this.states.global;
-    console.log("hiding MY view showing GLOBAL");
+    gb.utils.debug("hiding MY view showing GLOBAL");
     this.states.my.view.hide();
     state.view.show();
     this.current = "global";
     this.nav.global.activate();
     this.nav.my.deactivate();
     if (state.hasData) return;
-    console.log("[stream view] - GLOBAL fetching data");
-    this.fetchGlobalStream(state.limit, state.limit * state.page++, function(error, data){
-      if (error) return console.log(error);
+    gb.utils.debug("[stream view] - GLOBAL fetching data");
+    this.fetchGlobalStream(state.limit, state.limit * ++state.page, function(error, data){
+      if (error) return gb.utils.debug(error);
       if (!data) return gb.Views.show('stream-no-data');
       state.hasData = true;
       self.showItems(self.states.global.view.view, data);
@@ -219,15 +219,15 @@ GB.Views.add('stream', {
   showMyView: function(){
     var self = this, state = this.states.my;
     this.states.global.view.hide();
-    console.log("hiding GLOBAL view showing MY");
+    gb.utils.debug("hiding GLOBAL view showing MY");
     state.view.show();
     this.current = "my";
     this.nav.global.deactivate();
     this.nav.my.activate();
     if (state.hasData) return;
-    console.log("[stream view] - MY - fetching data");
-    this.fetchMyStream(state.limit, state.limit * state.page++, function(error, data){
-      if (error) return console.log(error);
+    gb.utils.debug("[stream view] - MY - fetching data");
+    this.fetchMyStream(state.limit, state.limit * ++state.page, function(error, data){
+      if (error) return gb.utils.debug(error);
       if (!data) return gb.Views.show('stream-no-data');
       state.hasData = true;
       if (data.length > 0) return self.showItems(state.view.view, data);
@@ -237,7 +237,7 @@ GB.Views.add('stream', {
   },
   
   showItems: function(scrollView, data){
-    console.log("[stream view] - show items");
+    gb.utils.debug("[stream view] - show items");
     for (var i = 0; i < data.length; i++){
       scrollView.add(
         new GB.Views.Activity(
@@ -248,10 +248,10 @@ GB.Views.add('stream', {
   },
   
   onScrollToEnd: function(fetchMe){
-    console.log("[stream view] - on scroll to end FETCHING NEW ITEMS")
+    gb.utils.debug("[stream view] - on scroll to end FETCHING NEW ITEMS")
     var self = this, state = this.states[fetchMe ? 'my' : 'global'];
-    this.fetchStream(fetchMe, state.limit, state.limit * state.page++, function(error, data){
-      if (error) return console.log(error);
+    this.fetchStream(fetchMe, state.limit, state.limit * ++state.page, function(error, data){
+      if (error) return gb.utils.debug(error);
       self.showItems(fetchMe ? self.states.my.view : self.states.global.view, data);
     });
   },
@@ -286,7 +286,7 @@ GB.Views.add('stream', {
     + '&offset='  + skip
     , gb.consumer.session
     , function(error, data){
-        if (error) return console.log(error);
+        if (error) return gb.utils.debug(error);
         data = JSON.parse(data);
         self.isFetching = false;
         cb(data.error, data.data);

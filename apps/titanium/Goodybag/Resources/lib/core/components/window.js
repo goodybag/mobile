@@ -9,6 +9,7 @@
     
     this.windows[name] = new window();
     this.windows[name].windowName = name;
+    this.windows[name].window.visible = false;
     
     if (typeof this.windows[name].onAndroid != 'undefined' && gb.isAndroid)
       this.windows[name].onAndroid();
