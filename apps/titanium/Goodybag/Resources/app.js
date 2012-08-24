@@ -92,13 +92,6 @@ Titanium.include('/lib/views/main.js');
   'email-change-request'
 ].forEach(function (item) {
   Titanium.include('/lib/views/' + item + '.js');
-  var main = GB.Windows.get('main');
-  
-  if (main) {
-   console.log('adding ' + item + ' to main.elements.view')
-   main.elements.views.main[item] = GB.Views.get(item).self;
-   main.elements.views.main.add(main.elements.views.main[item]);
-  }
 });
 
 [ 'login', 'complete-registration' ].forEach(function (item) {

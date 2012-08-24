@@ -45,7 +45,7 @@ GB.Windows.add('main', Window.extend({
     // Add views to scrollable view
     GB.Views.get('sidebar').self.set('visible', true);
     GB.Views.get('sidebar').parent = this;
-    $el.views.holder.add($el.views.holder.sidebar.self);
+    $el.views.holder.add(GB.Views.get('sidebar').self);
     $el.views.holder.add($el.views.main);
 
     // Add scrollable to window.
@@ -61,12 +61,12 @@ GB.Windows.add('main', Window.extend({
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $user = gb.consumer, $url, written = true;
     
     // New users get the welcome screen upon logging in
-    if (gb.consumer.newlyRegistered){
+    if (gb.consumer.newlyRegistered) {
       this.flashWelcomeScreen();
     }
     
     // If we a user doesn't have a charity, let's send them to the charity page
-    if (!gb.consumer.getCharityId()){
+    if (!gb.consumer.getCharityId()) {
       this.location = "charities";
     }
     
@@ -74,7 +74,7 @@ GB.Windows.add('main', Window.extend({
     GB.Views.show(this.location);
 
     // User setup
-    $el.views.holder.sidebar.setDetails($user);
+    GB.Views.get('sidebar').setDetails($user);
   },
 
   /**

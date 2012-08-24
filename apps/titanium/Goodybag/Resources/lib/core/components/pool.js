@@ -49,8 +49,6 @@ var Pool = function (obj) {
     },
     
     hide: function () {
-      console.log(this.pool);
-      console.log('hiding... from pool');
       if (this.pool) this.pool.hide();
     },
     
@@ -73,9 +71,11 @@ var Pool = function (obj) {
     
     add: function (child, id) {
       var area = this.pool? 'children' : 'pendingChildren';
+      console.log('adding ' + child + ' to ' + area + ' with id ' + id);
       if (!this[area]) this[area] = {};
       id = id || this.cuuid++;
-      this[area][id] = child.pooler? child : new Pool(child), this[area][id].create();
+      this[area][id] = child.pooler? child : new Pool(child);
+      if (this.pool) this[area][id].create();
       if (this.pool) this.pool.add(this[area][id].pool);
       return id;
     },

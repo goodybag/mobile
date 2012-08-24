@@ -83,7 +83,8 @@ GB.Views.add('nearby', {
           $this.models[results.data[i]._id] = new GB.Models.Place(results.data[i]);
         }
       }
-
+      
+      GB.Windows.get('main').add($this.self);
       $this['show' + $this.location]();
     }, true);
   },

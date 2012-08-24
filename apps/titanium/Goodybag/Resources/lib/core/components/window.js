@@ -88,7 +88,7 @@ var Window = new Class({
     gb.utils.debug('[' + this.windowName + '] Attempting to hide window.', this.debug);
     
     if (typeof this.onHide != 'undefined' && this.created) this.onHide();
-    if (this.created) this.window.hide();
+    if (this.created) this.window.close(), this.created = false;
   },
   
   destroy: function () {
