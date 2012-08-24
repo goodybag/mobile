@@ -2,28 +2,19 @@
   var $ui = Ti.UI;
   
   var fieldFactory = function(field, text, isPassword){
-    var pw = isPassword ? gb.style.get('register.field.password') : {};
+    var style = 'register.field.input' + (isPassword? ' register.field.password' : '')
     return {
-      "base": $ui.createView(gb.style.get('register.field.wrapper'))
-    , "input": $ui.createTextField(gb.utils.extend({
-        hintText: text
-      , events: {
-          
-        }
-      }
-      , gb.style.get('register.field.input')
-      , pw
-      ))
-    , "indicator": $ui.createView(gb.style.get('register.field.indicator.base'))
-    , "separator": $ui.createView(gb.style.get('register.field.separator'))
+      "base": gb.style.get('register.field.wrapper')
+    , "input": gb.style.get(style, {
+        hintText: text, events: {}
+      })
+    , "indicator": gb.style.get('register.field.indicator.base')
+    , "separator": gb.style.get('register.field.separator')
     }
   };
   
   GB.Views.add('register', {
-    self: $ui.createScrollView(gb.utils.extend(
-      gb.style.get('common.scrollView')
-    , gb.style.get('register.self')
-    )),
+    self: gb.style.get('common.scrollView register.self'),
     
     Constructor: function () {
       var $this = this;
@@ -31,13 +22,13 @@
       this.onBackCallback = function(){};
       this.onRegisterCallback = function(){};
       
-      this.backBtn = new GB.Button('Back', gb.utils.extend(
-        { width: 80 }
-      , gb.style.get('common.bluePage.buttons.gray')));
+      this.backBtn = new GB.Button('Back', gb.style.get('common.bluePage.buttons.gray', { width: 80 }));
       this.registerBtn = new GB.Button('Register');
+      
       this.backBtn.addEventListener('click', function(e){
         $this.triggerOnBack(e);
       });
+      
       this.registerBtn.addEventListener('click', function(e){
         $this.register(e);
       });
@@ -46,7 +37,7 @@
         "base": this.self
         
       , "wrapper": {
-          "base": $ui.createView(gb.style.get('register.wrapper'))
+          "base": gb.style.get('register.wrapper')
         
         /*, "header": $ui.createLabel(gb.utils.extend(
             { text: "Register" }
@@ -54,7 +45,7 @@
           ))*/
           
         , "fields": {
-            "base": $ui.createView(gb.style.get('register.fields'))
+            "base": gb.style.get('register.fields')
             
           , "firstName":        $this.fieldFactory('firstName',       'First Name')
           , "lastName":         $this.fieldFactory('lastName',        'Last Name')
@@ -65,13 +56,13 @@
           }
           
         , "nav": {
-            "base": $ui.createView(gb.style.get('register.nav.base'))
+            "base": gb.style.get('register.nav.base')
           , "left": {
-              "base": $ui.createView(gb.style.get('register.nav.left'))
+              "base": gb.style.get('register.nav.left')
             , "btn": this.backBtn.views.base
             }
           , "right": {
-              "base": $ui.createView(gb.style.get('register.nav.right'))
+              "base": gb.style.get('register.nav.right')
             , "btn": this.registerBtn.views.base
             }
           }
@@ -86,26 +77,25 @@
     },
     
     fieldFactory: function (field, text, isPassword){
-      var $this = this, pw = isPassword ? gb.style.get('register.field.password') : {};
+      var $this = this, style = 'register.field.input' + (isPassword? ' register.field.password' : '');
+      
       return {
-        "base": $ui.createView(gb.style.get('register.field.wrapper'))
-      , "input": $ui.createTextField(gb.utils.extend({
+        "base": gb.style.get('register.field.wrapper')
+      , "input": gb.style.get(style, {
           hintText: text
         , events: {
             blur: function(e){
               $this.validateOne(field, e.source.getValue(), function(errors){
-                $this.views.wrapper.fields[field].indicator.setBackgroundImage(
+                $this.views.wrapper.fields[field].indicator.set(
+                  'BackgroundImage',
                   gb.style.get('register.field.indicator.' + ((errors.length > 0) ? 'red' : 'green')).backgroundImage
                 );
               });
             }
           }
-        }
-        , gb.style.get('register.field.input')
-        , pw
-        ))
-      , "indicator": $ui.createView(gb.style.get('register.field.indicator.base'))
-      , "separator": $ui.createView(gb.style.get('register.field.separator'))
+        })
+      , "indicator": gb.style.get('register.field.indicator.base')
+      , "separator": gb.style.get('register.field.separator')
       }
     },
     

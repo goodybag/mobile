@@ -515,7 +515,7 @@ gb.utils = function (global) {
   this.compoundViews = function (tree) {
     var base = tree.base, item;
     if (typeof base === "undefined") throw new Error("Base is undefined");
-    if (!base.add) throw new Error("Base must be a Titanium Object!");
+    console.log(base);
     
     for (var key in tree){
       item = tree[key];

@@ -30,12 +30,14 @@ gb.Windows.add('login', Window.extend({
     $el.view.add($el.loginWrapper)
     
     // Registration
-    gb.Views.get('register').self.setVisible(true);
+    gb.Views.get('register').self.set('visible', true);
     this.elements.registerWrapper.add(gb.Views.get('register').self);
     $el.view.add(this.elements.registerWrapper);
+    
     gb.Views.get('register').setOnBackCallback(function(){
       $self.hideRegistration();
     });
+    
     gb.Views.get('register').setOnRegisterCallback(function(){
       if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
       else GB.Windows.show('complete-registration');
@@ -65,9 +67,9 @@ gb.Windows.add('login', Window.extend({
     $el.buttons.submit.addEventListener('click', function (e) {
       if(gb.config.debug) console.log('[login] attempting to authenticate user.');
       
-      gb.consumer.email = gb.utils.trim($el.inputs.email.getValue());
-      gb.consumer.password = gb.utils.trim($el.inputs.password.getValue());
-      $el.inputs.password.setValue("");
+      gb.consumer.email = gb.utils.trim($el.inputs.email.get('value'));
+      gb.consumer.password = gb.utils.trim($el.inputs.password.get('value'));
+      $el.inputs.password.set('value', "");
       
       gb.consumer.auth(function(error, consumer) {
         if (error) {
@@ -112,16 +114,16 @@ gb.Windows.add('login', Window.extend({
     
     // Input Events
     $el.inputs.email.addEventListener('return', function (e) {
-      $el.inputs.password.focus();
-      $el.loginWrapper.scrollTo(0, 80);
+      $el.inputs.password.get().focus();
+      $el.loginWrapper.get().scrollTo(0, 80);
     });
     
     $el.inputs.password.addEventListener('return', function (e) {
-      $el.loginWrapper.scrollTo(0, 0);
+      $el.loginWrapper.get().scrollTo(0, 0);
     });
     
     $el.inputs.password.addEventListener('blur', function (e) {
-      $el.loginWrapper.scrollTo(0, 0);
+      $el.loginWrapper.get().scrollTo(0, 0);
     });
     
     $el.buttons.register.addEventListener('click', function (e) {
@@ -138,11 +140,11 @@ gb.Windows.add('login', Window.extend({
   },
   
   showRegistration: function () {
-    this.elements.registerWrapper.setZIndex(3);
+    this.elements.registerWrapper.set('zIndex', 3);
   },
   
   hideRegistration: function () {
-    this.elements.registerWrapper.setZIndex(1);
+    this.elements.registerWrapper.set('zIndex', 1);
   },
   
   onHide: function () {

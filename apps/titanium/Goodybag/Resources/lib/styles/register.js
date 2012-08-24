@@ -2,7 +2,8 @@
   var $ui = Ti.UI;
   gb.style.iphone.register = {
     "self": {
-      backgroundImage: 'screens/login/background.png'
+      backgroundImage: 'screens/login/background.png',
+      build: { type: 'ScrollView' }
     }
     
   , "wrapper": {
@@ -12,6 +13,7 @@
     , right: 10
     , top: 136
     , layout: 'vertical'
+    , build: { type: 'View' }
     }
     
   , "header": {
@@ -26,6 +28,7 @@
       }
     , shadowOffset: { x: 0, y: 1 }
     , shadowColor: '#63a5cf'
+    , build: { type: 'View' }
     }
     
   , "fields": {
@@ -37,6 +40,7 @@
     , borderWidth: '1dp'
     , borderColor: '#2e6284'
     , backgroundColor: '#fff'
+    , build: { type: 'View' }
     }
     
   , "field": {
@@ -44,6 +48,7 @@
         width: $ui.FILL
       , height: $ui.SIZE
       , layout: 'horizontal'
+      , build: { type: 'View' }
       }
     , "input": {
         width: 260
@@ -53,6 +58,7 @@
       , borderStyle: Ti.UI.INPUT_BORDERSTYLE_NONE
       , autocorrect: false
       , autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_NONE
+      , build: { type: 'TextField' }
       }
     , "indicator": {
         "base": {
@@ -60,6 +66,7 @@
         , height: 20
         , right: 10
         , backgroundImage: 'screens/register/indicator-gray.png'
+        , build: { type: 'View' }
         }
       , "green": {
           backgroundImage: 'screens/register/indicator-green.png'
@@ -75,6 +82,7 @@
         width: $ui.FILL
       , height: 1
       , backgroundColor: gb.ui.color.grayLighter
+      , build: { type: 'View' }
       }
     }
     
@@ -83,16 +91,19 @@
         width: $ui.FILL
       , height: $ui.SIZE
       , top: 14
+      , build: { type: 'View' }
       }     
     , "left": {
         left: 0
       , width: $ui.SIZE
       , height: $ui.SIZE
+      , build: { type: 'View' }
       }
     , "right": {
         right: 0
       , width: $ui.SIZE
       , height: $ui.SIZE
+      , build: { type: 'View' }
       }
     }
   };
