@@ -78,7 +78,7 @@
     
     this._setupViews();
     this._delegateEvents();
-    this._mapStyles();
+    // this._mapStyles();
   };
   constructor.prototype = {
     /**
@@ -186,21 +186,21 @@
         , bottom: base.bottom
         })
         
-      , "bottomShadow": $ui.createView({
-          width: $ui.FILL
-        , height: '12dp'
-        , backgroundColor: base.bottomShadow.color
-        , opacity: base.bottomShadow.opacity
-        , bottom: 0
-        })
-        
-      , "topShadow": $ui.createView({
-          width: $ui.FILL
-        , height: '12dp'
-        , backgroundColor: base.topShadow.color
-        , opacity:base.topShadow.opacity
-        , top: 0
-        })
+       // , "bottomShadow": $ui.createView({
+           // width: $ui.FILL
+         // , height: '12dp'
+         // , backgroundColor: base.bottomShadow.color
+         // , opacity: base.bottomShadow.opacity
+         // , bottom: 0
+         // })
+//         
+      // , "topShadow": $ui.createView({
+          // width: $ui.FILL
+        // , height: '12dp'
+        // , backgroundColor: base.topShadow.color
+        // , opacity:base.topShadow.opacity
+        // , top: 0
+        // })
         
       , "fill": $ui.createButton({
           width: $ui.FILL
@@ -225,28 +225,28 @@
         , shadowColor: base.shadowColor
         })
         
-      , "border": $ui.createView({
-          width: $ui.FILL
-        , height: base.height
-        , borderRadius: base.borderRadius
-        , borderWidth: base.borderWidth
-        , borderColor: base.borderColor
-        , top: 0
-        })
+      // , "border": $ui.createView({
+          // width: $ui.FILL
+        // , height: base.height
+        // , borderRadius: base.borderRadius
+        // , borderWidth: base.borderWidth
+        // , borderColor: base.borderColor
+        // , top: 0
+        // })
       };
       gb.utils.compoundViews(this.views);
-      this.views.base.addEventListener('touchstart', function(e){
-        if ($this.state === "disabled") return;
-        $this.set('active');
-      });
-      this.views.base.addEventListener('touchend', function(e){
-        if ($this.state === "disabled") return;
-        $this.set('default');
-      });
-      this.views.base.addEventListener('touchcancel', function(e){
-        if ($this.state === "disabled") return;
-        $this.set('default');
-      });
+      // this.views.base.addEventListener('touchstart', function(e){
+        // if ($this.state === "disabled") return;
+        // $this.set('active');
+      // });
+      // this.views.base.addEventListener('touchend', function(e){
+        // if ($this.state === "disabled") return;
+        // $this.set('default');
+      // });
+      // this.views.base.addEventListener('touchcancel', function(e){
+        // if ($this.state === "disabled") return;
+        // $this.set('default');
+      // });
     }
   };
   GB.Button = constructor;
