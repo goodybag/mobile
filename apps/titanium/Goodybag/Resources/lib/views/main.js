@@ -9,7 +9,8 @@ GB.Windows.add('main', Window.extend({
   elements: {
     views: {
       holder: gb.style.get('main.views.holder'),
-      main: gb.style.get('main.views.main')
+      main: gb.style.get('main.views.main'),
+      content: gb.style.get('main.views.content')
     },
 
     header: {
@@ -36,6 +37,7 @@ GB.Windows.add('main', Window.extend({
     $el.views.main.add($el.header.background);
     $el.views.main.add($el.header.logo);
     $el.views.main.add($el.header.buttons.sidebar);
+    $el.views.main.add($el.views.content);
 
     // Events
     $el.header.buttons.sidebar.addEventListener('click', function(e) {
@@ -57,7 +59,7 @@ GB.Windows.add('main', Window.extend({
     return this;
   },
 
-  onShow : function() {
+  onShow: function() {
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $user = gb.consumer, $url, written = true;
     
     // New users get the welcome screen upon logging in
@@ -71,10 +73,21 @@ GB.Windows.add('main', Window.extend({
     }
     
     // Direct Pages, then delegate background tasks.
-    GB.Views.show(this.location);
+    this.showPage(this.location);
 
     // User setup
     GB.Views.get('sidebar').setDetails($user);
+  },
+  
+  showPage: function (area) {
+    console.log('clearing current view');
+    this.elements.views.content.clear();
+    
+    console.log('showing ' + area);
+    GB.Views.show(area);
+    
+    console.log('adding new view to content');
+    this.elements.views.content.add(GB.Views.get(area).self);
   },
 
   /**

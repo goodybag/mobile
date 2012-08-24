@@ -4,7 +4,6 @@
   ,   detailsCharitySelect = gb.utils.getImage('screens/charity/buttons/charity_select.png')
   ,   detailsCharitySelected = gb.utils.getImage('screens/charity/buttons/charity_selected.png');
   
-  
   var views = {
     "base": $ui.createView({
       width: $ui.FILL

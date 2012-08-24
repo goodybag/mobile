@@ -31,9 +31,8 @@ var Pool = function (obj) {
     
     create: function () {
       if (this.pool) return this;
-      if (this.holder.build) this.holder.build = null;
-      if (this.type) this.pool = Titanium[this.area || 'UI'][(this.method || 'create') + this.type](this.holder), this.holder = null;
-      if (this.pendingChildren) for (var i in this.pendingChildren) this.add(this.pendingChildren[i], i), this.pendingChildren[i] = null;
+      if (this.type) this.pool = Titanium[this.area || 'UI'][(this.method || 'create') + this.type](this.holder);
+      if (this.pendingChildren) for (var i in this.pendingChildren) this.add(this.pendingChildren[i], i);
       if (this.pendingEvents) for (var i in this.pendingEvents) this.addEvent(this.pendingEvents[i].type, this.pendingEvents[i].callback, i);
       return this;
     },
@@ -71,7 +70,6 @@ var Pool = function (obj) {
     
     add: function (child, id) {
       var area = this.pool? 'children' : 'pendingChildren';
-      console.log('adding ' + child + ' to ' + area + ' with id ' + id);
       if (!this[area]) this[area] = {};
       id = id || this.cuuid++;
       this[area][id] = child.pooler? child : new Pool(child);
@@ -108,7 +106,27 @@ var Pool = function (obj) {
       return true;
     },
     
+    clear: function () {
+      if (this.children) {
+        console.log('removing children from: ' + this.pool.name || this.pool);
+        for (var i in this.children)
+          this._removeChild(i);
+      }
+      
+      if (this.events) {
+        console.log('removing events');
+        for (var i in this.events)
+          this.pool.removeEventListener(this.events[i].type, this.events[i].callback),
+          this.events[i] = null;
+      }
+      
+      this.events = null;
+      this.children = null;
+    },
+    
     close: function (excessive) {
+      if (!this.pool) return;
+      
       if (this.pool.hide) 
         console.log('hiding pool'),
         this.pool.hide();
@@ -116,7 +134,7 @@ var Pool = function (obj) {
       if (this.children) {
         console.log('removing children from: ' + this.pool.name || this.pool);
         for (var i in this.children)
-          this._removeChild(i);
+          this._removeChild(i, excessive);
       }
           
       if (this.events) {
@@ -132,17 +150,19 @@ var Pool = function (obj) {
         
       console.log('nullifying the objects')
       this.pool = null;
-      this.holder = null;
-      this.children = null;
       this.pendingChildren = null;
       this.pendingEvents = null;
+      this.children = null;
       this.events = null;
       
       if (excessive) {
         console.log('nullifying excessives')
         , this.area = null
         , this.method = null
-        , this.type = null;
+        , this.type = null
+        , this.holder = null
+        , this.pendingChildren = null
+        , this.pendingEvents = null;
         
         delete this.pool, this.holder, this.children, this.pendingChildren, this.pendingEvents = null, this.events = null;
         delete this.area, this.method, this.type;
@@ -156,11 +176,11 @@ var Pool = function (obj) {
       delete this[area][id];
     },
     
-    _removeChild: function (id) {
+    _removeChild: function (id, excessive) {
       console.log('removing ' + id);
       var area = this.pool? 'children' : 'pendingChildren';
       if (this.pool) this.pool.remove(this[area][id].pool);
-      this[area][id].close(true),
+      this[area][id].close(excessive),
       this[area][id] = null;
       delete this[area][id];
     }

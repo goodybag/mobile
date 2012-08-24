@@ -83,8 +83,7 @@ GB.Views.add('nearby', {
           $this.models[results.data[i]._id] = new GB.Models.Place(results.data[i]);
         }
       }
-      
-      GB.Windows.get('main').add($this.self);
+
       $this['show' + $this.location]();
     }, true);
   },
@@ -108,7 +107,7 @@ GB.Views.add('nearby', {
     this.locations = [];
     for(i in this.models) {
       locations = this.models[i].getLocations();
-      for(x = 0; x < locations.length; x++) {
+      for(x = 0; x < 30; x++) {
         this.locations.push(locations[x]);
       }
     }
@@ -122,7 +121,7 @@ GB.Views.add('nearby', {
       return $this.compareLocations.apply($this, [a, b]); 
     });
     
-    for (i = 0; i < $this.locations.length; i++) {
+    for (i = 0; i < 30; i++) {
       $el.places.add($this.locations[i].toRow(i%2, function (e) { 
         $this.onPlaceClick.apply($this, [ this ]); 
       }));

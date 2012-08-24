@@ -115,7 +115,7 @@ GB.Views.add('sidebar', {
     $prop.setString('location', area);
     
     // Show The Area
-    GB.Views.show(view);
+    GB.Windows.get('main').showPage(area);
     
     // Swap and close the sidebar
     $el.list[area].set('image', gb.utils.getImage('screens/sidebar/items/' + area + '_active.png'));

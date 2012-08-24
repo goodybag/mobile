@@ -25,7 +25,12 @@ gb.style.base.main = {
       width: 'platform',
       backgroundColor: 'white',
       build: { type: 'View' }
-    }
+    },
+    
+    content: {
+      width: 'platform',
+      build: { type: 'View' }
+    },
   },
   
   header: {

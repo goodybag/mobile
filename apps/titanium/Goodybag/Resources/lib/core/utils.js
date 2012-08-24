@@ -515,7 +515,6 @@ gb.utils = function (global) {
   this.compoundViews = function (tree) {
     var base = tree.base, item;
     if (typeof base === "undefined") throw new Error("Base is undefined");
-    console.log(base);
     
     for (var key in tree){
       item = tree[key];
