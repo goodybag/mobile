@@ -22,6 +22,9 @@ GB.CharityView = function(data, options){
   
   this.selected = this.options.selected;
   
+  this.onSelect = function(e){ $this.triggerOnSelect(e); };
+  this.onDetails = function(e){ $this.triggerOnDetails(e); };
+  
   this.views = {
     base: $ui.createView({
       width: $ui.FILL
@@ -97,22 +100,12 @@ GB.CharityView = function(data, options){
       , height: '30dp'
       , left: '1dp'
       , image: this.options["charitySelect" + (this.selected ? 'ed' : '') + "Btn"]
-      // , events: {
-          // click: function(e){
-            // $this.triggerOnSelect(e);
-          // }
-        // }
       })
       
     , detailsBtn: $ui.createButton({
         width: '155dp'
       , height: '30dp'
       , image: this.options.charityDetailsBtn
-      // , events: {
-          // click: function(e){
-            // $this.triggerOnDetails(e);
-          // }
-        // }
       })
     }
   };
@@ -120,15 +113,15 @@ GB.CharityView = function(data, options){
   gb.utils.compoundViews(this.views);
 };
 
-constructor.prototype = {
+GB.CharityView.prototype = {
   triggerOnDetails: function(e){
-    this.options.onDetails(this, e);
+    // this.options.onDetails(this, e);
   }
-, triggerOnSelect: function(e){
+, select: function(e){
     if (this.selected) return;
     this.views.bottom.selectBtn.setImage(this.options.charitySelectedBtn);
     this.selected = true;
-    this.options.onSelect(this, e);
+    // this.options.onSelect(this, e);
   }
 , deselect: function(){
     if (!this.selected) return;

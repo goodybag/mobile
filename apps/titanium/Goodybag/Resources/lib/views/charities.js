@@ -182,6 +182,8 @@ GB.Views.add('charities', {
     this.hasLoaded = false;
     this.hasCalledOnComplete = false;
     this.onComplete = function(){};
+    this.onCharityDetails = function(charity){ $this.showCharityDetails(charity); };
+    this.onCharitySelect = function(charity){ $this.selectCharity(charity); };
     
     this.views.charityDetails.base.hide();
     
@@ -198,10 +200,6 @@ GB.Views.add('charities', {
        $this.hasLoaded = true;
        $this.showData(data);
      });
-  },
-  
-  onCharityDetails: function(charity){
-    this.showCharityDetails(charity);
   },
   
   triggerOnComplete: function(){
@@ -243,7 +241,8 @@ GB.Views.add('charities', {
     this.onDetailsCharitySelect = function(e){
       if (charity.selected) return;
       select.setImage(detailsCharitySelected);
-      charity.triggerOnSelect(e);
+      charity.select();
+      $this.selectCharity(charity);
     };
     select.addEventListener('click', this.onDetailsCharitySelect);
     // For some reason the view's block properties are still prevalent after it's hidden
@@ -254,13 +253,36 @@ GB.Views.add('charities', {
   
   showData: function (data) {
     var $this = this;
+    
+    
+    var getSelectCallback = function(charity){
+      return function(){
+        charity.select();
+        $this.onCharitySelect(charity);
+      };
+    };
+    var getDetailsCallback = function(charity){
+      return function(){
+        $this.onCharityDetails(charity);
+      };
+    };
+    
     gb.utils.debug('showing charities');
     for (var i = 0; i < data.length; i++) {
       this.views.charityList["charity-" + i] = new GB.CharityView(data[i], {
-        onSelect: function(_charity, e){ $this.selectCharity(_charity, e) }
-      , onDetails: function(_charity, e){ $this.selectCharity(_charity, e) }
-      , selected: data[i]._id === gb.consumer.getCharityId()
+        // onSelect: this.onCharitySelect
+      // , onDetails: this.onCharityDetails
+        selected: data[i]._id === gb.consumer.getCharityId()
       });
+      
+      this.views.charityList["charity-" + i].views.bottom.selectBtn.addEventListener(
+        'click'
+      , getSelectCallback(this.views.charityList["charity-" + i]));
+      
+      this.views.charityList["charity-" + i].views.bottom.detailsBtn.addEventListener(
+        'click'
+      , getDetailsCallback(this.views.charityList["charity-" + i])
+      );
       
       if (this.views.charityList["charity-" + i].selected) this.selected = this.views.charityList["charity-" + i];
       this.views.charityList.base.add(this.views.charityList["charity-" + i].views.base);
@@ -269,18 +291,16 @@ GB.Views.add('charities', {
     // charity = null;
   },
   
-  selectCharity: function(charity, callback){
+  selectCharity: function(charity){
     var $this = this;
     if (this.selected) this.selected.deselect();
     this.selected = charity;
-    callback || (callback = function(){});
     gb.consumer.setCharity({
       id: charity.model._id
     , name: charity.model.publicName
     }, function(error){
       if (error) return console.log(error);
       $this.triggerOnComplete(); // Registration step complete
-      callback();
     });
   },
   
