@@ -44,6 +44,7 @@ var Pool = function (obj) {
     },
     
     show: function () {
+      if (!this.pool) this.create();
       if (this.pool) this.pool.show();
     },
     
