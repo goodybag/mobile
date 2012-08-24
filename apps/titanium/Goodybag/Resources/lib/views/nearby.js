@@ -3,7 +3,6 @@ var $http = gb.utils.http
 ,   $file = Titanium.Filesystem;
 
 GB.Views.add('nearby', {
-  self: gb.style.get('nearby.self'),
   location: 'Nearby',
   locations: [],
   models: {},
@@ -29,6 +28,8 @@ GB.Views.add('nearby', {
    * @constructor
    */
   Constructor: function () {
+    this.self = gb.style.get('nearby.self');
+    
     var store = $file.getFile($file.applicationDataDirectory, 'places.json')
     ,   $this = this
     ,   $el = this.elements;
@@ -87,6 +88,8 @@ GB.Views.add('nearby', {
 
       $this['show' + $this.location]();
     }, true);
+    
+    console.log("asdf");
   },
   
   exists: function (id) {
@@ -100,7 +103,7 @@ GB.Views.add('nearby', {
     ,   x
     ,   locations;
     
-    if($el.places) $el.places.close(), $el.holder.remove($el.places);
+    if($el.places) /*$el.places.close(),*/ $el.holder.remove($el.places);
     this.locations = [];
     for(i in this.models) {
       locations = this.models[i].getLocations();

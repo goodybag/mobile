@@ -19,6 +19,8 @@ var Views = {
    */
   views: {},
   
+  instantiated: {},
+  
   /**
    * Tracking variable used to keep up with which view has priority at the 
    * given moment.
@@ -43,16 +45,16 @@ var Views = {
  * @type {Method}
  */
 Views.add = function (name, view) {
-  if (typeof view.extended === 'undefined') {
-    view.viewName = name;
-    view = View.extend(view);
-  }
+  // if (typeof view.extended === 'undefined') {
+    // view.viewName = name;
+    // view = View.extend(view);
+  // }
   // gb.utils.debug("instantiating " + name);
-  this.views[name] = new view();
   // gb.utils.debug("instantiated " + name);
-  this.views[name].viewName = name;
+  view.Constructor.prototype = view;
+  this.views[name] = view.Constructor;
   // gb.utils.debug("hiding " + name);
-  this.views[name].self.hide();
+  // this.views[name].self.hide();
 };
 
 /**
@@ -64,7 +66,8 @@ Views.add = function (name, view) {
  * @type {Method}
  */
 Views.get = function (name) {
-  return this.views[name];
+  if (!this.instantiated[name]) return (this.instantiated[name] = new this.views[name]());
+  return this.instantiated[name];
 };
 
 /**
@@ -75,7 +78,7 @@ Views.get = function (name) {
  * @type {Method}
  */
 Views.exists = function (name) {
-  return (this.views[name]) ? true : false;
+  return (this.instantiated[name]) ? true : false;
 };
 
 /**
@@ -87,15 +90,16 @@ Views.exists = function (name) {
  */
 Views.show = function (name, context) {
   if (!name) return;
-  if (!this.exists(name)) return;
+  // if (!this.exists(name)) return;
   if (this.current) this.hide(this.current);
-  if (typeof this.views[name].onShow != 'undefined') this.views[name].onShow(context);
-  gb.utils.debug("showing " + name);
-  this.views[name].self.show();
-  gb.utils.debug("showed " + name);
+  if (!this.instantiated[name]) this.instantiated[name] = new this.views[name]();
   this.current = name;
+  if (typeof this.instantiated[name].onShow != 'undefined') this.instantiated[name].onShow(context);
+  gb.utils.debug("showing " + name);
+  this.instantiated[name].self.show();
+  gb.utils.debug("showed " + name);
   
-  if (typeof this.views[name].afterShow != 'undefined' && gb.isIOS) this.views[name].afterShow(context);
+  if (typeof this.instantiated[name].afterShow != 'undefined' && gb.isIOS) this.instantiated[name].afterShow(context);
 };
 
 /**
@@ -108,9 +112,16 @@ Views.show = function (name, context) {
 Views.hide = function (name, context) {
   if (!name) return;
   if (!this.exists(name)) return;
-  if (typeof this.views[name].onHide != 'undefined') this.views[name].onHide(context);
-  
-  this.views[name].self.hide();
+  // if (typeof this.views[name].onHide != 'undefined') this.views[name].onHide(context);
+  console.log('HIDING view ' + name);
+  // if (this.instantiated[name].destroy) this.instantiated[name].destroy(); 
+  this.instantiated[name].self = null;
+  this.instantiated[name].views = null;
+  delete this.instantiated[name].views;
+  delete this.instantiated[name].self;
+  this.instantiated[name] = null;
+  delete this.instantiated[name];
+  // this.destroy(name);
 };
 
 /**

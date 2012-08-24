@@ -4,7 +4,8 @@ GB.Windows.add('main', Window.extend({
   
   window: $ui.createWindow(gb.style.get('main.self')),
   
-  location: 'nearby',
+  location: null,
+  initial: 'charities',
   
   elements: {
     views: {
@@ -56,22 +57,24 @@ GB.Windows.add('main', Window.extend({
 
     return this;
   },
+  
+  showPage : function(view) {
+    this.elements.views.main.startLayout();
+    if (this.location){
+      console.log('attempting to remove view ' + this.location);
+      this.elements.views.main.remove(GB.Views.get(this.location).self)
+      GB.Views.hide(this.location);
+    } 
+    this.location = view;
+    GB.Views.show(view);
+    this.elements.views.main.add(GB.Views.get(view).self);
+    this.elements.views.main.finishLayout();
+  },
 
   onShow : function() {
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $user = gb.consumer, $url, written = true;
     
-    // New users get the welcome screen upon logging in
-    if (gb.consumer.newlyRegistered){
-      this.flashWelcomeScreen();
-    }
-    
-    // If we a user doesn't have a charity, let's send them to the charity page
-    if (!gb.consumer.getCharityId()){
-      this.location = "charities";
-    }
-    
-    // Direct Pages, then delegate background tasks.
-    GB.Views.show(this.location);
+    this.showPage(this.initial);
 
     // User setup
     $el.views.holder.sidebar.setDetails($user);
@@ -92,43 +95,5 @@ GB.Windows.add('main', Window.extend({
       $el.views.main.animate(gb.style.get('main.animations.left'));
       $el.header.buttons.sidebar.setImage(gb.utils.getImage('screens/main/buttons/sidebar_default.png'));
     }
-  },
-  
-  /**
-   * Displays the welcome screen and then hides it after a specified period
-   */
-  flashWelcomeScreen: function (time) {
-    var $this = this;
-    this.showWelcomeScreen();
-    setTimeout(function(){
-      $this.hideWelcomeScreen();
-    }, time || 3000);
-  },
-  
-  /**
-   * Opens the welcome screen
-   */
-  showWelcomeScreen: function (callback) {
-    if (this.welcomeScreenOpen) return;
-    this.welcomeScreenOpen = true;
-    var welcome = GB.Views.get('welcome').views.base;
-    welcome.setOpacity(0);
-    welcome.show();
-    welcome.animate(gb.style.get('common.animation.fadeIn'), callback || function(){});
-  },
-  
-  /**
-   * Hides the welcome screen
-   */
-  hideWelcomeScreen: function (callback) {
-    if (!this.welcomeScreenOpen) return;
-    this.welcomeScreenOpen = false;
-    callback || (callback = function(){});
-    var welcome = GB.Views.get('welcome').views.base;
-    welcome.show();
-    welcome.animate(gb.style.get('common.animation.fadeOut'), function(){
-      welcome.hide();
-      callback();
-    });
   }
 }));
