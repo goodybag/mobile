@@ -183,20 +183,6 @@
         , left: base.left
         , right: base.right
         , bottom: base.bottom
-        , events: {
-            touchstart: function(e){
-              if ($this.state === "disabled") return;
-              $this.set('active');
-            }
-          , touchend: function(e){
-              if ($this.state === "disabled") return;
-              $this.set('default');
-            }
-          , touchcancel: function(e){
-              if ($this.state === "disabled") return;
-              $this.set('default');
-            }
-          }
         })
         
       , "bottomShadow": $ui.createView({
@@ -248,6 +234,18 @@
         })
       };
       gb.utils.compoundViews(this.views);
+      this.views.base.addEventListener('touchstart', function(e){
+        if ($this.state === "disabled") return;
+        $this.set('active');
+      });
+      this.views.base.addEventListener('touchend', function(e){
+        if ($this.state === "disabled") return;
+        $this.set('default');
+      });
+      this.views.base.addEventListener('touchcancel', function(e){
+        if ($this.state === "disabled") return;
+        $this.set('default');
+      });
     }
   };
   GB.Button = constructor;

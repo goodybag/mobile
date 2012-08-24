@@ -190,13 +190,16 @@ GB.Views.add('settings', {
     
     this.settings = this.views.pageWrapper.island.fill.wrapper;
     
+    // this.settings['setting:password'].edit.btn.addEventListener('click', function(){ $this.editField('password') });
+    
+    
     // Events
-    gb.consumer.on('change:name', function(){
-      $this.updateSetting('name', gb.consumer.getName());
-    });
-    gb.consumer.on('change:screenName', function(){
-      $this.updateSetting('screenName',  gb.consumer.getScreenName());
-    });
+    // gb.consumer.on('change:name', function(){
+      // $this.updateSetting('name', gb.consumer.getName());
+    // });
+    // gb.consumer.on('change:screenName', function(){
+      // $this.updateSetting('screenName',  gb.consumer.getScreenName());
+    // });
     // gb.consumer.on('change:email', function(email){
       // $this.updateSetting('email', gb.consumer.getEmail());
     // });
@@ -205,9 +208,9 @@ GB.Views.add('settings', {
     // this.views.pageWrapper.facebook.addEventListener('click', function(){
       // Ti.Facebook.authorize();
     // });
-    Ti.Facebook.addEventListener('login', function(e){
-      
-    });
+    // Ti.Facebook.addEventListener('login', function(e){
+//       
+    // });
   }
   
 , onShow: function(){
@@ -251,12 +254,11 @@ GB.Views.add('settings', {
   
 , _displayUserData: function(){;
     var $this = this;
-    var settings = this.settings;
     gb.consumer.getAvatar(128, function(image){
-      settings['setting:avatar'].field.setImage(image);
+      $this.settings['setting:avatar'].field.setImage(image);
     });
-    settings['setting:name'].field.setText(gb.consumer.getName());
-    settings['setting:screenName'].field.setText(gb.consumer.data.screenName);
-    settings['setting:email'].field.setText(gb.consumer.data.email);
+    this.settings['setting:name'].field.setText(gb.consumer.getName());
+    this.settings['setting:screenName'].field.setText(gb.consumer.data.screenName);
+    this.settings['setting:email'].field.setText(gb.consumer.data.email);
   }
 });
