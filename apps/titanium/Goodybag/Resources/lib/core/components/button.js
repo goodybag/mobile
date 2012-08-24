@@ -159,6 +159,7 @@
             case 'opacity': case 'backgroundColor': case 'top': case 'right': case 'bottom': case 'left':
               styleState.base[styleType] = props[styleType];
             break;
+            default: break;
           }
         }
       }

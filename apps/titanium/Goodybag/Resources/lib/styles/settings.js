@@ -32,7 +32,7 @@
   , "setting": {
       "base": {
         width: $ui.FILL
-      , height: $ui.SIZE
+      , height: 50
       , top: 7
       }
       
