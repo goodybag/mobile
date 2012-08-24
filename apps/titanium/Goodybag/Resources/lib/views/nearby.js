@@ -65,7 +65,7 @@ GB.Views.add('nearby', {
         $el.menu.map.activate();
       });
       
-      $el.menu.base.add($ui.createView({ width: $ui.FILL, height: '6dp'}));
+      $el.menu.base.add({ width: $ui.FILL, height: '6dp', build: { type: 'View' }});
       $el.menu.base.add($el.menu.nearby.base);
       $el.menu.base.add($el.menu.map.base);
     }

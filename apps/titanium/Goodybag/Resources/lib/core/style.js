@@ -107,8 +107,11 @@ gb.style = {
         dest = new Pool(dest);
         if (events) {
           for (var e in events) {
-            if (context) dest.addEventListener(e, function (evt) { events[e].call(this, evt, context); });
-            else dest.addEventListener(e, events[e]);
+            (function(type, callback, context) { 
+              dest.addEventListener(type, function (e) { 
+                return callback.call(this, e, context); 
+              });
+            })(e, events[e], context);
           }
         }
         

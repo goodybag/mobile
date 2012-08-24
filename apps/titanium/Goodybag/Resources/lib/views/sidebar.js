@@ -40,7 +40,7 @@ GB.Views.add('sidebar', {
   },
   
   Constructor: function () { 
-    var $el = this.elements, $self = this.self;
+    var $el = this.elements, $this = this, $self = this.self;
     
     $el.list.nearby     = gb.style.get('sidebar.list.base sidebar.list.nearby',     null, null, this);
     $el.list.sponsored  = gb.style.get('sidebar.list.base sidebar.list.sponsored',  null, null, this);
@@ -60,9 +60,9 @@ GB.Views.add('sidebar', {
       $self.add($el.list[item]);
       
     // Events
-    gb.consumer.on('change:avatar', function(){ $self.setAvatar(); });
-    gb.consumer.on('change:name', function(){ $el.header.username.setText(gb.consumer.getUsername()); });
-    gb.consumer.on('change:screenName', function(){ $el.header.username.setText(gb.consumer.getUsername()); });
+    gb.consumer.on('change:avatar', function(){ $this.setAvatar(); });
+    gb.consumer.on('change:name', function(){ $el.header.username.set('text', gb.consumer.getUsername()); });
+    gb.consumer.on('change:screenName', function(){ $el.header.username.set('text', gb.consumer.getUsername()); });
     
     return this;
   },
@@ -82,15 +82,15 @@ GB.Views.add('sidebar', {
       donated.reverse();
       for(var i = 0; i < donated.length; i++) {
         item = list[i];
-        $el.bank.slots[item].text = donated[i];
-        $el.bank.slots[item].visible = true;
-        item == "13" && ($el.bank.slots['14'].visible = true);
-        item == "09" && ($el.bank.slots['10'].visible = true);
-        item == "05" && ($el.bank.slots['06'].visible = true);
+        $el.bank.slots[item].set('text', donated[i]);
+        $el.bank.slots[item].set('visible', true);
+        item == "13" && ($el.bank.slots['14'].set('visible', true));
+        item == "09" && ($el.bank.slots['10'].set('visible', true));
+        item == "05" && ($el.bank.slots['06'].set('visible', true));
       }
     } else {
-      $el.bank.slots["16"].visible = true;
-      $el.bank.slots["16"].text = "0";
+      $el.bank.slots["16"].set('visible', true);
+      $el.bank.slots["16"].set('text', 0);
     }
     
     this.setAvatar();
@@ -118,13 +118,13 @@ GB.Views.add('sidebar', {
     GB.Views.show(view);
     
     // Swap and close the sidebar
-    $el.list[area].image = gb.utils.getImage('screens/sidebar/items/' + area + '_active.png');
+    $el.list[area].set('image', gb.utils.getImage('screens/sidebar/items/' + area + '_active.png'));
     this.parent.toggleSidebar();
   },
   
   clearActive: function () {
     var $el = this.elements;
     if (!this.active) return;
-    $el.list[this.active].image = gb.utils.getImage('screens/sidebar/items/' + this.active + '.png');
+    $el.list[this.active].set('image', gb.utils.getImage('screens/sidebar/items/' + this.active + '.png'));
   }
 });

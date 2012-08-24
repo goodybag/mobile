@@ -15,17 +15,12 @@ var Pool = function (obj) {
     return to;
   }
   
-  if (obj.build) {
-    obj = extend(obj);
-    if (obj.events) delete obj.events;
-  } 
-  
   return {
     pool: obj.build? null : obj,
     type: obj.build? obj.build.type || null : null,
     area: obj.build? obj.build.area || null : null,
     method: obj.build? obj.build.method || null : null,
-    holder: obj,
+    holder: extend(obj),
     pendingChildren: null,
     pendingEvents: null,
     children: null,
@@ -116,9 +111,9 @@ var Pool = function (obj) {
         this.pool.hide();
       
       if (this.children) {
-        console.log('removing children from: ' + this.pool.name);
+        console.log('removing children from: ' + this.pool.name || this.pool);
         for (var i in this.children)
-          this._remove(i);
+          this._removeChild(i);
       }
           
       if (this.events) {
