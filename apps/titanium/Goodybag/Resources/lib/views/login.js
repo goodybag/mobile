@@ -150,14 +150,14 @@ gb.Windows.add('login', Window.extend({
   onHide: function () {
     var $el = this.elements;
     
-    $el.inputs.email.blur();
-    $el.inputs.password.blur();
+    $el.inputs.email.get().blur();
+    $el.inputs.password.get().blur();
   },
   
   onAndroid: function () {
     var $el = this.elements;
     
-    $el.inputs.email.setSoftKeyboardOnFocus(Titanium.UI.Android.SOFT_KEYBOARD_HIDE_ON_FOCUS);
-    $el.inputs.password.setSoftKeyboardOnFocus(Titanium.UI.Android.SOFT_KEYBOARD_HIDE_ON_FOCUS);
+    $el.inputs.email.set('softKeyboardOnFocus', Titanium.UI.Android.SOFT_KEYBOARD_HIDE_ON_FOCUS);
+    $el.inputs.password.set('softKeyboardOnFocus', Titanium.UI.Android.SOFT_KEYBOARD_HIDE_ON_FOCUS);
   }
 }));

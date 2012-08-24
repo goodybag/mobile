@@ -49,6 +49,8 @@ var Pool = function (obj) {
     },
     
     hide: function () {
+      console.log(this.pool);
+      console.log('hiding... from pool');
       if (this.pool) this.pool.hide();
     },
     

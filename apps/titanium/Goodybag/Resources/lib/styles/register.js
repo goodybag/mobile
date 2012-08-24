@@ -50,6 +50,7 @@
       , layout: 'horizontal'
       , build: { type: 'View' }
       }
+      
     , "input": {
         width: 260
       , height: 40
@@ -60,6 +61,7 @@
       , autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_NONE
       , build: { type: 'TextField' }
       }
+      
     , "indicator": {
         "base": {
           width: $ui.FILL
