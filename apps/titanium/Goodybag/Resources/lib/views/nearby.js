@@ -29,11 +29,10 @@ GB.Views.add('nearby', {
    * @constructor
    */
   Constructor: function () {
-    var store = $file.getFile($file.applicationDataDirectory, 'places.json')
-    ,   $this = this
-    ,   $el = this.elements;
+    var $this = this, $el = this.elements;
     
     this.fetch(function (error, results) {
+      var store = $file.getFile($file.applicationDataDirectory, 'places.json')
       store.deleteFile();
       store.write(JSON.stringify(results));
       store = null;
@@ -51,7 +50,7 @@ GB.Views.add('nearby', {
     
     if (this.location == 'Place') this.location = 'Nearby';
     
-    if($el.menu.base.children.length < 1) {
+    if($el.menu.base.pool && $el.menu.base.pool.children.length < 1) {
       $el.menu.nearby.addEventListener('click', function () { 
         if ($el.places) $el.places.visible = true; else $this.showNearby(); 
         if ($el.map) $el.map.visible = false;
@@ -100,7 +99,11 @@ GB.Views.add('nearby', {
     ,   x
     ,   locations;
     
-    if($el.places) $el.places.close(), $el.holder.remove($el.places);
+    if($el.places) 
+      $el.places.close(), 
+      $el.holder.remove($el.places),
+      $el.places = null;
+    
     this.locations = [];
     for(i in this.models) {
       locations = this.models[i].getLocations();
@@ -110,15 +113,6 @@ GB.Views.add('nearby', {
     }
 
     $el.places = gb.style.get('nearby.places');
-    $el.places.add($ui.createLabel({
-      text: Ligature.get('code'),
-      color: gb.ui.color.gray,
-      font: { 
-        fontSize: 32,
-        fontFamily: Ligature.typeface()
-      }
-    }));
-    
     $el.holder.add($el.places);
     $el.menu.nearby.activate();
     $el.menu.map.deactivate();
@@ -148,12 +142,7 @@ GB.Views.add('nearby', {
       $el.place.close();
     
     $el.place  = $ui.createWindow();
-    var modal  = $ui.createWindow();
     var back   = new GB.StreamButton('Back');
-    modal.back = $ui.createButton({ title: 'Back' });
-    modal.back.addEventListener('click', function (e) {
-      modal.close();
-    });
     
     // Styles
     var area      = "nearby.loc";
@@ -202,8 +191,17 @@ GB.Views.add('nearby', {
               events: {
                 click: function (e) {
                   var url = place.parent.getUrl();
+                  
                   if (url) {
-                    var webview = $ui.createWebView({ url: url });
+                    var modal  = $ui.createWindow();
+                    modal.webview = $ui.createWebView({ url: url });
+                    modal.back = $ui.createButton({ title: 'Back' });
+                    modal.back.addEventListener('click', function (e) {
+                      modal.close();
+                      modal.back = null;
+                      modal.webview = null;
+                    });
+                    
                     modal.setLeftNavButton(modal.back);
                     modal.add(webview);
                     modal.open(gb.style.get('nearby.loc.modal'));
@@ -240,8 +238,11 @@ GB.Views.add('nearby', {
     
     // Menu
     elements.menu.back.addEventListener('click', function (e) {
+      function nullify (obj) {
+        
+      }
+      
       back.activate();
-      if (modal) modal.close();
       $el.place.setVisible(false);
       $this.self.remove($el.place);
       $el.place.close();

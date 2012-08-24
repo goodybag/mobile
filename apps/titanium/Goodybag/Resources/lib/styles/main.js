@@ -4,7 +4,8 @@ gb.style.base.main = {
     top: 0,
     title: 'Main',
     backgroundImage: 'background.png',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    build: { type: 'Window' }
   },
   
   views: {
@@ -16,12 +17,14 @@ gb.style.base.main = {
       horizontalWrap: false,
       disableBounce: true,
       focusable: false,
-      nomagic: true
+      nomagic: true,
+      build: { type: 'View' }
     },
     
     main: {
       width: 'platform',
-      backgroundColor: 'white'
+      backgroundColor: 'white',
+      build: { type: 'View' }
     }
   },
   
@@ -30,13 +33,15 @@ gb.style.base.main = {
       top: 0,
       zIndex: 1,
       image: 'screens/main/header.png',
-      backgroundColor: 'black'
+      backgroundColor: 'black',
+      build: { type: 'ImageView' }
     },
     
     logo: {
       top: 5,
       zIndex: 2,
-      image: 'screens/main/logo.png'
+      image: 'screens/main/logo.png',
+      build: { type: 'ImageView' }
     },
     
     buttons: {
@@ -47,7 +52,8 @@ gb.style.base.main = {
         width: 'auto',
         height: 'auto',
         canScale: false,
-        image: 'screens/main/buttons/sidebar_default.png'
+        image: 'screens/main/buttons/sidebar_default.png',
+        build: { type: 'ImageView' }
       }
     }
   },

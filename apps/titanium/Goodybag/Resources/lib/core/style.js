@@ -6,6 +6,37 @@ gb.style = {
   android: {},
   web:     {},
   
+  types:   {
+    images: [ 
+      'image', 'selectedImage', 'backButtonTitleImage', 'barImage', 'titleImage',
+      'backgroundImage', 'backgroundDisabledImage', 'backgroundSelectedImage', 'backgroundFocusedImage',
+      'tabsBackgroundImage', 'tabsBackgroundDisabledImage', 'tabsBackgroundSelectedImage', 'tabsBackgroundFocusedImage',
+      'leftTrackImage', 'rightTrackImage', 'thumbImage', 'disabledLeftTrackImage', 'disabledRightTrackImage', 'disabledThumbImage'
+    ],
+    
+    posizing: [ 
+      'top', 'left', 'right', 'bottom', 'height', 'width' 
+    ]
+  },
+  
+  merger: function (n, str, o, swap) {
+    var x, y;
+    if(str.indexOf(' ') != -1) {
+      str = str.split(' ')
+      for (var i = 0; i < str.length; i++)
+      swap = swap ? true : i > 0 ? true : false,
+         x = (swap ? o : gb.utils.ref(gb.style[n], str[i])) || {}, 
+         y = (swap ? gb.utils.ref(gb.style[n], str[i]) : o) || {},
+         o = gb.utils.merge(x, y);
+    } else {
+      x = (swap ? o : gb.utils.ref(gb.style[n], str)) || {};
+      y = (swap ? gb.utils.ref(gb.style[n], str) : o) || {};
+      o = gb.utils.merge(x, y);
+    }
+    
+    return o;
+  },
+  
   /**
    * It's magical. That's all there is to it.
    * 
@@ -18,24 +49,6 @@ gb.style = {
    */
   get: function (platform, style, options, context) {
     var dest = null, base = null, build = true, name = 'base';
-    
-    function merger (n, str, o, swap) {
-      var x, y;
-      if(str.indexOf(' ') != -1) {
-        str = str.split(' ')
-        for (var i = 0; i < str.length; i++)
-        swap = swap ? true : i > 0 ? true : false,
-           x = (swap ? o : gb.utils.ref(gb.style[n], str[i])) || {}, 
-           y = (swap ? gb.utils.ref(gb.style[n], str[i]) : o) || {},
-           o = gb.utils.merge(x, y);
-      } else {
-        x = (swap ? o : gb.utils.ref(gb.style[n], str)) || {};
-        y = (swap ? gb.utils.ref(gb.style[n], str) : o) || {};
-        o = gb.utils.merge(x, y);
-      }
-      
-      return o;
-    }
     
     if (style == null) 
       style = platform, platform = gb.style.type();
@@ -57,10 +70,10 @@ gb.style = {
     if (!gb.style[name]) 
       return null;
     else 
-      orig = merger(name, style, {}), orig = merger(platform, style, orig, true);
+      orig = this.merger(name, style, {}), orig = this.merger(platform, style, orig, true);
 
     if (platform == 'retina') 
-      orig = merger('iphone', style, orig || {});
+      orig = this.merger('iphone', style, orig || {});
       
     if (!orig || orig == undefined) 
       return null;
@@ -71,43 +84,39 @@ gb.style = {
       return null;
     
     if (!dest.nomagic) {
-      [ // Image Magic, no really.
-        'image', 'selectedImage', 'backButtonTitleImage', 'barImage', 'titleImage',
-        'backgroundImage', 'backgroundDisabledImage', 'backgroundSelectedImage', 'backgroundFocusedImage',
-        'tabsBackgroundImage', 'tabsBackgroundDisabledImage', 'tabsBackgroundSelectedImage', 'tabsBackgroundFocusedImage',
-        'leftTrackImage', 'rightTrackImage', 'thumbImage', 'disabledLeftTrackImage', 'disabledRightTrackImage', 'disabledThumbImage'
-      ].forEach(function (type) {
+      gb.style.types.images.forEach(function (type) {
         if (dest[type] && typeof dest[type] === 'string') 
           dest[type] = gb.utils.getImage(dest[type]);
       });
       
-      [ 'top', 'left', 'right', 'bottom', 'height', 'width' ].forEach(function (type) {
+      gb.style.types.posizing.forEach(function (type) {
         if (dest[type] && typeof dest[type] !== 'string') 
           dest[type] = dest[type] + 'dp';
         else if (dest[type] && dest[type] === 'platform')
-          if (type == 'width') 
-            dest[type] = $dp.platformWidth;
-          else if (type == 'height') 
-            dest[type] = $dp.platformHeight;
+          if (type == 'width') dest[type] = $dp.platformWidth;
+          else if (type == 'height') dest[type] = $dp.platformHeight;
       });
-    } else if (dest.nomagic) 
-      delete dest.nomagic;
+    } else if (dest.nomagic) delete dest.nomagic;
     
     if (dest.build && build) {
       if (dest.build.later) {
         dest.build.later = false;
       } else if (dest.build && (!dest.build.later || dest.build.later == null || dest.build.later == undefined)) {
-        var type = dest.build.type, events = dest.events ? dest.events : null; delete dest.build;
-        dest = $ui[type](dest);
+        var events = dest.events ? dest.events : null;
+        dest.build.type = dest.build.type.replace('create', '');
+        dest = new Pool(dest);
         if (events) {
           for (var e in events) {
             if (context) dest.addEventListener(e, function (evt) { events[e].call(this, evt, context); });
             else dest.addEventListener(e, events[e]);
           }
         }
+        
+        events = null;
       }
     }
-
+    
+    orig = null;
     return dest;
   },
   

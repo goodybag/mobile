@@ -70,7 +70,7 @@ GB.Views.add('sidebar', {
   setDetails: function ($user) {
     var $self = this.self, $el = this.elements, list = [], donated, item;
     
-    $el.header.username.setText($user.getUsername());
+    $el.header.username.set('text', $user.getUsername());
     
     if (parseInt($user.data.funds.donated) > 0) {
       for (var i = 16; i > 3; i--) {
@@ -99,7 +99,7 @@ GB.Views.add('sidebar', {
   setAvatar: function () {
     var $self = this;
     gb.consumer.getAvatar(128, function (image) {
-      $self.elements.header.avatar.image.setImage(image);
+      $self.elements.header.avatar.image.set('image', image);
     });
   },
   

@@ -38,6 +38,7 @@ gb.files = {
   ],
   
   "core/components": [
+    'pool',
     'view',
     'window',
     'qrcode',

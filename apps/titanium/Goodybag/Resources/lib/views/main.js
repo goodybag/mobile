@@ -2,22 +2,22 @@ GB.Windows.add('main', Window.extend({
   debug: true,
   animated: false,
   
-  window: $ui.createWindow(gb.style.get('main.self')),
+  window: gb.style.get('main.self'),
   
   location: 'nearby',
   
   elements: {
     views: {
-      holder: $ui.createView(gb.style.get('main.views.holder')),
-      main: $ui.createView(gb.style.get('main.views.main'))
+      holder: gb.style.get('main.views.holder'),
+      main: gb.style.get('main.views.main')
     },
 
-    header : {
-      background : $ui.createImageView(gb.style.get('main.header.background')),
-      logo : $ui.createImageView(gb.style.get('main.header.logo')),
+    header: {
+      background: gb.style.get('main.header.background'),
+      logo: gb.style.get('main.header.logo'),
 
-      buttons : {
-        sidebar : $ui.createImageView(gb.style.get('main.header.buttons.sidebar'))
+      buttons: {
+        sidebar: gb.style.get('main.header.buttons.sidebar')
       }
     }
   },
@@ -43,7 +43,7 @@ GB.Windows.add('main', Window.extend({
     });
 
     // Add views to scrollable view
-    GB.Views.get('sidebar').self.setVisible(true);
+    GB.Views.get('sidebar').self.set('visible', true);
     GB.Views.get('sidebar').parent = this;
     $el.views.holder.add($el.views.holder.sidebar.self);
     $el.views.holder.add($el.views.main);
@@ -85,12 +85,12 @@ GB.Windows.add('main', Window.extend({
 
     if (!this.animated) {
       this.animated = !0;
-      $el.views.main.animate(gb.style.get('main.animations.right'));
-      $el.header.buttons.sidebar.setImage(gb.utils.getImage('screens/main/buttons/sidebar_active.png'));
+      $el.views.main.pool.animate(gb.style.get('main.animations.right'));
+      $el.header.buttons.sidebar.set('image', gb.utils.getImage('screens/main/buttons/sidebar_active.png'));
     } else {
       this.animated = !1;
-      $el.views.main.animate(gb.style.get('main.animations.left'));
-      $el.header.buttons.sidebar.setImage(gb.utils.getImage('screens/main/buttons/sidebar_default.png'));
+      $el.views.main.pool.animate(gb.style.get('main.animations.left'));
+      $el.header.buttons.sidebar.set('image', gb.utils.getImage('screens/main/buttons/sidebar_default.png'));
     }
   },
   
