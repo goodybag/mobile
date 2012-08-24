@@ -186,21 +186,21 @@
         , bottom: base.bottom
         })
         
-       // , "bottomShadow": $ui.createView({
-           // width: $ui.FILL
-         // , height: '12dp'
-         // , backgroundColor: base.bottomShadow.color
-         // , opacity: base.bottomShadow.opacity
-         // , bottom: 0
-         // })
-//         
-      // , "topShadow": $ui.createView({
-          // width: $ui.FILL
-        // , height: '12dp'
-        // , backgroundColor: base.topShadow.color
-        // , opacity:base.topShadow.opacity
-        // , top: 0
-        // })
+       , "bottomShadow": $ui.createView({
+           width: $ui.FILL
+         , height: '12dp'
+         , backgroundColor: base.bottomShadow.color
+         , opacity: base.bottomShadow.opacity
+         , bottom: 0
+         })
+        
+      , "topShadow": $ui.createView({
+          width: $ui.FILL
+        , height: '12dp'
+        , backgroundColor: base.topShadow.color
+        , opacity:base.topShadow.opacity
+        , top: 0
+        })
         
       , "fill": $ui.createButton({
           width: $ui.FILL
@@ -210,7 +210,7 @@
         , borderWidth: 0
         , borderColor: null
         , backgroundGradient: base.backgroundGradient
-        , style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN
+        , style: Titanium.UI.iPhone.SystemButtonStyle.PLAIN
         , backgroundColor: 'transparent'
         })
         
@@ -225,14 +225,14 @@
         , shadowColor: base.shadowColor
         })
         
-      // , "border": $ui.createView({
-          // width: $ui.FILL
-        // , height: base.height
-        // , borderRadius: base.borderRadius
-        // , borderWidth: base.borderWidth
-        // , borderColor: base.borderColor
-        // , top: 0
-        // })
+      , "border": $ui.createView({
+          width: $ui.FILL
+        , height: base.height
+        , borderRadius: base.borderRadius
+        , borderWidth: base.borderWidth
+        , borderColor: base.borderColor
+        , top: 0
+        })
       };
       gb.utils.compoundViews(this.views);
       // this.views.base.addEventListener('touchstart', function(e){

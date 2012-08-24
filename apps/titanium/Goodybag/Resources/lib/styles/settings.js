@@ -32,7 +32,7 @@
   , "setting": {
       "base": {
         width: $ui.FILL
-      , height: 50
+      , height: $ui.SIZE
       , top: 7
       }
       
@@ -60,6 +60,7 @@
         "default": {
           width: $ui.FILL
         , height: 30
+        , borderRadius: 0
         }
       }
       

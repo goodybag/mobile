@@ -98,15 +98,15 @@ GB.Views.add('settings', {
                 , gb.style.get('settings.setting.field')
                 ))
                 
-              , "edit": {
-                  "base": $ui.createView(gb.style.get('settings.setting.right'))
-                , "btn": new GB.Button(
-                    'edit'
-                  , gb.style.get('settings.setting.edit')
-                  , gb.style.get('common.grayPage.island.buttons.gray')
-                  , { events: { click: function(){ $this.editField('screenName') } } }
-                  ).views.base
-                }
+              // , "edit": {
+                  // "base": $ui.createView(gb.style.get('settings.setting.right'))
+                // , "btn": new GB.Button(
+                    // 'edit'
+                  // // , gb.style.get('settings.setting.edit')
+                  // // , gb.style.get('common.grayPage.island.buttons.gray')
+                  // , { events: { click: function(){ $this.editField('screenName') } } }
+                  // ).views.base
+                // }
               }
             , "separator-3": $ui.createView(gb.style.get('settings.setting.separator'))
               
