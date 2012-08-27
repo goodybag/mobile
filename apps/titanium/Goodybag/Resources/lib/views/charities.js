@@ -73,8 +73,6 @@
       this.views = views;
       this.hasCalledOnComplete = false;
       this.onComplete = function () {};
-      console.log(this.views.charityDetails.base);
-      this.views.charityDetails.base.get().hide();
       
       this.views.charityDetails.bottom.base.addEventListener('click', function(){
         $this.showCharityList();

@@ -1,5 +1,5 @@
 GB.Windows.add('complete-registration', Window.extend({
-  window: $ui.createWindow(gb.style.get('main.self')),
+  window: gb.style.get('main.self'),
   
   Constructor: function () {
     var $this = this;
@@ -8,13 +8,12 @@ GB.Windows.add('complete-registration', Window.extend({
     this.window.orientationModes = [ Ti.UI.PORTRAIT ];
     
     this.views = {
-      "base": $ui.createView(gb.style.get('main.views.holder'))
+      "base": gb.style.get('main.views.holder') // view
     
     , "main": {
-        "base":   $ui.createView(gb.style.get('main.views.main'))
-
-      , "header": $ui.createImageView(gb.style.get('main.header.background'))
-      , "logo":   $ui.createImageView(gb.style.get('main.header.logo'))
+        "base":   gb.style.get('main.views.main') // view
+      , "header": gb.style.get('main.header.background') // image view
+      , "logo":   gb.style.get('main.header.logo') // image view
       
         // Attached page views
       , "charities": GB.Views.get('charities').self
@@ -22,9 +21,7 @@ GB.Windows.add('complete-registration', Window.extend({
       , "set-screen-name": GB.Views.get('set-screen-name').self
       , "enter-tapin-id": GB.Views.get('enter-tapin-id').self
       }
-    };
-    
-    gb.utils.compoundViews(this.views);
+    }; gb.utils.compoundViews(this.views);
     this.add(this.views.base);
     
     var onComplete = function(){ console.log("ON COMPLETE SHOWING NEXT"); $this.showNextScreen(); };
