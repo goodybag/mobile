@@ -1,165 +1,54 @@
 (function(){
   var $http = gb.utils.http
-  ,   $ui = Titanium.UI
-  ,   detailsCharitySelect = gb.utils.getImage('screens/charity/buttons/charity_select.png')
-  ,   detailsCharitySelected = gb.utils.getImage('screens/charity/buttons/charity_selected.png');
+  ,   $ui = Titanium.UI;
   
   var views = {
-    "base": $ui.createView({
-      width: $ui.FILL
-    , height: $ui.FILL
-    , top: '54dp'
-    , backgroundColor: '#ddd'
-    , layout: 'vertical'
-    })
+    "base": gb.style.get('charities.self'),
     
-  , "charityList": {
-      base: $ui.createScrollView({
-        width: $ui.FILL
-      , height: $ui.FILL
-      , layout: 'vertical'
-      , showVerticalScrollIndicator: true
-      })
-      
-    , "header": $ui.createLabel({
-        text: "Choose a Charity to Raise Funds For!"
-      , width: $ui.FILL
-      , height: $ui.SIZE
-      , top: '16dp'
-      , bottom: '16dp'
-      , color: gb.ui.color.grayDarker
-      , textAlign: "center"
-      , font: {
-          fontSize: 16
-        , fontWeight: 'bold'
-        }
-      , shadowColor: '#fff'
-      , shadowOffset: { x: 0, y: 1 }
-      })
-    }
+    "charityList": {
+      base: gb.style.get('charities.charity.list.base'),
+      header: gb.style.get('charities.charity.list.header'),
+    },
     
-  , "charityDetails": {
-      "base": $ui.createView({
-        width: $ui.FILL
-      , layout: 'vertical'
-      , top: '10dp'
-      })
+    "charityDetails": {
+      "base": gb.style.get('charities.charity.details.base')
       
     , "mainContent": {
-        "base": $ui.createView({
-          width: '318dp'
-        , height: '333dp'
-        , top: 0
-        , backgroundImage: gb.utils.getImage('screens/charity/charity_backdrop.png')
-        })
+        "base": gb.style.get('charities.charity.details.content.base')
         
       , "wrapper": {
-          "base": $ui.createView({
-            width: $ui.FILL
-          , height: $ui.SIZE
-          , left: '12dp'
-          , right: '12dp'
-          , top: 0
-          , layout: 'vertical'
-          })
+          "base": gb.style.get('charities.charity.details.content.wrapper.base')
           
         , "header": {
-            "base": $ui.createView({
-              width: $ui.FILL
-            , height: '44dp'
-            , top: '12dp'
-            })
+            "base": gb.style.get('charities.charity.details.content.wrapper.header.base')
             
           , "left": {
-              "base": $ui.createView({
-                width: '210dp'
-              , height: $ui.SIZE
-              , left: 0
-              , top: '8dp'
-              , layout: 'vertical'
-              })
-              
-            , "name": $ui.createLabel({
-                width: $ui.FILL
-              , height: $ui.SIZE
-              , color: gb.ui.color.grayDark
-              , font: {
-                  fontSize: 14
-                , fontWeight: 'bold'
-                }
-              })
-              
-            , "url": $ui.createLabel({
-                width: $ui.FILL
-              , height: $ui.SIZE
-              , top: '-2dp'
-              , color: gb.ui.color.blueBright
-              , font: {
-                  fontSize: 12
-                }
-              })
-            }
-            
+              "base": gb.style.get('charities.charity.details.content.wrapper.header.left.base')
+            , "name": gb.style.get('charities.charity.details.content.wrapper.header.left.name')
+            , "url":  gb.style.get('charities.charity.details.content.wrapper.header.left.url')
+          }
+          
           , "right": {
-              "base": $ui.createView({
-                width: '80dp'
-              , right: 0
-              })
-              
-            , "logo": $ui.createImageView({
-                height: '44dp'
-              , center: { x: '54dp', y: '22dp' }
-              })
+              "base": gb.style.get('charities.charity.details.content.wrapper.header.right.base')              
+            , "logo": gb.style.get('charities.charity.details.content.wrapper.header.right.logo')
             }
           }
           
         , "content": {
-            "base": $ui.createView({
-              width: $ui.FILL
-            , height: $ui.SIZE
-            })
-            
-          , "text": $ui.createLabel({
-              text: "loading"
-            , width: $ui.FILL
-            , height: $ui.SIZE
-            , color: gb.ui.color.base
-            , font: {
-                fontSize: gb.ui.font.fontSize
-              }
-            })
+            "base": gb.style.get('charities.charity.details.content.wrapper.content.base')
+          , "text": gb.style.get('charities.charity.details.content.wrapper.content.text')
           }
         }
         
-      , "charitySelect": $ui.createButton({
-          image: detailsCharitySelect
-        , style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN
-        , bottom: '12dp'
-        })
+      , "charitySelect": gb.style.get('charities.charity.select')
       }
       
     , "bottom": {
-      
-        "base": $ui.createView({
-          width: $ui.FILL
-        , height: $ui.SIZE
-        , top: '8dp'
-        })
-        
-      , "back": $ui.createButton({
-          image: gb.utils.getImage('screens/charity/buttons/charity_back.png')
-        , width: '304dp'
-        , height: '47dp'
-        , borderWidth: 0
-        , borderColor: null
-        , style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN
-        , backgroundColor: 'transparent'
-        })
+        "base": gb.style.get('charities.charity.bottom.base')
+      , "back": gb.style.get('charities.charity.bottom.back')
       }
     }
-  };
-  
-  gb.utils.compoundViews(views);
+  }; gb.utils.compoundViews(views);
   
   GB.Views.add('charities', {
     self: views.base,
@@ -183,9 +72,9 @@
       this.hasLoaded = false;
       this.views = views;
       this.hasCalledOnComplete = false;
-      this.onComplete = function(){};
-      
-      this.views.charityDetails.base.hide();
+      this.onComplete = function () {};
+      console.log(this.views.charityDetails.base);
+      this.views.charityDetails.base.get().hide();
       
       this.views.charityDetails.bottom.base.addEventListener('click', function(){
         $this.showCharityList();
@@ -223,49 +112,59 @@
     
     showCharityList: function(){
       if (this.current === "charityList") return;
-      this.current = "charityList"
+      this.current = "charityList";
       this.views.charityDetails.base.hide();
-      this.views.charityList.base.setHeight($ui.FILL);
+      this.views.charityList.base.set('height', $ui.FILL);
       this.views.charityList.base.show();
     },
     
-    showCharityDetails: function(charity){
+    showCharityDetails: function (charity) {
       if (this.current === "charityDetails") return;
+      
       this.current = "charityDetails";
+      
       // Fill in details
       var
         details = this.views.charityDetails
+      , select_image = gb.utils.getImage('screens/charity/buttons/charity_select.png')
+      , selected_image = gb.utils.getImage('screens/charity/buttons/charity_selected.png')
       , header  = details.mainContent.wrapper.header
       , select  = details.mainContent.charitySelect
       , $this   = this
       ;
-      header.left.name.setText(charity.model.publicName);
-      header.left.url.setText(charity.model.url);
-      header.right.logo.setImage(charity.model.media.url);
-      if (charity.selected) select.setImage(detailsCharitySelected);
-      else select.setImage(detailsCharitySelect);
-      if (this.onDetailsCharitySelect){
+      
+      header.left.name.set('text', charity.model.publicName);
+      header.left.url.set('text', charity.model.url);
+      header.right.logo.set('image', charity.model.media.url);
+      
+      if (charity.selected) select.set('image', selected_image);
+      else select.set('image', select_image);
+      
+      if (this.onDetailsCharitySelect) {
         select.removeEventListener('click', this.onDetailsCharitySelect);
       }
-      this.onDetailsCharitySelect = function(e){
+      
+      this.onDetailsCharitySelect = function (e) {
         if (charity.selected) return;
-        select.setImage(detailsCharitySelected);
+        select.set('image', selected_image);
         charity.triggerOnSelect(e);
       };
+      
       select.addEventListener('click', this.onDetailsCharitySelect);
+      
       // For some reason the view's block properties are still prevalent after it's hidden
-      this.views.charityList.base.setHeight(0);
+      this.views.charityList.base.set('height', 0);
       this.views.charityList.base.hide();
       details.base.show();
     },
     
     showData: function (data) {
-      var charity, list = this.views.charityList.base, $this = this;
+      var charity, list = this.views.charityList.base.get(), $this = this;
       gb.utils.debug('showing charities');
       for (var i = 0; i < data.length; i++) {
         charity = new GB.CharityView(data[i], {
-          onSelect: function(charity, e){ $this.onCharitySelect(charity, e) }
-        , onDetails: function(charity, e){ $this.onCharityDetails(charity, e) }
+          onSelect: function (charity, e) { $this.onCharitySelect(charity, e) }
+        , onDetails: function (charity, e) { $this.onCharityDetails(charity, e) }
         , selected: data[i]._id === gb.consumer.getCharityId()
         });
         

@@ -4,7 +4,7 @@ GB.Windows.add('main', Window.extend({
   
   window: gb.style.get('main.self'),
   
-  location: 'nearby',
+  location: 'charities',
   
   elements: {
     views: {
@@ -98,12 +98,12 @@ GB.Windows.add('main', Window.extend({
 
     if (!this.animated) {
       this.animated = !0;
-      $el.views.main.pool.animate(gb.style.get('main.animations.right'));
       $el.header.buttons.sidebar.set('image', gb.utils.getImage('screens/main/buttons/sidebar_active.png'));
+      $el.views.main.pool.animate(gb.style.get('main.animations.right'));
     } else {
       this.animated = !1;
-      $el.views.main.pool.animate(gb.style.get('main.animations.left'));
       $el.header.buttons.sidebar.set('image', gb.utils.getImage('screens/main/buttons/sidebar_default.png'));
+      $el.views.main.pool.animate(gb.style.get('main.animations.left'));
     }
   },
   

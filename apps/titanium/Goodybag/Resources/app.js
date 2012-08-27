@@ -26,6 +26,7 @@ gb.files = {
     'common',
     'login',
     'main',
+    'charities',
     'sidebar',
     'qrcode',
     'register',
