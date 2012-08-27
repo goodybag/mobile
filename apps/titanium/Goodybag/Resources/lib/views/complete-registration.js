@@ -36,7 +36,7 @@ GB.Windows.add('complete-registration', Window.extend({
     var $this = this;
     
     // New users get the welcome screen upon logging in
-    if (gb.consumer.newlyRegistered){
+    if (gb.consumer.newlyRegistered) {
       this.flashWelcomeScreen();
     }
     

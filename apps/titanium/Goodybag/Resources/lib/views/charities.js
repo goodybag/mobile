@@ -48,7 +48,7 @@
       , "back": gb.style.get('charities.charity.bottom.back')
       }
     }
-  }; gb.utils.compoundViews(views);
+  };
   
   GB.Views.add('charities', {
     self: views.base,
@@ -80,11 +80,15 @@
     },
     
     onShow: function () {
-      if (this.hasLoaded) return;
       var $this = this;
+      
+      gb.utils.compoundViews(views);
+      
+      console.log('showing charities, onShow method');
       
       this.fetchData(function(error, data){
         if (error) return gb.utils.debug(error);
+        console.log('fetched charity data, has loaded is true showData called.');
         $this.hasLoaded = true;
         $this.showData(data);
       });
@@ -104,7 +108,7 @@
       this.hasCalledOnComplete = true;
     },
     
-    setOnComplete: function(fn){
+    setOnComplete: function (fn) {
       this.onComplete = fn;
     },
     
@@ -157,7 +161,8 @@
     },
     
     showData: function (data) {
-      var charity, list = this.views.charityList.base.get(), $this = this;
+      var charity, list = this.views.charityList.base, $this = this;
+      
       gb.utils.debug('showing charities');
       for (var i = 0; i < data.length; i++) {
         charity = new GB.CharityView(data[i], {
@@ -165,8 +170,6 @@
         , onDetails: function (charity, e) { $this.onCharityDetails(charity, e) }
         , selected: data[i]._id === gb.consumer.getCharityId()
         });
-        
-        gb.utils.debug(charity);
         
         if (charity.selected) this.selected = charity;
         list.add(charity.views.base);

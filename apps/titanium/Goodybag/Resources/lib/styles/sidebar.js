@@ -112,6 +112,7 @@ gb.style.base.sidebar = {
       build: { type: 'createImageView' },
       events: {
         click: function (args, ctx) {
+          console.log(args);
           ctx.setActive(args.source.name);
         }
       }

@@ -87,7 +87,8 @@ GB.Windows.add('main', Window.extend({
     GB.Views.show(area);
     
     console.log('adding new view to content');
-    this.elements.views.content.add(GB.Views.get(area).self);
+    var area = GB.Views.get(area);
+    this.elements.views.content.add(area.self ? area.self : area.window);
   },
 
   /**

@@ -517,7 +517,6 @@ gb.utils = function (global) {
     if (typeof base === "undefined") throw new Error("Base is undefined");
     
     for (var key in tree){
-      console.log(key);
       item = tree[key];
       if (item === null) continue;
       if (key === "base"){
@@ -531,7 +530,6 @@ gb.utils = function (global) {
         // maybe get a little more granular with this check with:
         // Object.prototype.toString.call(item).indexOf('TI') > -1
       } else if (typeof item === "object") {
-        console.log(item);
         for (var eventType in item.events)
           item.addEventListener(eventType, item.events[eventType]);
         base.add(item);

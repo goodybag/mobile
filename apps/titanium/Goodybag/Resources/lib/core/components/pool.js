@@ -31,6 +31,7 @@ var Pool = function (obj) {
     
     create: function () {
       if (this.pool) return this;
+      console.log('creating new pool object');
       if (this.type) this.pool = Titanium[this.area || 'UI'][(this.method || 'create') + this.type](this.holder);
       if (this.pendingChildren) for (var i in this.pendingChildren) this.add(this.pendingChildren[i], i);
       if (this.pendingEvents) for (var i in this.pendingEvents) this.addEvent(this.pendingEvents[i].type, this.pendingEvents[i].callback, i);
@@ -38,7 +39,8 @@ var Pool = function (obj) {
     },
     
     open: function () {
-      if (!this.pool) this.create();
+      if (!this.pool) console.log('attempted to open an uncreated pool, creating pool object'), this.create();
+      console.log('opening pool');
       this.pool.open();
     },
     
@@ -69,6 +71,7 @@ var Pool = function (obj) {
     },
     
     add: function (child, id) {
+      console.log('adding: ' + child);
       var area = this.pool? 'children' : 'pendingChildren';
       if (!this[area]) this[area] = {};
       id = id || this.cuuid++;
@@ -87,15 +90,25 @@ var Pool = function (obj) {
       return true;
     },
     
-    removeEvent: function (id) {
-      
+    removeEvent: function (type, obj, id) {
+      if (typeof type === 'string') {
+        
+      } else {
+        obj = type, type = null, id = null;
+        for (var i in events) {
+          if (events[i].callback == obj) {
+            if (this.pool) {
+            }
+          }
+        }
+      }
     },
     
     addEventListener: function (type, callback, id) { 
       return this.addEvent(type,callback,id); 
     },
     
-    removeEventListener: function (id) {
+    removeEventListener: function (type, obj, id) {
       return this.removeEvent(id);
     },
     

@@ -114,7 +114,6 @@ gb.style = {
             })(e, events[e], context);
           }
         }
-        
         events = null;
       }
     }
