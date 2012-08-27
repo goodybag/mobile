@@ -59,13 +59,13 @@ GB.Views.add('settings', {
                 
               , "edit": {
                   "base": $ui.createView(gb.style.get('settings.setting.right'))
-                , "btn": new GB.Button(
-                    'edit'
-                  , gb.style.get('settings.setting:picture.edit')
-                  , gb.style.get('settings.setting.edit')
-                  , gb.style.get('common.grayPage.island.buttons.gray')
-                  , { events: { click: function(){ $this.editAvatar() } } }
-                  ).views.base
+                // , "btn": new GB.Button(
+                    // 'edit'
+                  // , gb.style.get('settings.setting:picture.edit')
+                  // , gb.style.get('settings.setting.edit')
+                  // , gb.style.get('common.grayPage.island.buttons.gray')
+                  // , { events: { click: function(){ $this.editAvatar() } } }
+                  // ).views.base
                 }
               }
             , "separator-1": $ui.createView(gb.style.get('settings.setting.separator'))
@@ -80,12 +80,20 @@ GB.Views.add('settings', {
                 
               , "edit": {
                   "base": $ui.createView(gb.style.get('settings.setting.right'))
-                , "btn": new GB.Button(
-                    'edit'
-                  , gb.style.get('settings.setting.edit')
-                  , gb.style.get('common.grayPage.island.buttons.gray')
-                  , { events: { click: function(){ $this.editField('name') } } }
-                  ).views.base
+                , "btn": $ui.createButtonBar({
+                    labels: ["edit"]
+                  , backgroundColor: '#00bfff'
+                  , width: $ui.FILL
+                  , height: 30
+                  , style: $ui.iPhone.SystemButtonStyle.BAR
+                  , events: { click: function(){ $this.editField('password') } }
+                  })
+                // , "btn": new GB.Button(
+                    // 'edit'
+                  // , gb.style.get('settings.setting.edit')
+                  // , gb.style.get('common.grayPage.island.buttons.gray')
+                  // , { events: { click: function(){ $this.editField('name') } } }
+                  // ).views.base
                 }
               }
             , "separator-2": $ui.createView(gb.style.get('settings.setting.separator'))
@@ -120,12 +128,20 @@ GB.Views.add('settings', {
                 
               , "edit": {
                   "base": $ui.createView(gb.style.get('settings.setting.right'))
-                , "btn": new GB.Button(
-                    'edit'
-                  , gb.style.get('settings.setting.edit')
-                  , gb.style.get('common.grayPage.island.buttons.gray')
-                  , { events: { click: function(){ $this.editField('email') } } }
-                  ).views.base
+                , "btn": $ui.createButtonBar({
+                    labels: ["edit"]
+                  , backgroundColor: '#00bfff'
+                  , width: $ui.FILL
+                  , height: 30
+                  , style: $ui.iPhone.SystemButtonStyle.BAR
+                  , events: { click: function(){ $this.editField('password') } }
+                  })
+                // , "btn": new GB.Button(
+                    // 'edit'
+                  // , gb.style.get('settings.setting.edit')
+                  // , gb.style.get('common.grayPage.island.buttons.gray')
+                  // , { events: { click: function(){ $this.editField('email') } } }
+                  // ).views.base
                 }
               }
             , "separator-4": $ui.createView(gb.style.get('settings.setting.separator'))
@@ -141,12 +157,20 @@ GB.Views.add('settings', {
                 
               , "edit": {
                   "base": $ui.createView(gb.style.get('settings.setting.right'))
-                , "btn": new GB.Button(
-                    'edit'
-                  , gb.style.get('settings.setting.edit')
-                  , gb.style.get('common.grayPage.island.buttons.gray')
-                  , { events: { click: function(){ $this.editField('barcodeId') } } }
-                  ).views.base
+                , "btn": $ui.createButtonBar({
+                    labels: ["edit"]
+                  , backgroundColor: '#00bfff'
+                  , width: $ui.FILL
+                  , height: 30
+                  , style: $ui.iPhone.SystemButtonStyle.BAR
+                  , events: { click: function(){ $this.editField('password') } }
+                  })
+                // , "btn": new GB.Button(
+                    // 'edit'
+                  // , gb.style.get('settings.setting.edit')
+                  // , gb.style.get('common.grayPage.island.buttons.gray')
+                  // , { events: { click: function(){ $this.editField('barcodeId') } } }
+                  // ).views.base
                 }
               }
             , "separator-5": $ui.createView(gb.style.get('settings.setting.separator'))
@@ -162,12 +186,21 @@ GB.Views.add('settings', {
                 
               , "edit": {
                   "base": $ui.createView(gb.style.get('settings.setting.right'))
-                , "btn": new GB.Button(
-                    'edit'
-                  , gb.style.get('settings.setting.edit')
-                  , gb.style.get('common.grayPage.island.buttons.gray')
-                  , { events: { click: function(){ $this.editField('password') } } }
-                  ).views.base
+                , "btn": $ui.createButtonBar({
+                    labels: ["edit"]
+                  , backgroundColor: '#00bfff'
+                  , width: $ui.FILL
+                  , height: 30
+                  , style: $ui.iPhone.SystemButtonStyle.BAR
+                  , events: { click: function(){ $this.editField('password') } }
+                  })
+                
+                // , "btn": new GB.Button(
+                    // 'edit'
+                  // , gb.style.get('settings.setting.edit')
+                  // , gb.style.get('common.grayPage.island.buttons.gray')
+                  // , { events: { click: function(){ $this.editField('password') } } }
+                  // ).views.base
                 }
               }
             }

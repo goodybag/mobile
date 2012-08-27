@@ -20,6 +20,16 @@ GB.Windows.add('main', Window.extend({
       buttons : {
         sidebar : $ui.createImageView(gb.style.get('main.header.buttons.sidebar'))
       }
+    },
+    
+    loader: {
+      base:       gb.style.get('common.loader.base')
+    , background: gb.style.get('common.loader.background')
+    , middle: {
+        base:     gb.style.get('common.loader.middle')
+      , spinner:  gb.style.get('common.loader.spinner')
+      , text:     gb.style.get('common.loader.text')
+      }
     }
   },
 
@@ -56,6 +66,10 @@ GB.Windows.add('main', Window.extend({
     this.welcomeFadeIn = Ti.UI.createAnimation
 
     return this;
+  },
+  
+  showLoader : function () {
+    
   },
   
   showPage : function(view) {

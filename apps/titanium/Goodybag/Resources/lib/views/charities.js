@@ -30,6 +30,15 @@ GB.Views.add('charities', {
       , layout: 'vertical'
       })
       
+    // , "loader": Ti.UI.createActivityIndicator({
+        // color: 'green',
+        // font: {fontFamily:'Helvetica Neue', fontSize:26, fontWeight:'bold'},
+        // message: 'Loading...',
+        // style:Ti.UI.iPhone.ActivityIndicatorStyle.DARK,
+        // height: $ui.SIZE,
+        // width:'auto'
+      // })
+      
     , "charityList": {
         base: $ui.createScrollView({
           width: $ui.FILL
