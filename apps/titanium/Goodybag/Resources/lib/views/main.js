@@ -5,7 +5,7 @@ GB.Windows.add('main', Window.extend({
   window: $ui.createWindow(gb.style.get('main.self')),
   
   location: null,
-  initial: 'charities',
+  initial: 'settings',
   
   elements: {
     views: {
@@ -22,15 +22,15 @@ GB.Windows.add('main', Window.extend({
       }
     },
     
-    loader: {
-      base:       gb.style.get('common.loader.base')
-    , background: gb.style.get('common.loader.background')
-    , middle: {
-        base:     gb.style.get('common.loader.middle')
-      , spinner:  gb.style.get('common.loader.spinner')
-      , text:     gb.style.get('common.loader.text')
-      }
-    }
+    // loader: {
+      // base:       gb.style.get('common.loader.base')
+    // , background: gb.style.get('common.loader.background')
+    // , middle: {
+        // base:     gb.style.get('common.loader.middle')
+      // , spinner:  gb.style.get('common.loader.spinner')
+      // , text:     gb.style.get('common.loader.text')
+      // }
+    // }
   },
 
   Constructor : function() {

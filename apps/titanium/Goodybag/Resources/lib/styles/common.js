@@ -15,6 +15,69 @@
     , showVerticalScrollIndicator: true
     }
     
+  , "go": {
+      build: { type: "createLabel" }
+    , width: 25
+    , height: 25
+    , text: '\ue112'
+    , textAlign: "right"
+    , color: gb.ui.color.gray
+    , font: {
+        fontSize: 16
+      , fontFamily: 'LigatureSymbols'
+      }
+    }
+    
+  , "labelBtns": {
+      "red": {
+        build: { type: "createLabel" }
+      , width: $ui.FILL
+      , height: 40
+      , top: 7
+      , borderRadius: 5
+      , borderWidth: 1
+      , borderColor: '#802420'
+      , textAlign: "center"
+      , color: '#fff'
+      , font: {
+          fontSize: gb.ui.font.base.fontSize
+        , fontWeight: "bold"
+        }
+      , shadowOffset: { x: 0, y: -1 }
+      , shadowColor: 'rgba(0,0,0, 0.5)'
+      , backgroundGradient: {
+          type: 'linear'
+        , startPoint: { x: 0, y: 0 }
+        , endPoint:   { x: 0, y: '100%' }
+        , colors: [{ color: '#EE5F5B', offset: 0.0 }, { color: '#BD362F', offset: 1.0 }]
+        }
+      }
+      
+    , "blue": {
+        build: { type: "createLabel" }
+      , width: $ui.FILL
+      , height: 40
+      , top: 7
+      , borderRadius: 5
+      , borderWidth: 1
+      , borderColor: '#027291'
+      , textAlign: "center"
+      , color: '#fff'
+      , font: {
+          fontSize: gb.ui.font.base.fontSize
+        , fontWeight: "bold"
+        }
+      , shadowOffset: { x: 0, y: -1 }
+      , shadowColor: 'rgba(0,0,0, 0.5)'
+      , backgroundGradient: {
+          type: 'linear'
+        , startPoint: { x: 0, y: 0 }
+        , endPoint:   { x: 0, y: '100%' }
+        , colors: [{ color: '#00bfff', offset: 0.0 }, { color: '#0390bf', offset: 1.0 }]
+        }
+      }
+    }
+    
   , "loader": {
       "base": {
         width: $ui.FILL
@@ -191,6 +254,7 @@
       , "fill": {
           width: $ui.FILL
         , height: $ui.SIZE
+        , layout: 'vertical'
         , bottom: 1
         , borderRadius: 5
         , borderWidth: 1

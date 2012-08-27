@@ -303,7 +303,7 @@
     
   , onBack: function(){
       if (this.currentFocus) this.currentFocus.blur();
-      GB.Views.show('settings');
+      GB.Windows.get('main').showPage('settings');
     }
   });
 })();

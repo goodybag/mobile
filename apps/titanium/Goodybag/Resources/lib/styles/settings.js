@@ -20,27 +20,31 @@
     }
     
   , "facebookBtn": {
-      "default": {
-        width: $ui.FILL
-      }
+      text: "Connect with Facebook"
+    }
+    
+  , "signOutBtn": {
+      text: "Sign Out"
     }
     
   , "island": {
-      
+      //
     }
     
   , "setting": {
       "base": {
         width: $ui.FILL
       , height: $ui.SIZE
-      , top: 7
+      , build: { type: "createView" }
       }
       
     , "field": {
         width: $ui.SIZE
       , height: $ui.SIZE
-      , left: 2
-      , right: settingRightWidth = 60
+      , left: 10
+      , top: 10
+      , bottom: 10
+      , right: settingRightWidth = 25
       , color: gb.ui.color.grayDark
       , shadowOffset: { x: 0, y: 1 }
       , shadowColor: '#fff'
@@ -48,12 +52,13 @@
           fontSize: gb.ui.font.base.fontSize + 1
         , fontWeight: 'bold'
         }
+      , build: { type: "createLabel" }
       }
       
     , "right": {
         width: settingRightWidth
       , height: $ui.SIZE
-      , right: 0
+      , right: 6
       }
       
     , "edit": {
@@ -64,11 +69,19 @@
         }
       }
       
+    , "editBar": {
+        backgroundColor: '#bbb'
+      , width: $ui.FILL
+      , height: 30
+      , style: $ui.iPhone.SystemButtonStyle.BAR                  
+      }
+      
     , "separator": {
         width: $ui.FILL
       , height: 1
       , backgroundColor: gb.ui.color.grayLightest
-      , top: 6
+      , bottom: 0
+      , build: { type: "createView" }
       }
     }
     
@@ -78,21 +91,16 @@
         top: 2
       }
     , "field": {
-        left: 0
+        left: 8
       , width: 85
       , height: 85
+      , build: { type: "createImageView" }
       }
     , "edit": {
         "default": {
           top: 1
         }
       }
-    }
-    
-  , "signOutWrapper": {
-      width: $ui.FILL
-    , height: $ui.SIZE
-    , top: 8
     }
     
     /**

@@ -1,35 +1,5 @@
-
-GB.Views.add('settings', {
-  
-  Constructor: function(){
-    var $this = this;
-    this.self = $ui.createScrollView(gb.utils.extend(
-      gb.style.get('settings.base')
-    , gb.style.get('common.grayPage.base')
-    , gb.style.get('common.scrollView')
-    ));   
-    this.views = {
-      "base": this.self
-      
-    , "pageWrapper": {
-        "base": $ui.createView(gb.style.get('common.grayPage.wrapper'))
-      
-      , "header": $ui.createLabel(gb.utils.extend(
-          { text: "Settings" }
-        , gb.style.get('settings.header')
-        , gb.style.get('common.grayPage.header1')
-        ))
-        
-      , "facebook": {
-          "base": $ui.createView(gb.style.get('settings.facebookWrapper'))
-          
-        , "btn": new GB.Button(
-            'Connect with Facebook'
-          , gb.style.get('settings.facebookBtn')
-          , gb.style.get('common.bluePage.buttons.blue')
-          , { events: { click: function(){ $this.onFacebookClick(e); } } }
-          ).views.base
-        }
+/*
+ 
 
       , "island": {
           "base": $ui.createView(gb.utils.extend(
@@ -59,6 +29,10 @@ GB.Views.add('settings', {
                 
               , "edit": {
                   "base": $ui.createView(gb.style.get('settings.setting.right'))
+                , "btn": $ui.createButtonBar(gb.utils.extend(
+                    { labels: ["edit"], events: { click: function(){ $this.editField('avatar') } } }
+                  , gb.style.get('settings.setting.editBar')
+                  ))
                 // , "btn": new GB.Button(
                     // 'edit'
                   // , gb.style.get('settings.setting:picture.edit')
@@ -80,14 +54,10 @@ GB.Views.add('settings', {
                 
               , "edit": {
                   "base": $ui.createView(gb.style.get('settings.setting.right'))
-                , "btn": $ui.createButtonBar({
-                    labels: ["edit"]
-                  , backgroundColor: '#00bfff'
-                  , width: $ui.FILL
-                  , height: 30
-                  , style: $ui.iPhone.SystemButtonStyle.BAR
-                  , events: { click: function(){ $this.editField('password') } }
-                  })
+                , "btn": $ui.createButtonBar(gb.utils.extend(
+                    { labels: ["edit"], events: { click: function(){ $this.editField('name') } } }
+                  , gb.style.get('settings.setting.editBar')
+                  ))
                 // , "btn": new GB.Button(
                     // 'edit'
                   // , gb.style.get('settings.setting.edit')
@@ -128,14 +98,10 @@ GB.Views.add('settings', {
                 
               , "edit": {
                   "base": $ui.createView(gb.style.get('settings.setting.right'))
-                , "btn": $ui.createButtonBar({
-                    labels: ["edit"]
-                  , backgroundColor: '#00bfff'
-                  , width: $ui.FILL
-                  , height: 30
-                  , style: $ui.iPhone.SystemButtonStyle.BAR
-                  , events: { click: function(){ $this.editField('password') } }
-                  })
+                , "btn": $ui.createButtonBar(gb.utils.extend(
+                    { labels: ["edit"], events: { click: function(){ $this.editField('email') } } }
+                  , gb.style.get('settings.setting.editBar')
+                  ))
                 // , "btn": new GB.Button(
                     // 'edit'
                   // , gb.style.get('settings.setting.edit')
@@ -157,14 +123,10 @@ GB.Views.add('settings', {
                 
               , "edit": {
                   "base": $ui.createView(gb.style.get('settings.setting.right'))
-                , "btn": $ui.createButtonBar({
-                    labels: ["edit"]
-                  , backgroundColor: '#00bfff'
-                  , width: $ui.FILL
-                  , height: 30
-                  , style: $ui.iPhone.SystemButtonStyle.BAR
-                  , events: { click: function(){ $this.editField('password') } }
-                  })
+                , "btn": $ui.createButtonBar(gb.utils.extend(
+                    { labels: ["edit"], events: { click: function(){ $this.editField('barcodeId') } } }
+                  , gb.style.get('settings.setting.editBar')
+                  ))
                 // , "btn": new GB.Button(
                     // 'edit'
                   // , gb.style.get('settings.setting.edit')
@@ -186,14 +148,10 @@ GB.Views.add('settings', {
                 
               , "edit": {
                   "base": $ui.createView(gb.style.get('settings.setting.right'))
-                , "btn": $ui.createButtonBar({
-                    labels: ["edit"]
-                  , backgroundColor: '#00bfff'
-                  , width: $ui.FILL
-                  , height: 30
-                  , style: $ui.iPhone.SystemButtonStyle.BAR
-                  , events: { click: function(){ $this.editField('password') } }
-                  })
+                , "btn": $ui.createButtonBar(gb.utils.extend(
+                    { labels: ["edit"], events: { click: function(){ $this.editField('password') } } }
+                  , gb.style.get('settings.setting.editBar')
+                  ))
                 
                 // , "btn": new GB.Button(
                     // 'edit'
@@ -206,22 +164,130 @@ GB.Views.add('settings', {
             }
           }
         }
-      
-      , "signOutWrapper": {
-          "base": $ui.createView(gb.style.get('settings.signOutWrapper'))
+        
+        
           
-        , "signOutBtn": new GB.Button(
-            'Sign Out'
-          , gb.style.get('settings.signOutBtn')
-          , gb.style.get('common.grayPage.buttons.red')
-          , { events: { click: function(){ $this.onSignOut(); } } }
-          ).views.base
+        // , "btn": new GB.Button(
+            // 'Connect with Facebook'
+          // , gb.style.get('settings.facebookBtn')
+          // , gb.style.get('common.bluePage.buttons.blue')
+          // , { events: { click: function(){ $this.onFacebookClick(e); } } }
+          // ).views.base
+          
+          
+
+        // , "signOutBtn": new GB.Button(
+            // 'Sign Out'
+          // , gb.style.get('settings.signOutBtn')
+          // , gb.style.get('common.grayPage.buttons.red')
+          // , { events: { click: function(){ $this.onSignOut(); } } }
+          // ).views.base
+ */
+
+
+
+GB.Views.add('settings', {
+  
+  Constructor: function(){
+    var $this = this;
+    this.self = $ui.createScrollView(gb.utils.extend(
+      gb.style.get('settings.base')
+    , gb.style.get('common.grayPage.base')
+    , gb.style.get('common.scrollView')
+    ));   
+    this.views = {
+      "base": this.self
+      
+    , "pageWrapper": {
+        "base": $ui.createView(gb.style.get('common.grayPage.wrapper'))
+      
+      , "header": $ui.createLabel(gb.utils.extend(
+          { text: "Settings" }
+        , gb.style.get('settings.header')
+        , gb.style.get('common.grayPage.header1')
+        ))
+        
+      , "island": {
+          "base": $ui.createView(gb.utils.extend(
+            gb.style.get('settings.island')
+          , gb.style.get('common.grayPage.island.base')
+          ))
+        
+        , "shadow": $ui.createView(gb.style.get('common.grayPage.island.shadow'))
+        
+        , "fill": {
+            "base":  $ui.createView(gb.style.get('common.grayPage.island.fill'))
+            
+          , "setting:avatar": {
+              "base": gb.style.get('settings.setting:avatar.base settings.setting.base', {
+                events: { click: function(){ $this.editAvatar() } }
+              })
+            , "field":      gb.style.get('settings.setting.field settings.setting:avatar.field')
+            , "go":         gb.style.get('common.go settings.setting.right')
+            , "separator":  gb.style.get('settings.setting.separator')
+            }
+            
+          , "setting:name": {
+              "base": gb.style.get('settings.setting.base settings.setting:name.base', {
+                events: { click: function(){ $this.editField('name') } }
+              })
+              
+            , "field":      gb.style.get('settings.setting.field settings.setting:name.field')
+            , "go":         gb.style.get('common.go settings.setting.right')
+            , "separator":  gb.style.get('settings.setting.separator')
+            }
+            
+          , "setting:screenName": {
+              "base": gb.style.get('settings.setting.base settings.setting:screenName.base', {
+                // events: { click: function(){ $this.editField('screenName') } }
+              })
+              
+            , "field":      gb.style.get('settings.setting.field settings.setting:screenName.field')
+            // , "go":         gb.style.get('common.go settings.setting.right')
+            , "separator":  gb.style.get('settings.setting.separator')
+            }
+            
+          , "setting:email": {
+              "base": gb.style.get('settings.setting.base settings.setting:email.base', {
+                events: { click: function(){ $this.editField('email') } }
+              })
+              
+            , "field":      gb.style.get('settings.setting.field settings.setting:email.field')
+            , "go":         gb.style.get('common.go settings.setting.right')
+            , "separator":  gb.style.get('settings.setting.separator')
+            }
+            
+          , "setting:barcodeId": {
+              "base": gb.style.get('settings.setting.base settings.setting:barcodeId.base', {
+                events: { click: function(){ $this.editField('barcodeId') } }
+              })
+              
+            , "field":      gb.style.get('settings.setting.field settings.setting:barcodeId.field', { text: "Tap-In ID" })
+            , "go":         gb.style.get('common.go settings.setting.right')
+            , "separator":  gb.style.get('settings.setting.separator')
+            }
+            
+          , "setting:password": {
+              "base": gb.style.get('settings.setting.base settings.setting:password.base', {
+                events: { click: function(){ $this.editField('password') } }
+              })
+              
+            , "field":      gb.style.get('settings.setting.field settings.setting:password.field', { text: "Password" })
+            , "go":         gb.style.get('common.go settings.setting.right')
+            }
+          }
         }
+      
+      // , "facebookBtn": gb.style.get('common.labelBtns.blue settings.facebookBtn')
+        
+      , "signOutBtn": gb.style.get('common.labelBtns.red settings.signOutBtn', {
+          events: { click: function(){ $this.onSignOut() } }
+        })
       }
     };
     gb.utils.compoundViews(this.views);
     
-    this.settings = this.views.pageWrapper.island.fill.wrapper;
+    this.settings = this.views.pageWrapper.island.fill;
     
     // this.settings['setting:password'].edit.btn.addEventListener('click', function(){ $this.editField('password') });
     
@@ -248,7 +314,7 @@ GB.Views.add('settings', {
   
 , onShow: function(){
     // Remove Facebook if we don't need it
-    if (gb.consumer.data.facebook) this.views.pageWrapper.base.remove(this.views.pageWrapper.facebook.base);  
+    if (gb.consumer.data.facebook) this.views.pageWrapper.base.remove(this.views.pageWrapper.facebookBtnBar);  
     this._displayUserData();
   }
   
@@ -258,11 +324,11 @@ GB.Views.add('settings', {
   
 , editField: function(field){
     GB.Views.get('edit-setting').setField(field);
-    GB.Views.show('edit-setting');
+    GB.Windows.get('main').showPage('edit-setting');
   }
   
 , editAvatar: function(){
-    var avatar = this.views.pageWrapper.island.fill.wrapper['setting:avatar'].field;
+    var avatar = this.settings['setting:avatar'].field;
     Ti.Media.openPhotoGallery({
       allowEditing: true
     , success: function(item){
