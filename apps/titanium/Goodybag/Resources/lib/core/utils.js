@@ -202,6 +202,7 @@ gb.utils = function (global) {
    * 
    * @param  {String} path image file path.
    * @return {String}      platform specific image path.
+   * @TODO   CHECK FOR /images/ prior to adding for android.
    */
   this.getImage = function (path) {
     path = (gb.isAndroid ? '/images/' : '') + path;

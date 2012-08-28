@@ -172,6 +172,7 @@
         });
         
         if (charity.selected) this.selected = charity;
+        console.log(charity.views);
         list.add(charity.views.base);
       }
     },

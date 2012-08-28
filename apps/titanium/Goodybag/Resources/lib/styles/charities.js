@@ -37,6 +37,92 @@ gb.style.base.charities = {
       }
     },
     
+    item: {
+      base: {
+        width: $ui.FILL
+      , height: $ui.SIZE
+      , layout: 'vertical'
+      , bottom: 15
+      , zIndex: 3
+      , build: { type: 'View' }
+      },
+      
+      top: {
+        base: {
+          width: 318
+        , height: 80
+        , layout: 'horizontal'
+        , backgroundImage: 'screens/charity/charity_backdrop.png'
+        , zIndex: 2
+        , build: { type: 'View' }
+        },
+        
+        filler: {
+          width: $ui.FILL
+        , height: 12
+        , build: { type: 'View' }
+        },
+        
+        left: {
+          base: {
+            width: 100
+          , height: 56
+          , build: { type: 'View' }
+          },
+          
+          logo: {
+            width: $ui.SIZE
+          , height: 52
+          , build: { type: 'ImageView' }
+          }
+        },
+        
+        right: {
+          base: {
+            width: $ui.FILL
+          , height: 56
+          , left: 30
+          , build: { type: 'View' }
+          },
+          
+          name: {
+            width: $ui.FILL
+          , color: gb.ui.color.grayDarker
+          , font: {
+              fontSize: gb.ui.font.base.fontSize + 2
+            , fontWeight: 'bold'
+            }
+          , build: { type: 'Label' }
+          }
+        },
+      }, 
+      
+      bottom: {
+        base: {
+          width: $ui.FILL
+        , height: 30
+        , layout: 'horizontal'
+        , top: -1
+        , left: 4
+        , zIndex: 1
+        , build: { type: 'View' }
+        }
+        
+      , select: {
+          width: 155
+        , height: 30
+        , left: 1
+        , build: { type: 'Button' }
+        },
+        
+        details: {
+          width: 155
+        , height: 30
+        , build: { type: 'Button' }
+        }
+      }
+    },
+    
     details: {
       base: {
         width: $ui.FILL

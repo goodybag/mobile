@@ -5,9 +5,7 @@
   
   var constructor = function(data, options){
     var $this = this;
-    
     this.model = data;
-    
     this.options = {
       onSelect: function(charity, e){
         alert('selected ' + charity.publicName);
@@ -28,91 +26,43 @@
     this.selected = this.options.selected;
     
     this.views = {
-      base: $ui.createView({
-        width: $ui.FILL
-      , height: $ui.SIZE
-      , layout: 'vertical'
-      , bottom: '15dp'
-      , zIndex: 3
-      })
+      base: gb.style.get('charities.charity.item.base'),
       
-    , top: {
-        base: $ui.createView({
-          width: '318dp'
-        , height: '80dp'
-        , layout: 'horizontal'
-        , backgroundImage: gb.utils.getImage('screens/charity/charity_backdrop.png')
-        , zIndex: 2
-        })
+      top: {
+        base: gb.style.get('charities.charity.item.top.base'),
+        fillerTop: gb.style.get('charities.charity.item.top.filler'),
         
-      , fillerTop: $ui.createView({
-          width: $ui.FILL
-        , height: '12dp'
-        })
+        left: {
+          base: gb.style.get('charities.charity.item.top.left.base'),
+          logo: gb.style.get('charities.charity.item.top.left.logo', {
+            image: this.model.media.url
+          })
+        },
         
-      , left: {
-          base: $ui.createView({
-            width: '100dp'
-          , height: '56dp'
-          })
-          
-         , logo: $ui.createImageView({
-            width: $ui.SIZE
-          , height: '52dp'
-          , image: this.model.media.url
-          })
-        }
-        
-      , right: {
-          base: $ui.createView({
-            width: $ui.FILL
-          , height: '56dp'
-          , left: '30dp'
-          })
-          
-        , name: $ui.createLabel({
+        right: {
+          base: gb.style.get('charities.charity.item.top.right.base'),
+          name: gb.style.get('charities.charity.item.top.right.name', {
             text: this.model.publicName
-          , width: $ui.FILL
-          , color: gb.ui.color.grayDarker
-          , font: {
-              fontSize: gb.ui.font.base.fontSize + 2
-            , fontWeight: 'bold'
-            }
           })
-        }
-      
-      , fillerBottom: $ui.createView({
-          width: $ui.FILL
-        , height: '12dp'
-        })
-      }
-      
-    , bottom: {
-        base: $ui.createView({
-          width: $ui.FILL
-        , height: '30dp'
-        , layout: 'horizontal'
-        , top: '-1dp'
-         , left: '4dp'
-        , zIndex: 1
-        })
+        },
         
-      , selectBtn: $ui.createButton({
-          width: '155dp'
-        , height: '30dp'
-        , left: '1dp'
-        , image: this.options["charitySelect" + (this.selected ? 'ed' : '') + "Btn"]
+        fillerBottom: gb.style.get('charities.charity.item.top.filler')
+      },
+      
+      bottom: {
+        base: gb.style.get('charities.charity.item.bottom.base'),
+        
+        selectBtn: gb.style.get('charities.charity.item.bottom.select', {
+          image: this.options["charitySelect" + (this.selected ? 'ed' : '') + "Btn"]
         , events: {
             click: function(e){
               $this.triggerOnSelect(e);
             }
           }
-        })
+        }),
         
-      , detailsBtn: $ui.createButton({
-          width: '155dp'
-        , height: '30dp'
-        , image: this.options.charityDetailsBtn
+        detailsBtn: gb.style.get('charities.charity.item.bottom.details', {
+          image: this.options.charityDetailsBtn
         , events: {
             click: function(e){
               $this.triggerOnDetails(e);
@@ -129,12 +79,14 @@
     triggerOnDetails: function(e){
       this.options.onDetails(this, e);
     }
+    
   , triggerOnSelect: function(e){
       if (this.selected) return;
       this.views.bottom.selectBtn.setImage(this.options.charitySelectedBtn);
       this.selected = true;
       this.options.onSelect(this, e);
     }
+    
   , deselect: function(){
       if (!this.selected) return;
       this.views.bottom.selectBtn.setImage(this.options.charitySelectBtn);
