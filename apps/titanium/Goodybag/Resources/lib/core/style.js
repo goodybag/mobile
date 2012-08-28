@@ -1,5 +1,6 @@
 
 gb.style = {
+  cached:  {},
   base:    {},
   iphone:  {},
   retina:  {},
@@ -43,8 +44,8 @@ gb.style = {
     if (typeof style === 'boolean') 
       build = style, style = platform, platform = gb.style.type();
       
-    if (typeof object === 'boolean') 
-      build = object, object = null;
+    if (typeof options === 'boolean') 
+      build = options, options = null;
       
     if (typeof context === 'boolean')
       build = context, context = null;
@@ -53,45 +54,58 @@ gb.style = {
       if (options) context = options, options = null;
       options = style, style = platform, platform = gb.style.type();
     }
-
-    if (!gb.style[name]) 
-      return null;
-    else 
-      orig = merger(name, style, {}), orig = merger(platform, style, orig, true);
-
-    if (platform == 'retina') 
-      orig = merger('iphone', style, orig || {});
-      
-    if (!orig || orig == undefined) 
-      return null;
-    else
-      dest = gb.utils.merge(orig, options || {});
-
-    if (!dest || dest == undefined) 
-      return null;
     
-    if (!dest.nomagic) {
-      [ // Image Magic, no really.
-        'image', 'selectedImage', 'backButtonTitleImage', 'barImage', 'titleImage',
-        'backgroundImage', 'backgroundDisabledImage', 'backgroundSelectedImage', 'backgroundFocusedImage',
-        'tabsBackgroundImage', 'tabsBackgroundDisabledImage', 'tabsBackgroundSelectedImage', 'tabsBackgroundFocusedImage',
-        'leftTrackImage', 'rightTrackImage', 'thumbImage', 'disabledLeftTrackImage', 'disabledRightTrackImage', 'disabledThumbImage'
-      ].forEach(function (type) {
-        if (dest[type] && typeof dest[type] === 'string') 
-          dest[type] = gb.utils.getImage(dest[type]);
-      });
+    if (this.cached[style]) {
+      if (typeof options === 'object' && this.cached[style].options == options)
+        dest = this.cached[style].build;
+      else 
+        dest = gb.utils.merge(this.cached[style].build, options || {});
+    } else {
+      if (!gb.style[name]) 
+        return null;
+      else 
+        orig = merger(name, style, {}), orig = merger(platform, style, orig, true);
+  
+      if (platform == 'retina') 
+        orig = merger('iphone', style, orig || {});
+        
+      if (!orig || orig == undefined) 
+        return null;
+      else
+        dest = gb.utils.merge(orig, options || {});
+  
+      if (!dest || dest == undefined) 
+        return null;
       
-      [ 'top', 'left', 'right', 'bottom', 'height', 'width' ].forEach(function (type) {
-        if (dest[type] && typeof dest[type] !== 'string') 
-          dest[type] = dest[type] + 'dp';
-        else if (dest[type] && dest[type] === 'platform')
-          if (type == 'width') 
-            dest[type] = $dp.platformWidth;
-          else if (type == 'height') 
-            dest[type] = $dp.platformHeight;
-      });
-    } else if (dest.nomagic) 
-      delete dest.nomagic;
+      if (!dest.nomagic) {
+        [ // Image Magic, no really.
+          'image', 'selectedImage', 'backButtonTitleImage', 'barImage', 'titleImage',
+          'backgroundImage', 'backgroundDisabledImage', 'backgroundSelectedImage', 'backgroundFocusedImage',
+          'tabsBackgroundImage', 'tabsBackgroundDisabledImage', 'tabsBackgroundSelectedImage', 'tabsBackgroundFocusedImage',
+          'leftTrackImage', 'rightTrackImage', 'thumbImage', 'disabledLeftTrackImage', 'disabledRightTrackImage', 'disabledThumbImage'
+        ].forEach(function (type) {
+          if (dest[type] && typeof dest[type] === 'string') 
+            dest[type] = gb.utils.getImage(dest[type]);
+        });
+        
+        [ 'top', 'left', 'right', 'bottom', 'height', 'width' ].forEach(function (type) {
+          if (dest[type] && typeof dest[type] !== 'string') 
+            dest[type] = dest[type] + 'dp';
+          else if (dest[type] && dest[type] === 'platform')
+            if (type == 'width') 
+              dest[type] = $dp.platformWidth;
+            else if (type == 'height') 
+              dest[type] = $dp.platformHeight;
+        });
+      } else if (dest.nomagic) 
+        delete dest.nomagic;
+    }
+    
+    if (!this.cached[style])
+      this.cached[style] = {
+        build: dest,
+        options: options
+      };
     
     if (dest.build && build) {
       if (dest.build.later) {

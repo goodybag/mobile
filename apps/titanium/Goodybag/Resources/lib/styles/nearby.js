@@ -64,7 +64,7 @@ gb.style.base.nearby = {
     }
   },
   
-  loc: {
+  location: {
     buttons: {
       back: {
         left: 10,
