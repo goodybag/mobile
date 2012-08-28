@@ -107,7 +107,7 @@ var Pool = function (obj) {
     },
     
     addEventListener: function (type, callback, id) { 
-      return this.addEvent(type,callback,id); 
+      return this.addEvent(type, callback, id); 
     },
     
     removeEventListener: function (type, obj, id) {

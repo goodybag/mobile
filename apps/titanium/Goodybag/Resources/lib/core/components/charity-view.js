@@ -3,8 +3,38 @@
     $ui = Titanium.UI
   ;
   
-  var constructor = function(data, options){
+  var views = function () {
+    return {
+      base: gb.style.get('charities.charity.item.base'),
+      
+      top: {
+        base: gb.style.get('charities.charity.item.top.base'),
+        fillerTop: gb.style.get('charities.charity.item.top.filler'),
+        
+        left: {
+          base: gb.style.get('charities.charity.item.top.left.base'),
+          logo: gb.style.get('charities.charity.item.top.left.logo')
+        },
+        
+        right: {
+          base: gb.style.get('charities.charity.item.top.right.base'),
+          name: gb.style.get('charities.charity.item.top.right.name')
+        },
+        
+        fillerBottom: gb.style.get('charities.charity.item.top.filler')
+      },
+      
+      bottom: {
+        base: gb.style.get('charities.charity.item.bottom.base'),
+        selectBtn: gb.style.get('charities.charity.item.bottom.select'),
+        detailsBtn: gb.style.get('charities.charity.item.bottom.details')
+      }
+    };
+  };
+  
+  var constructor = function (data, options) {
     var $this = this;
+    this.views = new views;
     this.model = data;
     this.options = {
       onSelect: function(charity, e){
@@ -25,52 +55,16 @@
     
     this.selected = this.options.selected;
     
-    this.views = {
-      base: gb.style.get('charities.charity.item.base'),
-      
-      top: {
-        base: gb.style.get('charities.charity.item.top.base'),
-        fillerTop: gb.style.get('charities.charity.item.top.filler'),
-        
-        left: {
-          base: gb.style.get('charities.charity.item.top.left.base'),
-          logo: gb.style.get('charities.charity.item.top.left.logo', {
-            image: this.model.media.url
-          })
-        },
-        
-        right: {
-          base: gb.style.get('charities.charity.item.top.right.base'),
-          name: gb.style.get('charities.charity.item.top.right.name', {
-            text: this.model.publicName
-          })
-        },
-        
-        fillerBottom: gb.style.get('charities.charity.item.top.filler')
-      },
-      
-      bottom: {
-        base: gb.style.get('charities.charity.item.bottom.base'),
-        
-        selectBtn: gb.style.get('charities.charity.item.bottom.select', {
-          image: this.options["charitySelect" + (this.selected ? 'ed' : '') + "Btn"]
-        , events: {
-            click: function(e){
-              $this.triggerOnSelect(e);
-            }
-          }
-        }),
-        
-        detailsBtn: gb.style.get('charities.charity.item.bottom.details', {
-          image: this.options.charityDetailsBtn
-        , events: {
-            click: function(e){
-              $this.triggerOnDetails(e);
-            }
-          }
-        })
-      }
-    };
+    this.views.top.left.logo.set('image', this.model.media.url);
+    this.views.top.right.name.set('text', this.model.publicName);
+    this.views.bottom.selectBtn.set('image', this.options["charitySelect" + (this.selected ? 'ed' : '') + "Btn"]);
+    this.views.bottom.selectBtn.addEventListener('click', function (e) {
+      $this.triggerOnSelect(e);
+    });
+    this.views.bottom.detailsBtn.set('image', this.options.charityDetailsBtn);
+    this.views.bottom.detailsBtn.addEventListener('click', function (e) {
+      $this.triggerOnDetails(e);
+    });
     
     gb.utils.compoundViews(this.views);
   };

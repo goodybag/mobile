@@ -107,7 +107,7 @@ Views.hide = function (name, context) {
   if (!name) return;
   if (!this.exists(name)) return;
   if (typeof this.views[name].onHide != 'undefined') this.views[name].onHide(context);
-  this.views[name].self.close();
+  this.views[name].self.hide();
 };
 
 /**

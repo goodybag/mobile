@@ -531,8 +531,9 @@ gb.utils = function (global) {
         // maybe get a little more granular with this check with:
         // Object.prototype.toString.call(item).indexOf('TI') > -1
       } else if (typeof item === "object") {
-        for (var eventType in item.events)
-          item.addEventListener(eventType, item.events[eventType]);
+        if (!item.pooler)
+          for (var eventType in item.events)
+            item.addEventListener(eventType, item.events[eventType]);
         base.add(item);
       }
     }

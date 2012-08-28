@@ -73,16 +73,16 @@
       this.views = views;
       this.hasCalledOnComplete = false;
       this.onComplete = function () {};
-      
-      this.views.charityDetails.bottom.base.addEventListener('click', function(){
-        $this.showCharityList();
-      });
+      this.backId = null;
     },
     
     onShow: function () {
       var $this = this;
       
-      gb.utils.compoundViews(views);
+      if (!views.base.pool) gb.utils.compoundViews(views);
+      if (!this.backId) this.backId = this.views.charityDetails.bottom.base.addEventListener('click', function(){
+        $this.showCharityList();
+      });
       
       console.log('showing charities, onShow method');
       
@@ -172,7 +172,6 @@
         });
         
         if (charity.selected) this.selected = charity;
-        console.log(charity.views);
         list.add(charity.views.base);
       }
     },
