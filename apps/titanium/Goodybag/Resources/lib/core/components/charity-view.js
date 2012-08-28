@@ -82,14 +82,14 @@
     
   , triggerOnSelect: function(e){
       if (this.selected) return;
-      this.views.bottom.selectBtn.setImage(this.options.charitySelectedBtn);
+      this.views.bottom.selectBtn.set('image', this.options.charitySelectedBtn);
       this.selected = true;
       this.options.onSelect(this, e);
     }
     
   , deselect: function(){
       if (!this.selected) return;
-      this.views.bottom.selectBtn.setImage(this.options.charitySelectBtn);
+      this.views.bottom.selectBtn.set('image', this.options.charitySelectBtn);
       this.selected = false;
     }
   };

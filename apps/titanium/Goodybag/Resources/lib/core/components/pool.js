@@ -92,7 +92,6 @@ var Pool = function (obj) {
     removeEvent: function (type, obj, id) {
       var area = this.pool? 'events' : 'pendingEvents';
       if (!this[area]) return;
-      
       if (typeof type === 'string') {
         
       } else {
