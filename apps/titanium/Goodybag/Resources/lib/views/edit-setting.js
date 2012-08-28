@@ -102,7 +102,6 @@
         if (this.wrapper[key].hasOwnProperty('base')) this.hideField(key);
       }
     }
-  
     
   , onShow: function(){
 
@@ -115,23 +114,13 @@
     
   , showField: function(which){
       this.wrapper[which].base.show();
-      this.wrapper[which].base.setHeight('auto');
+      this.wrapper[which].base.setHeight($ui.SIZE);
     }
     
   , setField: function(which){
       if (this.which) this.hideField(this.which);
       this.showField(which);
       this.which = which;
-      
-      /**
-       * BUG:
-       * When changing to the edit-setting page, view is not calculating the height properly.
-       * My input elements are clipped and not only until I tab to one of the clipped
-       * inputs and type something does the height get properly calculated.
-       * A quick fix is initially setting the height to something specific and later
-       * changing it back to $ui.SIZE
-       */
-      // this.wrapper.base.setHeight('1000dp');
       // Set page title
       switch(which){
         case 'name':
@@ -151,7 +140,6 @@
         break;
         default: break;
       }
-      // this.wrapper.base.setHeight($ui.SIZE); // Bug height resolution
     }
     
   , getField: function(hint, value, hidden){

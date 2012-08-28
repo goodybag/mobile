@@ -186,6 +186,15 @@ gb.utils = function (global) {
     client.setRequestHeader('Cookie', session.toString() + '; ');
     client.send(options ? JSON.stringify(options) : '');
   };
+  
+  this.paramParser = function(options){
+    var params = "", i = 0;
+    for (var key in data){
+      params += ((i === 0) ? "?" : "&") + key + "=" + data[key];
+      i++;
+    }
+    return params;
+  };
 
   /**
    * Returns relational path from basepath.

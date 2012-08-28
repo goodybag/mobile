@@ -206,6 +206,8 @@
         , bottom: 9
         , left: 6
         , right: 5
+        , autocorrect: false
+        , autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_NONE
         , color: gb.ui.color.grayDark
         , font: {
             fontSize: gb.ui.font.base.fontSize
@@ -219,6 +221,8 @@
         , bottom: 10
         , left: 6
         , right: 50
+        , autocorrect: false
+        , autocapitalization: Ti.UI.TEXT_AUTOCAPITALIZATION_NONE
         , color: gb.ui.color.grayDark
         , font: {
             fontSize: gb.ui.font.base.fontSize
