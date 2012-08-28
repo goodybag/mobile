@@ -14,12 +14,6 @@ gb.style.base.sidebar = {
       zIndex: 1,
       image: 'screens/sidebar/header.png',
       build: { type: 'createImageView' },
-      events: {
-        click: function (e) {
-          gb.Views.show('profile');
-          gb.Windows.get('main').toggleSidebar();
-        }
-      }
     },
     
     username: {
