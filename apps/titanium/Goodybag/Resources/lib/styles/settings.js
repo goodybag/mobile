@@ -1,7 +1,7 @@
 (function(){
   var $ui = Ti.UI, settingRightWidth;
   
-  gb.style.iphone.settings = {
+  gb.style.base.settings = {
     "base": {
       zIndex: 15
     }
@@ -44,7 +44,7 @@
       , left: 10
       , top: 10
       , bottom: 10
-      , right: settingRightWidth = 25
+      , right: 25
       , color: gb.ui.color.grayDark
       , shadowOffset: { x: 0, y: 1 }
       , shadowColor: '#fff'
@@ -56,7 +56,7 @@
       }
       
     , "right": {
-        width: settingRightWidth
+        width: 25
       , height: $ui.SIZE
       , right: 6
       }
@@ -79,7 +79,7 @@
     , "separator": {
         width: $ui.FILL
       , height: 1
-      , backgroundColor: gb.ui.color.grayLightest
+      , backgroundColor: '#ddd'
       , bottom: 0
       , build: { type: "createView" }
       }
@@ -88,12 +88,13 @@
     // Sub-pixel rendering was messing up the button render clarity
   , "setting:avatar": {
       "base": {
-        top: 2
+        top: 0
       }
     , "field": {
         left: 8
       , width: 85
       , height: 85
+      , borderRadius: 3
       , build: { type: "createImageView" }
       }
     , "edit": {

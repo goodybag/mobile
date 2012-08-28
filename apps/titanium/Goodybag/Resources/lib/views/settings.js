@@ -189,29 +189,22 @@
 GB.Views.add('settings', {
   
   Constructor: function(){
+    
     var $this = this;
-    this.self = $ui.createScrollView(gb.utils.extend(
-      gb.style.get('settings.base')
-    , gb.style.get('common.grayPage.base')
-    , gb.style.get('common.scrollView')
-    ));   
+    this.self = $ui.createScrollView(gb.style.get('settings.base common.grayPage.base common.scrollView'));
+    
     this.views = {
       "base": this.self
       
     , "pageWrapper": {
         "base": $ui.createView(gb.style.get('common.grayPage.wrapper'))
       
-      , "header": $ui.createLabel(gb.utils.extend(
+      , "header": $ui.createLabel(gb.style.get('settings.header common.grayPage.header1',
           { text: "Settings" }
-        , gb.style.get('settings.header')
-        , gb.style.get('common.grayPage.header1')
         ))
         
       , "island": {
-          "base": $ui.createView(gb.utils.extend(
-            gb.style.get('settings.island')
-          , gb.style.get('common.grayPage.island.base')
-          ))
+          "base": $ui.createView(gb.style.get('settings.island common.grayPage.island.base'))
         
         , "shadow": $ui.createView(gb.style.get('common.grayPage.island.shadow'))
         

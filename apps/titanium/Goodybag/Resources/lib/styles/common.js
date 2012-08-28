@@ -121,7 +121,7 @@
     
   , "grayPage": {
       "base": {
-        backgroundColor: '#ddd'
+        backgroundColor: gb.ui.color.grayLightest
       , top: 54
       }
         
@@ -262,7 +262,7 @@
         , bottom: 1
         , borderRadius: 5
         , borderWidth: 1
-        , borderColor: '#f1f1f1'
+        , borderColor: '#eee'
         , backgroundColor: '#fff'
         , backgroundGradient: {
             type: 'linear'
