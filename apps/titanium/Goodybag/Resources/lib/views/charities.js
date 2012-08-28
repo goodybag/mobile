@@ -80,7 +80,7 @@
       var $this = this;
       
       if (!views.base.pool) gb.utils.compoundViews(views);
-      if (!this.backId) this.backId = this.views.charityDetails.bottom.base.addEventListener('click', function(){
+      this.views.charityDetails.bottom.base.addEventListener('click', function(){
         $this.showCharityList();
       });
       
