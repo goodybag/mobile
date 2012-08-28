@@ -110,35 +110,26 @@ gb.style.base.sidebar = {
   list: {
     base: {
       build: { type: 'createImageView' },
-      events: {
-        click: function (args, ctx) {
-          ctx.setActive(args.source.name);
-        }
-      }
     },
     
     nearby: {
       top: 88,
-      image: 'screens/sidebar/items/nearby.png',
-      name: 'nearby'
+      image: 'screens/sidebar/items/nearby.png'
     },
     
     sponsored: {
       top: 124,
-      image: 'screens/sidebar/items/sponsored.png',
-      name: 'sponsored'
+      image: 'screens/sidebar/items/sponsored.png'
     },
     
     activity: {
       top: 160,
-      image: 'screens/sidebar/items/activity.png',
-      name: 'activity'
+      image: 'screens/sidebar/items/activity.png'
     },
     
     settings: {
       top: 196,
-      image: 'screens/sidebar/items/settings.png',
-      name: 'settings'
+      image: 'screens/sidebar/items/settings.png'
     }
   }
 };

@@ -40,12 +40,12 @@ GB.Views.add('sidebar', {
   },
   
   Constructor: function () { 
-    var $el = this.elements, $self = this.self;
+    var $el = this.elements, $self = this.self, $this = this;
     
-    $el.list.nearby     = gb.style.get('sidebar.list.base sidebar.list.nearby',     null, null, this);
-    $el.list.sponsored  = gb.style.get('sidebar.list.base sidebar.list.sponsored',  null, null, this);
-    $el.list.activity   = gb.style.get('sidebar.list.base sidebar.list.activity',   null, null, this);
-    $el.list.settings   = gb.style.get('sidebar.list.base sidebar.list.settings',   null, null, this);
+    $el.header.background.addEventListener('click', function (e) {
+      $this.clearActive();
+      $this.setActive('profile');
+    });
     
     $self.add($el.header.background);
     $self.add($el.header.avatar.background);
@@ -53,11 +53,19 @@ GB.Views.add('sidebar', {
     $self.add($el.header.username);
     $self.add($el.bank.background);
     
-    for (var slot in $el.bank.slots)
-      $self.add($el.bank.slots[slot]);
+    // Bank Slots
+    for (var slot in $el.bank.slots) $self.add($el.bank.slots[slot]);
     
-    for (var item in $el.list)
+    // Side-bar items
+    [ 'nearby', 'sponsored', 'activity', 'settings' ].forEach(function (item) {
+      $el.list[item] = gb.style.get('sidebar.list.base sidebar.list.' + item);
+      $el.list[item].addEventListener('click', function (e) {
+        $this.clearActive();
+        $this.setActive(item);
+      });
+      
       $self.add($el.list[item]);
+    });
       
     // Events
     gb.consumer.on('change:avatar', function(){ $self.setAvatar(); });
@@ -98,33 +106,40 @@ GB.Views.add('sidebar', {
   
   setAvatar: function () {
     var $self = this;
+    
     gb.consumer.getAvatar(128, function (image) {
       $self.elements.header.avatar.image.setImage(image);
     });
   },
   
   setActive: function (area) {
-    var $el = this.elements, view;
+    var view;
     
-    // General Cleanup
-    this.clearActive();
-    if (area == 'activity') view = 'stream';
-    else if (area == 'sponsored') view = 'charities';
-    else view = area;
+    // Correct name for files.
+    if (area === 'activity') {
+      view = 'stream';
+    } else if (area === 'sponsored') {
+      view = 'charities';
+    } else {
+      view = area;
+    }
+    
+    // Save Location
     this.active = area;
     $prop.setString('location', area);
     
+    // Toggle side-bar.
+    GB.Windows.get('main').toggleSidebar();
+    
+    if (area !== 'profile')
+      this.elements.list[area].image = gb.utils.getImage('screens/sidebar/items/' + area + '_active.png');
+    
     // Show The Area
     GB.Windows.get('main').showPage(view);
-    
-    // Swap and close the sidebar
-    $el.list[area].image = gb.utils.getImage('screens/sidebar/items/' + area + '_active.png');
-    this.parent.toggleSidebar();
   },
   
   clearActive: function () {
-    var $el = this.elements;
-    if (!this.active) return;
-    $el.list[this.active].image = gb.utils.getImage('screens/sidebar/items/' + this.active + '.png');
+    if (typeof this.active === 'undefined' || this.active === 'profile') return;
+    this.elements.list[this.active].image = gb.utils.getImage('screens/sidebar/items/' + this.active + '.png');
   }
 });

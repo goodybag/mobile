@@ -184,18 +184,17 @@ GB.Views.add('charities', {
         }
       }
     };
-    gb.utils.compoundViews(this.views);
-    this.self = this.views.base;
     
+    gb.utils.compoundViews(this.views);
+    
+    this.self = this.views.base;
     this.isFetching = false;
     this.hasLoaded = false;
     this.hasCalledOnComplete = false;
     this.onComplete = function(){};
     this.onCharityDetails = function(charity){ $this.showCharityDetails(charity); };
     this.onCharitySelect = function(charity){ $this.selectCharity(charity); };
-    
     this.views.charityDetails.base.hide();
-    
     this.views.charityDetails.bottom.base.addEventListener('click', function(){ $this.showCharityList() });
   },
   
@@ -263,13 +262,13 @@ GB.Views.add('charities', {
   showData: function (data) {
     var $this = this;
     
-    
     var getSelectCallback = function(charity){
       return function(){
         charity.select();
         $this.onCharitySelect(charity);
       };
     };
+    
     var getDetailsCallback = function(charity){
       return function(){
         $this.onCharityDetails(charity);
