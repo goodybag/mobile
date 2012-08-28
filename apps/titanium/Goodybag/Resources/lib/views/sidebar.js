@@ -113,7 +113,7 @@ GB.Views.add('sidebar', {
     else view = area;
     this.active = area;
     $prop.setString('location', area);
-    
+    alert(area);
     // Show The Area
     GB.Windows.get('main').showPage(view);
     
