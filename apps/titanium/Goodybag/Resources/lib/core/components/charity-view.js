@@ -76,6 +76,8 @@
     
   , triggerOnSelect: function(e){
       if (this.selected) return;
+      console.log('on select triggered');
+      console.log('e is: ' + e);
       this.views.bottom.selectBtn.set('image', this.options.charitySelectedBtn);
       this.selected = true;
       this.options.onSelect(this, e);
@@ -83,6 +85,7 @@
     
   , deselect: function(){
       if (!this.selected) return;
+      console.log('deselect triggered');
       this.views.bottom.selectBtn.set('image', this.options.charitySelectBtn);
       this.selected = false;
     }

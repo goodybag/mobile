@@ -21,7 +21,10 @@ GB.Windows.add('complete-registration', Window.extend({
       , "set-screen-name": GB.Views.get('set-screen-name').self
       , "enter-tapin-id": GB.Views.get('enter-tapin-id').self
       }
-    }; gb.utils.compoundViews(this.views);
+    }; 
+    
+    gb.utils.compoundViews(this.views);
+    
     this.add(this.views.base);
     
     var onComplete = function(){ console.log("ON COMPLETE SHOWING NEXT"); $this.showNextScreen(); };

@@ -89,17 +89,17 @@ var Pool = function (obj) {
       return true;
     },
     
-    removeEvent: function (type, obj, id) {
+    removeEvent: function (type, obj) {
       var area = this.pool? 'events' : 'pendingEvents';
       if (!this[area]) return;
-      if (typeof type === 'string') {
+      if (typeof type === 'string' && !obj) {
         
-      } else {
+      } else if (type && obj) {
         obj = type, type = null, id = null;
         for (var i in this[area]) {
           if (this[area][i].callback == obj) {
             if (this.pool) {
-              
+              this.pool.removeEventListener(type, obj);
             }
           }
         }
@@ -110,8 +110,8 @@ var Pool = function (obj) {
       return this.addEvent(type, callback, id); 
     },
     
-    removeEventListener: function (type, obj, id) {
-      return this.removeEvent(type, obj, id);
+    removeEventListener: function (type, obj) {
+      return this.removeEvent(type, obj);
     },
     
     remove: function (obj) {

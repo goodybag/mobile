@@ -95,7 +95,7 @@ Titanium.include('/lib/views/main.js');
   Titanium.include('/lib/views/' + item + '.js');
 });
 
-[ 'login', 'complete-registration' ].forEach(function (item) {
+[ 'login' ].forEach(function (item) {
   Titanium.include('/lib/views/' + item + '.js');
 });
 

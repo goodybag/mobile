@@ -148,6 +148,7 @@
       
       this.onDetailsCharitySelect = function (e) {
         if (charity.selected) return;
+        console.log('selected charity, setting image, triggering (details)');
         select.set('image', selected_image);
         charity.triggerOnSelect(e);
       };
@@ -179,15 +180,20 @@
     selectCharity: function(charity, callback){
       var $this = this;
       if (this.selected) this.selected.deselect();
+      console.log('selected charity ' + charity);
       this.selected = charity;
       callback || (callback = function(){});
+      console.log('setting charity');
       gb.consumer.setCharity({
         id: charity.model._id
       , name: charity.model.publicName
       }, function(error){
+        console.log('setting complete');
         if (error) return console.log(error);
         $this.triggerOnComplete(); // Registration step complete
+        console.log('triggerOnComplete called');
         callback();
+        console.log('callback called: ' + callback);
       });
     },
     
