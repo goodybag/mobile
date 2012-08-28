@@ -37,6 +37,43 @@
             , "wrapper": {
                 "base": $ui.createView(gb.style.get('common.grayPage.island.wrapper'))
                 
+                /**
+                 * Fields
+                 */
+                
+              , "name": {
+                  "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
+                , "field:firstName": this.getValidatedField('firstName', 'First Name', gb.consumer.data.firstName)
+                , "field:lastName": this.getValidatedField('lastName', 'Last Name', gb.consumer.data.lastName)
+                }
+                
+              , "email": {
+                  "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
+                , "field:email": this.getValidatedField('email', 'Email', gb.consumer.data.email)
+                , "field:emailConfirm": this.getValidatedField('email', 'Confirm Email')
+                }
+                
+              , "screenName": {
+                  "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
+                , "field:email": this.getValidatedField('screenName', 'Alias', gb.consumer.data.setScreenName ? gb.consumer.data.screenName : "")
+                }
+                
+              , "barcodeId": {
+                  "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
+                , "field:barcodeId": this.getValidatedField('barcodeId', 'Tap-In ID', gb.consumer.data.barcodeId || "")
+                }
+                
+              , "password": {
+                  "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
+                , "field:password": this.getField('Current Password', "", true)
+                , "field:newPassword": this.getValidatedField('password', 'New Password', "", true)
+                , "field:confirmPassword": this.getValidatedField('password', 'Confirm', "", true)
+                }
+                
+                /**
+                 * End Fields
+                 */
+                
               } // Wrapper
             } // Fill
           } // Island
@@ -61,6 +98,7 @@
         }
       };
       gb.utils.compoundViews(this.views);
+      this.wrapper = this.views.pageWrapper.island.fill.wrapper;
     }
   
     
@@ -69,8 +107,10 @@
     }
     
   , setField: function(which){
+      if (this.which) this.wrapper[which].base.hide();
+      this.wrapper[which].base.show();
       this.which = which;
-      var wrapper = this.views.pageWrapper.island.fill.wrapper;
+      
       /**
        * BUG:
        * When changing to the edit-setting page, view is not calculating the height properly.
@@ -79,44 +119,27 @@
        * A quick fix is initially setting the height to something specific and later
        * changing it back to $ui.SIZE
        */
-      wrapper.base.setHeight('1000dp');
-      // Remove Previous fields
-      if (this.currentFields) wrapper.base.remove(this.currentFields.base);
+      // this.wrapper.base.setHeight('1000dp');
+      // Set page title
       switch(which){
         case 'name':
-          // Set Title
           this.views.pageWrapper.header.setText('Settings - Name');
-          // Set new Fields
-          this.currentFields = this.getNameFields();
         break;
         case 'email':
-          // Set Title
           this.views.pageWrapper.header.setText('Settings - Email');
-          // Set new Fields
-          this.currentFields = this.getEmailFields();
         break;
         case 'screenName':
-          // Set Title
           this.views.pageWrapper.header.setText('Settings - Alias');
-          // Set new Fields
-          this.currentFields = this.getScreenNameFields();
         break;
         case 'barcodeId':
-          // Set Title
           this.views.pageWrapper.header.setText('Settings - Tap-In ID');
-          // Set new Fields
-          this.currentFields = this.getBarcodeIdFields();
         break;
         case 'password':
-          // Set Title
           this.views.pageWrapper.header.setText('Settings - Password');
-          // Set new Fields
-          this.currentFields = this.getPasswordFields();
         break;
         default: break;
       }
-      wrapper.base.add(gb.utils.compoundViews(this.currentFields));
-      wrapper.base.setHeight($ui.SIZE); // Bug height resolution
+      // this.wrapper.base.setHeight($ui.SIZE); // Bug height resolution
     }
     
   , getField: function(hint, value, hidden){
@@ -181,52 +204,14 @@
       return view;
     }
     
-  , getNameFields: function(){
-      return {
-        "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
-      , "field:firstName": this.getValidatedField('firstName', 'First Name', gb.consumer.data.firstName)
-      , "field:lastName": this.getValidatedField('lastName', 'Last Name', gb.consumer.data.lastName)
-      };
-    }
-    
-  , getEmailFields: function(){
-      return {
-        "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
-      , "field:email": this.getValidatedField('email', 'Email', gb.consumer.data.email)
-      , "field:emailConfirm": this.getValidatedField('email', 'Confirm Email')
-      };
-    }
-    
-  , getScreenNameFields: function(){
-      return {
-        "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
-      , "field:email": this.getValidatedField('screenName', 'Alias', gb.consumer.data.setScreenName ? gb.consumer.data.screenName : "")
-      };
-    }
-    
-  , getBarcodeIdFields: function(){
-      return {
-        "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
-      , "field:barcodeId": this.getValidatedField('barcodeId', 'Tap-In ID', gb.consumer.data.barcodeId || "")
-      };
-    }
-    
-  , getPasswordFields: function(){
-      return {
-        "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
-      , "field:password": this.getField('Current Password', "", true)
-      , "field:newPassword": this.getValidatedField('password', 'New Password', "", true)
-      , "field:confirmPassword": this.getValidatedField('password', 'Confirm', "", true)
-      };
-    }
-    
   , save: function(){
+      var currentFields = this.wrapper[this.which];
       switch (this.which){
       case 'name':
         var
-          firstName = this.currentFields['field:firstName'].input.getValue()
-        , lastName = this.currentFields['field:lastName'].input.getValue()
-        , errors = []
+          firstName = currentFields['field:firstName'].input.getValue()
+        , lastName  = currentFields['field:lastName'].input.getValue()
+        , errors    = []
         ;
         if (gb.consumer.data.facebook) return this.reportErrors(['Facebook users must change their name from facebook']);
         if (firstName === gb.consumer.data.firstName && lastName === gb.consumer.data.lastName) return;
@@ -247,9 +232,9 @@
       break;
       case 'email':
         var
-          email = this.currentFields['field:email'].input.getValue()
-        , confirm = this.currentFields['field:emailConfirm'].input.getValue()
-        , errors = []
+          email   = currentFields['field:email'].input.getValue()
+        , confirm = currentFields['field:emailConfirm'].input.getValue()
+        , errors  = []
         ;
         gb.validate('email', email, function(_errors){
           if (_errors.length > 0) errors = errors.join(_errors);
@@ -265,8 +250,8 @@
       break;
       case 'barcodeId':
         var
-          barcodeId = this.currentFields['field:barcodeId'].input.getValue()
-        , errors = gb.validate('barcodeId', barcodeId)
+          barcodeId = currentFields['field:barcodeId'].input.getValue()
+        , errors    = gb.validate('barcodeId', barcodeId)
         ;
         if (errors.length > 0) return this.reportErrors(errors);
         gb.consumer.setBarcodeId(barcodeId, function(error){
@@ -275,10 +260,10 @@
       break;
       case 'password':
         var
-          password = this.currentFields['field:password'].input.getValue()
-        , newPassword = this.currentFields['field:newPassword'].input.getValue()
-        , confirmPassword = this.currentFields['field:confirmPassword'].input.getValue()
-        , errors = gb.validate('password', newPassword)
+          password        = currentFields['field:password'].input.getValue()
+        , newPassword     = currentFields['field:newPassword'].input.getValue()
+        , confirmPassword = currentFields['field:confirmPassword'].input.getValue()
+        , errors          = gb.validate('password', newPassword)
         ;
         if (newPassword !== confirmPassword) errors.push('Passwords do not match');
         if (errors.length > 0) return this.reportErrors(errors);
