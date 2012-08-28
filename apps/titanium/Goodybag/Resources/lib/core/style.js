@@ -97,14 +97,8 @@ gb.style = {
       if (dest.build.later) {
         dest.build.later = false;
       } else if (dest.build && (!dest.build.later || dest.build.later == null || dest.build.later == undefined)) {
-        var type = dest.build.type, events = dest.events ? dest.events : null; delete dest.build;
-        dest = $ui[type](dest);
-        if (events) {
-          for (var e in events) {
-            if (context) dest.addEventListener(e, function (evt) { events[e].call(this, evt, context); });
-            else dest.addEventListener(e, events[e]);
-          }
-        }
+        var area = dest.build.area || null, type = dest.build.type;
+        return Titanium[area || 'UI'][type.indexOf('create') !== -1 ? type : 'create' + type](dest);
       }
     }
 
