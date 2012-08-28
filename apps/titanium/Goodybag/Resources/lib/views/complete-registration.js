@@ -50,11 +50,9 @@ GB.Windows.add('complete-registration', Window.extend({
     // Facebook regs don't set their screen name like email regs
     console.log("[Complete Registration] - Checking for Set Screen Name");
     if (!gb.consumer.hasSetScreenName())  return GB.Views.show('set-screen-name');
-
     // Show Charity if necessary
     console.log("[Complete Registration] - Checking for Set Charities");
     if (!gb.consumer.hasCharity())        return GB.Views.show('charities');
-    
     // Show QR Code
     console.log("[Complete Registration] - Checking for Set TapIn ID");
     if (!gb.consumer.getBarcodeID())      return GB.Views.show('enter-tapin-id');

@@ -100,7 +100,7 @@ Titanium.include('/lib/views/main.js');
   }
 });
 
-[ 'login'].forEach(function (item) {
+[ 'login', 'complete-registration'].forEach(function (item) {
   Titanium.include('/lib/views/' + item + '.js');
 });
 
