@@ -386,8 +386,22 @@ if(!GB.Models)
       var locations = this.data.locations || null, $this = this, $data = this.data;
       
       $http.get.sessioned(gb.config.api.consumer.locations, this.session, function (error, results) {
-        if (error) return callback(locations); else results = JSON.parse(results);
-        if (results.error) return callback(locations); else $data.locations = results.data;
+        if (typeof error === 'undefined' && typeof results === 'undefined') {
+          return callback(locations); // No Data, use old
+        } else if (error) {
+          gb.utils.debug(error);
+          return callback(locations);
+        } else {
+          results = JSON.parse(results);
+        }
+        
+        if (results.error) {
+          gb.utils.debug(results.error);
+          return callback(locations); 
+        } else {
+          $data.locations = results.data;
+        }
+        
         callback($data.locations);
         $this._setConsumer($data);
       });
@@ -397,10 +411,20 @@ if(!GB.Models)
       var count = this.data.tapinCount || null, $this = this, $data = this.data;
       
       $http.get.sessioned(gb.config.api.consumer.count, this.session, function (error, results) {
-        gb.utils.debug(error);
-        gb.utils.debug(results);
-        if (error) return callback(count); else results = JSON.parse(results);
-        if (results.error) return callback(count); else $data.tapinCount = results.data;
+        if (typeof error === 'undefined' && typeof results === 'undefined') {
+          return callback(count); // No Data, use old
+        } else if (error) {
+           return callback(error);
+        } else { 
+          results = JSON.parse(results);
+        }
+        
+        if (results.error) { 
+          return callback(count); // Error obtained, use old data.
+        } else {
+          $data.tapinCount = results.data;
+        }
+        
         callback($data.tapinCount);
         $this._setConsumer($data);
       });

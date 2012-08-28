@@ -16,6 +16,7 @@ gb.ui.color = {
 , silver:       '#CCCCCC'
 , platinum:     '#E5E4E2'
 , offWhite:     '#F5F5F5'
+, offGray:      '#FAFAFA'
 , pink:         '#D357BA'
 , blue:         '#57A0D3'
 , blueBright:   '#35C8F6'
