@@ -27,11 +27,6 @@ GB.Windows.add('complete-registration', Window.extend({
     gb.utils.compoundViews(this.views);
     this.add(this.views.base);
     
-    var onComplete = function(){ console.log("ON COMPLETE SHOWING NEXT"); $this.showNextScreen(); };
-    GB.Views.get('charities').setOnComplete(onComplete);
-    GB.Views.get('set-screen-name').setOnComplete(onComplete);
-    GB.Views.get('enter-tapin-id').setOnComplete(onComplete);
-    
     return this;
   },
   
@@ -42,6 +37,11 @@ GB.Windows.add('complete-registration', Window.extend({
     if (gb.consumer.newlyRegistered){
       this.flashWelcomeScreen();
     }
+    
+    var onComplete = function(){ console.log("ON COMPLETE SHOWING NEXT"); $this.showNextScreen(); };
+    GB.Views.get('charities').setOnComplete(onComplete);
+    GB.Views.get('set-screen-name').setOnComplete(onComplete);
+    GB.Views.get('enter-tapin-id').setOnComplete(onComplete);
     
     this.showNextScreen();
   },

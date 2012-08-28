@@ -40,7 +40,6 @@
                 /**
                  * Fields
                  */
-                
               , "name": {
                   "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
                 , "field:firstName": this.getValidatedField('firstName', 'First Name', gb.consumer.data.firstName)
@@ -69,7 +68,6 @@
                 , "field:newPassword": this.getValidatedField('password', 'New Password', "", true)
                 , "field:confirmPassword": this.getValidatedField('password', 'Confirm', "", true)
                 }
-                
                 /**
                  * End Fields
                  */
@@ -99,6 +97,10 @@
       };
       gb.utils.compoundViews(this.views);
       this.wrapper = this.views.pageWrapper.island.fill.wrapper;
+      for (var key in this.wrapper){
+        if (key === "base") continue;
+        if (this.wrapper[key].hasOwnProperty('base')) this.hideField(key);
+      }
     }
   
     
@@ -106,9 +108,19 @@
 
     }
     
-  , setField: function(which){
-      if (this.which) this.wrapper[which].base.hide();
+  , hideField: function(which){
+      this.wrapper[which].base.hide();
+      this.wrapper[which].base.setHeight(0);
+    }
+    
+  , showField: function(which){
       this.wrapper[which].base.show();
+      this.wrapper[which].base.setHeight('auto');
+    }
+    
+  , setField: function(which){
+      if (this.which) this.hideField(this.which);
+      this.showField(which);
       this.which = which;
       
       /**
