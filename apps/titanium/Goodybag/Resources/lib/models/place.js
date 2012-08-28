@@ -321,17 +321,17 @@ if(!GB.Models)
     toRow: function (border, callback) {
       var $self = this, row;
 
-      row = gb.style.get('nearby.loc.row.view', {
+      row = gb.style.get('nearby.location.row.view', {
         borderWidth: border ? 1 : 0
       });
   
       // Label
-      row.add(gb.style.get('nearby.loc.row.name', {
+      row.add(gb.style.get('nearby.location.row.name', {
         text: this.parent.data.publicName
       }));
       
       if (this.data.distance) {
-        row.add(gb.style.get('nearby.loc.row.distance', {
+        row.add(gb.style.get('nearby.location.row.distance', {
           text: this.data.distance + " miles"
         }));
       }

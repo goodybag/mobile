@@ -88,8 +88,6 @@ GB.Views.add('nearby', {
 
       $this['show' + $this.location]();
     }, true);
-    
-    console.log("asdf");
   },
   
   exists: function (id) {
@@ -103,7 +101,8 @@ GB.Views.add('nearby', {
     ,   x
     ,   locations;
     
-    if($el.places) /*$el.places.close(),*/ $el.holder.remove($el.places);
+    if($el.places) $el.holder.remove($el.places), $el.places = null;
+    
     this.locations = [];
     for(i in this.models) {
       locations = this.models[i].getLocations();
@@ -113,15 +112,6 @@ GB.Views.add('nearby', {
     }
 
     $el.places = gb.style.get('nearby.places');
-    $el.places.add($ui.createLabel({
-      text: Ligature.get('code'),
-      color: gb.ui.color.gray,
-      font: { 
-        fontSize: 32,
-        fontFamily: Ligature.typeface()
-      }
-    }));
-    
     $el.holder.add($el.places);
     $el.menu.nearby.activate();
     $el.menu.map.deactivate();
@@ -150,16 +140,12 @@ GB.Views.add('nearby', {
       $this.self.remove($el.place), 
       $el.place.close();
     
-    $el.place  = $ui.createWindow();
-    var modal  = $ui.createWindow();
-    var back   = new GB.StreamButton('Back');
-    modal.back = $ui.createButton({ title: 'Back' });
-    modal.back.addEventListener('click', function (e) {
-      modal.close();
-    });
+    $el.place = $ui.createWindow();
+    var back  = new GB.StreamButton('Back');
     
     // Styles
-    var area      = "nearby.loc";
+    var area = "nearby.location";
+    
     var elements = {
       base: $el.place,
       
@@ -191,9 +177,11 @@ GB.Views.add('nearby', {
           base: gb.style.get(area + '.header.sub.base'),
           inner: {
             base: gb.style.get(area + '.header.sub.inner'),
+            
             one: gb.style.get(area + '.header.sub.one ' + area + '.header.sub.padding', { 
               text: 'NUMBER', top: 8,
             }),
+            
             two: gb.style.get(area + '.header.sub.two ' + area + '.header.sub.padding')
           }
         },
@@ -201,22 +189,12 @@ GB.Views.add('nearby', {
         url: {
           base: gb.style.get(area + '.header.sub.base'),
           inner: {
-            base: gb.style.get(area + '.header.sub.inner', {
-              events: {
-                click: function (e) {
-                  var url = place.parent.getUrl();
-                  if (url) {
-                    var webview = $ui.createWebView({ url: url });
-                    modal.setLeftNavButton(modal.back);
-                    modal.add(webview);
-                    modal.open(gb.style.get('nearby.loc.modal'));
-                  }
-                }
-              }
-            }),
+            base: gb.style.get(area + '.header.sub.inner'),
+            
             one: gb.style.get(area + '.header.sub.one ' + area + '.header.sub.padding', { 
               text: 'URL', top: 8,
             }),
+            
             two: gb.style.get(area + '.header.sub.two ' + area + '.header.sub.padding')
           }
         },
@@ -225,9 +203,11 @@ GB.Views.add('nearby', {
           base: gb.style.get(area + '.header.sub.base'),
           inner: {
             base: gb.style.get(area + '.header.sub.inner'),
+            
             one: gb.style.get(area + '.header.sub.one ' + area + '.header.sub.padding', { 
               text: 'KARMA POINTS', top: 8,
             }),
+            
             two: gb.style.get(area + '.header.sub.two ' + area + '.header.sub.padding')
           }
         },
@@ -241,21 +221,6 @@ GB.Views.add('nearby', {
       }
     }; gb.utils.compoundViews(elements);
     
-    // Menu
-    elements.menu.back.addEventListener('click', function (e) {
-      back.activate();
-      if (modal) modal.close();
-      $el.place.setVisible(false);
-      $this.self.remove($el.place);
-      $el.place.close();
-      $el.holder.setVisible(true);
-      $el.menu.base.setVisible(true);
-    });
-    
-    // Remove unnecessary things
-    var url = place.parent.getUrl().replace('http://','').toLowerCase();
-    if (url) if (url[url.length-1] == '/') url = url.substr(0, url.length-1);
-    
     // Showing function
     function show () {
       $el.holder.setVisible(false);
@@ -264,14 +229,30 @@ GB.Views.add('nearby', {
       $this.self.add($el.place);
     }
     
-    // Back to scheduled programming
+    // Menu
+    elements.menu.back.addEventListener('click', function (e) {
+      back.activate();
+      $el.place.setVisible(false);
+      $this.self.remove($el.place);
+      $el.place.close();
+      $el.holder.setVisible(true);
+      $el.menu.base.setVisible(true);
+    });
+    
+    elements.holder.url.base.addEventListener('click', function (e) {
+      $this.createModal(place.parent.getUrl());
+    });
+    
+    // Remove unnecessary things
+    var url = place.parent.getUrl().replace('http://','').toLowerCase();
+    if (url) if (url[url.length-1] == '/') url = url.substr(0, url.length-1);
+    
+    // Setup Text
     elements.holder.header.right.name.setText(place.parent.getName());
-    elements.holder.header.right.details.setText(
-      place.getAddress().replace(/,\s/, "\n")
-    );
-     
+    elements.holder.header.right.details.setText(place.getAddress().replace(/,\s/, "\n"));
     elements.holder.number.inner.two.setText(
-      place.getNumber().replace(/^1?(\d{3})\s?\-?\.?(\d{3})\s?\-?\.?(\d{4})$/, '($1) $2-$3') || 'N/A'
+      place.getNumber().replace(/^1?(\d{3})\s?\-?\.?(\d{3})\s?\-?\.?(\d{4})$/, '($1) $2-$3') 
+      || 'N/A'
     );
     
     elements.holder.url.inner.two.setText(url || 'N/A');
@@ -281,8 +262,7 @@ GB.Views.add('nearby', {
     });
     
     place.parent.getPointsEarned(gb.consumer.getCode(), function (data) {
-      if (data == null) data = 0;
-      elements.holder.points.inner.two.text = data;
+      elements.holder.points.inner.two.text = data || 0;
     });
     
     place.parent.getGoodies(function (data) {
@@ -290,6 +270,7 @@ GB.Views.add('nearby', {
       
       if (data == null) {
         console.log('adding no goodies text');
+        
         goodies.add(gb.style.get(area + '.goodies.err', {
           text: 'None Available'
         }));
@@ -301,7 +282,8 @@ GB.Views.add('nearby', {
       
       for (var i = 0; i < data.length; i++) {
         var goody = data[i]; if (!goody.active) continue;
-        var goody = data[i], place = {
+        
+        var place = {
           base: gb.style.get(area + '.goody.base', {
             borderWidth: i%2 ? 0 : 1,
             borderColor: '#eee'
@@ -313,14 +295,18 @@ GB.Views.add('nearby', {
           
           icon: {
             base: gb.style.get(area + '.goody.icon.base'),
+            
             amount: gb.style.get(area + '.goody.icon.amount', {
               text: goody.karmaPointsRequired
             }),
+            
             text: gb.style.get(area + '.goody.icon.text', {
               text: 'KP'
             })
           }
-        }; gb.utils.compoundViews(place);
+        }; 
+        
+        gb.utils.compoundViews(place);
         
         if (i == data.length-1) 
           place.base.bottom = 44;
@@ -374,6 +360,26 @@ GB.Views.add('nearby', {
    */
   onPlaceClick: function (place) {
     this.showPlace(place);
+  },
+  
+  createModal: function (url) {
+    if (typeof url === 'undefined') return;
+    
+    var modal = $ui.createWindow()
+    ,   back = $ui.createButton({ title: 'Back' })
+    ,   webview = $ui.createWebView({ url: url });
+    
+    back.addEventListener('click', function (e) {
+      modal.remove(webview);
+      modal.remove(back);
+      webview = null, back = null;
+      modal.close();
+      modal = null;
+    });
+    
+    modal.setLeftNavButton(back);
+    modal.add(webview);
+    modal.open(gb.style.get('nearby.loc.modal'));
   },
   
   /**
