@@ -651,16 +651,14 @@ if(!GB.Models)
     setCharity: function (charity, callback) {
       var $this = this;
       callback || (callback = function(){});
-      $http.post(gb.config.api.selectCharity + charity.id, {}, function(error, data){
-        if (error) return gb.utils.debug(error);
-        data = JSON.parse(data);
-        if (data.error) return callback(data.error);
+      gb.api.charities.select(charity.id, function(error, data){
+        if (error) return callback(error);
+        callback(null, data);
         $this.data.charity = {
-          id: charity.id
+          id:   charity.id
         , name: charity.publicName
         };
         $this._setConsumer($this);
-        callback(null, data.data);
       });
     },
     

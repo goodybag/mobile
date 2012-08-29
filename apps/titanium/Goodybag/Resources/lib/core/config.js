@@ -47,7 +47,7 @@ gb.config = function (global, fb, storage) {
   this.api.consumer.count     = 'http://' + domain + '/api/consumers/self/tapinCount';
   this.api.stream.me          = 'http://' + domain + '/api/consumers/me/stream';
   this.api.stream.global      = 'http://' + domain + '/api/consumers/streams';
-  this.api.charities          = 'http://' + domain + '/api/consumers/businesses?charity=1'
+  this.api.charities          = 'http://' + domain + '/api/consumers/businesses'
   this.api.selectCharity      = 'http://' + domain + '/api/consumers/self/charity/'
   this.api.setScreenName      = 'http://' + domain + '/api/consumers/updateScreenName/'
   this.api.setName            = 'http://' + domain + '/api/consumers/self/name'

@@ -75,11 +75,13 @@
       return this;
     }
   , setStyles: function(){
+      console.log("[Stream Button] - Setting Styles");
       this.stateOptions = this.options[this.active ? 'activeState' : 'inactiveState'];
       this.button.setBackgroundImage(this.stateOptions.background);
       this.label.setColor(this.stateOptions.color);
       if (!Ti.Android) this.label.setShadowColor(this.stateOptions.shadowColor);
       if (!Ti.Android) this.label.setShadowOffset(this.stateOptions.shadowOffset);
+      console.log("[Stream Button] - Styles Set");
       return this;
     }
   , addEventListener: function(name, fn){

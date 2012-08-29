@@ -18,6 +18,7 @@ gb.files = {
     'utils',
     'aes',
     'ui',
+    'api',
     'style'
   ],
   

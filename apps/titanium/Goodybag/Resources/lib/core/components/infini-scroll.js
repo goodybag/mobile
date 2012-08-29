@@ -158,7 +158,8 @@
       // In case there was some scrolling while the handler was being removed
       if (this.isCalculatingHeight()) return;
       if (e.y >= this.triggerAt - this.view.size.height) {
-        this.scorllEndTriggered = true;
+        console.log("[InfiniScroll] - Scrolled to end")
+        this.scrollEndTriggered = true;
         this.view.removeEventListener('scroll', this.onScrollCurry);
         this.triggerScrollEnd(e.y);
       }

@@ -187,7 +187,7 @@ gb.utils = function (global) {
     client.send(options ? JSON.stringify(options) : '');
   };
   
-  this.paramParser = function(options){
+  this.paramParser = function(data){
     var params = "", i = 0;
     for (var key in data){
       params += ((i === 0) ? "?" : "&") + key + "=" + data[key];
@@ -471,12 +471,6 @@ gb.utils = function (global) {
   this.ref = function (o, s) {
     return (s.indexOf('.') != -1) ? s.split('.').reduce(this.index, o) : [ s ].reduce(this.index, o);
   }
-  
-  // Stackoverflow, lost link, google format money
-  this.formatMoney = function(n, c, d, t){
-    var c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "." : d, t = t == undefined ? "," : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
-    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-  };
   
   /**
    * Extend on object with an arbitrary amount of other objects

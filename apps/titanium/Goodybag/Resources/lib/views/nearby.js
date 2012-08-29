@@ -79,7 +79,7 @@ GB.Views.add('nearby', {
       var i, model; $this.models = {};
       
       if(results && results.data) {
-        for (i = 0; i < results.data.length; i++) {
+        for (i = 0; i < 30 /*results.data.length*/; i++) {
           if (!results.data[i]) continue;
           if (!results.data[i]._id) continue;
           $this.models[results.data[i]._id] = new GB.Models.Place(results.data[i]);
@@ -120,7 +120,7 @@ GB.Views.add('nearby', {
       return $this.compareLocations.apply($this, [a, b]); 
     });
     
-    for (i = 0; i < $this.locations.length; i++) {
+    for (i = 0; i < 30; i++) {
       $el.places.add($this.locations[i].toRow(i%2, function (e) { 
         $this.onPlaceClick.apply($this, [ this ]); 
       }));
