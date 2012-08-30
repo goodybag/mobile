@@ -117,8 +117,8 @@
                      : this.height - this.options.triggerAt;
       this.calculatingHeight = false;
       this.scrollEndTriggered = false;
-      console.log("[InfiniScroll] - new height triggered adding scroll event again", this.height, this.triggerAt);
-      this.view.addEventListener('scroll', this.onScrollCurry);
+      console.log("[InfiniScroll] - new height triggered", this.height, this.triggerAt);
+      // this.view.addEventListener('scroll', this.onScrollCurry);
       this.options.onNewHeight(this.height, this);
     },
 
@@ -158,6 +158,7 @@
      * @private
      */
     _onScroll: function (e) {
+      console.log("[InfiniScroll] - ", e.y);
       if (this.scrollEndTriggered) return;
       // In case there was some scrolling while the handler was being removed
       if (this.isCalculatingHeight()) return;
@@ -165,7 +166,7 @@
         clearInterval(this.scrollThrottle);
         console.log("[InfiniScroll] - Scrolled to end");
         this.scrollEndTriggered = true;
-        this.view.removeEventListener('scroll', this.onScrollCurry);
+        // this.view.removeEventListener('scroll', this.onScrollCurry);
         this.triggerScrollEnd(e.y);
       } 
     }

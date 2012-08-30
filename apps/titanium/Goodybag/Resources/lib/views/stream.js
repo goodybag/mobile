@@ -73,8 +73,11 @@ GB.Views.add('stream', {
     this.nav.container.add($ui.createView({ width: $ui.FILL, height: '6dp'}));
     this.nav.container.add(this.nav.global.base);
     this.nav.container.add(this.nav.my.base);
-//     
+
     // Global Stream View
+    this.newHeightCurry = function(){
+      if (self.loaderShowing) GB.Windows.get('main').hideLoader();
+    };
     this.states.global.view = new gb.Views.InfiniScroll(
       {
         showVerticalScrollIndicator: true
@@ -85,6 +88,7 @@ GB.Views.add('stream', {
           gb.utils.debug("GLOBAl scroll to end");
           self.onScrollToEnd(false);
         }
+      , onNewHeight: this.newHeightCurry
       , name: "Global Scroll"
       }
     );
@@ -103,61 +107,6 @@ GB.Views.add('stream', {
       , name: "My Scroll"
       }
     );
-    
-    // No Tapins
-    // this.noTapins = {
-      // "base": $ui.createView({
-        // width: $ui.FILL
-      // , height: $ui.SIZE
-      // , layout: 'vertical'
-      // , left: '8dp'
-      // , right: '8dp'
-      // })
-//       
-    // , "submitTapinIdIsland": {
-        // "base": $ui.createView(gb.utils.extend(
-          // {}
-        // , gb.style.get('common.grayPage.island.base')
-        // ))
-//       
-      // , "shadow": $ui.createView(gb.style.get('common.grayPage.island.shadow'))
-//       
-      // , "fill": {
-          // "base":  $ui.createView(gb.style.get('common.grayPage.island.fill'))
-//           
-        // , "wrapper": {
-            // "base": $ui.createView(gb.style.get('common.grayPage.island.wrapper'))
-//             
-            // /**
-             // * Header and sub-header
-             // */
-          // , "header:already": $ui.createLabel(gb.utils.extend(
-              // { text: "You haven't Tapped In anywhere yet" }
-            // , gb.style.get('enterTapinId.header:already')
-            // , gb.style.get('common.grayPage.island.header1')
-            // ))
-//             
-          // , "header:enter": $ui.createLabel(gb.utils.extend(
-              // { text: "Press the button below to see our participating businesses" }
-            // , gb.style.get('enterTapinId.header:enter')
-            // , gb.style.get('common.grayPage.island.paragraph')
-            // ))
-// 
-          // , "submitWrapper": {
-              // "base": $ui.createView(gb.style.get('enterTapinId.form.submitWrapper'))
-//             
-            // , "submit": new GB.Button(
-                // 'Participating Businesses'
-              // , gb.style.get('enterTapinId.form.submit')
-              // , gb.style.get('common.grayPage.island.buttons.gray')
-              // , { events: { click: function(e){  } } }
-              // ).views.base
-            // }
-          // }
-        // }
-      // }
-    // };
-    // gb.utils.compoundViews(this.noTapins);
     
     // Pull to Refresh
     // this.states.global.refresher = new GB.PullToRefresh(this.states.global.view.view, {
@@ -178,17 +127,17 @@ GB.Views.add('stream', {
     this.states.global.view.view.hide();
     this.states.my.view.view.hide();
     
-    this.refreshButton = $ui.createLabel({
-      width: '15dp'
-    , height: '15dp'
-    , text: 0xe14d
-    , zIndex: 2000
-    , top: 10
-    , right: 10
-    , color: '#fff'
-    , borderWidth: 1
-    });
-    this.self.add(this.refreshButton);
+    // this.refreshButton = $ui.createLabel({
+      // width: '15dp'
+    // , height: '15dp'
+    // , text: 0xe14d
+    // , zIndex: 2000
+    // , top: 10
+    // , right: 10
+    // , color: '#fff'
+    // , borderWidth: 1
+    // });
+    // this.self.add(this.refreshButton);
     
     this.onDestroy = function(){
       this.self.remove(this.scrollWrapper);
@@ -199,6 +148,7 @@ GB.Views.add('stream', {
   },
   
   onRefresh: function (done) {
+    GB.Windows.get('main').showLoader();
     var
       curr  = this.current = this.current || 'global'
     , state = this.states[curr]
@@ -216,6 +166,7 @@ GB.Views.add('stream', {
   onShow: function () {
     var curr = this.current = this.current || 'global';
     if (this.states[this.current].hasData) return;
+    this.loaderShowing = true;
     this["show" + curr[0].toUpperCase() + curr.substring(1) + "View"]();
   },
   
@@ -228,10 +179,12 @@ GB.Views.add('stream', {
     state.view.show();
     this.current = "global";
     if (state.hasData) return;
+    GB.Windows.get('main').showLoader();
     gb.utils.debug("[stream view] - GLOBAL fetching data");
     this.fetchGlobalStream(state.limit, state.limit * state.page++, function(error, data){
       if (error) return gb.utils.debug(error);
       // if (!data) return gb.Views.show('stream-no-data');
+      if (data.length === 0) GB.Windows.get('main').hideLoader();
       state.hasData = true;
       self.showItems(self.states.global.view, data);
     });
@@ -246,10 +199,12 @@ GB.Views.add('stream', {
     state.view.show();
     this.current = "my";
     if (state.hasData) return;
+    GB.Windows.get('main').showLoader();
     gb.utils.debug("[stream view] - MY - fetching data");
     this.fetchMyStream(state.limit, state.limit * state.page++, function(error, data){
       if (error) return gb.utils.debug(error);
       // if (!data) return gb.Windows.get('main').showPage('stream-no-data');
+      if (data.length === 0) GB.Windows.get('main').hideLoader();
       state.hasData = true;
       if (data.length > 0) return self.showItems(state.view, data);
     });
@@ -268,6 +223,7 @@ GB.Views.add('stream', {
   },
   
   onScrollToEnd: function(fetchMe){
+    GB.Windows.get('main').showLoader();
     gb.utils.debug("[stream view] - on scroll to end FETCHING NEW ITEMS")
     var self = this, state = this.states[fetchMe ? 'my' : 'global'];
     this.fetchStream(fetchMe, state.limit, state.limit * state.page++, function(error, data){
@@ -293,9 +249,9 @@ GB.Views.add('stream', {
       limit     = 15;
       skip      = 0;
     }
-    gb.api.stream[fetchMe ? 'me' : 'global']({ limit: limit, skip: skip }, function(error, data){
+    gb.api.stream[fetchMe ? 'my' : 'global']({ limit: limit, skip: skip }, function(error, data){
       self.isFetching = false;
-      callback(error, data);
+      if (typeof callback === "function") callback(error, data);
     });
   }
 });
