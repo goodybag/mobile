@@ -14,8 +14,7 @@ gb.style.base.nearby = {
   
   places: {
     backgroundColor: 'white',
-    layout: 'vertical',
-    build: { type: 'createScrollView' }
+    layout: 'vertical'
   },
   
   menu: {
