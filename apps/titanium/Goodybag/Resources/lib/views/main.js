@@ -5,7 +5,7 @@ GB.Windows.add('main', Window.extend({
   window: $ui.createWindow(gb.style.get('main.self')),
   
   location: null,
-  initial: 'settings',
+  initial: 'nearby',
   
   elements: {
     views: {
@@ -66,7 +66,10 @@ GB.Windows.add('main', Window.extend({
     this.add($el.views.holder);
 
     // Setup Welcome screen animation
-    this.welcomeFadeIn = Ti.UI.createAnimation
+    this.welcomeFadeIn = Ti.UI.createAnimation;
+    
+    // Setup Geolocation Event
+    Titanium.Geolocation.addEventListener('location', gb.consumer._setGeolocation);
 
     return this;
   },
@@ -108,12 +111,12 @@ GB.Windows.add('main', Window.extend({
 
     if (!this.animated) {
       this.animated = !0;
-      $el.views.main.animate(gb.style.get('main.animations.right'));
       $el.header.buttons.sidebar.setImage(gb.utils.getImage('screens/main/buttons/sidebar_active.png'));
+      $el.views.main.animate(gb.style.get('main.animations.right'));
     } else {
       this.animated = !1;
-      $el.views.main.animate(gb.style.get('main.animations.left'));
       $el.header.buttons.sidebar.setImage(gb.utils.getImage('screens/main/buttons/sidebar_default.png'));
+      $el.views.main.animate(gb.style.get('main.animations.left'));
     }
   }
 }));

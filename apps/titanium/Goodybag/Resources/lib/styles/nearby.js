@@ -123,7 +123,7 @@ gb.style.base.nearby = {
         left: 10,
         width: 80,
         height: $ui.SIZE,
-        layout: 'vertical',
+          layout: 'vertical',
         build: { type: 'createView' }
       },
       
