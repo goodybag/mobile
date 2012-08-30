@@ -22,15 +22,15 @@ GB.Windows.add('main', Window.extend({
       }
     },
     
-    // loader: {
-      // base:       gb.style.get('common.loader.base')
-    // , background: gb.style.get('common.loader.background')
-    // , middle: {
-        // base:     gb.style.get('common.loader.middle')
-      // , spinner:  gb.style.get('common.loader.spinner')
-      // , text:     gb.style.get('common.loader.text')
-      // }
-    // }
+    loader: {
+      base:       gb.style.get('common.loader.base')
+    , background: gb.style.get('common.loader.background')
+    , middle: {
+        base:     gb.style.get('common.loader.middle')
+      , spinner:  gb.style.get('common.loader.spinner')
+      , text:     gb.style.get('common.loader.text')
+      }
+    }
   },
 
   Constructor : function() {
@@ -47,6 +47,9 @@ GB.Windows.add('main', Window.extend({
     $el.views.main.add($el.header.background);
     $el.views.main.add($el.header.logo);
     $el.views.main.add($el.header.buttons.sidebar);
+    
+    // Loader
+    this.initializeLoader();
 
     // Events
     $el.header.buttons.sidebar.addEventListener('click', function(e) {
@@ -66,10 +69,6 @@ GB.Windows.add('main', Window.extend({
     this.welcomeFadeIn = Ti.UI.createAnimation
 
     return this;
-  },
-  
-  showLoader : function () {
-    
   },
   
   showPage : function(view) {
@@ -92,6 +91,13 @@ GB.Windows.add('main', Window.extend({
 
     // User setup
     $el.views.holder.sidebar.setDetails($user);
+    
+    setInterval(function(){
+      $self.showLoader();
+      setTimeout(function(){
+        $self.hideLoader();
+      }, 3000)
+    }, 4000);
   },
 
   /**

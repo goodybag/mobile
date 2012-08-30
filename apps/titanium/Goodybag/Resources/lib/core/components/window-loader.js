@@ -1,0 +1,35 @@
+var WindowLoader = {
+  loader: {
+    base:       gb.style.get('common.loader.base')
+  , background: gb.style.get('common.loader.background')
+  , middle: {
+      base:     gb.style.get('common.loader.middle')
+    , spinner:  gb.style.get('common.loader.spinner')
+    , text:     gb.style.get('common.loader.text')
+    }
+  }
+, initializeLoader: function(){
+    gb.utils.compoundViews(this.loader);
+    this.window.add(this.loader.base);
+  }
+
+, showLoader : function(callback){
+    this.loader.middle.text.setText(
+      gb.config.loadingMessages[Math.floor(Math.random() * gb.config.loadingMessages.length)]
+    );
+    this.loader.base.setZIndex(1000);
+    this.loader.middle.spinner.show();
+    this.loader.base.animate({ opacity: 1 }, function(){
+      if (callback) callback();
+    });
+  }
+  
+, hideLoader : function(callback){
+    var $this = this;
+    this.loader.base.animate({ opacity: 0 }, function(){
+      $this.elements.loader.base.setZIndex(-1);
+      $this.elements.loader.middle.spinner.hide();
+      if (callback) callback();
+    });
+  }
+};

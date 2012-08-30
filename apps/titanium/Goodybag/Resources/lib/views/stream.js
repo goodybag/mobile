@@ -19,13 +19,12 @@ GB.Views.add('stream', {
     var self = this;
     
     this.self = Titanium.UI.createView({
-      top: '54dp'
-    , backgroundColor: '#ddd'
+      backgroundColor: '#ddd'
     , width: $ui.FILL
     });
     
     this.scrollWrapper = $ui.createView({
-      top: 0
+      top: 54
     , width: $ui.FILL
     , height: $ui.FILL
     , bottom: '44dp'
@@ -178,6 +177,18 @@ GB.Views.add('stream', {
     this.self.add(this.scrollWrapper);
     this.states.global.view.view.hide();
     this.states.my.view.view.hide();
+    
+    this.refreshButton = $ui.createLabel({
+      width: '15dp'
+    , height: '15dp'
+    , text: 0xe14d
+    , zIndex: 2000
+    , top: 10
+    , right: 10
+    , color: '#fff'
+    , borderWidth: 1
+    });
+    this.self.add(this.refreshButton);
     
     this.onDestroy = function(){
       this.self.remove(this.scrollWrapper);

@@ -53,12 +53,12 @@
   gb
 );
 
-var Window = new Class({
+var Window = new Class(gb.utils.extend({
   created: false,
   window: false,
   debug: false,
   
-  Constructor: function () { },
+  Constructor: function () {},
   
   /**
    * Add element to current window. 
@@ -106,4 +106,4 @@ var Window = new Class({
       gb.utils.debug('[' + this.windowName + '] Window never created, ignoring request.', this.debug);
     }
   }
-});
+}, WindowLoader));

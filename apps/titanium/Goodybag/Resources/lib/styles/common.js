@@ -81,8 +81,7 @@
   , "loader": {
       "base": {
         width: $ui.FILL
-      , height: 120
-      , borderRadius: 10
+      , height: '50%'
       , opacity: 0
       , zIndex: -1
       , build: { type: "createView" }
@@ -90,31 +89,41 @@
     , "background": {
         width: $ui.FILL
       , height: $ui.FILL
+      , left: 10
+      , right: 10
       , backgroundColor: '#000'
-      , opacity: 0.4
+      , borderRadius: 10
+      , opacity: 0.5
       , build: { type: "createView" }
       }
     , "middle": {
         width: $ui.FILL
       , height: $ui.SIZE
+      , left: 20
+      , right: 20
       , layout: 'horizontal'
+      , zIndex: 1001
       , build: { type: "createView" }
       }
     , "spinner": {
-        width: $ui.SIZE
-      , height: $ui.SIZE
+        width: 40
+      , height: 40
+      , left: 10
+      , style: Titanium.UI.iPhone.ActivityIndicatorStyle.BIG
       , build: { type: "createActivityIndicator" }
       }
     , "text": {
         width: $ui.FILL
       , height: $ui.SIZE
-      , color: gb.ui.color.grayDarker
+      , left: 30
+      , text: "Loading"
+      , color: gb.ui.color.white
       , font: {
-          fontSize: gb.ui.font.base.fontSize + 2
+          fontSize: gb.ui.font.base.fontSize + 6
         , fontWeight: "normal"
         }
-      , shadowOffset: { x: 0, y: 1 }
-      , shadowColor: '#fff'
+      , shadowOffset: { x: 0, y: -1 }
+      , shadowColor: '#000'
       , build: { type: "createLabel" }
       }
     }

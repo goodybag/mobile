@@ -67,6 +67,20 @@ gb.config = function (global, fb, storage) {
   , upload_url: "http://api2.transloadit.com/assemblies"
   };
   
+  // Loading
+  this.loadingMessages = [
+    'Let me think on this...'
+  , 'Hold on a second'
+  , 'The hamster wheels are firing up'
+  , 'Pre-heating the oven to 350'
+  , 'Preparing things and stuff'
+  , 'Waiting on our lawyers to get back with us...'
+  , 'BRB'
+  , 'The apollo program took 10 years to put a man on the moon, give me a few seconds'
+  , 'New hamster being loaded'
+  , 'Reticulating splines...'
+  ];
+  
   return this;
 }(
   this, 

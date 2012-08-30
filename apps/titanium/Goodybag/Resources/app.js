@@ -39,6 +39,7 @@ gb.files = {
   
   "core/components": [
     'view',
+    'window-loader',
     'window',
     'qrcode',
     'infini-scroll',

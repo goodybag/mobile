@@ -37,6 +37,25 @@
     this.view.add(this.wrapper);
     this.scrollEndTriggered = false;
     this.postLayoutAdded = false;
+    
+    /**
+     * Current Height of the ScrollView
+     */
+    this.height = 0;
+    /**
+     * Current dp value for trigger at - differs from the one in options because
+     * Someone can pass in a percentage to trigger at and this value represents the dp
+     * value of that percentage
+     */
+    this.triggerAt = 0;
+    /**
+     * Keeps state for current rounds trigger status
+     */
+    this.triggered = false;
+    /**
+     * Maintains state for whether or no we're calculating a new height
+     */
+    this.calculatingHeight = false;
 
     // Cache whether or not this a percentage we're dealing with and the trigger ratio
     if (this.triggerIsPercentage = this.options.triggerAt.indexOf('%')) {
@@ -52,41 +71,6 @@
   };
 
   constructor.prototype = {
-
-    /**
-     * Current Height of the ScrollView
-     */
-    height: 0,
-
-    /**
-     * Current dp value for trigger at - differs from the one in options because
-     * Someone can pass in a percentage to trigger at and this value represents the dp
-     * value of that percentage
-     */
-    triggerAt: 0,
-
-    /**
-     * Keeps state for current rounds trigger status
-     */
-    triggered: false,
-
-    /**
-     * The next child to start adding height from when we trigger the postLayout event
-     * We keep track of this so we don't iterate through all of the old children that got added previously
-     * And we only add in the new height
-     */
-    nextChild: 0,
-
-    /**
-     * Maintains state for whether or no we're calculating a new height
-     */
-    calculatingHeight: false,
-
-    /**
-     * Base ScrollView for InfiniScroll
-     */
-    view: null,
-
     /**
      * Proxy Methods
      */
@@ -158,10 +142,13 @@
      */
     _onPostLayout: function (e) {
       if (!this.postLayoutAdded) return;
+      var height = this.wrapper.getSize().height;
+      // Don't do anything if the height hasn't changed yet
+      if (height === this.height) return;
       this.postLayoutAdded = false;
       this.wrapper.removeEventListener('postlayout', this.onPostLayoutCurry);
       // Introducing the wrapper, you don't need to add up children boxes.. silly me!
-      this.height = this.wrapper.getSize().height;
+      this.height = height;
       this.triggerNewHeight();
     },
 

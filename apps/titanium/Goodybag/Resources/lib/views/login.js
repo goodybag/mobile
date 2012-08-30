@@ -54,6 +54,9 @@ gb.Windows.add('login', Window.extend({
     $el.loginWrapper.add($el.buttons.submit);
     $el.loginWrapper.add($el.buttons.register);
     
+    // Loader
+    this.initializeLoader();
+    
     // Button Events
     $el.buttons.facebook.addEventListener('click', function (e) {
       console.log('clicked facebook login');

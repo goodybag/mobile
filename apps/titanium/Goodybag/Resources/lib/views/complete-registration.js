@@ -27,6 +27,9 @@ GB.Windows.add('complete-registration', Window.extend({
     gb.utils.compoundViews(this.views);
     this.add(this.views.base);
     
+    // Loader
+    this.initializeLoader();
+    
     return this;
   },
   
