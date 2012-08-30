@@ -30,11 +30,6 @@ GB.getActivityView = function(model){
     , left: "-3dp"
     , zIndex: 1
     , borderRadius: 5
-    , events: {
-        error: function (e) {
-          e.source.setImage('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-128.png');
-        }
-      }
     })
     
   , container: {

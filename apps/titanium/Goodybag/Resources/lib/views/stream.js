@@ -222,7 +222,7 @@ GB.Views.add('stream', {
       if (error) return gb.utils.debug(error);
       // if (!data) return gb.Views.show('stream-no-data');
       state.hasData = true;
-      self.showItems(self.states.global.view.view, data);
+      self.showItems(self.states.global.view, data);
     });
   },
   
@@ -240,17 +240,20 @@ GB.Views.add('stream', {
       if (error) return gb.utils.debug(error);
       // if (!data) return gb.Windows.get('main').showPage('stream-no-data');
       state.hasData = true;
-      if (data.length > 0) return self.showItems(state.view.view, data);
+      if (data.length > 0) return self.showItems(state.view, data);
     });
   },
   
   showItems: function(scrollView, data){
     gb.utils.debug("[stream view] - show items");
+    var intermediate = $ui.createView({ width: $ui.FILL, height: $ui.SIZE, layout: 'vertical' });
     for (var i = 0; i < data.length; i++){
-      scrollView.add(
+      intermediate.add(
         GB.getActivityView(GB.Models.getActivity(data[i]))
       );
     }
+    console.log("[Stream View] - Adding to scroll view");
+    scrollView.add(intermediate);
   },
   
   onScrollToEnd: function(fetchMe){

@@ -111,7 +111,7 @@
       callback = options;
       options = {};
     }
-    var params = gb.utils.paramParser(options), cleanName = getCleanName("api-stream-global", options);
+    var params = gb.utils.paramParser(options), cleanName = getCleanName("stream-global", options);
     
     // Check the store
     if (!forceNew && store.stream[cleanName]){
@@ -138,7 +138,7 @@
       callback = options;
       options = {};
     }
-    var params = gb.utils.paramParser(options), cleanName = getCleanName("api-stream-my", options);
+    var params = gb.utils.paramParser(options), cleanName = getCleanName("stream-my", options);
     
     // Check the store
     if (!forceNew && store.stream[cleanName]){
