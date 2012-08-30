@@ -158,9 +158,8 @@ if(!GB.Models)
         for (var i = 0; i < length; i++) {
           locations.push(new GB.Models.Location(locs[i], this));
         }
-      } else locations = this.locations;
-        
-      this.locations = locations;
+      } else return this.locations;
+      
       return locations;
     },
     

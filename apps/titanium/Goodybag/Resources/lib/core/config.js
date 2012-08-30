@@ -28,6 +28,14 @@ gb.config = function (global, fb, storage) {
   this.debug = true;
   this.development = false;
   
+  // Geolocation Configuration
+  this.geoEnabled = (Titanium.Geolocation.locationServicesEnabled === true);
+  
+  Titanium.Geolocation.purpose = "Nearby Businesses";
+  Titanium.Geolocation.preferredProvider = "gps";
+  Titanium.Geolocation.accuracy = Titanium.Geolocation.ACCURACY_BEST; // Accuracy
+  Titanium.Geolocation.distanceFilter = 10; // Meters to fire event again
+  
   // Api Domain
   var domain = (this.development ? 'local' : 'www') + '.goodybag.com';
       // domain = '192.168.1.6:3001';

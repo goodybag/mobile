@@ -4,8 +4,9 @@ var $http = gb.utils.http
 
 GB.Views.add('nearby', {
   location: 'Nearby',
-  locations: [],
   models: {},
+  locations: [],
+  iterable: [],
   views: [],
   
   elements: {
@@ -28,11 +29,9 @@ GB.Views.add('nearby', {
    * @constructor
    */
   Constructor: function () {
+    var store = $file.getFile($file.applicationDataDirectory, 'places.json');
     this.self = gb.style.get('nearby.self');
-    
-    var store = $file.getFile($file.applicationDataDirectory, 'places.json')
-    ,   $this = this
-    ,   $el = this.elements;
+    this.page = 0;
     
     this.fetch(function (error, results) {
       store.deleteFile();
@@ -48,7 +47,7 @@ GB.Views.add('nearby', {
    * @private
    */
   onShow: function (context) {
-    var $this = this, $el = this.elements, locations;
+    var $this = this, $el = this.elements, locations, location;
     
     if (this.location == 'Place') this.location = 'Nearby';
     
@@ -75,19 +74,47 @@ GB.Views.add('nearby', {
     this.self.add($el.menu.base);
     this.self.add($el.holder);
     
-    this.fetch(function (error, results) {
-      var i, model; $this.models = {};
-      
-      if(results && results.data) {
-        for (i = 0; i < results.data.length; i++) {
-          if (!results.data[i]) continue;
-          if (!results.data[i]._id) continue;
-          $this.models[results.data[i]._id] = new GB.Models.Place(results.data[i]);
-        }
+    // Setup User Location if Available and not in Development Mode
+    gb.consumer.getGeolocation(function (coords) {
+      if (!gb.config.development) {
+        $this.position = {
+          lat: coords.latitude,
+          lon: coords.longitude
+        };
       }
-
-      $this['show' + $this.location]();
-    }, true);
+      
+      if ($this.previous && (
+        $this.position.lat == $this.previous.lat &&
+        $this.position.lon == $this.previous.lon
+      )) {
+        $this['show' + $this.location]();
+      } else {
+        $this.fetch(function (error, results) {
+          var i, model, locations; $this.models = {}; $this.locations = [];
+          if(results && results.data) {
+            for (i = 0; i < results.data.length; i++) {
+              if (!results.data[i] && !results.data[i]._id) continue;
+              $this.models[results.data[i]._id] = new GB.Models.Place(results.data[i]);
+            }
+          }
+          
+          for (i in $this.models) {
+            locations = $this.models[i].getLocations();
+            for (x = 0; x < locations.length; x++) {
+              $this.locations.push(locations[x]);
+            }
+          }
+          
+          $this.locations.sort(function (a, b) {
+            return $this.compareLocations.apply($this, [a, b]);
+          });
+          
+          $this.previous = $this.position;
+    
+          $this['show' + $this.location]();
+        }, true);
+      }
+    });
   },
   
   exists: function (id) {
@@ -95,57 +122,53 @@ GB.Views.add('nearby', {
   },
   
   showNearby: function () {
-    var $this = this
-    ,   $el = this.elements
-    ,   i
-    ,   x
-    ,   locations;
+    var $this = this;
+    var $el = this.elements;
+    var locations;
+    var i, x;
     
-    if($el.places) $el.holder.remove($el.places), $el.places = null;
-    
-    this.locations = [];
-    for(i in this.models) {
-      locations = this.models[i].getLocations();
-      for(x = 0; x < locations.length; x++) {
-        this.locations.push(locations[x]);
-      }
-    }
+    // If it still exists, get rid of it.
+    if ($el.places) $el.holder.remove($el.places), $el.places = null;
 
     $el.places = gb.style.get('nearby.places');
-    $el.holder.add($el.places);
     $el.menu.nearby.activate();
     $el.menu.map.deactivate();
     
-    this.locations.sort(function (a, b) {
-      return $this.compareLocations.apply($this, [a, b]); 
-    });
-    
-    for (i = 0; i < $this.locations.length; i++) {
+    function mem (param) {  
+       if (!$this.memcache) $this.memcache = {};
+       var store = JSON.stringify(param[0].getPosition()) + 
+       JSON.stringify(param[1].getPosition()) + 
+       JSON.stringify($this.position);
+       if (!$this.memcache[store]) $this.memcache[store] = $this.compareLocations.apply($this, param);
+       return $this.memcache[store];
+    }
+     
+    for (i = 0; i < 30; i++) {
       $el.places.add($this.locations[i].toRow(i%2, function (e) { 
         $this.onPlaceClick.apply($this, [ this ]); 
       }));
     }
     
+    $el.holder.add($el.places);
+    
     this.location = 'Nearby';
   },
   
+  /**
+   * Creates and displays a single location page.
+   */
   showPlace: function (place, location) {
     var $this = this
     ,   $el = this.elements;
     
-    if (typeof place == 'string')
-      place = this.models[place];
-      
-    if ($el.place) 
-      $this.self.remove($el.place), 
-      $el.place.close();
+    if (typeof place == 'string') place = this.models[place];
+    if ($el.place) $this.self.remove($el.place), $el.place.close(), $el.place = null;
     
     $el.place = $ui.createWindow();
     var back  = new GB.StreamButton('Back');
     
     // Styles
     var area = "nearby.location";
-    
     var elements = {
       base: $el.place,
       
@@ -232,13 +255,22 @@ GB.Views.add('nearby', {
     // Menu
     elements.menu.back.addEventListener('click', function (e) {
       back.activate();
+      
+      // Clear Place
       $el.place.setVisible(false);
       $this.self.remove($el.place);
       $el.place.close();
+      $el.place = null;
+      
+      // Set Holder up
+      $el.holder.backgroundColor = 'yellow';
       $el.holder.setVisible(true);
+      
+      // Set Menu to visible
       $el.menu.base.setVisible(true);
     });
     
+    // URL Click Event
     elements.holder.url.base.addEventListener('click', function (e) {
       $this.createModal(place.parent.getUrl());
     });
@@ -255,16 +287,20 @@ GB.Views.add('nearby', {
       || 'N/A'
     );
     
+    // URL?
     elements.holder.url.inner.two.setText(url || 'N/A');
     
+    // Fetch Location Image
     place.parent.getImage(128, function (data) {
       elements.holder.header.left.image.setImage(data);
     });
     
+    // Show Users Points Earned at this location if applicable
     place.parent.getPointsEarned(gb.consumer.getCode(), function (data) {
       elements.holder.points.inner.two.text = data || 0;
     });
     
+    // Fetch Goodies for Single Location
     place.parent.getGoodies(function (data) {
       var goodies = gb.style.get(area + '.goodies.base');
       
@@ -289,7 +325,7 @@ GB.Views.add('nearby', {
             borderColor: '#eee'
           }),
           
-          desc: gb.style.get('nearby.loc.goody.label', {
+          desc: gb.style.get(area + '.goody.label', {
             text: goody.name
           }),
           
@@ -304,7 +340,7 @@ GB.Views.add('nearby', {
               text: 'KP'
             })
           }
-        }; 
+        };
         
         gb.utils.compoundViews(place);
         
@@ -350,6 +386,12 @@ GB.Views.add('nearby', {
     $el.menu.map.activate();
   },
   
+  onHide: function () {
+    ($el.map) && ($el.holder.remove($el.map), $el.map = null);
+    ($el.places) && ($el.holder.remove($el.places), $el.places = null);
+    ($el.place) && ($this.self.remove($el.place), $el.place.close(), $el.place = null);
+  },
+  
   /**
    * Called when a place row is clicked.
    *
@@ -364,22 +406,19 @@ GB.Views.add('nearby', {
   
   createModal: function (url) {
     if (typeof url === 'undefined') return;
-    
-    var modal = $ui.createWindow()
-    ,   back = $ui.createButton({ title: 'Back' })
-    ,   webview = $ui.createWebView({ url: url });
+    var modal = $ui.createWindow();
+    var back = $ui.createButton({ title: 'Back' });
+    var webview = Titanium.UI.createWebView({ url: url });
     
     back.addEventListener('click', function (e) {
-      modal.remove(webview);
-      modal.remove(back);
-      webview = null, back = null;
       modal.close();
+      webview = null, back = null;
       modal = null;
     });
     
     modal.setLeftNavButton(back);
     modal.add(webview);
-    modal.open(gb.style.get('nearby.loc.modal'));
+    modal.open(gb.style.get('nearby.location.modal'));
   },
   
   /**
@@ -389,11 +428,13 @@ GB.Views.add('nearby', {
    * @param  {Object} b
    * @return {Integer}
    */
-  compareLocations: function (a, b) {
-    var e = a.getPosition(), f = b.getPosition();
+  compareLocations: function (a, b, c, d, e, f) {
+    e = a.getPosition();
     if (!e.lat && !e.lon) return 1;
+    f = b.getPosition();
     if (!f.lat && !f.lon) return -1;
-    var c = a.getDistanceFrom(this.position), d = b.getDistanceFrom(this.position);
+    c = a.getDistanceFrom(this.position);
+    d = b.getDistanceFrom(this.position);
     if (c < d) return -1;
     if (c > d) return 1;
     return 0;

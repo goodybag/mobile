@@ -352,25 +352,34 @@ if(!GB.Models)
       if (this.avatar.s128 && this.avatar.s128.exists()) this.avatar.s128.deleteFile();
       
       consumer = cookie = null;
+      
       $http.get(gb.config.api.logout, function(error){
         if (error) alert(error);
         if (callback) callback();
       });
+      
       return null;
     },
     
+    /**
+     * Return physical street based location, based on coordinates.
+     */
     getPosition: function (callback) {
       var $this = this;
       
       Titanium.Geolocation.purpose = 'Get Current Location';
       Titanium.Geolocation.getCurrentPosition(function(e) {
         var coords = e.coords;
+        
         Titanium.Geolocation.reverseGeocoder(coords.latitude, coords.longitude, function (e) {
           callback.apply($this, [ e ]);
         });
       });
     },
     
+    /**
+     * Get Profile through API Calls
+     */
     getProfile: function (callback) {
       var profile = this.data.profile || null, $this = this, $data = this.data;
       
@@ -382,6 +391,9 @@ if(!GB.Models)
       });
     },
     
+    /**
+     * Returns locations based on amount of tapins over time.
+     */
     getLocationsByTapins: function (callback) {
       var locations = this.data.locations || null, $this = this, $data = this.data;
       
@@ -407,6 +419,9 @@ if(!GB.Models)
       });
     },
     
+    /**
+     * Returns total tapin count
+     */
     getTapinCount: function (callback) {
       var count = this.data.tapinCount || null, $this = this, $data = this.data;
       
@@ -536,6 +551,21 @@ if(!GB.Models)
       if (!this.data.funds.donated) return 0;
       var donated = parseInt(this.data.funds.donated);
       return Math.round(donated*100)/100;
+    },
+    
+    /**
+     * Returns Geolocation
+     */
+    getGeolocation: function (callback) {
+      var $this = this;
+      
+      if (!gb.config.geoEnabled) callback();
+      else if (!this.location) Titanium.Geolocation.distanceFilter = 10, // required
+      Titanium.Geolocation.getCurrentPosition(function (e) {
+        $this.location = e.coords;
+        callback(e.coords)
+      });
+      else callback(this.location);
     },
   
     /**
@@ -750,6 +780,14 @@ if(!GB.Models)
         $this._setAvatar();
         callback();
       }, onProgress);
+    },
+    
+    /**
+     * Callback for Geolocation event, this will be fired repeatedly based on distance.
+     */
+    _setGeolocation: function (e) {
+      if (!e.success || e.error) { gb.utils.debug(JSON.stringify(e.error)); return; }
+      gb.consumer.location = e.coords;
     },
     
     /**

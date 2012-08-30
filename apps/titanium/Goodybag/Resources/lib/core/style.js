@@ -54,12 +54,10 @@ gb.style = {
       if (options) context = options, options = null;
       options = style, style = platform, platform = gb.style.type();
     }
-    
+
     if (this.cached[style]) {
-      if (typeof options === 'object' && this.cached[style].options == options)
-        dest = this.cached[style].build;
-      else 
-        dest = gb.utils.merge(this.cached[style].build, options || {});
+      if (typeof options === 'object' && this.cached[style].options == options) dest = this.cached[style].build;
+      else dest = gb.utils.merge(this.cached[style].build, options || {});
     } else {
       if (!gb.style[name]) 
         return null;
@@ -101,11 +99,12 @@ gb.style = {
         delete dest.nomagic;
     }
     
-    if (!this.cached[style])
+    if (!this.cached[style]) {
       this.cached[style] = {
         build: dest,
         options: options
       };
+    }
     
     if (dest.build && build) {
       if (dest.build.later) {
