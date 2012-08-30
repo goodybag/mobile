@@ -160,23 +160,9 @@
       if (!this.postLayoutAdded) return;
       this.postLayoutAdded = false;
       this.wrapper.removeEventListener('postlayout', this.onPostLayoutCurry);
+      // Introducing the wrapper, you don't need to add up children boxes.. silly me!
       this.height = this.wrapper.getSize().height;
       this.triggerNewHeight();
-      
-      // if (e.source === this.view && this.view.children.length > 0) {
-        // this.calculatingHeight = true;
-        // var children = this.view.children;
-        // console.log("[InfiniScroll] - calculating new height");
-        // for (var i = this.nextChild || 0, child; i < children.length; i++) {
-          // child = children[i];
-          // this.height += parseInt(child.getSize().height)     || 0;
-          // this.height += parseInt(child.getTop())             || 0;
-          // this.height += parseInt(child.getBottom())          || 0;
-          // this.height += parseInt(child.getBorderWidth()) * 2 || 0;
-        // }
-        // this.nextChild = children.length;
-        // this.triggerNewHeight();
-      // }
     },
 
     /**
