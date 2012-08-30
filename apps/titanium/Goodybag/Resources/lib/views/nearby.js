@@ -414,7 +414,7 @@ GB.Views.add('nearby', {
     var $el = this.elements;
     
     ($el.map) && ($el.holder.remove($el.map), $el.map = null);
-    ($el.places) && ($el.holder.remove($el.places), $el.places = null);
+    ($el.places) && ($el.holder.remove($el.places.view), $el.places.view = null);
     ($el.place) && ($this.self.remove($el.place), $el.place.close(), $el.place = null);
   },
   
