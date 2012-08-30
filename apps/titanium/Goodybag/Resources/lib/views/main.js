@@ -94,13 +94,6 @@ GB.Windows.add('main', Window.extend({
 
     // User setup
     $el.views.holder.sidebar.setDetails($user);
-    
-    setInterval(function(){
-      $self.showLoader();
-      setTimeout(function(){
-        $self.hideLoader();
-      }, 3000)
-    }, 4000);
   },
 
   /**
