@@ -19,6 +19,9 @@ GB.Views.add('nearby', {
     }
   },
   
+  /*
+   * Position of user, default is center of Austin, TX.
+   */
   position: {
     lat: 30.266703,
     lon: -97.73798
@@ -91,6 +94,16 @@ GB.Views.add('nearby', {
       } else {
         $this.fetch(function (error, results) {
           var i, model, locations; $this.models = {}; $this.locations = [];
+          
+          function mem (param) {  
+             if (!$this.memcache) $this.memcache = {};
+             var store = JSON.stringify(param[0].getPosition()) + 
+             JSON.stringify(param[1].getPosition()) + 
+             JSON.stringify($this.position);
+             if (!$this.memcache[store]) $this.memcache[store] = $this.compareLocations.apply($this, param);
+             return $this.memcache[store];
+          }
+          
           if(results && results.data) {
             for (i = 0; i < results.data.length; i++) {
               if (!results.data[i] && !results.data[i]._id) continue;
@@ -106,7 +119,7 @@ GB.Views.add('nearby', {
           }
           
           $this.locations.sort(function (a, b) {
-            return $this.compareLocations.apply($this, [a, b]);
+            return mem([a, b]);
           });
           
           $this.previous = $this.position;
@@ -129,29 +142,40 @@ GB.Views.add('nearby', {
     
     // If it still exists, get rid of it.
     if ($el.places) $el.holder.remove($el.places), $el.places = null;
-
-    $el.places = gb.style.get('nearby.places');
+    
+    // Setup Page
+    this.page = 0;
+    
+    // Setup Infiniscroll
+    $el.places = new gb.Views.InfiniScroll(gb.style.get('nearby.places'), {
+      triggerAt: '82%',
+      onScrollToEnd: function () {
+        $this.page++;
+        $this.onScroll.apply($this);
+      },
+      name: "Places"
+    });
+    
     $el.menu.nearby.activate();
     $el.menu.map.deactivate();
-    
-    function mem (param) {  
-       if (!$this.memcache) $this.memcache = {};
-       var store = JSON.stringify(param[0].getPosition()) + 
-       JSON.stringify(param[1].getPosition()) + 
-       JSON.stringify($this.position);
-       if (!$this.memcache[store]) $this.memcache[store] = $this.compareLocations.apply($this, param);
-       return $this.memcache[store];
-    }
      
-    for (i = 0; i < 30; i++) {
-      $el.places.add($this.locations[i].toRow(i%2, function (e) { 
+    this.onScroll(true);
+    this.location = 'Nearby';
+  },
+  
+  onScroll: function (initial) {
+    var $this = this, start = (this.page === 0) ? 0 : (30 * this.page), end =  30 * (this.page + 1);
+    var middleman = $ui.createView({ width: $ui.FILL, height: $ui.SIZE, layout: 'vertical' });
+    if (end > $this.locations.length) 
+      if (end - $this.locations.length > 30) return;
+      else end -= $this.locations.length;
+    for (i = start; i < end; i++) {
+      middleman.add($this.locations[i].toRow(i%2, function (e) { 
         $this.onPlaceClick.apply($this, [ this ]); 
       }));
     }
-    
-    $el.holder.add($el.places);
-    
-    this.location = 'Nearby';
+    this.elements.places.add(middleman);
+    (initial) && (this.elements.holder.add(this.elements.places.view));
   },
   
   /**
@@ -370,8 +394,8 @@ GB.Views.add('nearby', {
 
     $el.map = Titanium.Map.createView({
       region: {
-        latitude: 30.266703,
-        longitude: -97.73798,
+        latitude: $this.position.lat,
+        longitude: $this.position.lon,
         latitudeDelta: .07,
         longitudeDelta: .07
       },
@@ -387,6 +411,8 @@ GB.Views.add('nearby', {
   },
   
   onHide: function () {
+    var $el = this.elements;
+    
     ($el.map) && ($el.holder.remove($el.map), $el.map = null);
     ($el.places) && ($el.holder.remove($el.places), $el.places = null);
     ($el.place) && ($this.self.remove($el.place), $el.place.close(), $el.place = null);

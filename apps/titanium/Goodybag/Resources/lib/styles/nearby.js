@@ -7,14 +7,14 @@ gb.style.base.nearby = {
   },
   
   holder: {
+    bottom: 44,
     backgroundColor: 'white',
     build: { type: 'createView' }
   },
   
   places: {
     backgroundColor: 'white',
-    layout: 'vertical',
-    build: { type: 'createScrollView' }
+    layout: 'vertical'
   },
   
   menu: {
