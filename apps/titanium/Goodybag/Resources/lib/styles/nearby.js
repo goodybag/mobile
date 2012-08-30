@@ -7,6 +7,7 @@ gb.style.base.nearby = {
   },
   
   holder: {
+    bottom: 44,
     backgroundColor: 'white',
     build: { type: 'createView' }
   },

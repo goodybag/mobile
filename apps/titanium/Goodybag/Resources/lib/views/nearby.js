@@ -91,6 +91,16 @@ GB.Views.add('nearby', {
       } else {
         $this.fetch(function (error, results) {
           var i, model, locations; $this.models = {}; $this.locations = [];
+          
+          function mem (param) {  
+             if (!$this.memcache) $this.memcache = {};
+             var store = JSON.stringify(param[0].getPosition()) + 
+             JSON.stringify(param[1].getPosition()) + 
+             JSON.stringify($this.position);
+             if (!$this.memcache[store]) $this.memcache[store] = $this.compareLocations.apply($this, param);
+             return $this.memcache[store];
+          }
+          
           if(results && results.data) {
             for (i = 0; i < results.data.length; i++) {
               if (!results.data[i] && !results.data[i]._id) continue;
@@ -106,7 +116,7 @@ GB.Views.add('nearby', {
           }
           
           $this.locations.sort(function (a, b) {
-            return $this.compareLocations.apply($this, [a, b]);
+            return mem([a, b]);
           });
           
           $this.previous = $this.position;
@@ -133,15 +143,6 @@ GB.Views.add('nearby', {
     $el.places = gb.style.get('nearby.places');
     $el.menu.nearby.activate();
     $el.menu.map.deactivate();
-    
-    function mem (param) {  
-       if (!$this.memcache) $this.memcache = {};
-       var store = JSON.stringify(param[0].getPosition()) + 
-       JSON.stringify(param[1].getPosition()) + 
-       JSON.stringify($this.position);
-       if (!$this.memcache[store]) $this.memcache[store] = $this.compareLocations.apply($this, param);
-       return $this.memcache[store];
-    }
      
     for (i = 0; i < 30; i++) {
       $el.places.add($this.locations[i].toRow(i%2, function (e) { 
@@ -387,6 +388,8 @@ GB.Views.add('nearby', {
   },
   
   onHide: function () {
+    var $el = this.elements;
+    
     ($el.map) && ($el.holder.remove($el.map), $el.map = null);
     ($el.places) && ($el.holder.remove($el.places), $el.places = null);
     ($el.place) && ($this.self.remove($el.place), $el.place.close(), $el.place = null);
