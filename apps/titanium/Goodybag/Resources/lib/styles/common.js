@@ -81,7 +81,10 @@
   , "loader": {
       "base": {
         width: $ui.FILL
-      , height: '50%'
+      , height: '40%'
+      , left: 10
+      , right: 10
+      , borderRadius: 10
       , opacity: 0
       , zIndex: -1
       , build: { type: "createView" }
@@ -89,10 +92,7 @@
     , "background": {
         width: $ui.FILL
       , height: $ui.FILL
-      , left: 10
-      , right: 10
       , backgroundColor: '#000'
-      , borderRadius: 10
       , opacity: 0.5
       , build: { type: "createView" }
       }

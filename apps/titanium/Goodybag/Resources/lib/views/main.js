@@ -5,7 +5,7 @@ GB.Windows.add('main', Window.extend({
   window: $ui.createWindow(gb.style.get('main.self')),
   
   location: null,
-  initial: 'nearby',
+  initial: 'settings',
   
   elements: {
     views: {
