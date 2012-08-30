@@ -31,8 +31,8 @@ var WindowLoader = {
 , hideLoader : function(callback){
     var $this = this;
     this.loader.base.animate({ opacity: 0 }, function(){
-      $this.elements.loader.base.setZIndex(-1);
-      $this.elements.loader.middle.spinner.hide();
+      $this.loader.base.setZIndex(-1);
+      $this.loader.middle.spinner.hide();
       if (callback) callback();
     });
   }

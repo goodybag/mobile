@@ -66,6 +66,7 @@ gb.Windows.add('login', Window.extend({
     Titanium.Facebook.logout();
     
     $el.buttons.submit.addEventListener('click', function (e) {
+      $self.showLoader();
       if(gb.config.debug) console.log('[login] attempting to authenticate user.');
       
       gb.consumer.email = gb.utils.trim($el.inputs.email.getValue());
@@ -78,7 +79,7 @@ gb.Windows.add('login', Window.extend({
         } else if (consumer) {
           gb.consumer = consumer;
         }
-        
+        $self.hideLoader();
         if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
         else GB.Windows.show('complete-registration');
       });
