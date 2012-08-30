@@ -18,6 +18,7 @@ gb.files = {
     'utils',
     'aes',
     'ui',
+    'api',
     'style'
   ],
   
@@ -98,7 +99,7 @@ Titanium.include('/lib/views/main.js');
 
 // Do Authentication Check
 gb.consumer.validate(function (consumer) {
-  if (consumer !== null) {
+  if (consumer !== null && typeof consumer !== "undefined") {
     gb.consumer = consumer;
     GB.Windows.show(gb.consumer.hasCompletedRegistration() ? 
       'main' : 'complete-registration'

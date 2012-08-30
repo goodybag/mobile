@@ -29,7 +29,14 @@
     for (var key in viewOptions) this.viewOptions[key] = viewOptions[key];
     for (var key in options) this.options[key] = options[key];
     this.view = $ui.createScrollView(this.viewOptions);
+    this.wrapper = $ui.createView({
+      width: $ui.FILL
+    , height: $ui.SIZE
+    , layout: 'vertical'
+    });
+    this.view.add(this.wrapper);
     this.scrollEndTriggered = false;
+    this.postLayoutAdded = false;
 
     // Cache whether or not this a percentage we're dealing with and the trigger ratio
     if (this.triggerIsPercentage = this.options.triggerAt.indexOf('%')) {
@@ -41,7 +48,6 @@
     // Apparently fn.bind isn't working so we'll curry it
     this.onPostLayoutCurry = function (e) { $this._onPostLayout(e); };
     this.onScrollCurry = function (e) { $this._onScroll(e); };
-    this.view.addEventListener('postlayout', this.onPostLayoutCurry);
     this.view.addEventListener('scroll', this.onScrollCurry);
   };
 
@@ -85,7 +91,24 @@
      * Proxy Methods
      */
     add: function (view) {
-      return this.view.add(view);
+      console.log("[InfiniScroll] - Add view");
+      if (!this.postLayoutAdded){
+        console.log("[InfiniScroll] - Post layout not added, adding now");
+        this.wrapper.addEventListener('postlayout', this.onPostLayoutCurry);
+        this.postLayoutAdded = true;
+      }
+      if (Object.prototype.toString.call(view)[8] === "A"){
+        console.log("[InfiniScroll] - passed in array to add creating intermediate");
+        var intermediate = $ui.createView({ width: $ui.FILL, height: $ui.SIZE, layout: 'vertical' });
+        for (var i = 0; i < view.length; i++){
+          intermediate.add(view[i]);
+        }
+        console.log("[InfiniScroll] - adding intermediate to wrapper");
+        this.wrapper.add(intermediate);
+      }else{
+        console.log("[InfiniScroll] - Adding view to wrapper");
+        this.wrapper.add(view);
+      }
     },
 
     hide: function () {
@@ -106,10 +129,11 @@
      */
     triggerNewHeight: function () {
       this.triggerAt = (this.triggerIsPercentage)
-                     ? this.height * this.triggerRatio
+                     ? parseInt(this.height * this.triggerRatio)
                      : this.height - this.options.triggerAt;
       this.calculatingHeight = false;
       this.scrollEndTriggered = false;
+      console.log("[InfiniScroll] - new height triggered adding scroll event again", this.height, this.triggerAt);
       this.view.addEventListener('scroll', this.onScrollCurry);
       this.options.onNewHeight(this.height, this);
     },
@@ -133,19 +157,12 @@
      * @private
      */
     _onPostLayout: function (e) {
-      if (e.source === this.view && this.view.children.length > 0) {
-        this.calculatingHeight = true;
-        var children = this.view.children;
-
-        for (var i = this.nextChild || 0, child; i < children.length; i++) {
-          child = children[i];
-          this.height += parseInt(child.getSize().height) || 0;
-          this.height += parseInt(child.getTop())         || 0;
-          this.height += parseInt(child.getBottom())      || 0;
-        }
-        this.nextChild = children.length;
-        this.triggerNewHeight();
-      }
+      if (!this.postLayoutAdded) return;
+      this.postLayoutAdded = false;
+      this.wrapper.removeEventListener('postlayout', this.onPostLayoutCurry);
+      // Introducing the wrapper, you don't need to add up children boxes.. silly me!
+      this.height = this.wrapper.getSize().height;
+      this.triggerNewHeight();
     },
 
     /**
@@ -158,10 +175,12 @@
       // In case there was some scrolling while the handler was being removed
       if (this.isCalculatingHeight()) return;
       if (e.y >= this.triggerAt - this.view.size.height) {
-        this.scorllEndTriggered = true;
+        clearInterval(this.scrollThrottle);
+        console.log("[InfiniScroll] - Scrolled to end");
+        this.scrollEndTriggered = true;
         this.view.removeEventListener('scroll', this.onScrollCurry);
         this.triggerScrollEnd(e.y);
-      }
+      } 
     }
   };
   GB.Views.InfiniScroll = constructor;

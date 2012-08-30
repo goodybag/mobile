@@ -186,6 +186,15 @@ gb.utils = function (global) {
     client.setRequestHeader('Cookie', session.toString() + '; ');
     client.send(options ? JSON.stringify(options) : '');
   };
+  
+  this.paramParser = function(data){
+    var params = "", i = 0;
+    for (var key in data){
+      params += ((i === 0) ? "?" : "&") + key + "=" + data[key];
+      i++;
+    }
+    return params;
+  };
 
   /**
    * Returns relational path from basepath.
@@ -463,12 +472,6 @@ gb.utils = function (global) {
     return (s.indexOf('.') != -1) ? s.split('.').reduce(this.index, o) : [ s ].reduce(this.index, o);
   }
   
-  // Stackoverflow, lost link, google format money
-  this.formatMoney = function(n, c, d, t){
-    var c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "." : d, t = t == undefined ? "," : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
-    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-  };
-  
   /**
    * Extend on object with an arbitrary amount of other objects
    */
@@ -545,6 +548,42 @@ gb.utils = function (global) {
     
     return base;
   }
+  
+  this.throttle = function(func, wait) {
+    var context, args, timeout, throttling, more, result;
+    var whenDone = gb.utils.debounce(function(){ more = throttling = false; }, wait);
+    return function() {
+      context = this; args = arguments;
+      var later = function() {
+        timeout = null;
+        if (more) func.apply(context, args);
+        whenDone();
+      };
+      if (!timeout) timeout = setTimeout(later, wait);
+      if (throttling) {
+        more = true;
+      } else {
+        result = func.apply(context, args);
+      }
+      whenDone();
+      throttling = true;
+      return result;
+    };
+  };
+
+  this.debounce = function(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      if (immediate && !timeout) func.apply(context, args);
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  };
   
   return this;
 }(

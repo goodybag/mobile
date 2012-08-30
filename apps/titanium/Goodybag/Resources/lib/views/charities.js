@@ -316,11 +316,9 @@ GB.Views.add('charities', {
     var $this = this;
     if (this.isFetching) return;
     this.isFetching = true;
-    $http.get(gb.config.api.charities, function(error, data){
-      if (error) return gb.utils.debug(error);
-      data = JSON.parse(data);
+    gb.api.charities.list(function(error, data){
       $this.isFetching = false;
-      callback(data.error, data.data);
+      callback(error, data);
     });
   }
 });

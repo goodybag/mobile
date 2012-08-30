@@ -112,9 +112,10 @@ Views.show = function (name, context) {
 Views.hide = function (name, context) {
   if (!name) return;
   if (!this.exists(name)) return;
-  // if (typeof this.views[name].onHide != 'undefined') this.views[name].onHide(context);
   console.log('HIDING view ' + name);
   this.instantiated[name].self.hide();
+  if (typeof this.instantiated[name].onHide != 'undefined') this.instantiated[name].onHide(context);
+  if (this.instantiated[name].destroyOnHide) this.destroy(name);
 };
 
 /**
@@ -124,6 +125,7 @@ Views.hide = function (name, context) {
  * @type {Method}
  */
 Views.destroy = function (name) {
+  if (this.instantiated[name].onDestroy) this.instantiated[name].onDestroy();
   this.instantiated[name].self = null;
   this.instantiated[name].views = null;
   delete this.instantiated[name].views;

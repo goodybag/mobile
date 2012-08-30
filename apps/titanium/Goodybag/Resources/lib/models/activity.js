@@ -4,22 +4,10 @@
 
 if(!GB.Models) 
   GB.Models = {};
-
-GB.Models.Activity = function(attributes){
-  this.attributes = attributes;
-  this.attributes.timestamp = moment(new Date(this.attributes.dates.lastModified)).from();
-  if (attributes.events && attributes.events.indexOf('eventRsvped') > -1){
-    this._formatDate(); 
-  }
-  this.generateSentence();
-};
-
-GB.Models.Activity.prototype = {
-  /*
-   * Sets the this.when date for event rsvps
-   */
-  _formatDate: function(){
-    var originalCalendar = moment.calendar;
+  
+(function(){
+  var formatDate = function(attributes){
+    var originalCalendar = moment.calendar, when;
     moment.calendar = {
       lastDay   : '[Yesterday at] LT',
       sameDay   : '[Today at] LT',
@@ -28,39 +16,32 @@ GB.Models.Activity.prototype = {
       nextWeek  : '[on the upcoming] dddd [at] LT',
       sameElse  : '[on] L'
     };
-    this.when = moment(Date.create(this.attributes.data.event.dates.actual)).calendar();
+    when = moment(Date.create(attributes.data.event.dates.actual)).calendar();
     moment.calendar = originalCalendar;
-  }
+    return when;
+  };
   
-, getSentence: function(){
-    return this.sentence;
-  }
-  
-, generateSentence: function(){
-    var
-      attr      = this.attributes
-    , sentence  = attr.who.screenName || "Someone"
-    , events    = attr.events
-    ;
+  var generateSentence = function(attributes){
+    var sentence = attributes.who.screenName || "Someone", events = attributes.events;
     // Determine sentence
     for (var i = 0, event; i < events.length; i++){
       event = events[i];
       switch (event){
         case "eventRsvped":
-          sentence += " rsvpd to attend a Goodybag event at " + attr.data.event.entity.name + " " + attr.when;
+          sentence += " rsvpd to attend a Goodybag event at " + attributes.data.event.entity.name + " " + attributes.when;
           break;
         case "pollCreated":
-          sentence += " created the poll question: " + attr.data.poll.question;
+          sentence += " created the poll question: " + attributes.data.poll.question;
           break;
         case "pollAnswered":
-          sentence += " answered the poll question: " + attr.data.poll.question;
+          sentence += " answered the poll question: " + attributes.data.poll.question;
           break;
         case "btTapped":
-          sentence += " tapped in at " + attr.where.org.name + " and raised " + attr.data.donationAmount + "\u00A2 for ";
-          sentence += (attr.data.charity) ? attr.data.charity.name : "charity"; 
+          sentence += " tapped in at " + attributes.where.org.name + " and raised " + attributes.data.donationAmount + "\u00A2 for ";
+          sentence += (attributes.data.charity) ? attributes.data.charity.name : "charity"; 
           break;
         case "fundsDonated":
-          sentence += " donated " + attr.data.amount + "\u00A2 to charity";
+          sentence += " donated " + attributes.data.amount + "\u00A2 to charity";
           break;
         default:
           sentence = "";
@@ -68,7 +49,16 @@ GB.Models.Activity.prototype = {
       // Conjunction for multiple events
       if (i !== (events.length - 1)) sentence += " and";
     }
-    this.sentence = sentence + " " + attr.timestamp;
+    sentence = sentence + " " + attributes.timestamp;
     return sentence;
-  }
-};
+  };
+  
+  GB.Models.getActivity = function(attributes){
+    attributes.timestamp = moment(new Date(attributes.dates.lastModified)).from();
+    if (attributes.events && attributes.events.indexOf('eventRsvped') > -1){
+      attributes.when = formatDate(attributes);
+    }
+    attributes.sentence = generateSentence(attributes);
+    return attributes;
+  };
+})();
