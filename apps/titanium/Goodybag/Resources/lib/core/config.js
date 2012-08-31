@@ -79,6 +79,7 @@ gb.config = function (global, fb, storage) {
   this.loadingMessages = [
     'Let me think on this...'
   , 'Hold on a second'
+  , '"That is not fair" says the Russian guy who was given wrong directions'
   , 'The hamster wheels are firing up'
   , 'Pre-heating the oven to 350'
   , 'Preparing things and stuff'

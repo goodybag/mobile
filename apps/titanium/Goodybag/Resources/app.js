@@ -110,3 +110,18 @@ gb.consumer.validate(function (consumer) {
     GB.Windows.show('login');
   }
 });
+
+
+
+
+// var main = Ti.UI.createWindow({ title: "Main" });
+// var worker = Ti.UI.createWindow({
+  // url: 'lib/core/components/worker.js'
+// , title: "worker"
+// });
+// worker.open();
+// main.open();
+// var i = 0;
+// setInterval(function(){
+  // console.log("[Main] - ", i++);
+// }, 100);

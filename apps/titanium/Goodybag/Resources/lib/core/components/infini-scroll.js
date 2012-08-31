@@ -68,6 +68,11 @@
     this.onPostLayoutCurry = function (e) { $this._onPostLayout(e); };
     this.onScrollCurry = function (e) { $this._onScroll(e); };
     this.view.addEventListener('scroll', this.onScrollCurry);
+    
+    // var i = 0;
+    // setInterval(function(){
+      // console.log("[InfiniScroll] - ", i++);
+    // }, 200)
   };
 
   constructor.prototype = {
@@ -118,7 +123,7 @@
       this.calculatingHeight = false;
       this.scrollEndTriggered = false;
       console.log("[InfiniScroll] - new height triggered", this.height, this.triggerAt);
-      // this.view.addEventListener('scroll', this.onScrollCurry);
+      this.view.addEventListener('scroll', this.onScrollCurry);
       this.options.onNewHeight(this.height, this);
     },
 
@@ -166,7 +171,7 @@
         clearInterval(this.scrollThrottle);
         console.log("[InfiniScroll] - Scrolled to end");
         this.scrollEndTriggered = true;
-        // this.view.removeEventListener('scroll', this.onScrollCurry);
+        this.view.removeEventListener('scroll', this.onScrollCurry);
         this.triggerScrollEnd(e.y);
       } 
     }
