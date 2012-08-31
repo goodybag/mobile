@@ -1,29 +1,27 @@
 GB.Windows.add('main', Window.extend({
   debug: true,
   animated: false,
-  
-  window: $ui.createWindow(gb.style.get('main.self')),
-  
   location: null,
   initial: 'settings',
-  
-  elements: {
-    views: {
-      holder: $ui.createView(gb.style.get('main.views.holder')),
-      main: $ui.createView(gb.style.get('main.views.main'))
-    },
-
-    header : {
-      background : $ui.createImageView(gb.style.get('main.header.background')),
-      logo : $ui.createImageView(gb.style.get('main.header.logo')),
-
-      buttons : {
-        sidebar : $ui.createImageView(gb.style.get('main.header.buttons.sidebar'))
-      }
-    }
-  },
 
   Constructor : function() {
+    this.window = $ui.createWindow(gb.style.get('main.self'));
+    this.elements = {
+      views: {
+        holder: $ui.createView(gb.style.get('main.views.holder')),
+        main: $ui.createView(gb.style.get('main.views.main'))
+      },
+  
+      header : {
+        background : $ui.createImageView(gb.style.get('main.header.background')),
+        logo : $ui.createImageView(gb.style.get('main.header.logo')),
+  
+        buttons : {
+          sidebar : $ui.createImageView(gb.style.get('main.header.buttons.sidebar'))
+        }
+      }
+    };
+    
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $window = this.window;
 
     // Force orientation
@@ -42,9 +40,20 @@ GB.Windows.add('main', Window.extend({
     this.initializeLoader();
 
     // Events
-    $el.header.buttons.sidebar.addEventListener('click', function(e) {
-      $self.toggleSidebar.apply($self, [e]);
-    });
+    this.events = {
+      "menu": {
+        type: 'click'
+      , target: $el.header.buttons.sidebar
+      , action: function(e) {
+          $self.toggleSidebar.apply($self, [e]);
+        }
+      }
+    , 'geolocation': {
+        type: 'location'
+      , target: Titanium.Geolocation
+      , action: gb.consumer._setGeolocation
+      }
+    }
 
     // Add views to scrollable view
     GB.Views.get('sidebar').self.setVisible(true);
@@ -58,8 +67,7 @@ GB.Windows.add('main', Window.extend({
     // Setup Welcome screen animation
     this.welcomeFadeIn = Ti.UI.createAnimation;
     
-    // Setup Geolocation Event
-    Titanium.Geolocation.addEventListener('location', gb.consumer._setGeolocation);
+    this.delegateEvents();
 
     return this;
   },
@@ -84,7 +92,16 @@ GB.Windows.add('main', Window.extend({
 
     // User setup
     $el.views.holder.sidebar.setDetails($user);
+    console.log("On show called");
   },
+  
+  onHide: function(){
+    gb.utils.debug("calling onHide on main");
+    this.destroyEvents();
+    this.elements = null;
+    delete this.elements;
+  },
+  
 
   /**
    * Toggle sidebar state and slide main screen in and out.
