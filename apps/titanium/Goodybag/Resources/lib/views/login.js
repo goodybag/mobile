@@ -74,12 +74,14 @@ gb.Windows.add('login', Window.extend({
       $el.inputs.password.setValue("");
       
       gb.consumer.auth(function(error, consumer) {
-        if (error) {
-          alert(error); return;
-        } else if (consumer) {
-          gb.consumer = consumer;
-        }
+        if (error || !consumer) {
+          if (error) alert(error);
+          if (!consumer) alert('Error checking account details!');
+          return;
+        } else if (consumer) gb.consumer = consumer;
+        
         $self.hideLoader();
+        
         if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
         else GB.Windows.show('complete-registration');
       });

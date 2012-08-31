@@ -164,6 +164,7 @@ if(!GB.Models)
       gb.utils.debug('[User] Attempting to register.');
       $http.post(gb.config.api.register, user, function(error, json){
         if (error) return callback(JSON.parse(error).message);
+        if (!json) return callback();
         var consumer = JSON.parse(json);
           
         gb.utils.debug('[User] Got back the data object.');
