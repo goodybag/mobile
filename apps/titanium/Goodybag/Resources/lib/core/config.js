@@ -88,6 +88,7 @@ gb.config = function (global, fb, storage) {
   , 'The apollo program took 10 years to put a man on the moon, give me a few seconds'
   , 'New hamster being loaded'
   , 'Reticulating splines...'
+  , 'One time I saw a loading screen. One time.'
   ];
   
   return this;

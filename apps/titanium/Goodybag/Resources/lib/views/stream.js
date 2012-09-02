@@ -100,7 +100,7 @@ GB.Views.add('stream', {
       },
       {
         triggerAt: '82%'
-      , onScrollToEnd: function(){
+      , onScrollToEnd: function(){b
           gb.utils.debug("MY scroll to end");
           self.onScrollToEnd(true);
         }
@@ -146,11 +146,6 @@ GB.Views.add('stream', {
       this.states = null;
       self = null;
     };
-    
-    // var i = 0;
-    // setInterval(function(){
-      // console.log("[Stream] - ", i++);
-    // }, 200)
   },
   
   onRefresh: function (done) {
@@ -226,7 +221,6 @@ GB.Views.add('stream', {
     }
     console.log("[Stream View] - Adding to scroll view");
     scrollView.add(intermediate);
-    // scrollView.add($ui.createView({width: $ui.FILL, height: '400dp' }));
   },
   
   onScrollToEnd: function(fetchMe){

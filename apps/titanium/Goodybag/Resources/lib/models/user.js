@@ -353,6 +353,8 @@ if(!GB.Models)
       if (this.avatar.s128 && this.avatar.s128.exists()) this.avatar.s128.deleteFile();
       
       consumer = cookie = null;
+
+      this.authenticated = false;
       
       $http.get(gb.config.api.logout, function(error){
         if (error) alert(error);
