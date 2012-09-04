@@ -4,7 +4,8 @@ gb.style.base.main = {
     top: 0,
     title: 'Main',
     backgroundImage: 'background.png',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    build: { type: 'Window' }
   },
   
   views: {
@@ -48,6 +49,16 @@ gb.style.base.main = {
         height: 'auto',
         canScale: false,
         image: 'screens/main/buttons/sidebar_default.png'
+      },
+      
+      qrcode: {
+        top: 10,
+        right: 10,
+        zIndex: 2,
+        width: 'auto',
+        height: 'auto',
+        canScale: false,
+        image: 'screens/main/buttons/qrcode_default.png'
       }
     }
   },

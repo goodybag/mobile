@@ -187,6 +187,7 @@ GB.Views.add('nearby', {
     
     $el.place = $ui.createWindow();
     var back  = new GB.StreamButton('Back');
+    var url   = null;
     
     // Styles
     var area = "nearby.location";
@@ -297,7 +298,7 @@ GB.Views.add('nearby', {
     });
     
     // Remove unnecessary things
-    var url = place.parent.getUrl().replace('http://','').toLowerCase();
+    if (place.parent.getUrl()) url = place.parent.getUrl().replace('http://','').toLowerCase();
     if (url) if (url[url.length-1] == '/') url = url.substr(0, url.length-1);
     
     // Setup Text

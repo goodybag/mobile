@@ -2,7 +2,7 @@ GB.Windows.add('main', Window.extend({
   debug: true,
   animated: false,
   
-  window: $ui.createWindow(gb.style.get('main.self')),
+  window: gb.style.get('main.self'),
   
   location: null,
   initial: 'settings',
@@ -13,17 +13,18 @@ GB.Windows.add('main', Window.extend({
       main: $ui.createView(gb.style.get('main.views.main'))
     },
 
-    header : {
-      background : $ui.createImageView(gb.style.get('main.header.background')),
-      logo : $ui.createImageView(gb.style.get('main.header.logo')),
+    header: {
+      background: $ui.createImageView(gb.style.get('main.header.background')),
+      logo: $ui.createImageView(gb.style.get('main.header.logo')),
 
-      buttons : {
-        sidebar : $ui.createImageView(gb.style.get('main.header.buttons.sidebar'))
+      buttons: {
+        sidebar: $ui.createImageView(gb.style.get('main.header.buttons.sidebar')),
+        qrcode: $ui.createImageView(gb.style.get('main.header.buttons.qrcode'))
       }
     }
   },
 
-  Constructor : function() {
+  Constructor: function () {
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $window = this.window;
 
     // Force orientation
@@ -37,14 +38,21 @@ GB.Windows.add('main', Window.extend({
     $el.views.main.add($el.header.background);
     $el.views.main.add($el.header.logo);
     $el.views.main.add($el.header.buttons.sidebar);
+    $el.views.main.add($el.header.buttons.qrcode);
     
     // Loader
     this.initializeLoader();
 
     // Events
-    $el.header.buttons.sidebar.addEventListener('click', function(e) {
+    $el.header.buttons.sidebar.addEventListener('click', function (e) {
       $self.toggleSidebar.apply($self, [e]);
     });
+    
+    $el.header.buttons.qrcode.addEventListener('click', function (e) {
+      if ($self.location == 'qrcode') return;
+      $self.showPage('qrcode');
+      $self.toggleQRCode();
+    })
 
     // Add views to scrollable view
     GB.Views.get('sidebar').self.setVisible(true);
@@ -64,9 +72,9 @@ GB.Windows.add('main', Window.extend({
     return this;
   },
   
-  showPage : function(view) {
+  showPage: function (view) {
     this.elements.views.main.startLayout();
-    if (this.location){
+    if (this.location) {
       console.log('attempting to remove view ' + this.location);
       this.elements.views.main.remove(GB.Views.get(this.location).self)
       GB.Views.hide(this.location);
@@ -77,7 +85,7 @@ GB.Windows.add('main', Window.extend({
     this.elements.views.main.finishLayout();
   },
 
-  onShow : function() {
+  onShow: function () {
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $user = gb.consumer, $url, written = true;
     
     this.showPage(this.initial);
@@ -85,11 +93,21 @@ GB.Windows.add('main', Window.extend({
     // User setup
     $el.views.holder.sidebar.setDetails($user);
   },
+  
+  toggleQRCode: function (e) {
+    var $el = this.elements;
+    
+    if (this.location == 'qrcode') {
+      $el.header.buttons.qrcode.setImage(gb.utils.getImage('screens/main/buttons/qrcode_active.png'));
+    } else {
+      $el.header.buttons.qrcode.setImage(gb.utils.getImage('screens/main/buttons/qrcode_default.png'));
+    }
+  },
 
   /**
    * Toggle sidebar state and slide main screen in and out.
    */
-  toggleSidebar : function(e) {
+  toggleSidebar: function (e) {
     var $el = this.elements;
 
     if (!this.animated) {

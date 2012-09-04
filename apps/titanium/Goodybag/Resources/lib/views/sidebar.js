@@ -136,6 +136,7 @@ GB.Views.add('sidebar', {
     
     // Show The Area
     GB.Windows.get('main').showPage(view);
+    GB.Windows.get('main').toggleQRCode();
   },
   
   clearActive: function () {
