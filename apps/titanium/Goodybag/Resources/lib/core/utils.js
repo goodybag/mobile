@@ -214,7 +214,7 @@ gb.utils = function (global) {
    */
   this.getImage = function (path) {
     path = (gb.isAndroid ? '/images/' : '') + path;
-    this.debug('[gb.utils.getImage] ' + path);
+    // this.debug('[gb.utils.getImage] ' + path);
   
     return path;
   }

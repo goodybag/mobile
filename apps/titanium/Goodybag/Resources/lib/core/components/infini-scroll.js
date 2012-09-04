@@ -65,7 +65,6 @@
     }
 
     // Apparently fn.bind isn't working so we'll curry it
-    this.onPostLayoutCurry = function (e) { $this._onPostLayout(e); };
     this.onScrollCurry = function (e) { $this._onScroll(e); };
     this.view.addEventListener('scroll', this.onScrollCurry);
   };
@@ -76,10 +75,9 @@
      */
     add: function (view) {
       console.log("[InfiniScroll] - Add view");
-      if (!this.postLayoutAdded){
+      if (!this.checkingHeight){
         console.log("[InfiniScroll] - Post layout not added, adding now");
-        this.wrapper.addEventListener('postlayout', this.onPostLayoutCurry);
-        this.postLayoutAdded = true;
+        this.startHeightCheck();
       }
       if (Object.prototype.toString.call(view)[8] === "A"){
         console.log("[InfiniScroll] - passed in array to add creating intermediate");
@@ -117,7 +115,7 @@
                      : this.height - this.options.triggerAt;
       this.calculatingHeight = false;
       this.scrollEndTriggered = false;
-      console.log("[InfiniScroll] - new height triggered adding scroll event again", this.height, this.triggerAt);
+      console.log("[InfiniScroll] - new height triggered", this.height, this.triggerAt);
       this.view.addEventListener('scroll', this.onScrollCurry);
       this.options.onNewHeight(this.height, this);
     },
@@ -133,6 +131,19 @@
      */
     isCalculatingHeight: function () {
       return this.calculatingHeight;
+    },
+    
+    startHeightCheck: function(){
+      this.checkingHeight = true;
+      var $this = this, checkInterval = setInterval(function(){
+        var newHeight = $this.wrapper.getSize().height;
+        if (newHeight > $this.height){
+          $this.height = newHeight;
+          clearInterval(checkInterval);
+          $this.checkingHeight = false;
+          $this.triggerNewHeight();
+        }
+      }, 100);
     },
 
     /**
@@ -158,6 +169,7 @@
      * @private
      */
     _onScroll: function (e) {
+      console.log("[InfiniScroll] - ", e.y);
       if (this.scrollEndTriggered) return;
       // In case there was some scrolling while the handler was being removed
       if (this.isCalculatingHeight()) return;

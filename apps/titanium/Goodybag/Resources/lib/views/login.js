@@ -2,29 +2,28 @@
 gb.Windows.add('login', Window.extend({
   debug: true,
   
-  elements: {
-    view: gb.style.get('login.view'),
-    background: gb.style.get('login.background'),
-    
-    loginWrapper: gb.style.get('login.loginWrapper'),
-    registerWrapper: gb.style.get('login.registerWrapper'),
-    
-    buttons: {
-      facebook: gb.style.get('login.buttons.facebook'),
-      submit: gb.style.get('login.buttons.submit'),
-      register: gb.style.get('login.buttons.register')
-    },
-    
-    inputs: {
-      background: gb.style.get('login.fields.background'),
-      email: gb.style.get('login.fields.base login.fields.email'),
-      password: gb.style.get('login.fields.base login.fields.password')
-    }
-  },
-  
-  window: gb.style.get('login.window'),
-  
   Constructor: function () {
+    this.window = gb.style.get('login.window');
+    this.elements = {
+      view: gb.style.get('login.view'),
+      background: gb.style.get('login.background'),
+      
+      loginWrapper: gb.style.get('login.loginWrapper'),
+      registerWrapper: gb.style.get('login.registerWrapper'),
+      
+      buttons: {
+        facebook: gb.style.get('login.buttons.facebook'),
+        submit: gb.style.get('login.buttons.submit'),
+        register: gb.style.get('login.buttons.register')
+      },
+      
+      inputs: {
+        background: gb.style.get('login.fields.background'),
+        email: gb.style.get('login.fields.base login.fields.email'),
+        password: gb.style.get('login.fields.base login.fields.password')
+      }
+    };
+
     var $self = this, $el = this.elements;
     
     $el.view.add($el.loginWrapper)
@@ -57,89 +56,126 @@ gb.Windows.add('login', Window.extend({
     // Loader
     this.initializeLoader();
     
-    // Button Events
-    $el.buttons.facebook.addEventListener('click', function (e) {
-      console.log('clicked facebook login');
-      Titanium.Facebook.authorize();  
-    });
-    
-    Titanium.Facebook.logout();
-    
-    $el.buttons.submit.addEventListener('click', function (e) {
-      $self.showLoader();
-      if(gb.config.debug) console.log('[login] attempting to authenticate user.');
-      
-      gb.consumer.email = gb.utils.trim($el.inputs.email.getValue());
-      gb.consumer.password = gb.utils.trim($el.inputs.password.getValue());
-      $el.inputs.password.setValue("");
-      
-      gb.consumer.auth(function(error, consumer) {
-        if (error || !consumer) {
-          if (error) alert(error);
-          if (!consumer) alert('Error checking account details!');
-          return;
-        } else if (consumer) gb.consumer = consumer;
-        
-        $self.hideLoader();
-        
-        if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
-        else GB.Windows.show('complete-registration');
-      });
-    });
-    
-    Titanium.Facebook.addEventListener('login', function(e) {
-      if (gb.consumer.isAuthenticated()) return;
-      console.log('signing in with facebook.');
-      console.log(JSON.stringify(e));
-      
-      if (e.success) {
-        console.log('succeeded, sending facebook authentication poll');
-        console.log(JSON.stringify(gb.consumer));
-        
-        gb.consumer.facebookAuth(function(error, consumer) {
-          console.log(error);
-          console.log(consumer);
-          
-          if (error) {
-            Titanium.Facebook.logout();
-            alert(error); return;
-          } else if (consumer) {
-            gb.consumer = consumer;
-          }
-          
-          if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
-          else GB.Windows.show('complete-registration');
-        });
-      } else {
-        if (!e.cancelled) {
-          alert('Could not login to Facebook, Try Again!');
+    // Events
+    this.events = {
+      "facebookLoginClick": {
+        type: 'click'
+      , target: $el.buttons.facebook
+      , action: function (e) {
+          console.log('clicked facebook login');
+          Titanium.Facebook.authorize();  
         }
       }
-    });
+    , "facebookLogin": {
+        type: 'login'
+      , target: Titanium.Facebook
+      , action: function(e) {
+          if (gb.consumer.isAuthenticated()) return;
+          console.log('signing in with facebook.');
+          console.log(JSON.stringify(e));
+          
+          if (e.success) {
+            console.log('succeeded, sending facebook authentication poll');
+            console.log(JSON.stringify(gb.consumer));
+            
+            gb.consumer.facebookAuth(function(error, consumer) {
+              console.log(error);
+              console.log(consumer);
+              
+              if (error) {
+                Titanium.Facebook.logout();
+                alert(error); return;
+              } else if (consumer) {
+                gb.consumer = consumer;
+              }
+              
+              if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
+              else GB.Windows.show('complete-registration');
+            });
+          } else {
+            if (!e.cancelled) {
+              alert('Could not login to Facebook, Try Again!');
+            }
+          }
+        }
+      }
+    , "emailLoginClick": {
+        type: 'click'
+      , target: $el.buttons.submit
+      , action: function (e) {
+          $self.showLoader();
+          if(gb.config.debug) console.log('[login] attempting to authenticate user.');
+          
+          gb.consumer.email = gb.utils.trim($el.inputs.email.getValue());
+          gb.consumer.password = gb.utils.trim($el.inputs.password.getValue());
+          $el.inputs.password.setValue("");
+          
+          gb.consumer.auth(function(error, consumer) {
+            $self.hideLoader();
+            if (error || !consumer) {
+              if (error) alert(error);
+              if (!consumer) alert('Error checking account details!');
+              return;
+            } else if (consumer) gb.consumer = consumer;
+            
+            if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
+            else GB.Windows.show('complete-registration');
+          });
+        }
+      }
+    , "emailOnReturn": {
+        type: 'return'
+      , target: $el.inputs.email
+      , action: function (e) {
+          $el.inputs.password.focus();
+          $el.loginWrapper.scrollTo(0, 80);
+        }
+      }
+    , "passwordOnReturn": {
+        type: 'return'
+      , target: $el.inputs.email
+      , action: function (e) {
+          $el.loginWrapper.scrollTo(0, 0);
+        }
+      }
+    , "passwordOnBlur": {
+        type: 'blur'
+      , target: $el.inputs.email
+      , action: function (e) {
+          $el.loginWrapper.scrollTo(0, 0);
+        }
+      }
+    , "registerClick": {
+        type: 'click'
+      , target: $el.buttons.register
+      , action: function (e) {
+          $self.showRegistration();
+        }
+      }
+    }; // End events
     
-    // Input Events
-    $el.inputs.email.addEventListener('return', function (e) {
-      $el.inputs.password.focus();
-      $el.loginWrapper.scrollTo(0, 80);
-    });
-    
-    $el.inputs.password.addEventListener('return', function (e) {
-      $el.loginWrapper.scrollTo(0, 0);
-    });
-    
-    $el.inputs.password.addEventListener('blur', function (e) {
-      $el.loginWrapper.scrollTo(0, 0);
-    });
-    
-    $el.buttons.register.addEventListener('click', function (e) {
-      $self.showRegistration();
-    });
+    this.delegateEvents();
+        
+    Titanium.Facebook.logout();
     
     // Add Main View to window
     this.add($el.view);
     
     // Force Orientation
     this.window.orientationModes = [ Ti.UI.PORTRAIT ];
+    
+    this.onHide = function () {
+      gb.utils.debug('calling onHide');
+      // GB.Views.hide('register');
+      this.elements.inputs.email.blur();
+      this.elements.inputs.password.blur();
+      this.destroyEvents();
+      this.window.remove(this.elements.view);
+      this.elements = null;
+      delete this.elements;
+      $self = null;
+      $el = null;
+    };
     
     return this;
   },
@@ -150,13 +186,6 @@ gb.Windows.add('login', Window.extend({
   
   hideRegistration: function () {
     this.elements.registerWrapper.setZIndex(1);
-  },
-  
-  onHide: function () {
-    var $el = this.elements;
-    
-    $el.inputs.email.blur();
-    $el.inputs.password.blur();
   },
   
   onAndroid: function () {

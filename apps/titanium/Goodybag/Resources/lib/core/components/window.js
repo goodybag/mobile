@@ -1,24 +1,35 @@
 !(function (GB) {
   var Windows = {
     windows: {},
+    instantiated: {},
     current: false
   };
   
   Windows.add = function (name, window) {
     gb.utils.debug('Storing Window: ' + name);
     
-    this.windows[name] = new window();
-    this.windows[name].windowName = name;
-    this.windows[name].window.visible = false;
+    window.windowName = name;
+    this.windows[name] = window;
+    gb.utils.debug('Window stored: ' + name);
+  };
+  
+  Windows.instantiate = function (name) {
+    gb.utils.debug("Instantiating Window: " + name);
+    if (this.instantiated[name]) return;
+    this.instantiated[name] = new this.windows[name]();
+    this.instantiated[name].window.visible = false;
     
-    if (typeof this.windows[name].onAndroid != 'undefined' && gb.isAndroid)
-      this.windows[name].onAndroid();
-    else if (typeof this.windows[name].onIOS != 'undefined' && gb.isIOS)
-      this.windows[name].onIOS();
+    if (typeof this.instantiated[name].onAndroid != 'undefined' && gb.isAndroid)
+      this.instantiated[name].onAndroid();
+    else if (typeof this.instantiated[name].onIOS != 'undefined' && gb.isIOS)
+      this.instantiated[name].onIOS();
+    gb.utils.debug('Window instantiated: ' + name);
   };
   
   Windows.get = function (name) {
-    return this.windows[name];
+    gb.utils.debug('Getting Window: ' + name);
+    if (!this.instantiated[name]) this.instantiate(name);
+    return this.instantiated[name];
   };
   
   Windows.exists = function (name) {
@@ -27,25 +38,37 @@
   
   Windows.show = function (name, destroy) {
     if (!name) return;
+    if (name === this.current) return;
+    gb.utils.debug('Checking if Window exists: ' + name);
     if (!this.exists(name)) return;
+    gb.utils.debug('Showing Window: ' + name);
 
-    if (this.current) {
-      this.windows[this.current][((destroy) ? 'destroy' : 'hide')]();
-      
-      if (destroy) {
-        delete this.windows[this.current];
-      }
-    }
+    this.instantiate(name);
+    if (this.current) this.hide(this.current);
     
-    this.windows[name].show();
+    this.instantiated[name].show();
     this.current = name;
+    gb.utils.debug('Window shown: ' + name);
   };
   
   Windows.hide = function (name, close) {
     if (!name) return;
     if (!this.exists(name)) return;
+    gb.utils.debug('Hiding Window: ' + name);
 
-    this.windows[name].hide();
+    this.instantiated[name].hide();
+    this.instantiated[name].window.close();
+    this.instantiated[name].window = null;
+    delete this.instantiated[name].window;
+    this.instantiated[name] = null;
+    delete this.instantiated[name];
+    gb.utils.debug('Window hidden: ' + name);
+  };
+  
+  Windows.destroy = function (name) {
+    this.hide(name);
+    this.windows[name] = null;
+    delete this.windows[name];
   };
   
   GB.Windows = Windows;
@@ -68,14 +91,31 @@ var Window = new Class(gb.utils.extend({
     this.window.add(object);
   },
   
+  delegateEvents: function () {
+    var e;
+    for (var key in this.events){
+      e = this.events[key];
+      e.target.addEventListener(e.type, e.action);
+    }
+  },
+  
+  destroyEvents: function () {
+    var e;
+    for (var key in this.events){
+      e = this.events[key];
+      e.target.removeEventListener(e.type, e.action);
+    }
+  },
+  
   show: function () {
     gb.utils.debug('[' + this.windowName + '] Attempting to show window.', this.debug);
     
     if (!this.created) {
       gb.utils.debug('[' + this.windowName + '] Window has not yet been created, opening.', this.debug);
       
-      this.created = true;
       this.window.open();
+      this.window.visible = true;
+      this.created = true;
     }
     
     if (typeof this.onShow != 'undefined')
@@ -88,7 +128,7 @@ var Window = new Class(gb.utils.extend({
     gb.utils.debug('[' + this.windowName + '] Attempting to hide window.', this.debug);
     
     if (typeof this.onHide != 'undefined' && this.created) this.onHide();
-    if (this.created) this.window.hide();
+    if (this.created) this.window.hide()
   },
   
   destroy: function () {

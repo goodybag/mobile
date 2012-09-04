@@ -201,6 +201,7 @@ GB.Views.add('charities', {
   onShow: function () {
      var $this = this;
      if (this.hasLoaded) return;
+     GB.Windows.get('main').showLoader();
      var $this = this;
     
      this.fetchData(function(error, data){
@@ -278,8 +279,6 @@ GB.Views.add('charities', {
     gb.utils.debug('showing charities');
     for (var i = 0; i < data.length; i++) {
       this.views.charityList["charity-" + i] = new GB.CharityView(data[i], {
-        // onSelect: this.onCharitySelect
-      // , onDetails: this.onCharityDetails
         selected: data[i]._id === gb.consumer.getCharityId()
       });
       
@@ -294,9 +293,8 @@ GB.Views.add('charities', {
       
       if (this.views.charityList["charity-" + i].selected) this.selected = this.views.charityList["charity-" + i];
       this.views.charityList.base.add(this.views.charityList["charity-" + i].views.base);
-      // list.add($ui.createLabel({width: $ui.FILL, height: $ui.SIZE, text: data[i].publicName}));
     }
-    // charity = null;
+    GB.Windows.get('main').hideLoader();
   },
   
   selectCharity: function(charity){

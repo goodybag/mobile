@@ -53,7 +53,7 @@ gb.config = function (global, fb, storage) {
   this.api.consumer.profile   = 'http://' + domain + '/api/consumers/self';
   this.api.consumer.locations = 'http://' + domain + '/api/consumers/locationsByTapins';
   this.api.consumer.count     = 'http://' + domain + '/api/consumers/self/tapinCount';
-  this.api.stream.me          = 'http://' + domain + '/api/consumers/me/stream';
+  this.api.stream.my          = 'http://' + domain + '/api/consumers/me/stream';
   this.api.stream.global      = 'http://' + domain + '/api/consumers/streams';
   this.api.charities          = 'http://' + domain + '/api/consumers/businesses'
   this.api.selectCharity      = 'http://' + domain + '/api/consumers/self/charity/'
@@ -79,7 +79,8 @@ gb.config = function (global, fb, storage) {
   this.loadingMessages = [
     'Let me think on this...'
   , 'Hold on a second'
-  , 'The hamster wheels are firing up'
+  , '"This is not fair" said the Russian guy who was given wrong directions to the fair'
+  , 'Firing up hamster wheels'
   , 'Pre-heating the oven to 350'
   , 'Preparing things and stuff'
   , 'Waiting on our lawyers to get back with us...'
@@ -87,6 +88,7 @@ gb.config = function (global, fb, storage) {
   , 'The apollo program took 10 years to put a man on the moon, give me a few seconds'
   , 'New hamster being loaded'
   , 'Reticulating splines...'
+  , 'One time I saw a loading screen. One time.'
   ];
   
   return this;
