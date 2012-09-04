@@ -1,6 +1,6 @@
 GB.Windows.add('main', Window.extend({
   debug: true,
-  animated: false,
+  animated: true,
   location: null,
   initial: 'settings',
   

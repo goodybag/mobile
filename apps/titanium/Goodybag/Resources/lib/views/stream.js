@@ -100,7 +100,7 @@ GB.Views.add('stream', {
       },
       {
         triggerAt: '82%'
-      , onScrollToEnd: function(){b
+      , onScrollToEnd: function(){
           gb.utils.debug("MY scroll to end");
           self.onScrollToEnd(true);
         }

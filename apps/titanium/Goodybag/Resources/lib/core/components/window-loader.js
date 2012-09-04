@@ -14,7 +14,7 @@ var WindowLoader = {
   }
 
 , showLoader : function(text, callback){
-    if (typeof text === "function"){
+    if (typeof text === "function") {
       callback = text;
       text = false;
     }
@@ -23,13 +23,14 @@ var WindowLoader = {
     this.loader.middle.text.setText(text);
     this.loader.base.setZIndex(1000);
     this.loader.middle.spinner.show();
-    this.loader.base.animate({ opacity: 1 }, function(){
+    this.loader.base.animate({ opacity: 1 }, function () {
       if (callback) callback();
     });
   }
   
 , hideLoader : function(callback){
     var $this = this;
+    
     this.loader.base.animate({ opacity: 0 }, function(){
       $this.loader.base.setZIndex(-1);
       $this.loader.middle.spinner.hide();
