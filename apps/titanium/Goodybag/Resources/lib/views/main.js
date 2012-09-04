@@ -147,7 +147,7 @@ GB.Windows.add('main', Window.extend({
    * Toggle sidebar state and slide main screen in and out.
    */
   toggleSidebar: function (e) {
-    this.animated = (!this.animated) ? true: false;
+    this.animated = (!this.animated) ? true : false;
     
     this.elements.header.buttons.sidebar.setImage(
       this.images.sidebar[((!this.animated) ? '' : 'in') + 'active'] 

@@ -409,7 +409,7 @@ GB.Views.add('nearby', {
   },
   
   onHide: function () {
-    var $el = this.elements;
+    var $this = this, $el = this.elements;
     
     ($el.map) && ($el.holder.remove($el.map), $el.map = null);
     ($el.places.view) && ($el.holder.remove($el.places.view), $el.places.view = null);
