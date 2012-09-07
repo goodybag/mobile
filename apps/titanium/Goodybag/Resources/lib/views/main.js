@@ -64,6 +64,7 @@ GB.Windows.add('main', Window.extend({
         action: function (e) {
           if ($this.location == 'qrcode') return;
           if ($this.callback) $this.toggleBack();
+          GB.Views.get('sidebar').clearActive();
           $this.showPage('qrcode');
           $this.toggleQRCode();
         }

@@ -453,7 +453,13 @@ GB.Views.add('nearby', {
    * @param  {Object} e Event Handler
    */
   onPlaceClick: function (place) {
+    // Loader Start
+    if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
+    
     this.showPlace(place);
+    
+    // Loader End
+    if (this.loading) GB.Windows.get('main').hideLoader(), this.loading = false;
   },
   
   createModal: function (url) {

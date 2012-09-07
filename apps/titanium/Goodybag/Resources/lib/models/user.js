@@ -91,16 +91,12 @@ if(!GB.Models)
     auth: function (callback) {
       var self = this;
       
-      if (this.authenticated) {
-        gb.utils.debug('[User] already authenticated, exiting.');
-        callback(null, self);
-        return;
-      }
+      // Already authenticated.
+      if (this.authenticated) return callback(null, self);
       
-      if (this.email === "" || this.password === "") {
-        callback('No email / password given.');
-        return;
-      }
+      // Nothing to validate
+      if (this.email === "" || this.password === "")
+        return callback('No email / password given.');
       
       gb.utils.debug('[User] Creating http post request.');
       
@@ -111,44 +107,41 @@ if(!GB.Models)
         var cookie, segments;
         
         gb.utils.debug('[User] Got back results.');
+        if (!error && !json) return callback('Invalid server response...');
+        if (error) return callback(JSON.parse(error).message || "Invalid login credentials!");
+          
+        gb.utils.debug('[User] Got back the consumer object.');
+        var consumer = JSON.parse(json);
+        if (consumer.error) return callback(consumer.error.message);
         
-        if (error) {
-          callback(JSON.parse(error).message);
-        } else {
-          var consumer = JSON.parse(json);
-          
-          gb.utils.debug('[User] Got back the consumer object.');
-          
-          if (consumer.error) {
-            callback(consumer.error.message);
-            return;
-          }
-          
-          gb.utils.debug('[User] No consumer errors, attempting to parse cookies and setup files.');
-          
-          // Grab Cookies and store session
-          cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
-          self._setSession(cookie.get('connect.sid'));
-          
-          // Store here
-          self.authenticated = true;
-          gb.utils.debug('[User] Creating consumer file with encrypted data.');
-          
-          // Store Consumer
-          self._setConsumer(consumer);
-          self.data.authMethod = GB.Models.User.Methods.EMAIL;
-          
-          // Setup Avatars
-          self._setAvatar();
-          
-          gb.utils.debug('[User] Success, returning to callback.');
-          
-          // Cleanup
-          cookie = null;
-          
-          // Callback
-          callback(null, self);
-        }
+        // We actually encountered invalid server response, tell the user that?
+        if (consumer.data == null) return callback('Invalid login credentials!'); 
+        
+        gb.utils.debug('[User] No consumer errors, attempting to parse cookies and setup files.');
+        
+        // Grab Cookies and store session
+        cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
+        if (cookie.get('connect.sid') == null) gb.utils.debug('Session id is null, uh oh!');
+        self._setSession(cookie.get('connect.sid'));
+        
+        // Store here
+        self.authenticated = true;
+        gb.utils.debug('[User] Creating consumer file with encrypted data.');
+        
+        // Store Consumer
+        self._setConsumer(consumer);
+        self.data.authMethod = GB.Models.User.Methods.EMAIL;
+        
+        // Setup Avatars
+        self._setAvatar();
+        
+        gb.utils.debug('[User] Success, returning to callback.');
+        
+        // Cleanup
+        cookie = null;
+        
+        // Callback
+        callback(null, self);
       });
     },
     
@@ -158,23 +151,30 @@ if(!GB.Models)
      * @param {Object}    data Consumer data
      * @param {Function}  Callback when server responds
      */
-    
     register: function (user, callback) {
       var self = this;
+      
       gb.utils.debug('[User] Attempting to register.');
+      
       $http.post(gb.config.api.register, user, function(error, json){
+        if (!error && !json) return callback('Invalid server response...');
         if (error) return callback(JSON.parse(error).message);
-        if (!json) return callback();
+        if (typeof json == 'undefined' || !json) return callback();
+        
         var consumer = JSON.parse(json);
-          
+        
         gb.utils.debug('[User] Got back the data object.');
         
         if (consumer.error) return callback(consumer.error);
+        
+        // We actually encountered invalid server response, tell the user that?
+        if (consumer.data == null) return callback('Invalid Server Response, Try logging in.');
         
         gb.utils.debug('[User] No errors, attempting to parse cookies and setup files.');
         
         // Grab Cookies and store session
         cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
+        if (cookie.get('connect.sid') == null) gb.utils.debug('Session id is null, uh oh!');
         self._setSession(cookie.get('connect.sid'));
         
         // Store here
@@ -220,49 +220,46 @@ if(!GB.Models)
     facebookAuth: function (callback) {
       var self = this;
   
-      if (this.authenticated) {
-        gb.utils.debug('[User] already authenticated, exiting.');
-        callback(null, self);
-        return;
-      }
+      // Already authenticated.
+      if (this.authenticated) return callback(null, self);
       
-      console.log('sending request');
+      gb.utils.debug('[FB Auth] Sending Request');
+      
       $http.post(gb.config.api.facebookAuth, {
         accessToken: $fb.getAccessToken()
       }, function (error, json) {
-        if (error) {
-          callback("Couldn't Connect to Goodybag Account.");
-        } else {
-          console.log(error);
-          console.log(json);
-          var consumer = JSON.parse(json);
+        if (!error && !json) return callback('Invalid server response...');
+        if (error) return callback('Error occurred during facebook connection.');
+        if (typeof json == 'undefined' || !json) return callback('Error during authentication, try again.');
+        
+        var consumer = JSON.parse(json);
+        if (consumer.error) return callback(consumer.error.message);
+        
+        // We actually encountered invalid server response, tell the user that?
+        if (consumer.data == null) return callback('Invalid login credentials!'); 
           
-          if (consumer.error) {
-            callback(consumer.error.message); return;
-          }
-            
-          // Grab Cookies, Store Session
-          cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
-          self._setSession(cookie.get('connect.sid'));
-          
-          // Store here
-          self.authenticated = true;
-          
-          // Store Consumer
-          self._setConsumer(consumer);
-          self.data.authMethod = GB.Models.User.Methods.FACEBOOK;
-          
-          // Setup Avatars
-          self._setAvatar();
-          
-          gb.utils.debug(JSON.stringify(self));
-          
-          // Cleanup
-          cookie = null;
-          
-          // Callback
-          callback(null, self);
-        }
+        // Grab Cookies, Store Session
+        cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
+        if (cookie.get('connect.sid') == null) gb.utils.debug('Session id is null, uh oh!');
+        self._setSession(cookie.get('connect.sid'));
+        
+        // Store here
+        self.authenticated = true;
+        
+        // Store Consumer
+        self._setConsumer(consumer);
+        self.data.authMethod = GB.Models.User.Methods.FACEBOOK;
+        
+        // Setup Avatars
+        self._setAvatar();
+        
+        gb.utils.debug(JSON.stringify(self));
+        
+        // Cleanup
+        cookie = null;
+        
+        // Callback
+        callback(null, self);
       });
     },
     
@@ -317,7 +314,11 @@ if(!GB.Models)
       
       $http.get.sessioned(gb.config.api.consumer.self, this.session, function (error, results) {
         if (error) {
-          gb.utils.warn(error.message);
+          gb.utils.warn('[User] Session Error: ' + error);
+          
+          // Logout and show login screen:
+          self.logout();
+          GB.Windows.show('login');
         } else {
           cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
   

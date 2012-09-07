@@ -107,6 +107,7 @@ gb.consumer.validate(function (consumer) {
     );
     gb.consumer.renew();
   } else {
+    gb.consumer.logout();
     GB.Windows.show('login');
   }
 });

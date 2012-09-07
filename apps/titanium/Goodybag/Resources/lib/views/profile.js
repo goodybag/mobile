@@ -92,6 +92,7 @@ gb.Views.add('profile', {
     }
     
     // Donated Amount
+    amt = (amt == null) ? 0 : amt;
     $holder.donated.inner.one.setText('Total Donated:');
     $holder.donated.inner.two.setText('$' + ((amt === 0) ? amt : gb.utils.formatMoney(amt / 100)));
 
