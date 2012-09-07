@@ -222,11 +222,11 @@ GB.Views.add('nearby', {
     var elements = {
       base: $el.place,
       
-      menu: {
-        base: gb.style.get('nearby.menu.base'),
-        blank: $ui.createView({ width: $ui.FILL, height: '6dp'}),
-        back: back.base
-      },
+      // menu: {
+        // base: gb.style.get('nearby.menu.base'),
+        // blank: $ui.createView({ width: $ui.FILL, height: '6dp'}),
+        // back: back.base
+      // },
       
       holder: {
         base: gb.style.get(area + '.holder'),
@@ -300,25 +300,25 @@ GB.Views.add('nearby', {
       $el.menu.base.setVisible(false);
       $el.place.show();
       $this.self.add($el.place);
+      
+      // Back
+      GB.Windows.get('main').toggleBack(function () {
+        back.activate();
+        
+        // Clear Place
+        $el.place.setVisible(false);
+        $this.self.remove($el.place);
+        $el.place.close();
+        $el.place = null;
+        
+        // Set Holder up
+        $el.holder.backgroundColor = 'yellow';
+        $el.holder.setVisible(true);
+        
+        // Set Menu to visible
+        $el.menu.base.setVisible(true);
+      });
     }
-    
-    // Menu
-    elements.menu.back.addEventListener('click', function (e) {
-      back.activate();
-      
-      // Clear Place
-      $el.place.setVisible(false);
-      $this.self.remove($el.place);
-      $el.place.close();
-      $el.place = null;
-      
-      // Set Holder up
-      $el.holder.backgroundColor = 'yellow';
-      $el.holder.setVisible(true);
-      
-      // Set Menu to visible
-      $el.menu.base.setVisible(true);
-    });
     
     // URL Click Event
     elements.holder.url.base.addEventListener('click', function (e) {
