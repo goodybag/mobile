@@ -68,13 +68,13 @@ GB.Windows.add('main', Window.extend({
           $this.showPage('qrcode');
           $this.toggleQRCode();
         }
-    }
-    , 'geolocation': {
-        type: 'location'
-      , target: Titanium.Geolocation
-      , action: gb.consumer._setGeolocation
       }
     };
+    
+    // Event for Geolocation (Can't be in handler above)
+    if(Titanium.Geolocation.locationServicesEnabled)
+      Titanium.Geolocation.addEventListener('location', gb.consumer._setGeolocation);
+    else alert('GPS is disabled, nearby places will not work correctly!');
 
     // Force orientation
     $window.orientationModes = [ Ti.UI.PORTRAIT ];
