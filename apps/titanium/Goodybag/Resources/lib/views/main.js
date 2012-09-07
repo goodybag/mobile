@@ -1,6 +1,7 @@
 GB.Windows.add('main', Window.extend({
   debug: true,
   animated: true,
+  callback: null,
   location: null,
   initial: 'settings',
   
@@ -62,6 +63,7 @@ GB.Windows.add('main', Window.extend({
         target: this.elements.header.buttons.qrcode,
         action: function (e) {
           if ($this.location == 'qrcode') return;
+          if ($this.callback) $this.toggleBack();
           $this.showPage('qrcode');
           $this.toggleQRCode();
         }
@@ -151,9 +153,9 @@ GB.Windows.add('main', Window.extend({
     var $this = this;
     
     if (callback) {
-      this.backCallback = { main: callback, back: function (e) { $this.toggleBack.apply($this); } };
+      this.callback = { main: callback, back: function (e) { $this.toggleBack.apply($this); } };
       this.elements.header.buttons.sidebar.removeEventListener('click', this.events.sidebar.action);
-      this.elements.header.buttons.sidebar.addEventListener('click', this.backCallback.back);
+      this.elements.header.buttons.sidebar.addEventListener('click', this.callback.back);
       this.elements.header.buttons.sidebar.setImage(
         this.images.back.inactive
       );
@@ -164,14 +166,15 @@ GB.Windows.add('main', Window.extend({
       this.images.back.active  
     );
     
-    this.backCallback.main();
+    this.callback.main();
     
     this.elements.header.buttons.sidebar.setImage(
       this.images.sidebar[((!this.animated) ? '' : 'in') + 'active'] 
     );
     
-    this.elements.header.buttons.sidebar.removeEventListener('click', this.backCallback.back);
+    this.elements.header.buttons.sidebar.removeEventListener('click', this.callback.back);
     this.elements.header.buttons.sidebar.addEventListener('click', this.events.sidebar.action);
+    this.callback = null;
   },
   
   /**
