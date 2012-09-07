@@ -98,6 +98,9 @@ GB.Windows.add('main', Window.extend({
     this.welcomeFadeIn = Titanium.UI.createAnimation;
     this.delegateEvents();
     
+    // keep track of what pages have been shown
+    this.shownPages = [];
+    
     return this;
   },
   
@@ -114,7 +117,7 @@ GB.Windows.add('main', Window.extend({
     GB.Views.show(view);
     this.elements.views.main.add(GB.Views.get(view).self);
     this.elements.views.main.finishLayout();
-    this.shownPages.push(view);
+    if (this.shownPages.indexOf(view) === -1) this.shownPages.push(view);
   },
 
   /**
@@ -128,8 +131,8 @@ GB.Windows.add('main', Window.extend({
   /**
    * Delegate cleanup measures upon this window being hidden.
    */
-  onHide: function () {
-    gb.utils.debug("calling onHide on main");
+  onDestroy: function () {
+    gb.utils.debug("calling onDestroy on main");
     this.destroyEvents();
     this.elements = null;
     delete this.elements;

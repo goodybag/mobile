@@ -86,8 +86,6 @@ gb.config = function (global, fb, storage) {
   , 'Waiting on our lawyers to get back with us...'
   , 'Hold up! Wait a minute...'
   , 'Firing up the Hamster Wheels'
-  , 'Pre-heating the oven to 350°'
-  , 'Preparing Things and Stuff.'
   , 'Containing Existential Buffer'
   , 'BRB'
   , 'The apollo program took 10 years to put a man on the moon, give me a few seconds'

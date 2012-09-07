@@ -58,15 +58,15 @@
 
     this.instantiated[name].hide();
     this.instantiated[name].window.close();
-    this.instantiated[name].window = null;
-    delete this.instantiated[name].window;
-    this.instantiated[name] = null;
-    delete this.instantiated[name];
     gb.utils.debug('Window hidden: ' + name);
   };
   
   Windows.destroy = function (name) {
     this.hide(name);
+    this.instantiated[name].window = null;
+    delete this.instantiated[name].window;
+    this.instantiated[name] = null;
+    delete this.instantiated[name];
     this.windows[name] = null;
     delete this.windows[name];
   };

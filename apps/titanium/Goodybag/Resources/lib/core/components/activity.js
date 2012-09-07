@@ -21,8 +21,8 @@ GB.getActivityView = function(model){
     // Profile picture
   , image: $ui.createImageView({
       image: "https://s3.amazonaws.com/goodybag-uploads/consumers" + imgSrc + "-128.png"
-    // , decodeRetries: 1
-    // , defaultImage: gb.utils.getImage('avatar.png')
+    , decodeRetries: 1
+    , defaultImage: gb.utils.getImage('avatar.png')
     , width: "42dp"
     , height: "42dp"
     , title: model.who.screenName
