@@ -95,7 +95,7 @@ GB.Views.add('nearby', {
     
     // Setup User Location if Available and not in Development Mode
     gb.consumer.getGeolocation(function (coords) {
-      if (!gb.config.development) {
+      if (!gb.config.development && coords && coords.latitude && coords.longitude) {
         $this.position = {
           lat: coords.latitude,
           lon: coords.longitude
