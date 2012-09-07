@@ -187,6 +187,11 @@ gb.utils = function (global) {
     client.send(options ? JSON.stringify(options) : '');
   };
   
+  /**
+   * Converts json object into URL Query.
+   * 
+   * @param {Object} data to be converted.
+   */
   this.paramParser = function(data){
     var params = "", i = 0;
     for (var key in data){
@@ -214,7 +219,7 @@ gb.utils = function (global) {
    */
   this.getImage = function (path) {
     path = (gb.isAndroid ? '/images/' : '') + path;
-    this.debug('[gb.utils.getImage] ' + path);
+    // this.debug('[gb.utils.getImage] ' + path);
   
     return path;
   }

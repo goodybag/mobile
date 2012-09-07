@@ -84,12 +84,22 @@ gb.config = function (global, fb, storage) {
   , 'Pre-heating the oven to 350'
   , 'Preparing things and stuff'
   , 'Waiting on our lawyers to get back with us...'
+  , 'Hold up! Wait a minute...'
+  , 'Firing up the Hamster Wheels'
+  , 'Pre-heating the oven to 350°'
+  , 'Preparing Things and Stuff.'
+  , 'Containing Existential Buffer'
   , 'BRB'
   , 'The apollo program took 10 years to put a man on the moon, give me a few seconds'
   , 'New hamster being loaded'
+  , 'Deciding next message to display...'
+  , 'Not Crashing...'
+  , 'Hyper-activating Hamster'
   , 'Reticulating splines...'
   , 'One time I saw a loading screen. One time.'
-  , 'Home is where the heart is? False. The chest cavity is where the heart is.'
+  , 'Re-evaluating Bits...'
+  , 'Emulating Progress'
+  , 'Inserting Impedance into Circuitry.'
   ];
   
   return this;
