@@ -89,6 +89,7 @@ gb.config = function (global, fb, storage) {
   , 'New hamster being loaded'
   , 'Reticulating splines...'
   , 'One time I saw a loading screen. One time.'
+  , 'Home is where the heart is? False. The chest cavity is where the heart is.'
   ];
   
   return this;

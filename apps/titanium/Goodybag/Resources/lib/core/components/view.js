@@ -125,7 +125,8 @@ Views.hide = function (name, context) {
  * @type {Method}
  */
 Views.destroy = function (name) {
-  if (typeof this.instantiated[name].onDestroy != 'undefined') this.instantiated[name].onDestroy();
+  if (!this.instantiated[name]) return;
+  if (this.instantiated[name].onDestroy) this.instantiated[name].onDestroy();
   this.instantiated[name].self = null;
   this.instantiated[name].views = null;
   delete this.instantiated[name].views;

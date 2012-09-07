@@ -22,6 +22,8 @@ GB.Windows.add('main', Window.extend({
       }
     };
     
+    this.shownPages = [];
+    
     var $self = this, $el = this.elements, $file = Titanium.Filesystem, $window = this.window;
 
     // Force orientation
@@ -83,6 +85,7 @@ GB.Windows.add('main', Window.extend({
     GB.Views.show(view);
     this.elements.views.main.add(GB.Views.get(view).self);
     this.elements.views.main.finishLayout();
+    this.shownPages.push(view);
   },
 
   onShow : function() {
@@ -100,6 +103,9 @@ GB.Windows.add('main', Window.extend({
     this.destroyEvents();
     this.elements = null;
     delete this.elements;
+    for (var i = this.shownPages.length - 1; i >= 0; i--){
+      GB.Views.destroy(this.shownPages[i]);
+    }
   },
   
 
