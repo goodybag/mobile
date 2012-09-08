@@ -576,7 +576,7 @@ if(!GB.Models)
      * @return {Boolean}
      */
     hasCharity: function () {
-      return (this.data.charity) ? !!(this.data.charity.id) : null;
+      return !!(this.data.charity && this.data.charity.id);
     },
     
     /**
@@ -686,12 +686,12 @@ if(!GB.Models)
       callback || (callback = function(){});
       gb.api.charities.select(charity.id, function(error, data){
         if (error) return callback(error);
-        callback(null, data);
         $this.data.charity = {
           id:   charity.id
         , name: charity.publicName
         };
         $this._setConsumer($this);
+        callback(null, data);
       });
     },
     

@@ -21,6 +21,8 @@ GB.Views.add('charities', {
   Constructor: function () {
     var $this = this;
     
+    this.window = GB.Windows.get('main');
+    
     this.views = {
       "base": $ui.createView({
         width: $ui.FILL
@@ -212,12 +214,16 @@ GB.Views.add('charities', {
   },
   
   triggerOnComplete: function(){
+    gb.utils.debug("[Charity] - Trigger On Complete");
     if (this.hasCalledOnComplete) return;
     this.onComplete();
+    gb.utils.debug("[Charity] - Triggered On Complete");
     this.hasCalledOnComplete = true;
+    this.window = GB.Windows.get('main');
   },
   
   setOnComplete: function(fn){
+    this.window = GB.Windows.get('complete-registration');
     this.onComplete = fn;
   },
   
@@ -284,7 +290,8 @@ GB.Views.add('charities', {
       
       this.views.charityList["charity-" + i].views.bottom.selectBtn.addEventListener(
         'click'
-      , getSelectCallback(this.views.charityList["charity-" + i]));
+      , getSelectCallback(this.views.charityList["charity-" + i])
+      );
       
       this.views.charityList["charity-" + i].views.bottom.detailsBtn.addEventListener(
         'click'

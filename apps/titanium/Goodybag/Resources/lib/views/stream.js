@@ -90,6 +90,10 @@ GB.Views.add('stream', {
         }
       , onNewHeight: this.newHeightCurry
       , name: "Global Scroll"
+      , refresher: true
+      , onLoad: function(done){
+          self.onRefresh(done);
+        }
       }
     );
     
@@ -110,17 +114,11 @@ GB.Views.add('stream', {
     );
     
     // Pull to Refresh
-    // this.states.global.refresher = new GB.PullToRefresh(this.states.global.view.view, {
-      // onLoad: function(done){
-        // self.onRefresh(done);
-      // }
-    // });
-    // this.states.my.refresher = new GB.PullToRefresh(this.states.my.view.view, {
-      // onLoad: function(done){
-        // self.onRefresh(done);
-      // }
-    // });
-    
+    this.states.my.refresher = new GB.PullToRefresh(this.states.my.view.view, {
+      onLoad: function(done){
+        self.onRefresh(done);
+      }
+    });
     this.scrollWrapper.add(this.states.global.view.view);
     this.scrollWrapper.add(this.states.my.view.view);
     this.self.add(this.nav.container);
@@ -149,13 +147,14 @@ GB.Views.add('stream', {
   },
   
   onRefresh: function (done) {
-    GB.Windows.get('main').showLoader();
     var
       curr  = this.current = this.current || 'global'
     , state = this.states[curr]
     , self  = this
     ;
+    gb.api.store.stream = {};
     curr = curr[0].toUpperCase() + curr.substring(1);
+    state.view.clearChildren();
     this["fetch" + curr + "Stream"](state.limit = 15, state.page = 0, function(error, data){
       if (error) return gb.utils.debug(error);
       if (!data) return gb.Views.show('stream-no-data');

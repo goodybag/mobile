@@ -165,14 +165,17 @@ gb.Windows.add('login', Window.extend({
     this.window.orientationModes = [ Ti.UI.PORTRAIT ];
     
     this.onHide = function () {
+      $self.elements.inputs.email.blur();
+      $self.elements.inputs.password.blur();
+    };
+    
+    this.onDestroy = function () {
       gb.utils.debug('calling onHide');
       // GB.Views.hide('register');
-      this.elements.inputs.email.blur();
-      this.elements.inputs.password.blur();
-      this.destroyEvents();
-      this.window.remove(this.elements.view);
-      this.elements = null;
-      delete this.elements;
+      $self.destroyEvents();
+      $self.window.remove($self.elements.view);
+      $self.elements = null;
+      delete $self.elements;
       $self = null;
       $el = null;
     };

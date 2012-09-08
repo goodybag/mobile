@@ -24,16 +24,19 @@
       onNewHeight: function(height, myInfiniScroll){}
     , onBottom: function(myInfiniScroll){}
     , triggerAt:   '90%'
+    , refresher: false
     };
 
     for (var key in viewOptions) this.viewOptions[key] = viewOptions[key];
     for (var key in options) this.options[key] = options[key];
     this.view = $ui.createScrollView(this.viewOptions);
-    this.wrapper = $ui.createView({
-      width: $ui.FILL
-    , height: $ui.SIZE
-    , layout: 'vertical'
-    });
+    this.wrapper = this.getNewWrapper();
+    if (this.options.refresher){
+      this.refresher = new GB.PullToRefresh(this.view, {
+        // onLoad: this.options.onLoad
+      })
+      this.view.add(this.refresher.views.base);
+    }
     this.view.add(this.wrapper);
     this.scrollEndTriggered = false;
     this.postLayoutAdded = false;
@@ -74,21 +77,16 @@
      * Proxy Methods
      */
     add: function (view) {
-      console.log("[InfiniScroll] - Add view");
       if (!this.checkingHeight){
-        console.log("[InfiniScroll] - Post layout not added, adding now");
         this.startHeightCheck();
       }
       if (Object.prototype.toString.call(view)[8] === "A"){
-        console.log("[InfiniScroll] - passed in array to add creating intermediate");
         var intermediate = $ui.createView({ width: $ui.FILL, height: $ui.SIZE, layout: 'vertical' });
         for (var i = 0; i < view.length; i++){
           intermediate.add(view[i]);
         }
-        console.log("[InfiniScroll] - adding intermediate to wrapper");
         this.wrapper.add(intermediate);
       }else{
-        console.log("[InfiniScroll] - Adding view to wrapper");
         this.wrapper.add(view);
       }
     },
@@ -115,7 +113,6 @@
                      : this.height - this.options.triggerAt;
       this.calculatingHeight = false;
       this.scrollEndTriggered = false;
-      console.log("[InfiniScroll] - new height triggered", this.height, this.triggerAt);
       this.view.addEventListener('scroll', this.onScrollCurry);
       this.options.onNewHeight(this.height, this);
     },
@@ -137,13 +134,27 @@
       this.checkingHeight = true;
       var $this = this, checkInterval = setInterval(function(){
         var newHeight = $this.wrapper.getSize().height;
-        if (newHeight > $this.height){
+        if (newHeight !== $this.height){
           $this.height = newHeight;
           clearInterval(checkInterval);
           $this.checkingHeight = false;
           $this.triggerNewHeight();
         }
       }, 100);
+    },
+    
+    clearChildren: function(){
+      this.view.remove(this.wrapper);
+      this.view.add(this.wrapper = this.getNewWrapper());
+      this.height = 0;
+    },
+    
+    getNewWrapper: function(){
+      return $ui.createView({
+        width: $ui.FILL
+      , height: $ui.SIZE
+      , layout: 'vertical'
+      });
     },
 
     /**
@@ -169,13 +180,10 @@
      * @private
      */
     _onScroll: function (e) {
-      console.log("[InfiniScroll] - ", e.y);
       if (this.scrollEndTriggered) return;
       // In case there was some scrolling while the handler was being removed
       if (this.isCalculatingHeight()) return;
       if (e.y >= this.triggerAt - this.view.size.height) {
-        clearInterval(this.scrollThrottle);
-        console.log("[InfiniScroll] - Scrolled to end");
         this.scrollEndTriggered = true;
         this.view.removeEventListener('scroll', this.onScrollCurry);
         this.triggerScrollEnd(e.y);

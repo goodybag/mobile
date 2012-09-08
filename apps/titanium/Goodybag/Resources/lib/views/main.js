@@ -101,10 +101,16 @@ GB.Windows.add('main', Window.extend({
     // keep track of what pages have been shown
     this.shownPages = [];
     
+    // Refresh stream data in the background
+    this.streamGlobalRefresher = new GB.PeriodicRefresher(function(callback){
+      gb.api.stream.global({ skip: 0, limit: 30 }, callback);
+    }, gb.api.store.stream, 1000 * 10);
+    
     return this;
   },
   
   showPage: function (view) {
+    if (view === "stream") this.streamGlobalRefresher.stop();
     this.elements.views.main.startLayout();
     
     if (this.location) {
@@ -119,6 +125,10 @@ GB.Windows.add('main', Window.extend({
     this.elements.views.main.finishLayout();
     if (this.shownPages.indexOf(view) === -1) this.shownPages.push(view);
   },
+  
+  onHide: function () {
+    this.streamGlobalRefresher.stop();
+  },
 
   /**
    * Methods to be called upon show.
@@ -126,6 +136,7 @@ GB.Windows.add('main', Window.extend({
   onShow: function () {
     this.showPage(this.initial);
     this.elements.views.holder.sidebar.setDetails(gb.consumer);
+    this.streamGlobalRefresher.start();
   },
   
   /**

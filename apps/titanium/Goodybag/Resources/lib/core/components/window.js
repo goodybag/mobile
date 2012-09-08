@@ -43,7 +43,7 @@
     if (!this.exists(name)) return;
     gb.utils.debug('Showing Window: ' + name);
 
-    this.instantiate(name);
+    if (!this.instantiated[name]) this.instantiate(name);
     if (this.current) this.hide(this.current);
     
     this.instantiated[name].show();
@@ -57,12 +57,12 @@
     gb.utils.debug('Hiding Window: ' + name);
 
     this.instantiated[name].hide();
-    this.instantiated[name].window.close();
     gb.utils.debug('Window hidden: ' + name);
   };
   
   Windows.destroy = function (name) {
     this.hide(name);
+    this.instantiated[name].window.close();
     this.instantiated[name].window = null;
     delete this.instantiated[name].window;
     this.instantiated[name] = null;

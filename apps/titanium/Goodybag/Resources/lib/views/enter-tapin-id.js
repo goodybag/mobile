@@ -2,15 +2,13 @@
   var $ui = Ti.UI;
   
   GB.Views.add('enter-tapin-id', {
-    self: $ui.createScrollView(gb.utils.extend(
-      gb.style.get('enterTapinId.base')
-    , gb.style.get('common.grayPage.base')
-    , gb.style.get('common.scrollView')
-    ))
+    self: $ui.createScrollView(gb.style.get('enterTapinId.base common.scrollView common.grayPage.base'))
     
   , Constructor: function(){
       var $this = this;
       
+      this.window = GB.Windows.get('complete-registration');
+            
       this.hasCalledOnComplete = false;
       this.onComplete = function(){};
       this.completeBtn = new GB.Button('Complete');
@@ -119,15 +117,19 @@
     
   , generateTapinId: function(){
       var $this = this;
+      this.window.showLoader();
       gb.consumer.createBarcodeId(function(error, id){
+        $this.window.hideLoader();
         if (error) return alert(error);
         $this.triggerOnComplete();
       });
     }
     
   , submitTapinId: function(){
+      this.window.showLoader();
       var value = this.tapinIdInput.getValue(), $this = this;
       gb.consumer.setBarcodeId(value, function(error){
+        this.window.hideLoader();
         if (error) return alert(error);
         $this.triggerOnComplete();
       });

@@ -126,12 +126,16 @@
     },
     
     register: function () {
+      GB.Windows.get('login').showLoader();
       var $this = this, data = this.getFormData();
       this.validate(data, function(errors){
         if (errors.length > 0) return $this.reportErrors(errors);
         gb.consumer.register(data, function(error, consumer){
+          GB.Windows.get('login').hideLoader();
           if (error) return alert(error.message);
+          $this.clearFormData();
           $this.triggerOnRegister(consumer);
+          $this.triggerOnBack();
         });
       });
     },
@@ -159,6 +163,17 @@
         msg += errors[i].message + ((i > 0) ? "\n\n" : "") 
       }
       alert(msg);
+    },
+    
+    clearFormData: function () {
+       var fields = this.views.wrapper.fields, field;
+      for (var key in fields){
+        field = fields[key]
+        if (field.input){
+          field.input.setValue("");
+          field.indicator.setBackgroundImage(gb.style.get('register.field.indicator.base').backgroundImage);
+        }
+      }
     },
     
     getFormData: function () {

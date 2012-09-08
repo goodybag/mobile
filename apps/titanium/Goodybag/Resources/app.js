@@ -49,6 +49,7 @@ gb.files = {
     'charity-view',
     'button',
     'validate',
+    'periodic-refresh',
     'events'
   ],
   

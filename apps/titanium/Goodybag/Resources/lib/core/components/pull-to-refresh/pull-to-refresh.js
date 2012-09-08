@@ -34,6 +34,7 @@
     }
     
     this.perceivedHeight = this.options.perceivedHeight;
+    this.height = parseInt(this.options.height);
     
     // Handle state
     this.pulling = false;
@@ -45,7 +46,8 @@
       , width: this.options.width
       , height: this.options.height
       , layout: 'vertical'
-      , top: -parseInt(this.options.height) + 'dp'
+      , top: -this.height + 'dp'
+      , zIndex: 5
       })
       
     , filler: $ui.createView({
@@ -134,9 +136,6 @@
         this.views.base.remove();
       }
       this.scrollView = scrollView;
-      this.log('scrollview set, add refresher to scrollview');
-      this.scrollView.add(this.views.base);
-      this.log('refresher added, registering events');
       this.registerEvents();
     }
     /**
@@ -153,6 +152,7 @@
       this.log('events added!');
     }
   , enterPullMode: function(){
+      this.log('entering pull mode')
       this.pulling = false;
       var t = Ti.UI.create2DMatrix();
       this.views.arrow.animate({ transform: t, duration: 180 });
@@ -167,18 +167,13 @@
       this.views.status.setText(this.options.pullingText);
     }
   , enterLoadingMode: function(){
+      this.scrollView.scrollTo(0, -this.perceivedHeight + 'dp');
       var views = this.views, currScroll = this.offset, scrollInterval, $this = this;
-      this.scrollView.scrollTo(0, currScroll);
       this.reloading = true;
       this.pulling = false;
       views.arrow.hide();
       views.activityIndicator.show();
       views.status.setText(this.options.reloadText);
-      scrollInterval = setInterval(function(){
-        console.log(currScroll)
-        if (currScroll >= -$this.perceivedHeight) clearInterval(scrollInterval);
-        else $this.scrollView.scrollTo(0, ++currScroll);
-      }, 2);
       views.arrow.transform = Ti.UI.create2DMatrix();
     }
   , getDateStr: function(){
@@ -193,20 +188,17 @@
     }
     
   , _onDoneLoading: function(){
+      this.scrollView.scrollTo(0, 0);
       this.reloading = false;
       var views = this.views, currScroll = -this.perceivedHeight, scrollDownInterval, $this = this;
       views.date.setText("Last Updated: " + this.getDateStr());
       views.status.setText(this.options.defaultText);
       views.activityIndicator.hide();
       views.arrow.show();
-      scrollDownInterval = setInterval(function(){
-        if (currScroll >= 0) clearInterval(scrollDownInterval);
-        else $this.scrollView.scrollTo(0, ++currScroll);
-      }, 2);
+      this.scrollView.scrollTo(0, 0);
     }
   , _onScroll: function(e){
       this.offset = e.y;
-      this.log(this.offset, (-this.perceivedHeight - 5));
       if (this.offset < (-this.perceivedHeight - 5) && !this.pulling && !this.reloading){
         this.enterReleaseMode();
       }
@@ -218,10 +210,12 @@
       console.log(e);
       this.log("on drag end!", e.y);
       if (this.pulling && !this.reloading){
+        this.scrollView.setTouchEnabled(false);
         var $this = this;
         this.enterLoadingMode(e.y);
         this.options.onLoad(function(){
           $this._onDoneLoading();
+          $this.scrollView.setTouchEnabled(true);
         });
       }
     }

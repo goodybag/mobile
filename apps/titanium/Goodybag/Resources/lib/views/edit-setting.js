@@ -17,17 +17,13 @@
       , "pageWrapper": {
           "base": $ui.createView(gb.style.get('common.grayPage.wrapper'))
         
-        , "header": $ui.createLabel(gb.utils.extend(
-            { text: "Settings" }
-          , gb.style.get('settings.header')
-          , gb.style.get('common.grayPage.header1')
+        , "header": $ui.createLabel(gb.style.get(
+            'settings.header common.grayPage.header1'
+          , { text: "Settings" }
           ))
 
         , "island": {
-            "base": $ui.createView(gb.utils.extend(
-              gb.style.get('settings.island')
-            , gb.style.get('common.grayPage.island.base')
-            ))
+            "base": $ui.createView(gb.style.get('settings.island common.grayPage.island.base'))
           
           , "shadow": $ui.createView(gb.style.get('common.grayPage.island.shadow'))
           
@@ -54,7 +50,7 @@
                 
               , "screenName": {
                   "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
-                , "field:email": this.getValidatedField('screenName', 'Alias', gb.consumer.data.setScreenName ? gb.consumer.data.screenName : "")
+                , "field:screenName": this.getValidatedField('screenName', 'Alias', gb.consumer.data.setScreenName ? gb.consumer.data.screenName : "")
                 }
                 
               , "barcodeId": {
@@ -104,7 +100,7 @@
     }
     
   , onShow: function(){
-
+    
     }
     
   , hideField: function(which){
@@ -121,22 +117,31 @@
       if (this.which) this.hideField(this.which);
       this.showField(which);
       this.which = which;
+      var fields = this.wrapper[this.which];
       // Set page title
       switch(which){
         case 'name':
           this.views.pageWrapper.header.setText('Settings - Name');
+          fields['field:firstName'].input.setValue(gb.consumer.data.firstName);
+          fields['field:lastName'].input.setValue(gb.consumer.data.lastName);
         break;
         case 'email':
           this.views.pageWrapper.header.setText('Settings - Email');
+          fields['field:email'].input.setValue(gb.consumer.data.email);
         break;
         case 'screenName':
           this.views.pageWrapper.header.setText('Settings - Alias');
+          fields['field:screenName'].input.setValue(gb.consumer.data.setScreenName ? gb.consumer.data.screenName : "");
         break;
         case 'barcodeId':
           this.views.pageWrapper.header.setText('Settings - Tap-In ID');
+          fields['field:barcodeId'].input.setValue(gb.consumer.data.barcodeId || "");
         break;
         case 'password':
           this.views.pageWrapper.header.setText('Settings - Password');
+          fields['field:password'].input.setValue('');
+          fields['field:newPassword'].input.setValue('');
+          fields['field:confirmPassword'].input.setValue('');
         break;
         default: break;
       }
