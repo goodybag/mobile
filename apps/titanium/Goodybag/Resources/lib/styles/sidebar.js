@@ -110,19 +110,19 @@ gb.style.base.sidebar = {
       top: 88,
       image: 'screens/sidebar/items/nearby.png'
     },
-    
-    sponsored: {
-      top: 124,
-      image: 'screens/sidebar/items/sponsored.png'
-    },
+//     
+    // sponsored: {
+      // top: 124,
+      // image: 'screens/sidebar/items/sponsored.png'
+    // },
     
     activity: {
-      top: 160,
+      top: 124, // 60
       image: 'screens/sidebar/items/activity.png'
     },
     
     settings: {
-      top: 196,
+      top: 160, // 96
       image: 'screens/sidebar/items/settings.png'
     }
   }

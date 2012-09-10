@@ -4,7 +4,7 @@
   GB.Views.add('edit-setting', {
     self: $ui.createScrollView(gb.style.get('settings.base common.grayPage.base common.scrollView'))
     
-  , Constructor: function(){
+  , Constructor: function () {
       var $this = this;
 
       this.views = {
@@ -38,13 +38,13 @@
                  */
               , "name": {
                   "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
-                , "field:firstName": this.getValidatedField('firstName', 'First Name', gb.consumer.data.firstName)
+                , "field:firstName": this.getValidatedField('firstName', 'First Name', gb.consumer.data.firstName, null, ['name', "field:lastName"])
                 , "field:lastName": this.getValidatedField('lastName', 'Last Name', gb.consumer.data.lastName)
                 }
                 
               , "email": {
                   "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
-                , "field:email": this.getValidatedField('email', 'Email', gb.consumer.data.email)
+                , "field:email": this.getValidatedField('email', 'Email', gb.consumer.data.email, null, ['email', "field:emailConfirm"])
                 , "field:emailConfirm": this.getValidatedField('email', 'Confirm Email')
                 }
                 
@@ -60,8 +60,8 @@
                 
               , "password": {
                   "base": $ui.createView(gb.style.get('settings.edit.fields.base'))
-                , "field:password": this.getField('Current Password', "", true)
-                , "field:newPassword": this.getValidatedField('password', 'New Password', "", true)
+                , "field:password": this.getField('Current Password', "", true, ['password', "field:newPassword"])
+                , "field:newPassword": this.getValidatedField('password', 'New Password', "", true, ['password', "field:confirmPassword"])
                 , "field:confirmPassword": this.getValidatedField('password', 'Confirm', "", true)
                 }
                 /**
@@ -73,16 +73,9 @@
           } // Island
         
         , "navWrapper": {
-            "base": $ui.createView(gb.style.get('common.grayPage.island.bottomNavWrapper'))
+            "base": $ui.createView(gb.style.get('common.grayPage.island.bottomNavWrapper')),
             
-          , "backBtn": new GB.Button(
-              'Back'
-            , gb.style.get('settings.edit.backBtn')
-            , gb.style.get('common.grayPage.buttons.gray')
-            , { events: { click: function(){ $this.onBack(); } } }
-            ).views.base
-            
-          , "saveBtn": new GB.Button(
+            "saveBtn": new GB.Button(
               'Save'
             , gb.style.get('settings.edit.saveBtn')
             , gb.style.get('common.grayPage.buttons.green')
@@ -91,8 +84,11 @@
           }
         }
       };
+      
       gb.utils.compoundViews(this.views);
+      
       this.wrapper = this.views.pageWrapper.island.fill.wrapper;
+      
       for (var key in this.wrapper){
         if (key === "base") continue;
         if (this.wrapper[key].hasOwnProperty('base')) this.hideField(key);
@@ -100,7 +96,11 @@
     }
     
   , onShow: function(){
-
+      var $this = this;
+      
+      GB.Windows.get('main').toggleBack(function (e) {
+        $this.onBack();
+      });
     }
     
   , hideField: function(which){
@@ -138,7 +138,7 @@
       }
     }
     
-  , getField: function(hint, value, hidden){
+  , getField: function(hint, value, hidden, next){
       var $this = this, view = {
         "base": $ui.createView(gb.utils.extend(
           gb.style.get('settings.edit.fields.field')
@@ -158,10 +158,19 @@
         
       , "indicator": gb.style.get('common.grayPage.island.indicator')
       };
+      
+      if (next)
+        view.input.setReturnKeyType(Titanium.UI.RETURNKEY_NEXT),
+        view.input.addEventListener('return', function (e) {
+          view.input.blur();
+          console.log(next);
+          $this.views.pageWrapper.island.fill.wrapper[next[0]][next[1]].input.focus();
+        });
+        
       return view;
     }
     
-  , getValidatedField: function(fieldName, hint, value, hidden){
+  , getValidatedField: function (fieldName, hint, value, hidden, next) {
       var $this = this, view = {
         "base": $ui.createView(gb.utils.extend(
           gb.style.get('settings.edit.fields.field')
@@ -197,6 +206,14 @@
         
       , "indicator": gb.style.get('common.grayPage.island.indicator')
       };
+      
+      if (next)
+        view.input.setReturnKeyType(Titanium.UI.RETURNKEY_NEXT),
+        view.input.addEventListener('return', function (e) {
+          view.input.blur();
+          $this.views.pageWrapper.island.fill.wrapper[next[0]][next[1]].input.focus();
+        });
+      
       return view;
     }
     
