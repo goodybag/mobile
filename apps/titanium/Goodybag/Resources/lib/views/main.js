@@ -1,6 +1,7 @@
 GB.Windows.add('main', Window.extend({
   debug: true,
   animated: true,
+  callback: null,
   location: null,
   initial: 'settings',
   
@@ -12,6 +13,10 @@ GB.Windows.add('main', Window.extend({
     sidebar: {
       active: gb.utils.getImage('screens/main/buttons/sidebar_active.png'),
       inactive: gb.utils.getImage('screens/main/buttons/sidebar_default.png')
+    },
+    back: {
+      active: gb.utils.getImage('screens/main/buttons/back_active.png'),
+      inactive: gb.utils.getImage('screens/main/buttons/back_default.png')
     }
   },
 
@@ -58,16 +63,18 @@ GB.Windows.add('main', Window.extend({
         target: this.elements.header.buttons.qrcode,
         action: function (e) {
           if ($this.location == 'qrcode') return;
+          if ($this.callback) $this.toggleBack();
+          GB.Views.get('sidebar').clearActive();
           $this.showPage('qrcode');
           $this.toggleQRCode();
         }
-    }
-    , 'geolocation': {
-        type: 'location'
-      , target: Titanium.Geolocation
-      , action: gb.consumer._setGeolocation
       }
     };
+    
+    // Event for Geolocation (Can't be in handler above)
+    if(Titanium.Geolocation.locationServicesEnabled)
+      Titanium.Geolocation.addEventListener('location', gb.consumer._setGeolocation);
+    else alert('GPS is disabled, nearby places will not work correctly!');
 
     // Force orientation
     $window.orientationModes = [ Ti.UI.PORTRAIT ];
@@ -159,6 +166,34 @@ GB.Windows.add('main', Window.extend({
     this.elements.header.buttons.qrcode.setImage(
       this.images.qrcode[((this.location == 'qrcode') ? '' : 'in') + 'active'] 
     );
+  },
+  
+  toggleBack: function (callback) {
+    var $this = this;
+    
+    if (callback) {
+      this.callback = { main: callback, back: function (e) { $this.toggleBack.apply($this); } };
+      this.elements.header.buttons.sidebar.removeEventListener('click', this.events.sidebar.action);
+      this.elements.header.buttons.sidebar.addEventListener('click', this.callback.back);
+      this.elements.header.buttons.sidebar.setImage(
+        this.images.back.inactive
+      );
+      return;
+    }
+    
+    this.elements.header.buttons.sidebar.setImage(
+      this.images.back.active  
+    );
+    
+    this.callback.main();
+    
+    this.elements.header.buttons.sidebar.setImage(
+      this.images.sidebar[((!this.animated) ? '' : 'in') + 'active'] 
+    );
+    
+    this.elements.header.buttons.sidebar.removeEventListener('click', this.callback.back);
+    this.elements.header.buttons.sidebar.addEventListener('click', this.events.sidebar.action);
+    this.callback = null;
   },
   
   /**

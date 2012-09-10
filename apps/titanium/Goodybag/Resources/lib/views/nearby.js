@@ -3,21 +3,27 @@ var $http = gb.utils.http
 ,   $file = Titanium.Filesystem;
 
 GB.Views.add('nearby', {
+  /**
+   * Is the loader showing?
+   */
+  loading: false,
+  
+  /**
+   * Initial location when going traversing pages.
+   */
   location: 'Nearby',
+  
+  /**
+   * Holder Object for Data Modules
+   */
   models: {},
+  
+  /*
+   * Arraysets
+   */
   locations: [],
   iterable: [],
   views: [],
-  
-  elements: {
-    holder: gb.style.get('nearby.holder'),
-    
-    menu: {
-      base: gb.style.get('nearby.menu.base'),
-      nearby: new GB.StreamButton('Nearby Places'),
-      map: new GB.StreamButton('Map View')
-    }
-  },
   
   /*
    * Position of user, default is center of Austin, TX.
@@ -35,6 +41,16 @@ GB.Views.add('nearby', {
     var store = $file.getFile($file.applicationDataDirectory, 'places.json');
     this.self = gb.style.get('nearby.self');
     this.page = 0;
+    
+    this.elements = {
+      holder: gb.style.get('nearby.holder'),
+      
+      menu: {
+        base: gb.style.get('nearby.menu.base'),
+        nearby: new GB.StreamButton('Nearby Places'),
+        map: new GB.StreamButton('Map View')
+      }
+    };
     
     this.fetch(function (error, results) {
       store.deleteFile();
@@ -79,7 +95,7 @@ GB.Views.add('nearby', {
     
     // Setup User Location if Available and not in Development Mode
     gb.consumer.getGeolocation(function (coords) {
-      if (!gb.config.development) {
+      if (!gb.config.development && coords && coords.latitude && coords.longitude) {
         $this.position = {
           lat: coords.latitude,
           lon: coords.longitude
@@ -92,6 +108,9 @@ GB.Views.add('nearby', {
       )) {
         $this['show' + $this.location]();
       } else {
+        // Loader Start
+        if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
+        
         $this.fetch(function (error, results) {
           var i, model, locations; $this.models = {}; $this.locations = [];
           
@@ -125,6 +144,7 @@ GB.Views.add('nearby', {
           $this.previous = $this.position;
     
           $this['show' + $this.location]();
+          if (this.loading) GB.Windows.get('main').showLoader(), this.loading = false;
         }, true);
       }
     });
@@ -163,6 +183,10 @@ GB.Views.add('nearby', {
   onScroll: function (initial) {
     var $this = this, start = (this.page === 0) ? 0 : (30 * this.page), end =  30 * (this.page + 1);
     var middleman = $ui.createView({ width: $ui.FILL, height: $ui.SIZE, layout: 'vertical' });
+    
+    // Loader Start
+    if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
+    
     if (end > $this.locations.length) 
       if (end - $this.locations.length > 30) return;
       else end -= $this.locations.length;
@@ -171,8 +195,12 @@ GB.Views.add('nearby', {
         $this.onPlaceClick.apply($this, [ this ]); 
       }));
     }
+    
     this.elements.places.add(middleman);
     (initial) && (this.elements.holder.add(this.elements.places.view));
+    
+    // Loader End
+    if (this.loading) GB.Windows.get('main').hideLoader(), this.loading = false;
   },
   
   /**
@@ -194,11 +222,11 @@ GB.Views.add('nearby', {
     var elements = {
       base: $el.place,
       
-      menu: {
-        base: gb.style.get('nearby.menu.base'),
-        blank: $ui.createView({ width: $ui.FILL, height: '6dp'}),
-        back: back.base
-      },
+      // menu: {
+        // base: gb.style.get('nearby.menu.base'),
+        // blank: $ui.createView({ width: $ui.FILL, height: '6dp'}),
+        // back: back.base
+      // },
       
       holder: {
         base: gb.style.get(area + '.holder'),
@@ -272,25 +300,25 @@ GB.Views.add('nearby', {
       $el.menu.base.setVisible(false);
       $el.place.show();
       $this.self.add($el.place);
+      
+      // Back
+      GB.Windows.get('main').toggleBack(function () {
+        back.activate();
+        
+        // Clear Place
+        $el.place.setVisible(false);
+        $this.self.remove($el.place);
+        $el.place.close();
+        $el.place = null;
+        
+        // Set Holder up
+        $el.holder.backgroundColor = 'yellow';
+        $el.holder.setVisible(true);
+        
+        // Set Menu to visible
+        $el.menu.base.setVisible(true);
+      });
     }
-    
-    // Menu
-    elements.menu.back.addEventListener('click', function (e) {
-      back.activate();
-      
-      // Clear Place
-      $el.place.setVisible(false);
-      $this.self.remove($el.place);
-      $el.place.close();
-      $el.place = null;
-      
-      // Set Holder up
-      $el.holder.backgroundColor = 'yellow';
-      $el.holder.setVisible(true);
-      
-      // Set Menu to visible
-      $el.menu.base.setVisible(true);
-    });
     
     // URL Click Event
     elements.holder.url.base.addEventListener('click', function (e) {
@@ -425,7 +453,13 @@ GB.Views.add('nearby', {
    * @param  {Object} e Event Handler
    */
   onPlaceClick: function (place) {
+    // Loader Start
+    if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
+    
     this.showPlace(place);
+    
+    // Loader End
+    if (this.loading) GB.Windows.get('main').hideLoader(), this.loading = false;
   },
   
   createModal: function (url) {

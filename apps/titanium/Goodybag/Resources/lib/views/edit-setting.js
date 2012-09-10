@@ -2,11 +2,7 @@
   var $ui = Ti.UI;
   
   GB.Views.add('edit-setting', {
-    self: $ui.createScrollView(gb.utils.extend(
-      gb.style.get('settings.base')
-    , gb.style.get('common.grayPage.base')
-    , gb.style.get('common.scrollView')
-    ))
+    self: $ui.createScrollView(gb.style.get('settings.base common.grayPage.base common.scrollView'))
     
   , Constructor: function(){
       var $this = this;
