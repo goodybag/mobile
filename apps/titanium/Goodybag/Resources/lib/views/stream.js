@@ -30,13 +30,14 @@ GB.Views.add('stream', {
             text: "There is no activity :("
           , top: 51
           , bottom: 38
+          , textAlign: "center"
           }))
         }
       }
     };
     gb.utils.compoundViews(this.noActivity);
-    this.noActivity.base.hide();
     this.self.add(this.noActivity.base);
+    this.noActivity.base.hide();
     this.noActivtyShown = false;
     
     this.scrollWrapper = $ui.createView({
@@ -197,9 +198,8 @@ GB.Views.add('stream', {
     this.states.my.view.hide();
     state.view.show();
     this.current = "global";
-    if (state.hasData) return;
+    if (state.hasData) return this.hideNoActivity();
     gb.utils.debug("[stream view] - GLOBAL fetching data");
-    this.showNoActivity();
     this.fetchGlobalStream(state.limit, state.limit * state.page++, function(error, data){
       if (error){
         GB.Windows.get('main').hideLoader();
@@ -222,7 +222,7 @@ GB.Views.add('stream', {
     gb.utils.debug("hiding GLOBAL view showing MY");
     state.view.show();
     this.current = "my";
-    if (state.hasData) return;
+    if (state.hasData) return this.hideNoActivity();
     GB.Windows.get('main').showLoader();
     gb.utils.debug("[stream view] - MY - fetching data");
     this.fetchMyStream(state.limit, state.limit * state.page++, function(error, data){

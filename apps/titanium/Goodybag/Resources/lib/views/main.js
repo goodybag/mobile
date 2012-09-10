@@ -124,7 +124,7 @@ GB.Windows.add('main', Window.extend({
       gb.utils.debug('attempting to remove view ' + this.location);
       this.elements.views.main.remove(GB.Views.get(this.location).self)
       GB.Views.hide(this.location);
-    } 
+    }
     
     this.location = view;
     GB.Views.show(view);
