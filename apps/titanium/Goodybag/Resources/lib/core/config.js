@@ -100,6 +100,9 @@ gb.config = function (global, fb, storage) {
   , 'Inserting Impedance into Circuitry.'
   ];
   
+  // Refresh
+  this.autoRefreshTime = 1000 * 60;
+  
   return this;
 }(
   this, 
