@@ -175,7 +175,7 @@
       return view;
     }
     
-  , getValidatedField: function(fieldName, hint, value, hidden){
+  , getValidatedField: function(fieldName, hint, value, hidden, next){
       var $this = this, view = {
         "base": $ui.createView(gb.utils.extend(
           gb.style.get('settings.edit.fields.field')

@@ -393,10 +393,6 @@ GB.Views.add('nearby', {
         };
         
         gb.utils.compoundViews(place);
-        
-        if (i == data.length-1) 
-          place.base.bottom = 44;
-          
         goodies.add(place.base);
       }
       
