@@ -162,7 +162,7 @@ GB.Views.add('stream', {
       if (error) return gb.utils.debug(error);
       if (!data) return gb.Views.show('stream-no-data');
       console.log(data.length);
-      self.showItems(state.view.view, data);
+      self.showItems(state.view, data);
       done();
     });
   },
@@ -247,7 +247,7 @@ GB.Views.add('stream', {
         GB.getActivityView(GB.Models.getActivity(data[i]))
       );
     }
-    console.log("[Stream View] - Adding to scroll view");
+    console.log("[Stream View] - Adding to scroll view", intermediate);
     scrollView.add(intermediate);
   },
   
@@ -260,6 +260,7 @@ GB.Views.add('stream', {
       self.showItems(fetchMe ? self.states.my.view : self.states.global.view, data);
     });
   },
+  
   
   fetchGlobalStream: function(limit, skip, cb){
     this.fetchStream(false, limit, skip, cb);

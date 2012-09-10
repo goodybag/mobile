@@ -77,6 +77,7 @@
      * Proxy Methods
      */
     add: function (view) {
+      console.log("[InfiniScroll] - Adding", view);
       if (!this.checkingHeight){
         this.startHeightCheck();
       }
@@ -87,6 +88,7 @@
         }
         this.wrapper.add(intermediate);
       }else{
+        console.log("################# ADDD ", view);
         this.wrapper.add(view);
       }
     },
@@ -154,9 +156,15 @@
     },
     
     clearChildren: function(){
-      console.log("clearing children");
+      console.log("clearing children", this.wrapper);
+      console.log("[InfiniScroll] - Children", this.view.children.length);
       this.view.remove(this.wrapper);
-      this.view.add(this.wrapper = this.getNewWrapper());
+      console.log("[InfiniScroll] - Children", this.view.children.length);
+      console.log("[InfiniScroll] - Wrapper Children", this.wrapper.children.length);
+      this.wrapper = this.getNewWrapper();
+      console.log("[InfiniScroll] - Wrapper Children", this.wrapper.children.length);
+      this.view.add(this.wrapper);
+      console.log("[InfiniScroll] - Children", this.view.children.length);
       this.height = 0;
     },
     
@@ -174,12 +182,17 @@
      * @private
      */
     _onScroll: function (e) {
+      if (this.clearingChildren) return;
       if (this.scrollEndTriggered) return;
       // In case there was some scrolling while the handler was being removed
       if (this.isCalculatingHeight()) return;
-      if (e.y >= this.triggerAt - this.view.size.height) {
+      var trigger = this.triggerAt - this.view.size.height;
+      if (trigger <= 0) return;
+      if (e.y >= trigger) {
+        console.log(e.y, this.triggerAt, this.view.size.height);
         this.scrollEndTriggered = true;
         this.removeEvents()
+        console.log("############TRIGGERING SCROLL TO END#############");
         this.triggerScrollEnd(e.y);
       } 
     }
