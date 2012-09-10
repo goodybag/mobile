@@ -234,6 +234,7 @@
         gb.consumer.setName({ firstName: firstName, lastName: lastName }, function(error){
           if (error) return alert(error);
         });
+        GB.Views.get('settings').updateSetting('name', firstName + " " + lastName);
       break;
       case 'email':
         var

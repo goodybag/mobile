@@ -33,7 +33,7 @@
     this.wrapper = this.getNewWrapper();
     if (this.options.refresher){
       this.refresher = new GB.PullToRefresh(this.view, {
-        // onLoad: this.options.onLoad
+        onLoad: this.options.onLoad
       })
       this.view.add(this.refresher.views.base);
     }
@@ -102,19 +102,27 @@
     scrollTo: function (x, y) {
       return this.view.scrollTo(x, y);
     },
+    
+    addEvents: function(){
+      this.view.addEventListener('scroll', this.onScrollCurry);
+    },
+    
+    removeEvents: function(){
+      this.view.removeEventListener('scroll', this.onScrollCurry);
+    },
 
     /**
      * Re-calculates the new triggerAt property if needed and calls user onNewHeight function
      * Also re-attaches the onscroll event
      */
-    triggerNewHeight: function () {
+    triggerNewHeight: function (silent) {
       this.triggerAt = (this.triggerIsPercentage)
                      ? parseInt(this.height * this.triggerRatio)
                      : this.height - this.options.triggerAt;
       this.calculatingHeight = false;
       this.scrollEndTriggered = false;
-      this.view.addEventListener('scroll', this.onScrollCurry);
-      this.options.onNewHeight(this.height, this);
+      this.addEvents();
+      if (!silent) this.options.onNewHeight(this.height, this);
     },
 
     triggerScrollEnd: function (scrollY) {
@@ -131,9 +139,11 @@
     },
     
     startHeightCheck: function(){
+      console.log("[InfiniScroll] - Start checking height");
       this.checkingHeight = true;
       var $this = this, checkInterval = setInterval(function(){
         var newHeight = $this.wrapper.getSize().height;
+        console.log("[InfiniScroll] - Checking Height", newHeight, $this.height);
         if (newHeight !== $this.height){
           $this.height = newHeight;
           clearInterval(checkInterval);
@@ -144,6 +154,7 @@
     },
     
     clearChildren: function(){
+      console.log("clearing children");
       this.view.remove(this.wrapper);
       this.view.add(this.wrapper = this.getNewWrapper());
       this.height = 0;
@@ -158,23 +169,6 @@
     },
 
     /**
-     * Bound to the postlayout even on the Base View
-     * Updates the height and nextChild property when a layout change occurs
-     * @private
-     */
-    _onPostLayout: function (e) {
-      if (!this.postLayoutAdded) return;
-      var height = this.wrapper.getSize().height;
-      // Don't do anything if the height hasn't changed yet
-      if (height === this.height) return;
-      this.postLayoutAdded = false;
-      this.wrapper.removeEventListener('postlayout', this.onPostLayoutCurry);
-      // Introducing the wrapper, you don't need to add up children boxes.. silly me!
-      this.height = height;
-      this.triggerNewHeight();
-    },
-
-    /**
      * Checks against scroll events and triggers and removes when necessary,
      * such as when scrolling happens during handler removal or end triggering.
      * @private
@@ -185,7 +179,7 @@
       if (this.isCalculatingHeight()) return;
       if (e.y >= this.triggerAt - this.view.size.height) {
         this.scrollEndTriggered = true;
-        this.view.removeEventListener('scroll', this.onScrollCurry);
+        this.removeEvents()
         this.triggerScrollEnd(e.y);
       } 
     }

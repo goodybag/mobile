@@ -17,7 +17,7 @@ GB.PeriodicRefresher.prototype = {
 , stop: function(){
     gb.utils.debug("[Periodic Updater] - stop");
     if (!this.isRunning) return;
-    clearInterval(this._curriedTick);
+    clearInterval(this.periodic);
     this.isRunning = false;
   }
 , isRunning: function(){
@@ -26,6 +26,6 @@ GB.PeriodicRefresher.prototype = {
 , _onTick: function(){
     gb.utils.debug("[Periodic Updater] - tick");
     this.store = {};
-    this.api(function(){ GB.Windows.get('main').hideLoader(); });
+    this.api(function(){  });
   }
 };

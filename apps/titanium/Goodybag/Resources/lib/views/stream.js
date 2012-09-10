@@ -10,10 +10,6 @@ GB.Views.add('stream', {
   
   current: null,
   
-  /**
-   * Grab and store places location and initialize View.
-   * @constructor
-   */
   Constructor: function () {
     gb.utils.debug(gb.utils.getImage('screens/stream/Main.png'));
     var self = this;
@@ -22,6 +18,26 @@ GB.Views.add('stream', {
       backgroundColor: '#ddd'
     , width: $ui.FILL
     });
+    
+    this.noActivity = {
+      "base": $ui.createView(gb.style.get('common.grayPage.island.base', { left: 10, right: 10 }))
+    , "shadow": $ui.createView(gb.style.get('common.grayPage.island.shadow'))
+    , "fill": {
+        "base": $ui.createView(gb.style.get('common.grayPage.island.fill'))
+      , "wrapper": {
+          "base": $ui.createView(gb.style.get('common.grayPage.island.wrapper'))
+        , "header": $ui.createLabel(gb.style.get('common.grayPage.island.header1', {
+            text: "There is no activity :("
+          , top: 51
+          , bottom: 38
+          }))
+        }
+      }
+    };
+    gb.utils.compoundViews(this.noActivity);
+    this.noActivity.base.hide();
+    this.self.add(this.noActivity.base);
+    this.noActivtyShown = false;
     
     this.scrollWrapper = $ui.createView({
       top: 54
@@ -43,7 +59,6 @@ GB.Views.add('stream', {
       global: new GB.StreamButton('Global Activity'),
       my: new GB.StreamButton('My Activity')
     };
-    
     
     this.states = {
       my: {
@@ -126,18 +141,6 @@ GB.Views.add('stream', {
     this.states.global.view.view.hide();
     this.states.my.view.view.hide();
     
-    // this.refreshButton = $ui.createLabel({
-      // width: '15dp'
-    // , height: '15dp'
-    // , text: 0xe14d
-    // , zIndex: 2000
-    // , top: 10
-    // , right: 10
-    // , color: '#fff'
-    // , borderWidth: 1
-    // });
-    // this.self.add(this.refreshButton);
-    
     this.onDestroy = function(){
       this.self.remove(this.scrollWrapper);
       this.scrollWrapper = null;
@@ -158,6 +161,7 @@ GB.Views.add('stream', {
     this["fetch" + curr + "Stream"](state.limit = 15, state.page = 0, function(error, data){
       if (error) return gb.utils.debug(error);
       if (!data) return gb.Views.show('stream-no-data');
+      console.log(data.length);
       self.showItems(state.view.view, data);
       done();
     });
@@ -168,6 +172,21 @@ GB.Views.add('stream', {
     if (this.states[this.current].hasData) return;
     this.loaderShowing = true;
     this["show" + curr[0].toUpperCase() + curr.substring(1) + "View"]();
+    var $this = this;
+  },
+  
+  showNoActivity: function(){
+    if (this.noActivityShown) return;
+    this.scrollWrapper.hide();
+    this.noActivity.base.show();
+    this.noActivityShown = true;
+  },
+  
+  hideNoActivity: function(){
+    if (!this.noActivityShown) return;
+    this.noActivity.base.hide();
+    this.scrollWrapper.show();
+    this.noActivityShown = false;
   },
   
   showGlobalView: function(){
@@ -179,12 +198,17 @@ GB.Views.add('stream', {
     state.view.show();
     this.current = "global";
     if (state.hasData) return;
-    GB.Windows.get('main').showLoader();
     gb.utils.debug("[stream view] - GLOBAL fetching data");
+    this.showNoActivity();
     this.fetchGlobalStream(state.limit, state.limit * state.page++, function(error, data){
-      if (error) return gb.utils.debug(error);
-      // if (!data) return gb.Views.show('stream-no-data');
-      if (data.length === 0) GB.Windows.get('main').hideLoader();
+      if (error){
+        GB.Windows.get('main').hideLoader();
+        gb.utils.debug(error);
+      }
+      if (!data || data.length === 0){
+        self.showNoActivity();
+        return GB.Windows.get('main').hideLoader();
+      }else if (self.noActivityShown) self.hideNoActivity();
       state.hasData = true;
       self.showItems(self.states.global.view, data);
     });
@@ -202,9 +226,14 @@ GB.Views.add('stream', {
     GB.Windows.get('main').showLoader();
     gb.utils.debug("[stream view] - MY - fetching data");
     this.fetchMyStream(state.limit, state.limit * state.page++, function(error, data){
-      if (error) return gb.utils.debug(error);
-      // if (!data) return gb.Windows.get('main').showPage('stream-no-data');
-      if (data.length === 0) GB.Windows.get('main').hideLoader();
+      if (error){
+        GB.Windows.get('main').hideLoader();
+        gb.utils.debug(error);
+      }
+      if (!data || data.length === 0){
+        self.showNoActivity();
+        return GB.Windows.get('main').hideLoader();
+      }else if (self.noActivityShown) self.hideNoActivity();
       state.hasData = true;
       if (data.length > 0) return self.showItems(state.view, data);
     });

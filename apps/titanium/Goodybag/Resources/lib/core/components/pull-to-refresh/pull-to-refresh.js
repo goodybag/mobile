@@ -129,10 +129,8 @@
      * @param {Object} scrollView
      */
     setScrollView: function(scrollView){
-      this.log("setting scroll view", scrollView);
       // If we had a previous scroll view, remove the pull to refresh
       if (this.scrollView){
-        this.log('removing base view');
         this.views.base.remove();
       }
       this.scrollView = scrollView;
@@ -149,17 +147,14 @@
       this.scrollView.addEventListener('dragEnd', function(e){
         $this._onDragEnd(e);
       });
-      this.log('events added!');
     }
   , enterPullMode: function(){
-      this.log('entering pull mode')
       this.pulling = false;
       var t = Ti.UI.create2DMatrix();
       this.views.arrow.animate({ transform: t, duration: 180 });
       this.views.status.setText(this.options.defaultText);
     }
   , enterReleaseMode: function(){
-      this.log("entering release mode");
       var t = Ti.UI.create2DMatrix();
       t = t.rotate(-180);
       this.pulling = true;
@@ -182,7 +177,7 @@
         dateStr += ' ' + (date.getHours() == 12 ? date.getHours() : date.getHours() - 12)
                        + ':' + date.getMinutes() +' PM';
       }else{
-        datestr += ' ' + date.getHours() + ':' + date.getMinutes() + ' AM';
+        dateStr += ' ' + date.getHours() + ':' + date.getMinutes() + ' AM';
       }
       return dateStr;
     }
@@ -207,8 +202,6 @@
       }
     }
   , _onDragEnd: function(e){
-      console.log(e);
-      this.log("on drag end!", e.y);
       if (this.pulling && !this.reloading){
         this.scrollView.setTouchEnabled(false);
         var $this = this;
@@ -218,9 +211,6 @@
           $this.scrollView.setTouchEnabled(true);
         });
       }
-    }
-  , log: function(msg, other){
-      console.log("[PullToRefresh] - " + msg, other);
     }
   };
   GB.PullToRefresh = constructor;
