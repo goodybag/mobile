@@ -114,7 +114,7 @@ gb.Windows.add('login', Window.extend({
             $self.hideLoader();
             if (error || !consumer) {
               if (error) alert(error);
-              if (!consumer) alert('Error checking account details!');
+              else if (!consumer) alert('Error checking account details!');
               return;
             } else if (consumer) gb.consumer = consumer;
             
@@ -127,8 +127,8 @@ gb.Windows.add('login', Window.extend({
         type: 'return'
       , target: $el.inputs.email
       , action: function (e) {
+          $el.inputs.email.blur();
           $el.inputs.password.focus();
-          $el.loginWrapper.scrollTo(0, 80);
         }
       }
     , "passwordOnReturn": {
