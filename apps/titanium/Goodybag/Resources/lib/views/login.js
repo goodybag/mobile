@@ -114,7 +114,7 @@ gb.Windows.add('login', Window.extend({
             $self.hideLoader();
             if (error || !consumer) {
               if (error) alert(error);
-              if (!consumer) alert('Error checking account details!');
+              else if (!consumer) alert('Error checking account details!');
               return;
             } else if (consumer) gb.consumer = consumer;
             
