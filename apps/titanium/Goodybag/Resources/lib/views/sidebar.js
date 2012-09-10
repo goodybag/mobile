@@ -57,7 +57,7 @@ GB.Views.add('sidebar', {
     for (var slot in $el.bank.slots) $self.add($el.bank.slots[slot]);
     
     // Side-bar items
-    [ 'nearby', 'sponsored', 'activity', 'settings' ].forEach(function (item) {
+    [ 'nearby', 'activity', 'settings' ].forEach(function (item) {
       $el.list[item] = gb.style.get('sidebar.list.base sidebar.list.' + item);
       $el.list[item].addEventListener('click', function (e) {
         $this.clearActive();

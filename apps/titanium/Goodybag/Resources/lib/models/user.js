@@ -312,6 +312,8 @@ if(!GB.Models)
     renew: function () {
       var self = this, $dataMethod = this.data.authMethod;
       
+      gb.utils.debug('[User] Renewing Session');
+      
       $http.get.sessioned(gb.config.api.consumer.self, this.session, function (error, results) {
         if (error) {
           gb.utils.warn('[User] Session Error: ' + error);
@@ -320,7 +322,11 @@ if(!GB.Models)
           self.logout();
           GB.Windows.show('login');
         } else {
+          gb.utils.debug('[User] Obtained new session data');
           cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
+          
+          console.log(this.getResponseHeader('Set-Cookie'));
+          console.log(cookie.get('connect.sid'));
   
           // Update session and consumer
           self._setSession(cookie.get('connect.sid'));
