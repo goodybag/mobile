@@ -83,7 +83,7 @@ GB.Views.add('settings', {
           }
         }
       
-      // , "facebookBtn": gb.style.get('common.labelBtns.blue settings.facebookBtn')
+      , "facebookBtn": gb.style.get('common.labelBtns.blue settings.facebookBtn')
         
       , "signOutBtn": gb.style.get('common.labelBtns.red settings.signOutBtn', {
           events: { click: function(){ $this.onSignOut() } }
@@ -98,17 +98,45 @@ GB.Views.add('settings', {
     
     
     // Facebook stuff
-    // this.views.pageWrapper.facebook.addEventListener('click', function(){
-      // Ti.Facebook.authorize();
-    // });
-    // Ti.Facebook.addEventListener('login', function(e){
-//       
-    // });
+    // Right now, it's only facebook stuff on here so I'm using that to my advantage in onShow
+    // Bad but it works
+    this.events = {
+      "connectWithFacebookClick": {
+        type: 'click'
+      , target: this.views.pageWrapper.facebookBtn
+      , action: function(e){
+          alert('cleek');
+          Ti.Facebook.authorize();
+        }
+      }
+    , "connectWithFacebokAuth": {
+        type: 'login'
+      , target: Ti.Facebook
+      , action: function(e){
+          GB.Windows.get('main').showLoader();
+          console.log("####################################");
+          console.log(Ti.Facebook.getAccessToken());
+          gb.api.consumer.facebookConnect(Ti.Facebook.getAccessToken(), function(error, data){
+            if (error) return GB.Windows.get('main').hideLoader(), gb.utils.error(error);
+            // Remove facebook stuff from settings
+            $this.destroyEvents();
+            $this.views.pageWrapper.base.remove($this.views.pageWrapper.facebookBtn);
+            // Update user profile and sidebar picture
+            this.settings['setting:avatar'].field.setImage(data.media.url);
+            GB.Views.get('sidebar').elements.header.avatar.image.setImage(data.media.url);
+            gb.consumer.setAvatar(data.media.url);
+            gb.consumer.data.facebook = data.facebook;
+            GB.Windows.get('main').hideLoader();
+          });
+        }
+      }
+    };
   }
   
 , onShow: function(){
     // Remove Facebook if we don't need it
-    if (gb.consumer.data.facebook) this.views.pageWrapper.base.remove(this.views.pageWrapper.facebookBtnBar);  
+    if (gb.consumer.data.facebook) this.views.pageWrapper.base.remove(this.views.pageWrapper.facebookBtn);  
+    else this.delegateEvents();
     this._displayUserData();
   }
   
@@ -119,6 +147,10 @@ GB.Views.add('settings', {
 , editField: function(field){
     GB.Views.get('edit-setting').setField(field);
     GB.Windows.get('main').showPage('edit-setting');
+  }
+  
+, onHide: function(){
+    this.destroyEvents();
   }
   
 , editAvatar: function(){
@@ -137,12 +169,28 @@ GB.Views.add('settings', {
   }
   
 , onFacebookClick: function(){
-    
+    Ti.Facebook.authorize();  
   }
   
 , onSignOut: function(){
     gb.consumer.logout();
     GB.Windows.show('login');
+  }
+  
+, delegateEvents: function () {
+    var e;
+    for (var key in this.events){
+      e = this.events[key];
+      e.target.addEventListener(e.type, e.action);
+    }
+  }
+  
+, destroyEvents: function () {
+    var e;
+    for (var key in this.events){
+      e = this.events[key];
+      e.target.removeEventListener(e.type, e.action);
+    }
   }
   
 , _displayUserData: function(){;

@@ -44,7 +44,7 @@ GB.Windows.add('complete-registration', Window.extend({
     }
     
     var onComplete = function(){ console.log("ON COMPLETE SHOWING NEXT"); $this.showNextScreen(); };
-    GB.Views.get('charities').setOnComplete(onComplete);
+    // GB.Views.get('charities').setOnComplete(onComplete);
     GB.Views.get('set-screen-name').setOnComplete(onComplete);
     GB.Views.get('enter-tapin-id').setOnComplete(onComplete);
     this.showNextScreen();
@@ -67,8 +67,8 @@ GB.Windows.add('complete-registration', Window.extend({
     console.log("[Complete Registration] - Checking for Set Screen Name");
     if (!gb.consumer.hasSetScreenName())  return this.showPage('set-screen-name');
     // Show Charity if necessary
-    console.log("[Complete Registration] - Checking for Set Charities");
-    if (!gb.consumer.hasCharity())        return this.showPage('charities');
+    // console.log("[Complete Registration] - Checking for Set Charities");
+    // if (!gb.consumer.hasCharity())        return this.showPage('charities');
     // Show QR Code
     console.log("[Complete Registration] - Checking for Set TapIn ID");
     if (!gb.consumer.getBarcodeID())      return this.showPage('enter-tapin-id');

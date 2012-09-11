@@ -43,6 +43,9 @@
   api.consumer.fbLogin = function(accessToken, callback){
     api.post(gb.config.api.facebookAuth, { accessToken: acessToken }, callback);
   };
+  api.consumer.facebookConnect = function(accessToken, callback){
+    api.post(gb.config.api.facebookConnect, { accessToken: accessToken }, callback);
+  };
   
   api.businesses = {}; store.businesses = {};
   api.businesses.list = function(options, callback, forceNew){
