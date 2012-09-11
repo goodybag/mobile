@@ -164,9 +164,14 @@ gb.Windows.add('login', Window.extend({
     // Force Orientation
     this.window.orientationModes = [ Ti.UI.PORTRAIT ];
     
+    this.onShow = function () {
+      $self.delegateEvents();
+    };
+    
     this.onHide = function () {
       $self.elements.inputs.email.blur();
       $self.elements.inputs.password.blur();
+      $self.destroyEvents();
     };
     
     this.onDestroy = function () {

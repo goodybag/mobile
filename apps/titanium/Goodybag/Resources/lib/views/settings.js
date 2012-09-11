@@ -114,8 +114,6 @@ GB.Views.add('settings', {
       , target: Ti.Facebook
       , action: function(e){
           GB.Windows.get('main').showLoader();
-          console.log("####################################");
-          console.log(Ti.Facebook.getAccessToken());
           gb.api.consumer.facebookConnect(Ti.Facebook.getAccessToken(), function(error, data){
             if (error) return GB.Windows.get('main').hideLoader(), gb.utils.error(error);
             // Remove facebook stuff from settings
