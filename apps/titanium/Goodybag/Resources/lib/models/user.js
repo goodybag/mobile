@@ -625,7 +625,7 @@ if(!GB.Models)
      * @return {Boolean}
      */
     hasCompletedRegistration: function(){
-      return this.hasSetScreenName() && this.hasCharity() && this.getBarcodeID();
+      return this.hasSetScreenName() && this.getBarcodeID();
     },
     
     /**

@@ -86,7 +86,9 @@ GB.Views.add('settings', {
       , "facebookBtn": gb.style.get('common.labelBtns.blue settings.facebookBtn')
         
       , "signOutBtn": gb.style.get('common.labelBtns.red settings.signOutBtn', {
-          events: { click: function(){ $this.onSignOut() } }
+          events: { click: function(){
+            $this.onSignOut()
+          } }
         })
       }
     };
@@ -172,6 +174,7 @@ GB.Views.add('settings', {
   
 , onSignOut: function(){
     gb.consumer.logout();
+    // if (gb.consumer.usedFacebook()) Ti.Facebook.logout();
     GB.Windows.show('login');
   }
   
