@@ -126,15 +126,13 @@ GB.Views.add('stream', {
         }
       , onNewHeight: this.newHeightCurry
       , name: "My Scroll"
+      , refresher: true
+      , onLoad: function(done){
+          self.onRefresh(done);
+        }
       }
     );
-    
-    // Pull to Refresh
-    this.states.my.refresher = new GB.PullToRefresh(this.states.my.view.view, {
-      onLoad: function(done){
-        self.onRefresh(done);
-      }
-    });
+
     this.scrollWrapper.add(this.states.global.view.view);
     this.scrollWrapper.add(this.states.my.view.view);
     this.self.add(this.nav.container);
