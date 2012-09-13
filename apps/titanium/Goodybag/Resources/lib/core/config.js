@@ -15,6 +15,7 @@ gb.config = function (global, fb, storage) {
   // Facebook
   fb.forceDialogAuth = false;
   fb.appid = '152282721508707';
+  // fb.appid = '159340790837933';
   // fb.appid = this.development ? '159340790837933' : '152282721508707';
   fb.permissions = [
     'email',

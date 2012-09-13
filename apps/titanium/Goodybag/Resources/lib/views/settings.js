@@ -174,7 +174,7 @@ GB.Views.add('settings', {
   
 , onSignOut: function(){
     gb.consumer.logout();
-    // if (gb.consumer.usedFacebook()) Ti.Facebook.logout();
+    if (gb.consumer.data.facebook) Ti.Facebook.logout();
     GB.Windows.show('login');
   }
   
