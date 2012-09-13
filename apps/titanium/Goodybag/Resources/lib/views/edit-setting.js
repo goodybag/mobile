@@ -120,24 +120,31 @@
           this.views.pageWrapper.header.setText('Settings - Name');
           fields['field:firstName'].input.setValue(gb.consumer.data.firstName);
           fields['field:lastName'].input.setValue(gb.consumer.data.lastName);
+          fields['field:firstName'].indicator.setOpacity(0);
+          fields['field:lastName'].indicator.setOpacity(0);
         break;
         case 'email':
           this.views.pageWrapper.header.setText('Settings - Email');
           fields['field:email'].input.setValue(gb.consumer.data.email);
+          fields['field:email'].indicator.setOpacity(0);
         break;
         case 'screenName':
           this.views.pageWrapper.header.setText('Settings - Alias');
           fields['field:screenName'].input.setValue(gb.consumer.data.setScreenName ? gb.consumer.data.screenName : "");
+          fields['field:screenName'].indicator.setOpacity(0);
         break;
         case 'barcodeId':
           this.views.pageWrapper.header.setText('Settings - Tap-In ID');
           fields['field:barcodeId'].input.setValue(gb.consumer.data.barcodeId || "");
+          fields['field:barcodeId'].indicator.setOpacity(0);
         break;
         case 'password':
           this.views.pageWrapper.header.setText('Settings - Password');
           fields['field:password'].input.setValue('');
           fields['field:newPassword'].input.setValue('');
           fields['field:confirmPassword'].input.setValue('');
+          fields['field:newPassword'].indicator.setOpacity(0);
+          fields['field:confirmPassword'].indicator.setOpacity(0);
         break;
         default: break;
       }

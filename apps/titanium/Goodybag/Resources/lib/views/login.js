@@ -73,9 +73,7 @@ gb.Windows.add('login', Window.extend({
           if ($self.fbLoginCheck) clearInterval($self.fbLoginCheck);
           fbCurrTime = 0;
           $self.fbLoginCheck = setInterval(function(){
-            console.log("[Facebook Check] tick", fbCurrTime);
             if (Ti.Facebook.getLoggedIn()){
-              console.log("[Facebook Check] DING DING DING");
               clearInterval($self.fbLoginCheck);
               $self.checkingFbLogin = false;
               $self.facebookLogin();
@@ -92,11 +90,14 @@ gb.Windows.add('login', Window.extend({
           $self.showLoader();
           if(gb.config.debug) console.log('[login] attempting to authenticate user.');
           
+          $self.loggingIn = true;
+          
           gb.consumer.email = gb.utils.trim($el.inputs.email.getValue());
           gb.consumer.password = gb.utils.trim($el.inputs.password.getValue());
           $el.inputs.password.setValue("");
           
           gb.consumer.auth(function(error, consumer) {
+            $self.loggingIn = false;
             $self.hideLoader();
             if (error || !consumer) {
               if (error) alert(error);
