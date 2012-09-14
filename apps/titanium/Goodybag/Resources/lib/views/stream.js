@@ -149,6 +149,7 @@ GB.Views.add('stream', {
   },
   
   onRefresh: function (done) {
+    GB.Windows.get('main').showLoader();
     var
       curr  = this.current = this.current || 'global'
     , state = this.states[curr]
@@ -158,9 +159,8 @@ GB.Views.add('stream', {
     curr = curr[0].toUpperCase() + curr.substring(1);
     state.view.clearChildren();
     this["fetch" + curr + "Stream"](state.limit = 15, state.page = 0, function(error, data){
-      if (error) return gb.utils.debug(error);
-      if (!data) return gb.Views.show('stream-no-data');
-      console.log(data.length);
+      if (error) return done(), gb.utils.debug(error);
+      if (!data) return done(), gb.Views.show('stream-no-data');
       self.showItems(state.view, data);
       done();
     });
@@ -175,6 +175,7 @@ GB.Views.add('stream', {
   },
   
   showNoActivity: function(){
+    
     if (this.noActivityShown) return;
     this.scrollWrapper.hide();
     this.noActivity.base.show();

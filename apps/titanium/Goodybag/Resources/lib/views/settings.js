@@ -90,6 +90,11 @@ GB.Views.add('settings', {
             $this.onSignOut()
           } }
         })
+        
+      , "padding": $ui.createTextField({
+          width: $ui.FILL
+        , height: 10
+        })
       }
     };
     gb.utils.compoundViews(this.views);
