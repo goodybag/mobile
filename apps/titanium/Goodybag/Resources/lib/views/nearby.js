@@ -191,7 +191,8 @@ GB.Views.add('nearby', {
       if (end - $this.locations.length > 30) return;
       else end -= $this.locations.length;
     for (i = start; i < end; i++) {
-      middleman.add($this.locations[i].toRow(i%2, function (e) { 
+      middleman.add($this.locations[i].toRow(i%2, function (e) {
+        GB.Windows.get('main').showLoader();
         $this.onPlaceClick.apply($this, [ this ]); 
       }));
     }
@@ -317,6 +318,8 @@ GB.Views.add('nearby', {
         
         // Set Menu to visible
         $el.menu.base.setVisible(true);
+        
+        GB.Windows.get('main').hideLoader();
       });
     }
     
