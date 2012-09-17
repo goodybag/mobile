@@ -338,8 +338,9 @@ GB.Views.add('nearby', {
     );
     
     // Calling
+    var number = place.getNumber().replace(/ |\(|\)|\-/g, "");
     elements.holder.number.base.addEventListener('click', function(){
-      Ti.Platform.openURL('tel:' + place.getNumber().replace(/ |\(|\)|\-/g, ""));
+      Ti.Platform.openURL('tel:' + number);
     });
     
     // URL?
