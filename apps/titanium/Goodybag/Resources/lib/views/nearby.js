@@ -192,7 +192,6 @@ GB.Views.add('nearby', {
       else end -= $this.locations.length;
     for (i = start; i < end; i++) {
       middleman.add($this.locations[i].toRow(i%2, function (e) {
-        GB.Windows.get('main').showLoader();
         $this.onPlaceClick.apply($this, [ this ]); 
       }));
     }
@@ -208,6 +207,10 @@ GB.Views.add('nearby', {
    * Creates and displays a single location page.
    */
   showPlace: function (place, location) {
+    // Loader Start
+    if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
+    
+    
     var $this = this
     ,   $el = this.elements;
     
@@ -306,6 +309,8 @@ GB.Views.add('nearby', {
       GB.Windows.get('main').toggleBack(function () {
         back.activate();
         
+        GB.Windows.get('main').showLoader();
+        
         // Clear Place
         $el.place.setVisible(false);
         $this.self.remove($el.place);
@@ -321,6 +326,9 @@ GB.Views.add('nearby', {
         
         GB.Windows.get('main').hideLoader();
       });
+    
+      // Loader End
+      if ($this.loading) GB.Windows.get('main').hideLoader(), $this.loading = false;
     }
     
     // URL Click Event
@@ -458,13 +466,7 @@ GB.Views.add('nearby', {
    * @param  {Object} e Event Handler
    */
   onPlaceClick: function (place) {
-    // Loader Start
-    if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
-    
     this.showPlace(place);
-    
-    // Loader End
-    if (this.loading) GB.Windows.get('main').hideLoader(), this.loading = false;
   },
   
   createModal: function (url) {
