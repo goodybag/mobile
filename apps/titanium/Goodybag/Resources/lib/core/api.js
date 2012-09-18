@@ -3,7 +3,7 @@
     api   = gb.api    = gb.api    || {}
   , store = api.store = api.store || {}
   , getCleanName = function(name, options){
-      return "api-" + name + "-skip-" + options.skip + "-limit-" + options.limit;
+      return "api-" + name + "-offset-" + options.offset + "-limit-" + options.limit;
     }
   ;
   api.get = function(url, callback){

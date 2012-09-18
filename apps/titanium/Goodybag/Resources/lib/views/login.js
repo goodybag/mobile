@@ -87,8 +87,9 @@ gb.Windows.add('login', Window.extend({
         type: 'click'
       , target: $el.buttons.submit
       , action: function (e) {
+          if ($self.loggingIn) return;
           $self.showLoader();
-          if(gb.config.debug) console.log('[login] attempting to authenticate user.');
+          if (gb.config.debug) console.log('[login] attempting to authenticate user.');
           
           $self.loggingIn = true;
           

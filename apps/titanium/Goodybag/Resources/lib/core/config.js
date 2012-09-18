@@ -10,7 +10,7 @@ gb.config = function (global, fb, storage) {
   
   // debugging modes
   this.debug = true;
-  this.development = false;
+  this.development = true;
   
   // Facebook
   fb.forceDialogAuth = false;

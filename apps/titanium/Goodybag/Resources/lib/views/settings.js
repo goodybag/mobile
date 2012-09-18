@@ -112,7 +112,7 @@ GB.Views.add('settings', {
         type: 'click'
       , target: this.views.pageWrapper.facebookBtn
       , action: function(e){
-          alert('cleek');
+          Ti.Facebook.logout();
           Ti.Facebook.authorize();
         }
       }
@@ -122,12 +122,15 @@ GB.Views.add('settings', {
       , action: function(e){
           GB.Windows.get('main').showLoader();
           gb.api.consumer.facebookConnect(Ti.Facebook.getAccessToken(), function(error, data){
-            if (error) return GB.Windows.get('main').hideLoader(), gb.utils.error(error);
+            if (error){
+              gb.utils.error(error);
+              return GB.Windows.get('main').hideLoader();
+            }
             // Remove facebook stuff from settings
             $this.destroyEvents();
             $this.views.pageWrapper.base.remove($this.views.pageWrapper.facebookBtn);
             // Update user profile and sidebar picture
-            this.settings['setting:avatar'].field.setImage(data.media.url);
+            $this.settings['setting:avatar'].field.setImage(data.media.url);
             GB.Views.get('sidebar').elements.header.avatar.image.setImage(data.media.url);
             gb.consumer.setAvatar(data.media.url);
             gb.consumer.data.facebook = data.facebook;

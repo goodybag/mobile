@@ -278,7 +278,7 @@ GB.Views.add('stream', {
       limit     = 15;
       skip      = 0;
     }
-    gb.api.stream[fetchMe ? 'my' : 'global']({ limit: limit, skip: skip }, function(error, data){
+    gb.api.stream[fetchMe ? 'my' : 'global']({ limit: limit, offset: skip }, function(error, data){
       self.isFetching = false;
       if (typeof callback === "function") callback(error, data);
     });

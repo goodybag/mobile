@@ -85,8 +85,6 @@ if(!GB.Models)
      * otherwise.
      * 
      * @param  {Function} callback returns the data or errors.
-     * @TODO   Check for charity and show page if missing.
-     * @TODO   Check for QRCode and generate one if missing.
      */
     auth: function (callback) {
       var self = this;
@@ -796,9 +794,9 @@ if(!GB.Models)
         // Delete old files and write the new blob
         if (!$this.avatar) $this.avatar = {};
         if ($this.avatar.s85) $this.avatar.s85.deleteFile();
-        else $this.avatar.s85 = $file.getFile($file.applicationDataDirectory, 'avatar-85.png')
+        else $this.avatar.s85 = $file.getFile($file.applicationDataDirectory, 'avatar-85.png');
         if ($this.avatar.s128) $this.avatar.s128.deleteFile();
-        else $this.avatar.s128 = $file.getFile($file.applicationDataDirectory, 'avatar-128.png')
+        else $this.avatar.s128 = $file.getFile($file.applicationDataDirectory, 'avatar-128.png');
 
         // Write
         $this.avatar.s85.write(blob);

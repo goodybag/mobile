@@ -9,7 +9,9 @@ gb.handleError = function(error){
       GB.Windows.show('login');
     }
   }else{
-    alert(error);
-    alert("Something went wrong :( I'm not sure what happened. Maybe your phone is sub-merged in water for all I know. But just trying logging out and logging back in and see if that helps :)")
+    alert(
+      (error && (error.friendlyMessage || error.message))
+      || "Something went wrong :( I'm not sure what happened, but if things aren't working properly, just trying logging out and logging back in and see if that helps :)"
+    );
   }
 };
