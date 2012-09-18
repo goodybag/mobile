@@ -50,7 +50,8 @@ gb.files = {
     'button',
     'validate',
     'periodic-refresh',
-    'events'
+    'events',
+    'error-handler'
   ],
   
   "models": [

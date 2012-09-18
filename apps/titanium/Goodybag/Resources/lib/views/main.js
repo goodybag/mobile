@@ -117,7 +117,11 @@ GB.Windows.add('main', Window.extend({
   },
   
   showPage: function (view) {
-    if (view === "stream") this.streamGlobalRefresher.stop();
+    if (view === "stream"){
+      this.showLoader();
+      this.streamGlobalRefresher.stop();
+    }
+    if (view === "nearby") this.showLoader();
     this.elements.views.main.startLayout();
     
     if (this.location) {

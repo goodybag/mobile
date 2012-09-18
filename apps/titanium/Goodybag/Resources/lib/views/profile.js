@@ -122,6 +122,8 @@ gb.Views.add('profile', {
     $holder.title.subHeader.setText('by tapins');
     
     $user.getLocationsByTapins(function (data) {
+      if (!data.length) return;
+      
       for (var i = 0; i < data.length; i++) {
         if (!data[i].name) continue;
         var model   = new GB.Models.Place({ _id: data[i].business.org.id })

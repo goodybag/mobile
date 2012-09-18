@@ -91,7 +91,7 @@ GB.Views.add('settings', {
           } }
         })
         
-      , "padding": $ui.createTextField({
+      , "padding": $ui.createView({
           width: $ui.FILL
         , height: 10
         })
@@ -168,6 +168,8 @@ GB.Views.add('settings', {
         avatar.setImage(item.media);
         // Update sidebar
         GB.Views.get('sidebar').elements.header.avatar.image.setImage(item.media);
+        // Update profile page
+        GB.Views.get('profile').elements.holder.header.left.image.setImage(item.media);
         gb.consumer.setAvatar(item.media);
       }
     });

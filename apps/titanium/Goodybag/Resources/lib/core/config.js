@@ -66,6 +66,7 @@ gb.config = function (global, fb, storage) {
   this.api.setPassword        = 'http://' + domain + '/api/consumers/self/password'
   this.api.setEmail           = 'http://' + domain + '/api/consumers/self/email'
   this.api.createBarcodeId    = 'http://' + domain + '/api/consumers/barcodes'
+  this.api.updateMedia        = 'http://' + domain + '/api/consumers/self/media'
   
   // Secret passphrase for files.
   this.secret = 'G00D13B4GR0X!!';

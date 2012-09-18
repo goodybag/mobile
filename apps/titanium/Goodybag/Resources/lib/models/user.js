@@ -165,7 +165,7 @@ if(!GB.Models)
         
         gb.utils.debug('[User] Got back the data object.');
         
-        if (consumer.error) return callback(consumer.error);
+        if (consumer.error) return gb.handleError(error), callback(consumer.error);
         
         // We actually encountered invalid server response, tell the user that?
         if (consumer.data == null) return callback('Invalid Server Response, Try logging in.');
@@ -318,10 +318,14 @@ if(!GB.Models)
         if (error) {
           gb.utils.warn('[User] Session Error: ' + error);
           
+          gb.handleError(error)
+          
           // Logout and show login screen:
           self.logout();
           GB.Windows.show('login');
         } else {
+          if (results.error) return gb.handleError(results.error);
+          
           gb.utils.debug('[User] Obtained new session data');
           cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
           
@@ -394,7 +398,7 @@ if(!GB.Models)
       var profile = this.data.profile || null, $this = this, $data = this.data;
       
       $http.get.sessioned(gb.config.api.consumer.profile, this.session, function (error, results) {
-        if (error) return callback(profile); else results = JSON.parse(results);
+        if (error) return gb.handleError(error), callback(profile); else results = JSON.parse(results);
         if (results.error) return callback(profile); else $data.profile = results.data;
         callback($data.profile);
         $this._setConsumer($data);
@@ -412,7 +416,7 @@ if(!GB.Models)
           return callback(locations); // No Data, use old
         } else if (error) {
           gb.utils.debug(error);
-          return callback(locations);
+          return gb.handleError(error), callback(locations);
         } else {
           results = JSON.parse(results);
         }
@@ -439,7 +443,7 @@ if(!GB.Models)
         if (typeof error === 'undefined' && typeof results === 'undefined') {
           return callback(count); // No Data, use old
         } else if (error) {
-           return callback(error);
+           return gb.handleError(error), callback(error);
         } else { 
           results = JSON.parse(results);
         }
@@ -484,7 +488,7 @@ if(!GB.Models)
       if (!url) url = 'http://goodybag-uploads.s3.amazonaws.com/consumers/' + this.data._id + '-' + size + '.png';
       if (!this.avatar['s' + size].exists() || forceNew) {
         $http.get.image(url, function (error, results) { 
-          if (error) return callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
+          if (error) return gb.handleError(error), callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
           if ($self.avatar['s' + size].write(results) === false) written = false;
           callback((written) ? $self.avatar['s' + size].read() : url);
         });
@@ -644,9 +648,9 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setBarcodeId, { barcodeId: id }, function(error, data){
-        if (error) return console.log(error);
+        if (error) return gb.handleError(error), console.log(error);
         data = JSON.parse(data);
-        if (data.error) return callback(data.error);
+        if (data.error) return gb.handleError(data.error), callback(data.error);
         $this.data.barcodeId = id;
         $this._setConsumer($this);
         callback(null, data.data);
@@ -661,8 +665,9 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setPassword, { password: password, newPassword: newPassword }, function(error, data){
-        if (error) return console.log(error);
+        if (error) return gb.handleError(error), console.log(error);
         data = JSON.parse(data);
+        if (data.error) gb.handleError(data.error);
         callback(data.error);
       });
     },
@@ -675,9 +680,9 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.get(gb.config.api.createBarcodeId, function(error, data){
-        if (error) return console.log(error);
+        if (error) return gb.handleError(error), console.log(error);
         data = JSON.parse(data);
-        if (data.error) return callback(data.error);
+        if (data.error) return gb.handleError(data.error), callback(data.error);
         $this.data.barcodeId = data.data.barcodeId;
         $this._setConsumer($this);
         callback(null, data.data);
@@ -692,12 +697,13 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       gb.api.charities.select(charity.id, function(error, data){
-        if (error) return callback(error);
+        if (error) return gb.handleError(error), callback(error);
         $this.data.charity = {
           id:   charity.id
         , name: charity.publicName
         };
         $this._setConsumer($this);
+        if (data.error) gb.handleError(data.error);
         callback(null, data);
       });
     },
@@ -711,9 +717,9 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setScreenName, { screenName: value }, function(error, data){
-        if (error) return console.log(error);
+        if (error) return gb.handleError(error), console.log(error);
         data = JSON.parse(data);
-        if (data.error) return callback(data.error);
+        if (data.error) return gb.handleError(data.error), callback(data.error);
         $this.data.setScreenName = true;
         $this._setConsumer($this);
         callback(null, data.data);
@@ -731,9 +737,9 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setName, values, function(error, data){
-        if (error) return console.log(error);
+        if (error) return gb.handleError(error), console.log(error);
         data = JSON.parse(data);
-        if (data.error) return callback(data.error);
+        if (data.error) return gb.handleError(error), callback(data.error);
         $this._setConsumer($this);
         callback(null, data.data);
       });
@@ -749,9 +755,9 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setEmail, { email: email }, function(error, data){
-        if (error) return console.log(error);
+        if (error) return gb.handleError(error), console.log(error);
         data = JSON.parse(data);
-        if (data.error) return callback(data.error);
+        if (data.error) return gb.handleError(error), callback(data.error);
         $this._setConsumer($this);
         callback(null, data.data);
       });
@@ -783,10 +789,39 @@ if(!GB.Models)
       };
       // Write file once we know the server got it
       $http.post.generic(gb.config.transloadit.upload_url, options, function(error, response){
-        if (error) return alert(error);
+        if (error) return gb.handleError(error), console.log(error);
         // Just callback when the initial request is done
-        $this._setAvatar();
-        callback();
+        response = JSON.parse(response);
+        
+        // Delete old files and write the new blob
+        if (!$this.avatar) $this.avatar = {};
+        if ($this.avatar.s85) $this.avatar.s85.deleteFile();
+        else $this.avatar.s85 = $file.getFile($file.applicationDataDirectory, 'avatar-85.png')
+        if ($this.avatar.s128) $this.avatar.s128.deleteFile();
+        else $this.avatar.s128 = $file.getFile($file.applicationDataDirectory, 'avatar-128.png')
+
+        // Write
+        $this.avatar.s85.write(blob);
+        $this.avatar.s128.write(blob);
+
+        // Update the user media object 
+        $this.data.media = {
+          // use the blob instead of the url since it's already on disk
+          url: blob
+        , thumb: blob
+        };
+        
+        // Update the user object on the server
+        var data = {
+          tempURL: response.uploads[0].url
+        , rotateDegrees: 0
+        , guid: gb.utils.guid()
+        };
+        gb.api.consumer.updateMedia(data, function(error, data){});
+        
+        $this._setConsumer($this);
+        
+        if (callback) callback();
       }, onProgress);
     },
     
