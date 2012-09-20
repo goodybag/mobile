@@ -44,7 +44,7 @@
     gb.utils.debug('Showing Window: ' + name);
 
     if (!this.instantiated[name]) this.instantiate(name);
-    if (this.current) this.hide(this.current);
+    if (this.current && !this.instantiated[this.current].isHidden()) this.hide(this.current);
     
     this.instantiated[name].show();
     this.current = name;
@@ -122,14 +122,21 @@ var Window = new Class(gb.utils.extend({
       this.onShow();
     
     this.window.show();
+    this.hidden = false;
   },
   
   hide: function () {
     gb.utils.debug('[' + this.windowName + '] Attempting to hide window.', this.debug);
     console.log("#################################");
     console.log(this.onHide);
+    var $this = this;
     if (typeof this.onHide != 'undefined' && this.created) this.onHide();
     if (this.created) this.window.hide()
+    this.hidden = true;
+  },
+  
+  isHidden: function () {
+    return this.hidden;
   },
   
   destroy: function () {

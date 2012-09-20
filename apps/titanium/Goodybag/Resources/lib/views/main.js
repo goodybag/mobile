@@ -117,14 +117,18 @@ GB.Windows.add('main', Window.extend({
   },
   
   showPage: function (view) {
-    if (view === "stream") this.streamGlobalRefresher.stop();
+    if (view === "stream"){
+      this.showLoader();
+      this.streamGlobalRefresher.stop();
+    }
+    if (view === "nearby") this.showLoader();
     this.elements.views.main.startLayout();
     
     if (this.location) {
       gb.utils.debug('attempting to remove view ' + this.location);
       this.elements.views.main.remove(GB.Views.get(this.location).self)
       GB.Views.hide(this.location);
-    } 
+    }
     
     this.location = view;
     GB.Views.show(view);

@@ -95,12 +95,12 @@ GB.Views.add('nearby', {
     
     // Setup User Location if Available and not in Development Mode
     gb.consumer.getGeolocation(function (coords) {
-      // if (!gb.config.development && coords && coords.latitude && coords.longitude) {
-        // $this.position = {
-          // lat: coords.latitude,
-          // lon: coords.longitude
-        // };
-      // }
+      if (!gb.config.development && coords && coords.latitude && coords.longitude) {
+        $this.position = {
+          lat: coords.latitude,
+          lon: coords.longitude
+        };
+      }
       
       if ($this.previous && (
         $this.position.lat == $this.previous.lat &&
@@ -191,7 +191,7 @@ GB.Views.add('nearby', {
       if (end - $this.locations.length > 30) return;
       else end -= $this.locations.length;
     for (i = start; i < end; i++) {
-      middleman.add($this.locations[i].toRow(i%2, function (e) { 
+      middleman.add($this.locations[i].toRow(i%2, function (e) {
         $this.onPlaceClick.apply($this, [ this ]); 
       }));
     }
@@ -207,6 +207,10 @@ GB.Views.add('nearby', {
    * Creates and displays a single location page.
    */
   showPlace: function (place, location) {
+    // Loader Start
+    if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
+    
+    
     var $this = this
     ,   $el = this.elements;
     
@@ -304,6 +308,8 @@ GB.Views.add('nearby', {
       // Back
       GB.Windows.get('main').toggleBack(function () {
         
+        GB.Windows.get('main').showLoader();
+        
         // Clear Place
         $el.place.setVisible(false);
         $this.self.remove($el.place);
@@ -316,7 +322,12 @@ GB.Views.add('nearby', {
         
         // Set Menu to visible
         $el.menu.base.setVisible(true);
+        
+        GB.Windows.get('main').hideLoader();
       });
+    
+      // Loader End
+      if ($this.loading) GB.Windows.get('main').hideLoader(), $this.loading = false;
     }
     
     // URL Click Event
@@ -457,13 +468,7 @@ GB.Views.add('nearby', {
    * @param  {Object} e Event Handler
    */
   onPlaceClick: function (place) {
-    // Loader Start
-    if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
-    
     this.showPlace(place);
-    
-    // Loader End
-    if (this.loading) GB.Windows.get('main').hideLoader(), this.loading = false;
   },
   
   createModal: function (url) {

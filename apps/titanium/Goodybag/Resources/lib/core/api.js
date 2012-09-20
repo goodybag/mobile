@@ -3,7 +3,7 @@
     api   = gb.api    = gb.api    || {}
   , store = api.store = api.store || {}
   , getCleanName = function(name, options){
-      return "api-" + name + "-skip-" + options.skip + "-limit-" + options.limit;
+      return "api-" + name + "-offset-" + options.offset + "-limit-" + options.limit;
     }
   ;
   api.get = function(url, callback){
@@ -11,7 +11,8 @@
     $http.get(url, function(error, data){
       if (error) return gb.utils.debug(error);
       data = JSON.parse(data);
-      callback(data.error, data.data);
+      if (data.error) gb.handleError(data.error);
+      if (callback) callback(data.error, data.data);
     });
   };
   
@@ -24,7 +25,8 @@
     $http.post(url, data, function(error, data){
       if (error) return gb.utils.debug(error);
       data = JSON.parse(data);
-      callback(data.error, data.data);
+      if (data.error) gb.handleError(data.error);
+      if (callback) callback(data.error, data.data);
     });
   };
   
@@ -42,6 +44,12 @@
   };
   api.consumer.fbLogin = function(accessToken, callback){
     api.post(gb.config.api.facebookAuth, { accessToken: acessToken }, callback);
+  };
+  api.consumer.facebookConnect = function(accessToken, callback){
+    api.post(gb.config.api.facebookConnect, { accessToken: accessToken }, callback);
+  };
+  api.consumer.updateMedia = function(media, callback){
+    api.post(gb.config.api.updateMedia, media, callback);
   };
   
   api.businesses = {}; store.businesses = {};

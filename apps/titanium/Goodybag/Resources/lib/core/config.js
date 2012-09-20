@@ -8,9 +8,15 @@
 gb.config = function (global, fb, storage) {
   var self = this;
   
+  // debugging modes
+  this.debug = true;
+  this.development = true;
+  
   // Facebook
   fb.forceDialogAuth = false;
   fb.appid = '152282721508707';
+  // fb.appid = '159340790837933';
+  // fb.appid = this.development ? '159340790837933' : '152282721508707';
   fb.permissions = [
     'email',
     'user_birthday',
@@ -23,10 +29,6 @@ gb.config = function (global, fb, storage) {
     'user_education_history',
     'friends_location'
   ];
-  
-  // debugging modes
-  this.debug = true;
-  this.development = false;
   
   // Geolocation Configuration
   this.geoEnabled = (Titanium.Geolocation.locationServicesEnabled === true);
@@ -48,6 +50,7 @@ gb.config = function (global, fb, storage) {
   this.api.logout             = 'http://' + domain + '/api/consumers/logout';
   this.api.register           = 'http://' + domain + '/api/consumers/register';
   this.api.facebookAuth       = 'http://' + domain + '/api/consumers/fblogin';
+  this.api.facebookConnect    = 'http://' + domain + '/api/consumers/facebook';
   this.api.participating      = 'http://' + domain + '/api/consumers/participatingBusinesses?limit=';
   this.api.consumer.self      = 'http://' + domain + '/api/consumers/session';
   this.api.consumer.profile   = 'http://' + domain + '/api/consumers/self';
@@ -63,6 +66,7 @@ gb.config = function (global, fb, storage) {
   this.api.setPassword        = 'http://' + domain + '/api/consumers/self/password'
   this.api.setEmail           = 'http://' + domain + '/api/consumers/self/email'
   this.api.createBarcodeId    = 'http://' + domain + '/api/consumers/barcodes'
+  this.api.updateMedia        = 'http://' + domain + '/api/consumers/self/media'
   
   // Secret passphrase for files.
   this.secret = 'G00D13B4GR0X!!';
@@ -79,16 +83,15 @@ gb.config = function (global, fb, storage) {
   this.loadingMessages = [
     'Let me think on this...'
   , 'Hold on a second'
-  , '"This is not fair" said the Russian guy who was given wrong directions to the fair'
+  // , '"This is not fair" said the Russian guy who was given wrong directions to the fair'
   , 'Firing up hamster wheels'
   , 'Pre-heating the oven to 350'
   , 'Preparing things and stuff'
   , 'Waiting on our lawyers to get back with us...'
   , 'Hold up! Wait a minute...'
-  , 'Firing up the Hamster Wheels'
   , 'Containing Existential Buffer'
   , 'BRB'
-  , 'The apollo program took 10 years to put a man on the moon, give me a few seconds'
+  // , 'The apollo program took 10 years to put a man on the moon, give me a few seconds'
   , 'New hamster being loaded'
   , 'Deciding next message to display...'
   , 'Not Crashing...'

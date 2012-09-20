@@ -1,4 +1,3 @@
-
 gb.Windows.add('login', Window.extend({
   debug: true,
   
@@ -56,6 +55,9 @@ gb.Windows.add('login', Window.extend({
     // Loader
     this.initializeLoader();
     
+    // Time out for checking to see if they logged in to facebook
+    var fbTimeout = 1000 * 10, fbCurrTime;
+    
     // Events
     this.events = {
       "facebookLoginClick": {
@@ -63,54 +65,40 @@ gb.Windows.add('login', Window.extend({
       , target: $el.buttons.facebook
       , action: function (e) {
           console.log('clicked facebook login');
-          Titanium.Facebook.authorize();  
-        }
-      }
-    , "facebookLogin": {
-        type: 'login'
-      , target: Titanium.Facebook
-      , action: function(e) {
-          if (gb.consumer.isAuthenticated()) return;
-          console.log('signing in with facebook.');
-          console.log(JSON.stringify(e));
-          
-          if (e.success) {
-            console.log('succeeded, sending facebook authentication poll');
-            console.log(JSON.stringify(gb.consumer));
-            
-            gb.consumer.facebookAuth(function(error, consumer) {
-              console.log(error);
-              console.log(consumer);
-              
-              if (error) {
-                Titanium.Facebook.logout();
-                alert(error); return;
-              } else if (consumer) {
-                gb.consumer = consumer;
-              }
-              
-              if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
-              else GB.Windows.show('complete-registration');
-            });
-          } else {
-            if (!e.cancelled) {
-              alert('Could not login to Facebook, Try Again!');
+          if ($self.loggingIn) return;
+          Titanium.Facebook.authorize();
+          // Start checking to see if we're logged in yet
+          // Titaniums fb login event does not always fire
+          $self.checkingFbLogin = true;
+          if ($self.fbLoginCheck) clearInterval($self.fbLoginCheck);
+          fbCurrTime = 0;
+          $self.fbLoginCheck = setInterval(function(){
+            if (Ti.Facebook.getLoggedIn()){
+              clearInterval($self.fbLoginCheck);
+              $self.checkingFbLogin = false;
+              $self.facebookLogin();
             }
-          }
+            fbCurrTime += 200;
+            if (fbCurrTime >= fbTimeout) clearInterval($self.fbLoginCheck);
+          }, 200);  
         }
       }
     , "emailLoginClick": {
         type: 'click'
       , target: $el.buttons.submit
       , action: function (e) {
+          if ($self.loggingIn) return;
           $self.showLoader();
-          if(gb.config.debug) console.log('[login] attempting to authenticate user.');
+          if (gb.config.debug) console.log('[login] attempting to authenticate user.');
+          
+          $self.loggingIn = true;
           
           gb.consumer.email = gb.utils.trim($el.inputs.email.getValue());
           gb.consumer.password = gb.utils.trim($el.inputs.password.getValue());
           $el.inputs.password.setValue("");
           
           gb.consumer.auth(function(error, consumer) {
+            $self.loggingIn = false;
             $self.hideLoader();
             if (error || !consumer) {
               if (error) alert(error);
@@ -150,6 +138,7 @@ gb.Windows.add('login', Window.extend({
       , target: $el.buttons.register
       , action: function (e) {
           $self.showRegistration();
+          Ti.Facebook.fireEvent('login');
         }
       }
     }; // End events
@@ -164,9 +153,14 @@ gb.Windows.add('login', Window.extend({
     // Force Orientation
     this.window.orientationModes = [ Ti.UI.PORTRAIT ];
     
+    this.onShow = function () {
+      $self.delegateEvents();
+    };
+    
     this.onHide = function () {
       $self.elements.inputs.email.blur();
       $self.elements.inputs.password.blur();
+      $self.destroyEvents();
     };
     
     this.onDestroy = function () {
@@ -181,6 +175,29 @@ gb.Windows.add('login', Window.extend({
     };
     
     return this;
+  },
+  
+  facebookLogin: function() {
+    if (gb.consumer.isAuthenticated() || !Ti.Facebook.getLoggedIn()) return;
+    this.loggingIn = true;
+    console.log('signing in with facebook.');
+    
+    var $this = this;
+    gb.consumer.facebookAuth(function(error, consumer) {
+      $this.loggingIn = false;
+      console.log(error);
+      console.log(consumer);
+      
+      if (error) {
+        Titanium.Facebook.logout();
+        alert(error); return;
+      } else if (consumer) {
+        gb.consumer = consumer;
+      }
+      
+      if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
+      else GB.Windows.show('complete-registration');
+    });
   },
   
   showRegistration: function () {

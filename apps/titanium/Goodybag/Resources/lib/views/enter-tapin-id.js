@@ -136,7 +136,7 @@
     }
     
   , triggerOnComplete: function(){
-      if (this.hasCalledOnComplete) return;
+      // if (this.hasCalledOnComplete) return;
       this.onComplete();
       this.hasCalledOnComplete = true;
     },

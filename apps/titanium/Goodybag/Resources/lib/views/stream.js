@@ -30,13 +30,14 @@ GB.Views.add('stream', {
             text: "There is no activity :("
           , top: 51
           , bottom: 38
+          , textAlign: "center"
           }))
         }
       }
     };
     gb.utils.compoundViews(this.noActivity);
-    this.noActivity.base.hide();
     this.self.add(this.noActivity.base);
+    this.noActivity.base.hide();
     this.noActivtyShown = false;
     
     this.scrollWrapper = $ui.createView({
@@ -125,15 +126,13 @@ GB.Views.add('stream', {
         }
       , onNewHeight: this.newHeightCurry
       , name: "My Scroll"
+      , refresher: true
+      , onLoad: function(done){
+          self.onRefresh(done);
+        }
       }
     );
-    
-    // Pull to Refresh
-    this.states.my.refresher = new GB.PullToRefresh(this.states.my.view.view, {
-      onLoad: function(done){
-        self.onRefresh(done);
-      }
-    });
+
     this.scrollWrapper.add(this.states.global.view.view);
     this.scrollWrapper.add(this.states.my.view.view);
     this.self.add(this.nav.container);
@@ -150,6 +149,7 @@ GB.Views.add('stream', {
   },
   
   onRefresh: function (done) {
+    GB.Windows.get('main').showLoader();
     var
       curr  = this.current = this.current || 'global'
     , state = this.states[curr]
@@ -159,9 +159,8 @@ GB.Views.add('stream', {
     curr = curr[0].toUpperCase() + curr.substring(1);
     state.view.clearChildren();
     this["fetch" + curr + "Stream"](state.limit = 15, state.page = 0, function(error, data){
-      if (error) return gb.utils.debug(error);
-      if (!data) return gb.Views.show('stream-no-data');
-      console.log(data.length);
+      if (error) return done(), gb.utils.debug(error);
+      if (!data) return done(), gb.Views.show('stream-no-data');
       self.showItems(state.view, data);
       done();
     });
@@ -176,6 +175,7 @@ GB.Views.add('stream', {
   },
   
   showNoActivity: function(){
+    
     if (this.noActivityShown) return;
     this.scrollWrapper.hide();
     this.noActivity.base.show();
@@ -197,9 +197,8 @@ GB.Views.add('stream', {
     this.states.my.view.hide();
     state.view.show();
     this.current = "global";
-    if (state.hasData) return;
+    if (state.hasData) return this.hideNoActivity();
     gb.utils.debug("[stream view] - GLOBAL fetching data");
-    this.showNoActivity();
     this.fetchGlobalStream(state.limit, state.limit * state.page++, function(error, data){
       if (error){
         GB.Windows.get('main').hideLoader();
@@ -222,7 +221,7 @@ GB.Views.add('stream', {
     gb.utils.debug("hiding GLOBAL view showing MY");
     state.view.show();
     this.current = "my";
-    if (state.hasData) return;
+    if (state.hasData) return this.hideNoActivity();
     GB.Windows.get('main').showLoader();
     gb.utils.debug("[stream view] - MY - fetching data");
     this.fetchMyStream(state.limit, state.limit * state.page++, function(error, data){
@@ -279,7 +278,7 @@ GB.Views.add('stream', {
       limit     = 15;
       skip      = 0;
     }
-    gb.api.stream[fetchMe ? 'my' : 'global']({ limit: limit, skip: skip }, function(error, data){
+    gb.api.stream[fetchMe ? 'my' : 'global']({ limit: limit, offset: skip }, function(error, data){
       self.isFetching = false;
       if (typeof callback === "function") callback(error, data);
     });
