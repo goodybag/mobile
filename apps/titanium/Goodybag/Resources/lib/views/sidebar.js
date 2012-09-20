@@ -112,8 +112,10 @@ GB.Views.add('sidebar', {
     });
   },
   
-  setActive: function (area) {
-    var view;
+  setActive: function (area, view) {
+    if (this.active == area) {
+      GB.Windows.get('main').toggleSidebar(true); return;
+    }
     
     // Correct name for files.
     if (area === 'activity') {

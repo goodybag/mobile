@@ -88,11 +88,14 @@ if(!GB.Models)
      * @TODO   Check for charity and show page if missing.
      * @TODO   Check for QRCode and generate one if missing.
      */
-    auth: function (callback) {
+    auth: function (callback, email, password, force) {
       var self = this;
       
+      if (email) this.email = email;
+      if (password) this.password = password;
+      
       // Already authenticated.
-      if (this.authenticated) return callback(null, self);
+      if (this.authenticated && !force) return callback(null, self);
       
       // Nothing to validate
       if (this.email === "" || this.password === "")
@@ -129,8 +132,14 @@ if(!GB.Models)
         gb.utils.debug('[User] Creating consumer file with encrypted data.');
         
         // Store Consumer
-        self._setConsumer(consumer);
+        consumer.data.authMethod = GB.Models.User.Methods.EMAIL;
         self.data.authMethod = GB.Models.User.Methods.EMAIL;
+        self._setConsumer(consumer);
+        
+        // Store Login Details in keychain under goodybag.
+        // gb.key = keychain.createKeychainItem({ identifier: 'goodybag' });
+        // gb.key.account = self.user;
+        // gb.key.valueData = self.password;
         
         // Setup Avatars
         self._setAvatar();
@@ -182,8 +191,9 @@ if(!GB.Models)
         gb.utils.debug('[User] Creating consumer file with encrypted data.');
         
         // Store Consumer
-        self._setConsumer(consumer);
+        consumer.data.authMethod = GB.Models.User.Methods.EMAIL;
         self.data.authMethod = GB.Models.User.Methods.EMAIL;
+        self._setConsumer(consumer);
         
         // Setup Avatars
         self._setAvatar();
@@ -213,15 +223,16 @@ if(!GB.Models)
      * otherwise.
      * 
      * @param  {Function} callback returns the data or errors.
+     * @param  {Boolean} force forces authentication and revalidation
      * @TODO   Check for alias and request data.
      * @TODO   Check for charity and show charity screen.
      * @TODO   Check for QRCode and generate one if missing.
      */
-    facebookAuth: function (callback) {
+    facebookAuth: function (callback, force) {
       var self = this;
   
       // Already authenticated.
-      if (this.authenticated) return callback(null, self);
+      if (this.authenticated && !force) return callback(null, self);
       
       gb.utils.debug('[FB Auth] Sending Request');
       
@@ -247,13 +258,12 @@ if(!GB.Models)
         self.authenticated = true;
         
         // Store Consumer
-        self._setConsumer(consumer);
+        consumer.data.authMethod = GB.Models.User.Methods.FACEBOOK;
         self.data.authMethod = GB.Models.User.Methods.FACEBOOK;
+        self._setConsumer(consumer);
         
         // Setup Avatars
         self._setAvatar();
-        
-        gb.utils.debug(JSON.stringify(self));
         
         // Cleanup
         cookie = null;
@@ -279,7 +289,7 @@ if(!GB.Models)
   
       // Cookie Data
       if (cooks.exists()) {
-        data = cooks.read(); 
+        data = cooks.read();
         if(data && data.text) cooksPt = sjcl.decrypt(gb.config.secret, data.text);
       }
       
@@ -292,7 +302,6 @@ if(!GB.Models)
       if (cooksPt != null && consumerPt != null && consumerPt[0] === "{") {
         this.data = JSON.parse(consumerPt);
         this.authenticated = true;
-        this.data.authMethod = this.data.authMethod;
         this.session = new gb.utils.parsers.cookie.storage();
         this.session.set('connect.sid', cooksPt);
         this._setAvatar();
@@ -311,8 +320,22 @@ if(!GB.Models)
      */
     renew: function () {
       var self = this, $dataMethod = this.data.authMethod;
-      
       gb.utils.debug('[User] Renewing Session');
+      
+      // // Reauthenticate the user.
+      // if ($dataMethod === GB.Models.User.Methods.FACEBOOK) {
+        // this.facebookAuth(function (error, consumer) {
+          // if (error) gb.utils.warn(error);
+        // }, true);
+      // } else {
+        // if (!gb.key) gb.key = keychain.createKeychainItem('goodybag');
+//         
+        // if (gb.key && gb.key.account && gb.key.valueData) {
+          // this.auth(function (error, consumer) {
+            // if (error) gb.utils.warn(error);
+          // }, gb.key.account, gb.key.valueData, true);
+        // }
+      // }
       
       $http.get.sessioned(gb.config.api.consumer.self, this.session, function (error, results) {
         if (error) {

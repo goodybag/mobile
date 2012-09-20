@@ -349,23 +349,19 @@ if(!GB.Models)
      *  
      * @param {Object} onClick
      */
-    toAnnotation: function (onClick) {
+    toAnnotation: function (i) {
       var $this = this;
       
-      var pin = Titanium.Map.createAnnotation({
+      return Titanium.Map.createAnnotation({
         latitude: this.data.lat,
         longitude: this.data.lng,
         title: this.data.name,
         subtitle: this.getAddress(),
         animate: true,
-        pincolor: Ti.Map.ANNOTATION_RED
+        pincolor: Ti.Map.ANNOTATION_RED,
+        rightButton: Titanium.UI.iPhone.SystemButton.DISCLOSURE,
+        myid: i
       });
-      
-      pin.addEventListener('click', function (e) { 
-        onClick.call($this, e);
-      });
-      
-      return pin;
     }
   });
 })();

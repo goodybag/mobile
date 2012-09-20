@@ -13,7 +13,7 @@ var WindowLoader = {
     this.window.add(this.loader.base);
   }
 
-, showLoader : function(text, callback){
+, showLoader : function (text, callback) {
     if (typeof text === "function") {
       callback = text;
       text = false;
@@ -26,15 +26,19 @@ var WindowLoader = {
     this.loader.base.animate({ opacity: 1 }, function () {
       if (callback) callback();
     });
+    
+    this.isLoading = true;
+    this.loader.base.hidden = false;
   }
   
-, hideLoader : function(callback){
+, hideLoader : function (callback) {
     var $this = this;
     
-    this.loader.base.animate({ opacity: 0 }, function(){
-      $this.loader.base.setZIndex(-1);
-      $this.loader.middle.spinner.hide();
-      if (callback) callback();
-    });
+    if (!this.loader.base.hidden)
+      this.loader.base.animate({ opacity: 0 }, function(){
+        $this.loader.base.setZIndex(-1);
+        $this.loader.middle.spinner.hide();
+        if (callback) callback();
+      }), this.loader.base.hidden = true;
   }
 };

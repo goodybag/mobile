@@ -95,12 +95,12 @@ GB.Views.add('nearby', {
     
     // Setup User Location if Available and not in Development Mode
     gb.consumer.getGeolocation(function (coords) {
-      if (!gb.config.development && coords && coords.latitude && coords.longitude) {
-        $this.position = {
-          lat: coords.latitude,
-          lon: coords.longitude
-        };
-      }
+      // if (!gb.config.development && coords && coords.latitude && coords.longitude) {
+        // $this.position = {
+          // lat: coords.latitude,
+          // lon: coords.longitude
+        // };
+      // }
       
       if ($this.previous && (
         $this.position.lat == $this.previous.lat &&
@@ -214,7 +214,7 @@ GB.Views.add('nearby', {
     if ($el.place) $this.self.remove($el.place), $el.place.close(), $el.place = null;
     
     $el.place = $ui.createWindow();
-    var back  = new GB.StreamButton('Back');
+    // var back  = new GB.StreamButton('Back');
     var url   = null;
     
     // Styles
@@ -303,7 +303,6 @@ GB.Views.add('nearby', {
       
       // Back
       GB.Windows.get('main').toggleBack(function () {
-        back.activate();
         
         // Clear Place
         $el.place.setVisible(false);
@@ -336,6 +335,10 @@ GB.Views.add('nearby', {
       place.getNumber().replace(/^1?(\d{3})\s?\-?\.?(\d{3})\s?\-?\.?(\d{4})$/, '($1) $2-$3') 
       || 'N/A'
     );
+    
+    elements.holder.number.base.addEventListener('click', function (e) {
+      Titanium.Platform.openURL('tel:' + place.getNumber().replace('/[^0-9]'));
+    });
     
     // URL?
     elements.holder.url.inner.two.setText(url || 'N/A');
@@ -407,13 +410,8 @@ GB.Views.add('nearby', {
     ,   annotations = [];
     
     if ($el.map) $el.holder.remove($el.map);
-
-    for (i = 0; i < this.locations.length; i++) {
-      annotations.push(this.locations[i].toAnnotation(function (e, parent) {
-        $this.onPlaceClick(this);
-      }));
-    }
-
+    
+    // Create Map
     $el.map = Titanium.Map.createView({
       region: {
         latitude: $this.position.lat,
@@ -423,10 +421,20 @@ GB.Views.add('nearby', {
       },
       animate: true,
       regionFit: true,
-      userLocation: true,
-      annotations: annotations
+      userLocation: true
     });
-    
+
+    for (i = 0; i < this.locations.length; i++) {
+      annotations.push(this.locations[i].toAnnotation(i));
+      
+      (function (idx) {
+        $el.map.addEventListener('click', function (evt) {
+          if (evt.annotation.myid == idx && evt.clicksource == 'rightButton')
+            $this.onPlaceClick($this.locations[idx]);
+        });
+      })(i);
+    }
+    $el.map.setAnnotations(annotations);
     $el.holder.add($el.map);
     $el.menu.nearby.deactivate();
     $el.menu.map.activate();
