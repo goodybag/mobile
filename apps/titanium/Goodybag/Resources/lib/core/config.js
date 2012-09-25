@@ -8,7 +8,7 @@
 gb.config = function (global, fb, storage) {
   var self = this;
   
-  this.version = "1.0.0";
+  this.version = "1.0.1";
   
   // App Store
   this.appId = '1234567890';
@@ -16,7 +16,7 @@ gb.config = function (global, fb, storage) {
   
   // debugging modes
   this.debug = true;
-  this.development = true;
+  this.development = false;
   
   // Facebook
   fb.forceDialogAuth = false;
@@ -45,8 +45,8 @@ gb.config = function (global, fb, storage) {
   Titanium.Geolocation.distanceFilter = 10; // Meters to fire event again
   
   // Api Domain
-  // var domain = (this.development ? 'local' : 'www') + '.goodybag.com';
-      var domain = '192.168.1.5';
+  var domain = (this.development ? 'local' : 'www') + '.goodybag.com';
+      // var domain = '192.168.1.5';
       
   // Api URLS
   this.api = {};
