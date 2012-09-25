@@ -6,6 +6,7 @@ var gb = {}
 ,   $prop = Titanium.App.Properties;
 
 var moment = require('lib/core/moment');
+// var keychain = require('com.obscure.keychain');
 var Ligature = require('lib/core/components/iconic/iconic').iconic({ font: 'LigatureSymbols' });
 
 // Base

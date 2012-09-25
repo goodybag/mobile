@@ -218,7 +218,7 @@ GB.Views.add('nearby', {
     if ($el.place) $this.self.remove($el.place), $el.place.close(), $el.place = null;
     
     $el.place = $ui.createWindow();
-    var back  = new GB.StreamButton('Back');
+    // var back  = new GB.StreamButton('Back');
     var url   = null;
     
     // Styles
@@ -307,7 +307,6 @@ GB.Views.add('nearby', {
       
       // Back
       GB.Windows.get('main').toggleBack(function () {
-        back.activate();
         
         GB.Windows.get('main').showLoader();
         
@@ -318,11 +317,7 @@ GB.Views.add('nearby', {
         $el.place = null;
         
         // Set Holder up
-        $el.holder.backgroundColor = 'yellow';
         $el.holder.setVisible(true);
-        
-        // Set Menu to visible
-        $el.menu.base.setVisible(true);
         
         GB.Windows.get('main').hideLoader();
       });
@@ -348,10 +343,8 @@ GB.Views.add('nearby', {
       || 'N/A'
     );
     
-    // Calling
-    var number = place.getNumber().replace(/ |\(|\)|\-/g, "");
-    elements.holder.number.base.addEventListener('click', function(){
-      Ti.Platform.openURL('tel:' + number);
+    elements.holder.number.base.addEventListener('click', function (e) {
+      Titanium.Platform.openURL('tel:' + place.getNumber().replace('/[^0-9]'));
     });
     
     // URL?
@@ -424,13 +417,8 @@ GB.Views.add('nearby', {
     ,   annotations = [];
     
     if ($el.map) $el.holder.remove($el.map);
-
-    for (i = 0; i < this.locations.length; i++) {
-      annotations.push(this.locations[i].toAnnotation(function (e, parent) {
-        $this.onPlaceClick(this);
-      }));
-    }
-
+    
+    // Create Map
     $el.map = Titanium.Map.createView({
       region: {
         latitude: $this.position.lat,
@@ -440,10 +428,20 @@ GB.Views.add('nearby', {
       },
       animate: true,
       regionFit: true,
-      userLocation: true,
-      annotations: annotations
+      userLocation: true
     });
-    
+
+    for (i = 0; i < this.locations.length; i++) {
+      annotations.push(this.locations[i].toAnnotation(i));
+      
+      (function (idx) {
+        $el.map.addEventListener('click', function (evt) {
+          if (evt.annotation.myid == idx && evt.clicksource == 'rightButton')
+            $this.onPlaceClick($this.locations[idx]);
+        });
+      })(i);
+    }
+    $el.map.setAnnotations(annotations);
     $el.holder.add($el.map);
     $el.menu.nearby.deactivate();
     $el.menu.map.activate();

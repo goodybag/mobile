@@ -62,8 +62,14 @@
       , bottom: 0
       })
       
-    , arrow: $ui.createView({
-        backgroundImage: 'lib/core/components/pull-to-refresh/images/white-arrow.png'
+    , arrow: $ui.createLabel({
+        color: 'white'
+      , textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER
+      , text: Ligature.get('down')
+      , font: {
+          fontFamily: Ligature.typeface(),
+          fontSize: 24
+      } 
       , width: '23dp'
       , height: '60dp'
       , bottom: '10dp'

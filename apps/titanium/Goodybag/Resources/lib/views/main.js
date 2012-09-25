@@ -55,7 +55,7 @@ GB.Windows.add('main', Window.extend({
         type: 'click'
       , target: this.elements.header.buttons.sidebar
       , action: function(e) {
-          $this.toggleSidebar.apply($this, [e]);
+          $this.toggleSidebar.apply($this);
         }
       }
     , 'qrcode': {
@@ -181,35 +181,44 @@ GB.Windows.add('main', Window.extend({
   toggleBack: function (callback) {
     var $this = this;
     
-    if (callback) {
-      this.callback = { main: callback, back: function (e) { $this.toggleBack.apply($this); } };
+    if (typeof callback != 'undefined') {
+      this.callback = {};
+      this.callback.back = function (e) { $this.toggleBack.apply($this); };
+      this.callback.main = callback;
       this.elements.header.buttons.sidebar.removeEventListener('click', this.events.sidebar.action);
       this.elements.header.buttons.sidebar.addEventListener('click', this.callback.back);
       this.elements.header.buttons.sidebar.setImage(
         this.images.back.inactive
       );
+      
       return;
+    } else if (!this.callback) {
+      this.elements.header.buttons.sidebar.setImage(
+        this.images.sidebar[((!this.animated) ? '' : 'in') + 'active'] 
+      );
+      
+      this.elements.header.buttons.sidebar.addEventListener('click', this.events.sidebar.action);
+    } else {
+      this.elements.header.buttons.sidebar.setImage(
+        this.images.back.active  
+      );
+      
+      if (typeof this.callback.main != 'undefined') this.callback.main();
+      
+      this.elements.header.buttons.sidebar.setImage(
+        this.images.sidebar[((!this.animated) ? '' : 'in') + 'active'] 
+      );
+      
+      this.elements.header.buttons.sidebar.removeEventListener('click', this.callback.back);
+      this.elements.header.buttons.sidebar.addEventListener('click', this.events.sidebar.action);
+      this.callback = null;
     }
-    
-    this.elements.header.buttons.sidebar.setImage(
-      this.images.back.active  
-    );
-    
-    this.callback.main();
-    
-    this.elements.header.buttons.sidebar.setImage(
-      this.images.sidebar[((!this.animated) ? '' : 'in') + 'active'] 
-    );
-    
-    this.elements.header.buttons.sidebar.removeEventListener('click', this.callback.back);
-    this.elements.header.buttons.sidebar.addEventListener('click', this.events.sidebar.action);
-    this.callback = null;
   },
   
   /**
    * Toggle sidebar state and slide main screen in and out.
    */
-  toggleSidebar: function (e) {
+  toggleSidebar: function (same) {
     this.animated = (!this.animated) ? true : false;
     
     this.elements.header.buttons.sidebar.setImage(

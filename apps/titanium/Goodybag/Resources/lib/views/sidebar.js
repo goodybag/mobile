@@ -36,7 +36,9 @@ GB.Views.add('sidebar', {
       }
     },
     
-    list: { }
+    list: { 
+      view: gb.style.get('sidebar.list.base')  
+    }
   },
   
   Constructor: function () { 
@@ -58,13 +60,18 @@ GB.Views.add('sidebar', {
     
     // Side-bar items
     [ 'nearby', 'activity', 'settings' ].forEach(function (item) {
-      $el.list[item] = gb.style.get('sidebar.list.base sidebar.list.' + item);
+      $el.list[item] = gb.style.get('sidebar.list.item.base');
+      $el.list[item].icon = gb.style.get('sidebar.list.item.inactive sidebar.list.' + item + '.icon');
+      $el.list[item].text = gb.style.get('sidebar.list.item.inactive sidebar.list.' + item + '.text');
+      $el.list[item].add($el.list[item].icon);
+      $el.list[item].add($el.list[item].text);
+      
       $el.list[item].addEventListener('click', function (e) {
         $this.clearActive();
         $this.setActive(item);
       });
       
-      $self.add($el.list[item]);
+      $el.list.view.add($el.list[item]);
     });
     
     // Download Update
@@ -75,6 +82,8 @@ GB.Views.add('sidebar', {
     });
     $self.add($el.list.update);
     $el.list.update.hide(); 
+    
+    $self.add($el.list.view);
       
     // Events
     gb.consumer.on('change:avatar', function(){ $self.setAvatar(); });
@@ -121,8 +130,10 @@ GB.Views.add('sidebar', {
     });
   },
   
-  setActive: function (area) {
-    var view;
+  setActive: function (area, view) {
+    if (this.active == area) {
+      GB.Windows.get('main').toggleSidebar(true); return;
+    }
     
     // Correct name for files.
     if (area === 'activity') {
@@ -134,6 +145,7 @@ GB.Views.add('sidebar', {
     }
     
     // Save Location
+    var $el = this.elements.list;
     this.active = area;
     $prop.setString('location', area);
     
@@ -141,7 +153,9 @@ GB.Views.add('sidebar', {
     GB.Windows.get('main').toggleSidebar();
     
     if (area !== 'profile')
-      this.elements.list[area].image = gb.utils.getImage('screens/sidebar/items/' + area + '_active.png');
+      $el[this.active].setBackgroundColor(gb.style.base.sidebar.list.item.active.background),
+      $el[this.active].icon.setColor(gb.style.base.sidebar.list.item.active.color),
+      $el[this.active].text.setColor(gb.style.base.sidebar.list.item.active.color);
     
     // Show The Area
     GB.Windows.get('main').showPage(view);
@@ -149,15 +163,11 @@ GB.Views.add('sidebar', {
   },
   
   clearActive: function () {
+    var $el = this.elements.list;
     if (typeof this.active === 'undefined' || this.active === 'profile') return;
-    this.elements.list[this.active].image = gb.utils.getImage('screens/sidebar/items/' + this.active + '.png');
-  },
-  
-  showUpdate: function () {
-    this.elements.list.update.show();
-  },
-  
-  hideUpdate: function () {
-    this.elements.list.update.hide();
+    $el[this.active].setBackgroundColor(gb.style.base.sidebar.list.item.base.background);
+    $el[this.active].icon.setColor(gb.style.base.sidebar.list.item.inactive.color);
+    $el[this.active].text.setColor(gb.style.base.sidebar.list.item.inactive.color);
+    this.active = undefined;
   }
 });

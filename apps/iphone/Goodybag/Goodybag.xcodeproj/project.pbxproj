@@ -49,6 +49,7 @@
 		12EC9B9314FDF16D003D3BF5 /* FBLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EC9B7A14FDF16C003D3BF5 /* FBLoginDialog.m */; };
 		12EC9B9414FDF16D003D3BF5 /* FBDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EC9B7C14FDF16C003D3BF5 /* FBDialog.m */; };
 		221FBE4415505E8300A7543E /* Cordova.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 221FBE4315505E8300A7543E /* Cordova.framework */; };
+		2CFF48031610642000E632EE /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CFF48021610642000E632EE /* Default-Landscape@2x~ipad.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +146,7 @@
 		12EC9B8814FDF16C003D3BF5 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		12EC9B8914FDF16C003D3BF5 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		221FBE4315505E8300A7543E /* Cordova.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cordova.framework; path = ../../../../../Users/Shared/Cordova/Frameworks/Cordova.framework; sourceTree = "<group>"; };
+		2CFF48021610642000E632EE /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
 		525BFE731509C8FD00C66A83 /* PhoneGapLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PhoneGapLib.xcodeproj; path = ../../../../../Users/john/PhoneGapLib/PhoneGapLib.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -184,6 +186,7 @@
 		128494BA14FC5F7F00802566 = {
 			isa = PBXGroup;
 			children = (
+				2CFF48021610642000E632EE /* Default-Landscape@2x~ipad.png */,
 				525BFE731509C8FD00C66A83 /* PhoneGapLib.xcodeproj */,
 				12EC9B6814FDF110003D3BF5 /* facebook-ios-sdk.xcodeproj */,
 				1284951A14FC604000802566 /* www */,
@@ -481,6 +484,7 @@
 				1284951214FC5F8000802566 /* MainViewController.xib in Resources */,
 				1284951B14FC604000802566 /* www in Resources */,
 				12EC9B8A14FDF16D003D3BF5 /* FBDialog.bundle in Resources */,
+				2CFF48031610642000E632EE /* Default-Landscape@2x~ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
