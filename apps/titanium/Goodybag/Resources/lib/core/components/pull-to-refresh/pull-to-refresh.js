@@ -65,7 +65,7 @@
     , arrow: $ui.createLabel({
         color: 'white'
       , textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER
-      , text: Ligature.get('down')
+      , text: Ligature.get('arrowdown')
       , font: {
           fontFamily: Ligature.typeface(),
           fontSize: 24

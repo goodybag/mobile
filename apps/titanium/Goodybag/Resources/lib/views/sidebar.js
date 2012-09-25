@@ -59,28 +59,29 @@ GB.Views.add('sidebar', {
     for (var slot in $el.bank.slots) $self.add($el.bank.slots[slot]);
     
     // Side-bar items
-    [ 'nearby', 'activity', 'settings' ].forEach(function (item) {
+    [ 'nearby', 'activity', 'settings', 'update' ].forEach(function (item) {
       $el.list[item] = gb.style.get('sidebar.list.item.base');
       $el.list[item].icon = gb.style.get('sidebar.list.item.inactive sidebar.list.' + item + '.icon');
       $el.list[item].text = gb.style.get('sidebar.list.item.inactive sidebar.list.' + item + '.text');
       $el.list[item].add($el.list[item].icon);
       $el.list[item].add($el.list[item].text);
       
-      $el.list[item].addEventListener('click', function (e) {
+      var fn = function (e) {
         $this.clearActive();
         $this.setActive(item);
-      });
+      };
       
+      if (item === 'update'){
+        fn = function () {
+          Ti.Platform.openURL(gb.config.appStoreUrl);
+        };
+      }
+      
+      $el.list[item].addEventListener('click', fn);
       $el.list.view.add($el.list[item]);
     });
     
-    // Download Update
-    $el.list.update = gb.style.get('sidebar.list.base sidebar.list.update');
-    $el.list.update.addEventListener('click', function () {
-      alert("opening " + gb.config.appStoreUrl);
-      Ti.Platform.openURL(gb.config.appStoreUrl);
-    });
-    $self.add($el.list.update);
+    // Hide the update button until we need it
     $el.list.update.hide(); 
     
     $self.add($el.list.view);
@@ -169,5 +170,13 @@ GB.Views.add('sidebar', {
     $el[this.active].icon.setColor(gb.style.base.sidebar.list.item.inactive.color);
     $el[this.active].text.setColor(gb.style.base.sidebar.list.item.inactive.color);
     this.active = undefined;
+  },
+  
+  showUpdate: function () {
+    this.elements.list.update.show();
+  },
+  
+  hideUpdate: function () {
+    this.elements.list.update.hide();
   }
 });
