@@ -317,11 +317,7 @@ GB.Views.add('nearby', {
         $el.place = null;
         
         // Set Holder up
-        $el.holder.backgroundColor = 'yellow';
         $el.holder.setVisible(true);
-        
-        // Set Menu to visible
-        $el.menu.base.setVisible(true);
         
         GB.Windows.get('main').hideLoader();
       });
