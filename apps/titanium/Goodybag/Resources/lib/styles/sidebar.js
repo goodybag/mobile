@@ -103,27 +103,106 @@ gb.style.base.sidebar = {
   
   list: {
     base: {
-      build: { type: 'createImageView' },
+      top: 88,
+      layout: 'vertical',
+      build: { type: 'createView' },
+    },
+    
+    item: {
+      base: {
+        top: -1,
+        left: -1,
+        height: 50,
+        width: Ti.UI.FILL,
+        layout: 'horizontal',
+        background: '#24303b',
+        borderWidth: 1,
+        borderColor: '#2f3b45',
+        build: { type: 'createView' }
+      },
+      
+      inactive: {
+        top: 5,
+        bottom: 5,
+        left: 5,
+        color: '#9baab9',
+        font: {
+          fontSize: 20
+        },
+        shadowColor: '#1c262f',
+        shadowOffset: { x: 0, y: 1 }
+      },
+      
+      active: {
+        color: '#cfdae4',
+        background: '#1c2228'
+      },
     },
     
     nearby: {
-      top: 88,
-      image: 'screens/sidebar/items/nearby.png'
+      icon: {
+        left: 10,
+        width: 28,
+        textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+        text: Ligature.get('pin'),
+        font: {
+          fontFamily: Ligature.typeface(),
+          fontSize: 36
+        },
+        build: { type: 'createLabel' }
+      },
+      
+      text: {
+        text: 'Nearby Places',
+        font: {
+          fontWeight: 'bold'
+        },
+        build: { type: 'createLabel' }
+      },
     },
-//     
-    // sponsored: {
-      // top: 124,
-      // image: 'screens/sidebar/items/sponsored.png'
-    // },
     
     activity: {
-      top: 124, // 60
-      image: 'screens/sidebar/items/activity.png'
+      icon: {
+        left: 10,
+        width: 28,
+        textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+        text: Ligature.get('globe'),
+        font: {
+          fontFamily: Ligature.typeface(),
+          fontSize: 36
+        },
+        build: { type: 'createLabel' }
+      },
+      
+      text: {
+        text: 'Activity Stream',
+        font: {
+          fontWeight: 'bold'
+        },
+        build: { type: 'createLabel' }
+      }
     },
     
     settings: {
-      top: 160, // 96
-      image: 'screens/sidebar/items/settings.png'
+      icon: {
+        left: 10,
+        width: 28,
+        textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+        text: Ligature.get('setting'),
+        font: {
+          fontFamily: Ligature.typeface(),
+          fontSize: 36
+        },
+        build: { type: 'createLabel' }
+      },
+      
+      text: {
+        text: 'Settings',
+        font: {
+          fontWeight: 'bold'
+        },
+        build: { type: 'createLabel' }
+      }
     }
   }
 };
