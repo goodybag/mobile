@@ -172,12 +172,20 @@
       views.arrow.transform = Ti.UI.create2DMatrix();
     }
   , getDateStr: function(){
-      var date = new Date(), dateStr = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
+      var
+        date    = new Date()
+      , dateStr = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear()
+      , min     = date.getMinutes()
+      ;
+      
+      if (min < 10) min = "0" + min;
+      else if (min % 10 === 0) min += "0";
+
       if (date.getHours() >= 12){
         dateStr += ' ' + (date.getHours() == 12 ? date.getHours() : date.getHours() - 12)
-                       + ':' + date.getMinutes() +' PM';
+                 + ':' + min +' PM';
       }else{
-        dateStr += ' ' + date.getHours() + ':' + date.getMinutes() + ' AM';
+        dateStr += ' ' + date.getHours() + ':' + min + ' AM';
       }
       return dateStr;
     }
