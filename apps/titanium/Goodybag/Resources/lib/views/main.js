@@ -148,6 +148,12 @@ GB.Windows.add('main', Window.extend({
     this.showPage(this.initial);
     this.elements.views.holder.sidebar.setDetails(gb.consumer);
     this.streamGlobalRefresher.start();
+
+    // Check for app update
+    gb.utils.updateAvailable(function(error, updateAvailable){
+      // Don't worry about errors - we really don't care to do much with them
+      GB.Views.get('sidebar')[(updateAvailable ? 'show' : 'hide') + 'Update']();
+    });
   },
   
   /**

@@ -715,7 +715,7 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setScreenName, { screenName: value }, function(error, data){
-        if (error) return gb.handleError(error), console.log(error);
+        if (error) return gb.handleError(error);
         data = JSON.parse(data);
         if (data.error) return gb.handleError(data.error), callback(data.error);
         $this.data.setScreenName = true;

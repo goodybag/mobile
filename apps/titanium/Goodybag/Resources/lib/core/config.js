@@ -8,6 +8,12 @@
 gb.config = function (global, fb, storage) {
   var self = this;
   
+  this.version = "1.0.0";
+  
+  // App Store
+  this.appId = '1234567890';
+  this.appStoreUrl = 'itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=' + this.appId;
+  
   // debugging modes
   this.debug = true;
   this.development = true;
@@ -39,8 +45,8 @@ gb.config = function (global, fb, storage) {
   Titanium.Geolocation.distanceFilter = 10; // Meters to fire event again
   
   // Api Domain
-  var domain = (this.development ? 'local' : 'www') + '.goodybag.com';
-      // domain = '192.168.1.6:3001';
+  // var domain = (this.development ? 'local' : 'www') + '.goodybag.com';
+      var domain = '192.168.1.5';
       
   // Api URLS
   this.api = {};
@@ -67,7 +73,8 @@ gb.config = function (global, fb, storage) {
   this.api.setEmail           = 'http://' + domain + '/api/consumers/self/email'
   this.api.createBarcodeId    = 'http://' + domain + '/api/consumers/barcodes'
   this.api.updateMedia        = 'http://' + domain + '/api/consumers/self/media'
-  
+  this.api.version            = 'http://' + domain + '/api/version/mobile'
+
   // Secret passphrase for files.
   this.secret = 'G00D13B4GR0X!!';
   

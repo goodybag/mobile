@@ -66,6 +66,15 @@ GB.Views.add('sidebar', {
       
       $self.add($el.list[item]);
     });
+    
+    // Download Update
+    $el.list.update = gb.style.get('sidebar.list.base sidebar.list.update');
+    $el.list.update.addEventListener('click', function () {
+      alert("opening " + gb.config.appStoreUrl);
+      Ti.Platform.openURL(gb.config.appStoreUrl);
+    });
+    $self.add($el.list.update);
+    $el.list.update.hide(); 
       
     // Events
     gb.consumer.on('change:avatar', function(){ $self.setAvatar(); });
@@ -142,5 +151,13 @@ GB.Views.add('sidebar', {
   clearActive: function () {
     if (typeof this.active === 'undefined' || this.active === 'profile') return;
     this.elements.list[this.active].image = gb.utils.getImage('screens/sidebar/items/' + this.active + '.png');
+  },
+  
+  showUpdate: function () {
+    this.elements.list.update.show();
+  },
+  
+  hideUpdate: function () {
+    this.elements.list.update.hide();
   }
 });

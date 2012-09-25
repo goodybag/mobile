@@ -124,6 +124,11 @@ gb.style.base.sidebar = {
     settings: {
       top: 160, // 96
       image: 'screens/sidebar/items/settings.png'
+    },
+    
+    update: {
+      top: 196, // 96
+      image: 'screens/sidebar/items/sponsored.png'
     }
   }
 };

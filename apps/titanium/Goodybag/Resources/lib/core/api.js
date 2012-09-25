@@ -6,17 +6,17 @@
       return "api-" + name + "-offset-" + options.offset + "-limit-" + options.limit;
     }
   ;
-  api.get = function(url, callback){
+  api.get = function(url, callback, silent){
     gb.utils.debug("[API GET] - " + url);
     $http.get(url, function(error, data){
       if (error) return gb.utils.debug(error);
       data = JSON.parse(data);
-      if (data.error) gb.handleError(data.error);
+      if (data.error && !silent) gb.handleError(data.error);
       if (callback) callback(data.error, data.data);
     });
   };
   
-  api.post = function(url, data, callback){
+  api.post = function(url, data, callback, silent){
     gb.utils.debug("[API POST] - " + url);
     if (typeof data === "function"){
       callback = data;
@@ -25,7 +25,7 @@
     $http.post(url, data, function(error, data){
       if (error) return gb.utils.debug(error);
       data = JSON.parse(data);
-      if (data.error) gb.handleError(data.error);
+      if (data.error && !silent) gb.handleError(data.error);
       if (callback) callback(data.error, data.data);
     });
   };
@@ -163,5 +163,10 @@
       file.write(JSON.stringify(data));
       return store.stream[cleanName] = true;
     });
+  };
+  
+  api.version = {};
+  api.version.get = function(callback){
+    api.get(gb.config.api.version, callback, true);
   };
 })();

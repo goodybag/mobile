@@ -603,6 +603,12 @@ gb.utils = function (global) {
     });
   };
   
+  this.updateAvailable = function(callback){
+    gb.api.version.get(function(error, data){
+      callback(error, data.version > gb.config.version)
+    });
+  };
+  
   return this;
 }(
   this
