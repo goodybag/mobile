@@ -505,8 +505,9 @@ if(!GB.Models)
       if (!this.data) return callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
       // Hack for now to fix users with no media
       if (!this.data.media) return callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
-      var url = ((size == 85) ? this.data.media.thumb : this.data.media.url), written = true, $self = this;
-      if (!url) url = 'http://goodybag-uploads.s3.amazonaws.com/consumers/' + this.data._id + '-' + size + '.png';
+      // We really don't need to be using the media object apparently
+      var url/* = ((size == 85) ? this.data.media.thumb : this.data.media.url)*/, written = true, $self = this;
+      /*if (!url) */url = 'http://goodybag-uploads.s3.amazonaws.com/consumers/' + this.data._id + '-' + size + '.png';
       if (!this.avatar['s' + size].exists() || forceNew) {
         $http.get.image(url, function (error, results) { 
           if (error) return gb.handleError(error), callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
