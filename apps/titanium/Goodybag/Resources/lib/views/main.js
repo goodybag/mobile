@@ -1,6 +1,6 @@
 GB.Windows.add('main', Window.extend({
   debug: true,
-  animated: true,
+  // animated: true,
   callback: null,
   location: null,
   initial: 'settings',
@@ -22,7 +22,7 @@ GB.Windows.add('main', Window.extend({
 
   Constructor: function () {
     var $this, $el, $window;
-    
+    this.animated = true;
     // Store window
     this.window = gb.style.get('main.self');
     
@@ -145,6 +145,7 @@ GB.Windows.add('main', Window.extend({
    * Methods to be called upon show.
    */
   onShow: function () {
+    this.animated = true;
     GB.Views.get('sidebar').setActive(this.initial);
     this.elements.views.holder.sidebar.setDetails(gb.consumer);
     this.streamGlobalRefresher.start();
@@ -219,14 +220,28 @@ GB.Windows.add('main', Window.extend({
    * Toggle sidebar state and slide main screen in and out.
    */
   toggleSidebar: function (same) {
-    this.animated = (!this.animated) ? true : false;
-    
+    this[(this.animated ? 'open' : 'close') + 'Sidebar']();
+  },
+  
+  openSidebar: function () {
+    if (!this.animated) return;
+    this.animated = false;
     this.elements.header.buttons.sidebar.setImage(
-      this.images.sidebar[((!this.animated) ? '' : 'in') + 'active'] 
+      this.images.sidebar.active 
     );
-    
     this.elements.views.main.animate(
-      gb.style.get('main.animations.' + ((!this.animated) ? 'right' : 'left'))
+      gb.style.get('main.animations.right')
+    );
+  },
+  
+  closeSidebar: function () {
+    if (this.animated) return;
+    this.animated = true;
+    this.elements.header.buttons.sidebar.setImage(
+      this.images.sidebar.inactive 
+    );
+    this.elements.views.main.animate(
+      gb.style.get('main.animations.left')
     );
   }
 }));

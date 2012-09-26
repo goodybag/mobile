@@ -133,9 +133,7 @@ GB.Views.add('sidebar', {
   
   setActive: function (area, view) {
     var main = GB.Windows.get('main');
-    if (this.active == area) {
-      main.toggleSidebar(true); return;
-    }
+    if (this.active == area) return main.closeSidebar();
     
     // Correct name for files.
     if (area === 'activity') {
@@ -151,8 +149,8 @@ GB.Views.add('sidebar', {
     this.active = area;
     $prop.setString('location', area);
     
-    // Toggle side-bar.
-    if (!main.animated) main.toggleSidebar();
+    // Close side-bar.
+    main.closeSidebar();
     
     if (area !== 'profile')
       $el[this.active].setBackgroundColor(gb.style.base.sidebar.list.item.active.background),
