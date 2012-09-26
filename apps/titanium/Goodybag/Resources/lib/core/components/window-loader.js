@@ -52,7 +52,6 @@ var WindowLoader = {
     this.loader.base.hidden = false;
     
     this._loader.interval = setInterval(function(){
-      console.log($this._loader.time + 1);
       if (++$this._loader.time > $this._loader.tooLong){
         $this.loader.middle.text.setText("Taking too long? Just tap here to hide this thing!");
         $this._loader.canClose = true;

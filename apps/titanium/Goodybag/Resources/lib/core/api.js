@@ -10,7 +10,7 @@
     gb.utils.debug("[API GET] - " + url);
     $http.get(url, function(error, data){
       if (error) return gb.utils.debug(error);
-      data = JSON.parse(data);
+      data = JSON.parse(data) || {};
       if (data.error && !silent) gb.handleError(data.error);
       if (callback) callback(data.error, data.data);
     });

@@ -139,6 +139,9 @@ GB.Windows.add('main', Window.extend({
   
   onHide: function () {
     this.streamGlobalRefresher.stop();
+    GB.Views.hide(this.location);
+    // Reset active sidebar item so it doesn't bail out early when we invoke setActive in main's onShow
+    GB.Views.get('sidebar').active = null;
   },
 
   /**
