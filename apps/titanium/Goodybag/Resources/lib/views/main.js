@@ -145,7 +145,6 @@ GB.Windows.add('main', Window.extend({
    * Methods to be called upon show.
    */
   onShow: function () {
-    this.animated = true;
     GB.Views.get('sidebar').setActive(this.initial);
     this.elements.views.holder.sidebar.setDetails(gb.consumer);
     this.streamGlobalRefresher.start();
