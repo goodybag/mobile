@@ -132,8 +132,9 @@ GB.Views.add('sidebar', {
   },
   
   setActive: function (area, view) {
+    var main = GB.Windows.get('main');
     if (this.active == area) {
-      GB.Windows.get('main').toggleSidebar(true); return;
+      main.toggleSidebar(true); return;
     }
     
     // Correct name for files.
@@ -151,7 +152,7 @@ GB.Views.add('sidebar', {
     $prop.setString('location', area);
     
     // Toggle side-bar.
-    GB.Windows.get('main').toggleSidebar();
+    if (!main.animated) main.toggleSidebar();
     
     if (area !== 'profile')
       $el[this.active].setBackgroundColor(gb.style.base.sidebar.list.item.active.background),
@@ -159,8 +160,8 @@ GB.Views.add('sidebar', {
       $el[this.active].text.setColor(gb.style.base.sidebar.list.item.active.color);
     
     // Show The Area
-    GB.Windows.get('main').showPage(view);
-    GB.Windows.get('main').toggleQRCode();
+    main.showPage(view);
+    main.toggleQRCode();
   },
   
   clearActive: function () {
