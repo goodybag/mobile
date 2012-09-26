@@ -32,16 +32,16 @@ gb.Views.add('profile', {
         }
       },
       
-      charity: {
-        base: gb.style.get('profile.header.sub.base'),
-        inner: {
-          base: gb.style.get('profile.header.sub.inner'),
-          one: gb.style.get('profile.header.sub.one profile.header.sub.padding'),
-          two: gb.style.get('profile.header.sub.two profile.header.sub.padding', {
-            color: gb.ui.color.pink
-          })
-        }
-      },
+      // charity: {
+        // base: gb.style.get('profile.header.sub.base'),
+        // inner: {
+          // base: gb.style.get('profile.header.sub.inner'),
+          // one: gb.style.get('profile.header.sub.one profile.header.sub.padding'),
+          // two: gb.style.get('profile.header.sub.two profile.header.sub.padding', {
+            // color: gb.ui.color.pink
+          // })
+        // }
+      // },
       
       tapins: {
         base: gb.style.get('profile.header.sub.base'),
@@ -97,8 +97,8 @@ gb.Views.add('profile', {
     $holder.donated.inner.two.setText('$' + ((amt === 0) ? amt : gb.utils.formatMoney(amt / 100)));
 
     // Selected Charities
-    $holder.charity.inner.one.setText('Selected Charity:');
-    $holder.charity.inner.two.setText($user.getCharityName());
+    // $holder.charity.inner.one.setText('Selected Charity:');
+    // $holder.charity.inner.two.setText($user.getCharityName());
     
     $user.getTapinCount(function (data) {
       if (!data) {
