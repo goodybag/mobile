@@ -5,13 +5,14 @@ var WindowLoader = {
     this._loader = {
       time: 0
     , tooLong: 5
+    , canClose: false
     };
     
     this.loader = {
       base: gb.style.get('common.loader.base', {
         events: {
           'click': function(){
-            if ($this._loader.time >= $this._loader.tooLong) $this.hideLoader();
+            if ($this._loader.canClose) $this.hideLoader();
           }
         }
       })
@@ -44,13 +45,19 @@ var WindowLoader = {
       if (callback) callback();
     });
     
+    if (this._loader.interval) clearInterval(this._loader.interval);
+    this._loader.time = 0;
+    this._loader.canClose = false;
     this.isLoading = true;
     this.loader.base.hidden = false;
     
     this._loader.interval = setInterval(function(){
-      if (++$this._loader.time >= $this._loader.tooLong){
+      console.log($this._loader.time + 1);
+      if (++$this._loader.time > $this._loader.tooLong){
         $this.loader.middle.text.setText("Taking too long? Just tap here to hide this thing!");
+        $this._loader.canClose = true;
         clearInterval($this._loader.interval);
+        $this._loader.time = 0;
       }
     }, 1000);
   }
@@ -58,9 +65,11 @@ var WindowLoader = {
 , hideLoader: function(callback){
     var $this = this;
     
+    clearInterval(this._loader.interval);
+    this._loader.canClose = false;
+    this._loader.time = 0;
+    
     if (!this.loader.base.hidden){
-      clearInterval(this._loader.interval);
-      this._loader.time = 0;
       this.loader.base.animate({ opacity: 0 }, function(){
         $this.loader.base.setZIndex(-1);
         $this.loader.middle.spinner.hide();
