@@ -222,9 +222,6 @@ if(!GB.Models)
      * 
      * @param  {Function} callback returns the data or errors.
      * @param  {Boolean} force forces authentication and revalidation
-     * @TODO   Check for alias and request data.
-     * @TODO   Check for charity and show charity screen.
-     * @TODO   Check for QRCode and generate one if missing.
      */
     facebookAuth: function (callback, force) {
       var self = this;

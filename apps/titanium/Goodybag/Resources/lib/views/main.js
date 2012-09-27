@@ -109,9 +109,13 @@ GB.Windows.add('main', Window.extend({
     this.shownPages = [];
     
     // Refresh stream data in the background
-    this.streamGlobalRefresher = new GB.PeriodicRefresher(function(callback){
-      gb.api.stream.global({ skip: 0, limit: 30 }, callback);
-    }, gb.api.store.stream, gb.config.autoRefreshTime);
+    this.streamGlobalRefresher = new GB.PeriodicRefresher(
+      function(callback){
+        gb.api.stream.global({ offset: 0, limit: 30 }, callback);
+      }
+    , gb.api.store.stream
+    , gb.config.autoRefreshTime
+    );
     
     return this;
   },
