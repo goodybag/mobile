@@ -315,6 +315,7 @@ GB.Views.add('nearby', {
         $this.self.remove($el.place);
         $el.place.close();
         $el.place = null;
+        $el.menu.base.setVisible(true);
         
         // Set Holder up
         $el.holder.setVisible(true);
