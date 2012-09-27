@@ -16,7 +16,7 @@
         <target device="blackberry">false</target>
     </deployment-targets>
     <sdk-version>2.1.1.GA</sdk-version>
-    <id>com.goodybag</id>
+    <id>com.goodybag.consumers.mobile.iphone</id>
     <name>Goodybag</name>
     <version>1.0</version>
     <publisher>Goodybag</publisher>

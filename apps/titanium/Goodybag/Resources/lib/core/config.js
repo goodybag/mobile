@@ -11,7 +11,7 @@ gb.config = function (global, fb, storage) {
   this.version = "1.0.1";
   
   // App Store
-  this.appId = '1234567890';
+  this.appId = '506924389';
   this.appStoreUrl = 'itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=' + this.appId;
   
   // debugging modes
