@@ -164,7 +164,7 @@ GB.Views.add('sidebar', {
   
   clearActive: function () {
     var $el = this.elements.list;
-    if (typeof this.active === 'undefined' || this.active === 'profile') return;
+    if (typeof this.active === 'undefined' || this.active === 'profile' || this.active === 'qrcode') return;
     $el[this.active].setBackgroundColor(gb.style.base.sidebar.list.item.base.background);
     $el[this.active].icon.setColor(gb.style.base.sidebar.list.item.inactive.color);
     $el[this.active].text.setColor(gb.style.base.sidebar.list.item.inactive.color);

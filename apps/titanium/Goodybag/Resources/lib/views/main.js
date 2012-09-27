@@ -183,6 +183,7 @@ GB.Windows.add('main', Window.extend({
     this.elements.header.buttons.qrcode.setImage(
       this.images.qrcode[((this.location == 'qrcode') ? '' : 'in') + 'active'] 
     );
+    if (this.location === "qrcode") GB.Views.get('sidebar').active = "qrcode";
   },
   
   toggleBack: function (callback) {
