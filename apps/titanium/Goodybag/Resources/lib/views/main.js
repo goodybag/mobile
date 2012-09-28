@@ -65,6 +65,7 @@ GB.Windows.add('main', Window.extend({
           if ($this.location == 'qrcode') return;
           if ($this.callback) $this.toggleBack();
           GB.Views.get('sidebar').clearActive();
+          GB.Views.get('sidebar').active = 'qrcode';
           $this.showPage('qrcode');
           $this.toggleQRCode();
         }
@@ -146,6 +147,7 @@ GB.Windows.add('main', Window.extend({
    */
   onShow: function () {
     this.showPage(this.initial);
+    if (this.initial in [ 'activity', 'nearby', 'settings']) GB.Views.get('sidebar')
     this.elements.views.holder.sidebar.setDetails(gb.consumer);
     this.streamGlobalRefresher.start();
   },
