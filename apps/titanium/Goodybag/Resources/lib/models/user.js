@@ -107,9 +107,12 @@ if(!GB.Models)
       }, function (error, json) {
         var cookie, segments;
         
-        gb.utils.debug('[User] Got back results.');
+        gb.utils.debug('[User] Got back results:');
+        gb.utils.debug('[User] - error: ' + error);
+        gb.utils.debug('[User] - json: ' + json);
         if (!error && !json) return callback('Invalid server response...');
         if (error) return callback(JSON.parse(error).message || "Invalid login credentials!");
+        if (!json) return callback("Invalid server response...");
           
         gb.utils.debug('[User] Got back the consumer object.');
         var consumer = JSON.parse(json);
