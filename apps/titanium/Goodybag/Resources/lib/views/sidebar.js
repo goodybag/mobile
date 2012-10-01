@@ -59,20 +59,30 @@ GB.Views.add('sidebar', {
     for (var slot in $el.bank.slots) $self.add($el.bank.slots[slot]);
     
     // Side-bar items
-    [ 'nearby', 'activity', 'settings' ].forEach(function (item) {
+    [ 'nearby', 'activity', 'settings', 'update' ].forEach(function (item) {
       $el.list[item] = gb.style.get('sidebar.list.item.base');
       $el.list[item].icon = gb.style.get('sidebar.list.item.inactive sidebar.list.' + item + '.icon');
       $el.list[item].text = gb.style.get('sidebar.list.item.inactive sidebar.list.' + item + '.text');
       $el.list[item].add($el.list[item].icon);
       $el.list[item].add($el.list[item].text);
       
-      $el.list[item].addEventListener('click', function (e) {
+      var fn = function (e) {
         $this.clearActive();
         $this.setActive(item);
-      });
+      };
       
+      if (item === 'update'){
+        fn = function () {
+          Ti.Platform.openURL(gb.config.appStoreUrl);
+        };
+      }
+      
+      $el.list[item].addEventListener('click', fn);
       $el.list.view.add($el.list[item]);
     });
+    
+    // Hide the update button until we need it
+    $el.list.update.hide(); 
     
     $self.add($el.list.view);
       
@@ -122,9 +132,8 @@ GB.Views.add('sidebar', {
   },
   
   setActive: function (area, view) {
-    if (this.active == area) {
-      GB.Windows.get('main').toggleSidebar(true); return;
-    }
+    var main = GB.Windows.get('main');
+    if (this.active == area) return main.closeSidebar();
     
     // Correct name for files.
     if (area === 'activity') {
@@ -140,8 +149,8 @@ GB.Views.add('sidebar', {
     this.active = area;
     $prop.setString('location', area);
     
-    // Toggle side-bar.
-    GB.Windows.get('main').toggleSidebar();
+    // Close side-bar.
+    main.closeSidebar();
     
     if (area !== 'profile')
       $el[this.active].setBackgroundColor(gb.style.base.sidebar.list.item.active.background),
@@ -149,16 +158,24 @@ GB.Views.add('sidebar', {
       $el[this.active].text.setColor(gb.style.base.sidebar.list.item.active.color);
     
     // Show The Area
-    GB.Windows.get('main').showPage(view);
-    GB.Windows.get('main').toggleQRCode();
+    main.showPage(view);
+    main.toggleQRCode();
   },
   
   clearActive: function () {
     var $el = this.elements.list;
-    if (typeof this.active === 'undefined' || this.active === 'profile') return;
+    if (typeof this.active === 'undefined' || this.active === 'profile' || this.active === 'qrcode') return;
     $el[this.active].setBackgroundColor(gb.style.base.sidebar.list.item.base.background);
     $el[this.active].icon.setColor(gb.style.base.sidebar.list.item.inactive.color);
     $el[this.active].text.setColor(gb.style.base.sidebar.list.item.inactive.color);
     this.active = undefined;
+  },
+  
+  showUpdate: function () {
+    this.elements.list.update.show();
+  },
+  
+  hideUpdate: function () {
+    this.elements.list.update.hide();
   }
 });

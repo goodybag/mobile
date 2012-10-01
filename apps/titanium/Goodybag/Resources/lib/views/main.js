@@ -1,6 +1,6 @@
 GB.Windows.add('main', Window.extend({
   debug: true,
-  animated: true,
+  // animated: true,
   callback: null,
   location: null,
   initial: 'settings',
@@ -22,7 +22,7 @@ GB.Windows.add('main', Window.extend({
 
   Constructor: function () {
     var $this, $el, $window;
-    
+    this.animated = true;
     // Store window
     this.window = gb.style.get('main.self');
     
@@ -110,9 +110,13 @@ GB.Windows.add('main', Window.extend({
     this.shownPages = [];
     
     // Refresh stream data in the background
-    this.streamGlobalRefresher = new GB.PeriodicRefresher(function(callback){
-      gb.api.stream.global({ skip: 0, limit: 30 }, callback);
-    }, gb.api.store.stream, gb.config.autoRefreshTime);
+    this.streamGlobalRefresher = new GB.PeriodicRefresher(
+      function(callback){
+        gb.api.stream.global({ offset: 0, limit: 30 }, callback);
+      }
+    , gb.api.store.stream
+    , gb.config.autoRefreshTime
+    );
     
     return this;
   },
@@ -140,16 +144,24 @@ GB.Windows.add('main', Window.extend({
   
   onHide: function () {
     this.streamGlobalRefresher.stop();
+    GB.Views.hide(this.location);
+    // Reset active sidebar item so it doesn't bail out early when we invoke setActive in main's onShow
+    GB.Views.get('sidebar').active = null;
   },
 
   /**
    * Methods to be called upon show.
    */
   onShow: function () {
-    this.showPage(this.initial);
-    if (this.initial in [ 'activity', 'nearby', 'settings']) GB.Views.get('sidebar')
+    GB.Views.get('sidebar').setActive(this.initial);
     this.elements.views.holder.sidebar.setDetails(gb.consumer);
     this.streamGlobalRefresher.start();
+
+    // Check for app update
+    gb.utils.updateAvailable(function(error, updateAvailable){
+      // Don't worry about errors - we really don't care to do much with them
+      GB.Views.get('sidebar')[(updateAvailable ? 'show' : 'hide') + 'Update']();
+    });
   },
   
   /**
@@ -172,6 +184,7 @@ GB.Windows.add('main', Window.extend({
     this.elements.header.buttons.qrcode.setImage(
       this.images.qrcode[((this.location == 'qrcode') ? '' : 'in') + 'active'] 
     );
+    if (this.location === "qrcode") GB.Views.get('sidebar').active = "qrcode";
   },
   
   toggleBack: function (callback) {
@@ -215,14 +228,28 @@ GB.Windows.add('main', Window.extend({
    * Toggle sidebar state and slide main screen in and out.
    */
   toggleSidebar: function (same) {
-    this.animated = (!this.animated) ? true : false;
-    
+    this[(this.animated ? 'open' : 'close') + 'Sidebar']();
+  },
+  
+  openSidebar: function () {
+    if (!this.animated) return;
+    this.animated = false;
     this.elements.header.buttons.sidebar.setImage(
-      this.images.sidebar[((!this.animated) ? '' : 'in') + 'active'] 
+      this.images.sidebar.active 
     );
-    
     this.elements.views.main.animate(
-      gb.style.get('main.animations.' + ((!this.animated) ? 'right' : 'left'))
+      gb.style.get('main.animations.right')
+    );
+  },
+  
+  closeSidebar: function () {
+    if (this.animated) return;
+    this.animated = true;
+    this.elements.header.buttons.sidebar.setImage(
+      this.images.sidebar.inactive 
+    );
+    this.elements.views.main.animate(
+      gb.style.get('main.animations.left')
     );
   }
 }));

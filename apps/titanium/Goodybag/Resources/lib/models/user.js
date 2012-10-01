@@ -222,9 +222,6 @@ if(!GB.Models)
      * 
      * @param  {Function} callback returns the data or errors.
      * @param  {Boolean} force forces authentication and revalidation
-     * @TODO   Check for alias and request data.
-     * @TODO   Check for charity and show charity screen.
-     * @TODO   Check for QRCode and generate one if missing.
      */
     facebookAuth: function (callback, force) {
       var self = this;
@@ -502,14 +499,16 @@ if(!GB.Models)
         callback = forceNew;
         forceNew = false;
       }
-      if (!this.data) return callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
+      var defaultAvatar = 'https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png';
+      if (!this.data) return callback();
       // Hack for now to fix users with no media
-      if (!this.data.media) return callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
-      var url = ((size == 85) ? this.data.media.thumb : this.data.media.url), written = true, $self = this;
-      if (!url) url = 'http://goodybag-uploads.s3.amazonaws.com/consumers/' + this.data._id + '-' + size + '.png';
+      if (!this.data.media) return callback(defaultAvatar);
+      // We really don't need to be using the media object apparently
+      var url/* = ((size == 85) ? this.data.media.thumb : this.data.media.url)*/, written = true, $self = this;
+      /*if (!url) */url = 'http://goodybag-uploads.s3.amazonaws.com/consumers/' + this.data._id + '-' + size + '.png';
       if (!this.avatar['s' + size].exists() || forceNew) {
         $http.get.image(url, function (error, results) { 
-          if (error) return gb.handleError(error), callback('https://s3.amazonaws.com/goodybag-uploads/consumers/000000000000000000000000-' + size + '.png');
+          if (error) return gb.handleError(error), callback(defaultAvatar);
           if ($self.avatar['s' + size].write(results) === false) written = false;
           callback((written) ? $self.avatar['s' + size].read() : url);
         });
@@ -738,7 +737,7 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setScreenName, { screenName: value }, function(error, data){
-        if (error) return gb.handleError(error), console.log(error);
+        if (error) return gb.handleError(error);
         data = JSON.parse(data);
         if (data.error) return gb.handleError(data.error), callback(data.error);
         $this.data.setScreenName = true;

@@ -114,3 +114,14 @@ gb.consumer.validate(function (consumer) {
     GB.Windows.show('login');
   }
 });
+
+// Check for updates when we return to the app
+Ti.App.addEventListener('resume', function () {
+  gb.consumer.validate(function (consumer) {
+    if (consumer !== null && typeof consumer !== "undefined") {
+      gb.utils.updateAvailable(function (error, updateAvailable) {
+        GB.Views.get('sidebar')[(updateAvailable ? 'show' : 'hide') + 'Update']();
+      });
+    }
+  });
+});

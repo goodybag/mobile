@@ -154,6 +154,7 @@ gb.style.base.sidebar = {
       
       text: {
         text: 'Nearby Places',
+        left: 8,
         font: {
           fontWeight: 'bold'
         },
@@ -176,6 +177,7 @@ gb.style.base.sidebar = {
       
       text: {
         text: 'Activity Stream',
+        left: 8,
         font: {
           fontWeight: 'bold'
         },
@@ -198,6 +200,30 @@ gb.style.base.sidebar = {
       
       text: {
         text: 'Settings',
+        left: 8,
+        font: {
+          fontWeight: 'bold'
+        },
+        build: { type: 'createLabel' }
+      }
+    },
+    
+    update: {
+      icon: {
+        left: 10,
+        width: 28,
+        textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
+        text: Ligature.get('save'),
+        font: {
+          fontFamily: Ligature.typeface(),
+          fontSize: 36
+        },
+        build: { type: 'createLabel' }
+      },
+      
+      text: {
+        text: 'Download Update',
+        left: 8,
         font: {
           fontWeight: 'bold'
         },

@@ -62,14 +62,8 @@
       , bottom: 0
       })
       
-    , arrow: $ui.createLabel({
-        color: 'white'
-      , textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER
-      , text: Ligature.get('down')
-      , font: {
-          fontFamily: Ligature.typeface(),
-          fontSize: 24
-      } 
+    , arrow: $ui.createView({
+        backgroundImage: 'lib/core/components/pull-to-refresh/images/white-arrow.png'
       , width: '23dp'
       , height: '60dp'
       , bottom: '10dp'
@@ -178,12 +172,20 @@
       views.arrow.transform = Ti.UI.create2DMatrix();
     }
   , getDateStr: function(){
-      var date = new Date(), dateStr = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
+      var
+        date    = new Date()
+      , dateStr = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear()
+      , min     = date.getMinutes()
+      ;
+      
+      if (min < 10) min = "0" + min;
+      else if (min % 10 === 0) min += "0";
+
       if (date.getHours() >= 12){
         dateStr += ' ' + (date.getHours() == 12 ? date.getHours() : date.getHours() - 12)
-                       + ':' + date.getMinutes() +' PM';
+                 + ':' + min +' PM';
       }else{
-        dateStr += ' ' + date.getHours() + ':' + date.getMinutes() + ' AM';
+        dateStr += ' ' + date.getHours() + ':' + min + ' AM';
       }
       return dateStr;
     }

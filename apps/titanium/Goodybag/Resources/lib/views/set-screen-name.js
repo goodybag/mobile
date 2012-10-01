@@ -80,7 +80,7 @@
       // Set
       var $this = this;
       gb.consumer.setScreenName(value, function(error){
-        if (error) return alert(error.friendlyMessage);
+        if (error) return;
         // Trigger that we've completed this step of registration
         $this.triggerOnComplete();
       });

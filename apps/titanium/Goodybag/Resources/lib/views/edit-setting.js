@@ -175,7 +175,6 @@
         view.input.setReturnKeyType(Titanium.UI.RETURNKEY_NEXT),
         view.input.addEventListener('return', function (e) {
           view.input.blur();
-          console.log(next);
           $this.views.pageWrapper.island.fill.wrapper[next[0]][next[1]].input.focus();
         });
         
@@ -278,7 +277,7 @@
         var
           barcodeId = currentFields['field:barcodeId'].input.getValue()
         , errors    = gb.validate('barcodeId', barcodeId)
-        ;
+        ; 
         if (errors.length > 0) return this.reportErrors(errors);
         gb.consumer.setBarcodeId(barcodeId, function(error){
           if (error) return alert(error);
@@ -299,7 +298,8 @@
       break;
       default: break;
     }
-    this.onBack();
+    // Invoke the main back btn callback which will in turn call this.onBack
+    GB.Windows.get('main').callback.back();
   }
   
   , reportErrors: function(errors){
