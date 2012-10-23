@@ -23,6 +23,7 @@ GB.Windows.add('main', Window.extend({
   Constructor: function () {
     var $this, $el, $window;
     this.animated = true;
+    
     // Store window
     this.window = gb.style.get('main.self');
     

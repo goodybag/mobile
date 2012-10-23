@@ -68,9 +68,12 @@ GB.Views.add('nearby', {
   onShow: function (context) {
     var $this = this, $el = this.elements, locations, location;
     
+    console.log('If place change to nearby');
     if (this.location == 'Place') this.location = 'Nearby';
     
+    console.log('Build menu if it does not exist');
     if($el.menu.base.children.length < 1) {
+      console.log('add click event to menu buttons');
       $el.menu.nearby.addEventListener('click', function () { 
         if ($el.places) $el.places.visible = true; else $this.showNearby(); 
         if ($el.map) $el.map.visible = false;
@@ -84,15 +87,19 @@ GB.Views.add('nearby', {
         $el.menu.nearby.deactivate();
         $el.menu.map.activate();
       });
-      
+      console.log('create spacer');
       $el.menu.base.add($ui.createView({ width: $ui.FILL, height: '6dp'}));
+      console.log('add nearby button');
       $el.menu.base.add($el.menu.nearby.base);
+      console.log('add map button');
       $el.menu.base.add($el.menu.map.base);
     }
     
+    gb.utils.debug('[Nearby] Adding Elements to Main View');
     this.self.add($el.menu.base);
     this.self.add($el.holder);
     
+    gb.utils.debug('[Nearby] Getting Geolocation');
     // Setup User Location if Available and not in Development Mode
     gb.consumer.getGeolocation(function (coords) {
       if (!gb.config.development && coords && coords.latitude && coords.longitude) {
@@ -102,18 +109,22 @@ GB.Views.add('nearby', {
         };
       }
       
+      gb.utils.debug('[Nearby] Checking previous location data for difference.')
       if ($this.previous && (
         $this.position.lat == $this.previous.lat &&
         $this.position.lon == $this.previous.lon
       )) {
+        gb.utils.debug('[Nearby] ')
         $this['show' + $this.location]();
       } else {
         // Loader Start
+        gb.utils.debug('[Nearby] Checking loader');
         if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
         
+        gb.utils.debug('[Nearby] Fetching Data');
         $this.fetch(function (error, results) {
           var i, model, locations; $this.models = {}; $this.locations = [];
-          
+          gb.utils.debug('[Nearby] Checking loaded data');
           function mem (param) {  
              if (!$this.memcache) $this.memcache = {};
              var store = JSON.stringify(param[0].getPosition()) + 
@@ -122,21 +133,21 @@ GB.Views.add('nearby', {
              if (!$this.memcache[store]) $this.memcache[store] = $this.compareLocations.apply($this, param);
              return $this.memcache[store];
           }
-          
+          gb.utils.debug('[Nearby] Checking loaded data');
           if(results && results.data) {
             for (i = 0; i < results.data.length; i++) {
               if (!results.data[i] && !results.data[i]._id) continue;
               $this.models[results.data[i]._id] = new GB.Models.Place(results.data[i]);
             }
           }
-          
+          gb.utils.debug('[Nearby] Iterate through locations and add them');
           for (i in $this.models) {
             locations = $this.models[i].getLocations();
             for (x = 0; x < locations.length; x++) {
               $this.locations.push(locations[x]);
             }
           }
-          
+          gb.utils.debug('[Nearby] Sort added locations');
           $this.locations.sort(function (a, b) {
             return mem([a, b]);
           });
@@ -144,7 +155,9 @@ GB.Views.add('nearby', {
           $this.previous = $this.position;
     
           $this['show' + $this.location]();
-          if (this.loading) GB.Windows.get('main').showLoader(), this.loading = false;
+          
+          gb.utils.debug('[Nearby] Checking loader, part two');
+          if (this.loading) GB.Windows.get('main').hideLoader(), this.loading = false;
         }, true);
       }
     });
@@ -164,6 +177,7 @@ GB.Views.add('nearby', {
     this.page = 0;
     
     // Setup Infiniscroll
+    console.log('setting up infiniscroll');
     $el.places = new gb.Views.InfiniScroll(gb.style.get('nearby.places'), {
       triggerAt: '82%',
       onScrollToEnd: function () {
@@ -173,9 +187,11 @@ GB.Views.add('nearby', {
       name: "Places"
     });
     
+    console.log('activating nearby button');
     $el.menu.nearby.activate();
     $el.menu.map.deactivate();
-     
+    
+    console.log('set scrolling to true and location to nearby');
     this.onScroll(true);
     this.location = 'Nearby';
   },
@@ -217,7 +233,7 @@ GB.Views.add('nearby', {
     if (typeof place == 'string') place = this.models[place];
     if ($el.place) $this.self.remove($el.place), $el.place.close(), $el.place = null;
     
-    $el.place = $ui.createWindow();
+    $el.place = $ui[Ti.Android ? 'createView' : 'createWindow']();
     // var back  = new GB.StreamButton('Back');
     var url   = null;
     
@@ -225,12 +241,6 @@ GB.Views.add('nearby', {
     var area = "nearby.location";
     var elements = {
       base: $el.place,
-      
-      // menu: {
-        // base: gb.style.get('nearby.menu.base'),
-        // blank: $ui.createView({ width: $ui.FILL, height: '6dp'}),
-        // back: back.base
-      // },
       
       holder: {
         base: gb.style.get(area + '.holder'),
@@ -453,7 +463,12 @@ GB.Views.add('nearby', {
     
     ($el.map) && ($el.holder.remove($el.map), $el.map = null);
     ($el.places.view) && ($el.holder.remove($el.places.view), $el.places.view = null);
-    ($el.place) && ($this.self.remove($el.place), $el.place.close(), $el.place = null);
+    
+    if ($el.place) {
+      $this.self.remove($el.place)
+      (!Ti.Android) && $el.place.close();
+      $el.place = null;
+    }
   },
   
   /**
@@ -515,14 +530,14 @@ GB.Views.add('nearby', {
   fetch: function (callback, download, force) {
     var limit = 1000, called = false;
     var store = $file.getFile($file.applicationDataDirectory, 'places.json');
-    
+    gb.utils.debug('[Nearby] Checking stored data, and forced variables');
     if (store.exists() && !force) {
       callback(null, JSON.parse(store.read()));
       called = true;
     }
-    
+    gb.utils.debug('[Nearby] Unset storage');
     store = null;
-    
+    gb.utils.debug('[Nearby] Checking loaded data');
     if (download) {
       $http.get(gb.config.api.participating + limit, function (error, results) {
         if (error) {

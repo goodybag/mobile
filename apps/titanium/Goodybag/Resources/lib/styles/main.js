@@ -66,12 +66,14 @@ gb.style.base.main = {
   animations: {
     right: { 
       left: $dp.platformWidth - 40, 
-      duration: 250 
+      duration: 250,
+      locked: true
     },
     
     left: {
       left: 0, 
-      duration: 250
+      duration: 250,
+      locked: true
     }
   }
 };

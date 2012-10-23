@@ -23,16 +23,7 @@ GB.Views.add('sidebar', {
         "04": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.four'),
         "05": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.five'),
         "06": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.six'),
-        "07": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.seven'),
-        "08": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.eight'),
-        "09": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.nine'),
-        "10": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.ten'),
-        "11": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.eleven'),
-        "12": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.twelve'),
-        "13": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.thteen'),
-        "14": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.frteen'),
-        "15": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.ffteen'),
-        "16": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.sxteen')
+        "07": gb.style.get('sidebar.bank.slots.base sidebar.bank.slots.seven')
       }
     },
     
@@ -100,24 +91,23 @@ GB.Views.add('sidebar', {
     $el.header.username.setText($user.getUsername());
     
     if (parseInt($user.data.funds.donated) > 0) {
-      for (var i = 16; i > 3; i--) {
-        if (i == 6 || i == 10 || i == 14) continue;
+      for (var i = 7; i > 2; i--) {
+        if (i == 5) continue;
         list.push(i < 10 ? "0" + i : "" + i);
       }
-      
+      console.log($user.data.funds.donated.toString());
       donated = $user.data.funds.donated.toString().split("");
       donated.reverse();
       for(var i = 0; i < donated.length; i++) {
         item = list[i];
+        console.log(item);
         $el.bank.slots[item].text = donated[i];
         $el.bank.slots[item].visible = true;
-        item == "13" && ($el.bank.slots['14'].visible = true);
-        item == "09" && ($el.bank.slots['10'].visible = true);
-        item == "05" && ($el.bank.slots['06'].visible = true);
+        item == "04" && ($el.bank.slots['05'].visible = true);
       }
     } else {
-      $el.bank.slots["16"].visible = true;
-      $el.bank.slots["16"].text = "0";
+      $el.bank.slots["07"].visible = true;
+      $el.bank.slots["07"].text = "0";
     }
     
     this.setAvatar();

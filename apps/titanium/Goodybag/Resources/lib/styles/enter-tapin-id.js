@@ -1,7 +1,7 @@
 (function(){
   var $ui = Ti.UI;
   
-  gb.style.iphone.enterTapinId = {
+  gb.style.base.enterTapinId = {
     "base": {
     }
     

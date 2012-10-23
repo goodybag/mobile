@@ -7,7 +7,7 @@
 
 (function(){
   var $ui = Ti.UI;
-  gb.style.iphone.common = {
+  gb.style.base.common = {
     scrollView: {
       width: $ui.FILL
     , height: $ui.FILL

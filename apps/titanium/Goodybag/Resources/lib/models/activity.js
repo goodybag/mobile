@@ -54,11 +54,17 @@ if(!GB.Models)
   };
   
   GB.Models.getActivity = function(attributes){
-    attributes.timestamp = moment(new Date(attributes.dates.lastModified)).from();
+    if (attributes.dates.lastModified) {
+      attributes.timestamp = moment(new Date(attributes.dates.lastModified));
+      attributes.timestamp = attributes.timestamp.from();
+    }
+    
     if (attributes.events && attributes.events.indexOf('eventRsvped') > -1){
       attributes.when = formatDate(attributes);
     }
+    
     attributes.sentence = generateSentence(attributes);
+    
     return attributes;
   };
 })();

@@ -40,7 +40,7 @@ var WindowLoader = {
     
     this.loader.middle.text.setText(text);
     this.loader.base.setZIndex(1000);
-    this.loader.middle.spinner.show();
+    if (!Ti.Android) this.loader.middle.spinner.show();
     this.loader.base.animate({ opacity: 1 }, function(){
       if (callback) callback();
     });
@@ -71,7 +71,7 @@ var WindowLoader = {
     if (!this.loader.base.hidden){
       this.loader.base.animate({ opacity: 0 }, function(){
         $this.loader.base.setZIndex(-1);
-        $this.loader.middle.spinner.hide();
+        if (!Ti.Android) $this.loader.middle.spinner.hide();
         if (callback) callback();
       });
       this.loader.base.hidden = true;

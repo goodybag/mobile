@@ -218,8 +218,8 @@ gb.utils = function (global) {
    * @return {String}      platform specific image path.
    */
   this.getImage = function (path) {
-    path = (gb.isAndroid ? '/images/' : '') + path;
-    // this.debug('[gb.utils.getImage] ' + path);
+    path = (Ti.Android ? '/images/' : '') + path;
+    this.debug('[gb.utils.getImage] ' + path);
   
     return path;
   }

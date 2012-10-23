@@ -59,27 +59,27 @@
 (function(){
   var $ui = Ti.UI;
   
-  var constructor = function(text){
+  var constructor = function (text) {
     this.text = text;
     this.state = "default";
+    
     // Apply Options
     this.options = {};
+    
     var args = Array.prototype.slice.call(arguments, 1), states = "default,disabled,active";
     for (var i = args.length - 1, arg; i >= 0; i--){
       arg = args[i];
       for (var key in arg){
-          this.options[key] = (states.indexOf(key) > -1) 
-                            ? gb.utils.extend(this.options[key] || {}, arg[key])
-                            : arg[key];
-        
+          this.options[key] = (states.indexOf(key) > -1) ? gb.utils.extend(this.options[key] || {}, arg[key]) : arg[key];
       }
     }
-    if (args.length === 0) this.options = gb.style.get('common.bluePage.buttons.blue');
     
+    if (args.length === 0) this.options = gb.style.get('common.bluePage.buttons.blue');
     this._setupViews();
     this._delegateEvents();
     // this._mapStyles();
   };
+  
   constructor.prototype = {
     /**
      * Sets the state of the button
@@ -175,6 +175,7 @@
     
   , _setupViews: function(){
       var base = this.options['default'], $this = this;
+      
       this.views = {
         "base": $ui.createView({
           width: base.width

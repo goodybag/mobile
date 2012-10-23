@@ -66,12 +66,12 @@ gb.style.base.sidebar = {
         top: 62,
         zIndex: 2,
         color: '#888888',
-        shadowColor: '#ffffff',
+        shadowColor: '#f0f0f0',
         shadowOffset: { 
           x: -1, y: 0 
         },
         font: { 
-          fontSize: '13dp', 
+          fontSize: '24dp', 
           fontFamily: 'Helvetica Neue', 
           fontStyle: 'normal', 
           fontWeight: 'bold' 
@@ -81,29 +81,20 @@ gb.style.base.sidebar = {
         },
         visible: false
       },
-      
-      one:    { left: 14,    text: '$', visible: true },
-      two:    { left: 32,    text: ' ' },
-      three:  { left: 48,    text: '2' },
-      four:   { left: 64,    text: '3' },
-      five:   { left: 80,    text: '4' },
-      six:    { left: 96,    text: ',' },
-      seven:  { left: 112,   text: '6' },
-      eight:  { left: 128,   text: '7' },
-      nine:   { left: 144,   text: '8' },
-      ten:    { left: 160,   text: ',' },
-      eleven: { left: 176,   text: '0' },
-      twelve: { left: 192,   text: '1' },
-      thteen: { left: 208,   text: '2' },
-      frteen: { left: 224,   text: '.' },
-      ffteen: { left: 240,   text: '3' },
-      sxteen: { left: 255,   text: '4' }
+
+      one:    { left: 22,    text: '$', visible: true },
+      two:    { left: 57,    text: '9' },
+      three:  { left: 95,    text: '9' },
+      four:   { left: 130,   text: '9' },
+      five:   { left: 170,   text: '.' },
+      six:    { left: 203,   text: '9' },
+      seven:  { left: 240,   text: '9' }
     }
   },
   
   list: {
     base: {
-      top: 88,
+      top: 102,
       layout: 'vertical',
       build: { type: 'createView' },
     },
@@ -240,22 +231,13 @@ gb.style.retina.sidebar = {
         top: 60
       },
       
-      one:    { left: 10 },
-      two:    { left: 27 },
-      three:  { left: 42 },
-      four:   { left: 58 },
-      five:   { left: 73 },
-      six:    { left: 91 },
-      seven:  { left: 105 },
-      eight:  { left: 121 },
-      nine:   { left: 137 },
-      ten:    { left: 154 },
-      eleven: { left: 169 },
-      twelve: { left: 185 },
-      thteen: { left: 201 },
-      frteen: { left: 219 },
-      ffteen: { left: 234 },
-      sxteen: { left: 249 }
+      one:    { left: 16 },
+      two:    { left: 53 },
+      three:  { left: 90 },
+      four:   { left: 130 },
+      five:   { left: 169 },
+      six:    { left: 203 },
+      seven:  { left: 238 }
     }
   }
 };

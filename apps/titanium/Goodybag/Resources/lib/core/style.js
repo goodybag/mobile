@@ -87,9 +87,9 @@ gb.style = {
         });
         
         [ 'top', 'left', 'right', 'bottom', 'height', 'width' ].forEach(function (type) {
-          if (dest[type] && typeof dest[type] !== 'string') 
+          if (dest[type] && typeof dest[type] !== 'string' && !dest['locked']) 
             dest[type] = dest[type] + 'dp';
-          else if (dest[type] && dest[type] === 'platform')
+          else if (dest[type] && dest[type] === 'platform' && !dest['locked'])
             if (type == 'width') 
               dest[type] = $dp.platformWidth;
             else if (type == 'height') 

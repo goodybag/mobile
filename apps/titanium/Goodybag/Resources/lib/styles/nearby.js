@@ -3,7 +3,7 @@ gb.style.base.nearby = {
   self: {
     top: 54,
     backgroundColor: 'white',
-    build: { type: 'createWindow' }
+    build: { type: Ti.Android ? 'createView' : 'createWindow' }
   },
   
   holder: {

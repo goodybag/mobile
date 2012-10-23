@@ -1,7 +1,7 @@
 (function(){
   var $ui = Ti.UI;
   
-  gb.style.iphone.setScreenName = {
+  gb.style.base.setScreenName = {
     "base": {
       zIndex: 10
     }
