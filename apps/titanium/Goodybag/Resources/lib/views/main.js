@@ -3,7 +3,7 @@ GB.Windows.add('main', Window.extend({
   // animated: true,
   callback: null,
   location: null,
-  initial: 'settings',
+  initial: 'qrcode',
   
   images: {
     qrcode: {

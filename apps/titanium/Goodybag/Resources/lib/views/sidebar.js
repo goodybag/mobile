@@ -142,7 +142,7 @@ GB.Views.add('sidebar', {
     // Close side-bar.
     main.closeSidebar();
     
-    if (area !== 'profile')
+    if (area !== 'profile' && area !== 'qrcode')
       $el[this.active].setBackgroundColor(gb.style.base.sidebar.list.item.active.background),
       $el[this.active].icon.setColor(gb.style.base.sidebar.list.item.active.color),
       $el[this.active].text.setColor(gb.style.base.sidebar.list.item.active.color);
