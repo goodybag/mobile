@@ -18,14 +18,14 @@
     <sdk-version>2.1.1.GA</sdk-version>
     <id>com.goodybag.consumers.mobile.iphone</id>
     <name>Goodybag</name>
-    <version>1.0</version>
+    <version>1.2</version>
     <publisher>Goodybag</publisher>
     <url>http://goodybag.com</url>
     <description>not specified</description>
     <copyright>Goodybag</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
-    <prerendered-icon>false</prerendered-icon>
+    <prerendered-icon>true</prerendered-icon>
     <statusbar-style>opaque</statusbar-style>
     <statusbar-hidden>false</statusbar-hidden>
     <fullscreen>false</fullscreen>
