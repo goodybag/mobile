@@ -8,6 +8,8 @@ gb.handleError = function(error){
       if (gb.consumer.data.facebook) Ti.Facebook.logout();
       GB.Windows.show('login');
     }
+  }else if (error.message === "E11001 duplicate key on update"){
+    alert("Already taken");
   }else{
     alert(
       (error && (error.friendlyMessage || error.message))

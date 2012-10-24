@@ -671,9 +671,9 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setBarcodeId, { barcodeId: id }, function(error, data){
-        if (error) return gb.handleError(error), console.log(error);
+        if (error && !data) return gb.handleError(error), console.log(error), callback(error);
         data = JSON.parse(data);
-        if (data.error) return gb.handleError(data.error), callback(data.error);
+        if (data.error) return gb.handleError(data.error), console.log(data.error), callback(data.error);
         $this.data.barcodeId = id;
         $this._setConsumer($this);
         callback(null, data.data);
