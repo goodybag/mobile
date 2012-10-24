@@ -465,8 +465,8 @@ GB.Views.add('nearby', {
     ($el.places.view) && ($el.holder.remove($el.places.view), $el.places.view = null);
     
     if ($el.place) {
+      (!Ti.Android) && $el.place.close && $el.place.close();
       $this.self.remove($el.place)
-      (!Ti.Android) && $el.place.close();
       $el.place = null;
     }
   },
