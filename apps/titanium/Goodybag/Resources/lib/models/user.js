@@ -421,8 +421,14 @@ if(!GB.Models)
       $http.get.sessioned(gb.config.api.consumer.profile, this.session, function (error, results) {
         if (error) return gb.handleError(error), callback(profile); else results = JSON.parse(results);
         if (results.error) return callback(profile); else $data.profile = results.data;
+        
+        if ($data.firstName) $this.data.firstName = $data.firstName;
+        if ($data.lastName) $this.data.lastName   = $data.lastName;
+        if ($data.email) $this.data.email         = $data.email;
+        if ($data.profile) $this.data.profile     = $data.profile;
+
+        $this._setConsumer($this);
         callback($data.profile);
-        $this._setConsumer($data);
       });
     },
     
@@ -448,9 +454,9 @@ if(!GB.Models)
         } else {
           $data.locations = results.data;
         }
-        
+
+        $this._setConsumer($this);
         callback($data.locations);
-        $this._setConsumer($data);
       });
     },
     
@@ -474,9 +480,9 @@ if(!GB.Models)
         } else {
           $data.tapinCount = results.data;
         }
-        
+        $this.data.tapinCount = $data.tapinCount;
+        $this._setConsumer($this);
         callback($data.tapinCount);
-        $this._setConsumer($data);
       });
     },
     

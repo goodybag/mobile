@@ -142,6 +142,7 @@ GB.Views.add('settings', {
   }
   
 , onShow: function(){
+    console.log(gb.consumer);
     // Remove Facebook if we don't need it
     if (gb.consumer.data.facebook) this.views.pageWrapper.base.remove(this.views.pageWrapper.facebookBtn);  
     else this.delegateEvents();
