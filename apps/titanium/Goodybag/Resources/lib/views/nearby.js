@@ -425,7 +425,8 @@ GB.Views.add('nearby', {
   showMap: function () {
     var $this = this
     ,   $el = this.elements
-    ,   annotations = [];
+    ,   annotations = []
+    ,   anno;
     
     if ($el.map) $el.holder.remove($el.map);
     
@@ -443,15 +444,20 @@ GB.Views.add('nearby', {
     });
 
     for (i = 0; i < this.locations.length; i++) {
-      annotations.push(this.locations[i].toAnnotation(i));
+      anno = this.locations[i].toAnnotation(i);
       
-      (function (idx) {
-        $el.map.addEventListener('click', function (evt) {
-          if (evt.annotation.myid == idx && evt.clicksource == 'rightButton')
-            $this.onPlaceClick($this.locations[idx]);
-        });
-      })(i);
-    }
+      if (anno) {
+        annotations.push(anno);
+      
+        (function (idx) {
+          $el.map.addEventListener('click', function (evt) {
+            if (evt.annotation.myid == idx && evt.clicksource == 'rightButton')
+              $this.onPlaceClick($this.locations[idx]);
+          });
+        })(i);
+      } else continue;
+    };
+    
     $el.map.setAnnotations(annotations);
     $el.holder.add($el.map);
     $el.menu.nearby.deactivate();
@@ -465,8 +471,8 @@ GB.Views.add('nearby', {
     ($el.places.view) && ($el.holder.remove($el.places.view), $el.places.view = null);
     
     if ($el.place) {
-      $this.self.remove($el.place)
       (!Ti.Android) && $el.place.close();
+      ($el.place) && $this.self.remove($el.place);
       $el.place = null;
     }
   },
