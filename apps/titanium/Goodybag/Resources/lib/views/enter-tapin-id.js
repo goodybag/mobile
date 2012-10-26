@@ -129,8 +129,8 @@
       this.window.showLoader();
       var value = this.tapinIdInput.getValue(), $this = this;
       gb.consumer.setBarcodeId(value, function(error){
-        this.window.hideLoader();
-        if (error) return alert(error);
+        $this.window.hideLoader();
+        if (error) return;
         $this.triggerOnComplete();
       });
     }
