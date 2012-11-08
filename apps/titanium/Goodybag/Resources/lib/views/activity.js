@@ -9,6 +9,7 @@
     }
     
     this.model = model;
+    
     // Main view wrapper
     this.view = Titanium.UI.createView({
       width: Ti.UI.FILL
@@ -17,24 +18,26 @@
     , layout: 'horizontal'
     });
   };
+  
   GB.Views.Activity.prototype = {
     render: function(){
       var events = this.model.attributes.events
       , attr = this.model.attributes
       , sentence = attr.who.screenName || "Someone"
       , imgSrc = attr.who.id || attr.who.screenName || "000000000000000000000000"
-      , event
+      , event, avatar, text
       ;
 
       // Add profile picture
-      this.view.add(Titanium.UI.createImageView({
-        image: "https://s3.amazonaws.com/goodybag-uploads/consumers-secure/" + imgSrc + "-85.png"
-      , title: attr.who.screenName
-      , width: "50dp"
-      , height: "50dp"
-      , top: "2dp"
-      , left: "10dp"
-      }));
+      try {
+        avatar = gb.style.get('stream.avatar');
+        avatar.image = "https://s3.amazonaws.com/goodybag-uploads/consumers-secure/" + imgSrc + "-85.png";
+        avatar.title = attr.who.screenName;
+      
+        this.view.add(Titanium.UI.createImageView(avatar));
+      catch (e) {
+        gb.utils.warn('Caught exception loading image.');
+      }
       
       // Determine sentence
       for (var i = 0; i < events.length; i++){
@@ -64,18 +67,10 @@
       }
       
       // Add stream text
-      this.view.add(Titanium.UI.createLabel({
-        text: sentence
-      , width: Titanium.UI.FILL
-      , height: Titanium.UI.SIZE
-      , textAlign: Titanium.UI.TEXT_ALIGNMENT_LEFT
-      , top: 0
-      , left: "10dp"
-      , right: "2dp"
-      , color: gb.ui.color.base
-      , font: gb.ui.font.base
-      , zIndex: 2
-      }));
+      text = gb.style.get('stream.text');
+      text.text = sentence;
+      
+      this.view.add(Titanium.UI.createLabel(text));
 
       if (!this.options.suppressBorder){
         this.view.add(Titanium.UI.createView({
@@ -85,6 +80,7 @@
         , top: '10dp'
         , backgroundColor: '#ddd'
         }));
+        
         this.view.add(Titanium.UI.createView({
           bottom: 0
         , width: Ti.UI.FILL

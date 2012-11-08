@@ -64,7 +64,6 @@ if(!GB.Models)
     }
     
     attributes.sentence = generateSentence(attributes);
-    
     return attributes;
   };
 })();

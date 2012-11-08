@@ -2,7 +2,8 @@ gb.Windows.add('login', Window.extend({
   debug: true,
   
   Constructor: function () {
-    this.window = gb.style.get('login.window');
+    this.window = gb.loginWindow = gb.style.get('login.window');
+    
     this.elements = {
       view: gb.style.get('login.view'),
       background: gb.style.get('login.background'),
@@ -25,15 +26,17 @@ gb.Windows.add('login', Window.extend({
 
     var $self = this, $el = this.elements;
     
-    $el.view.add($el.loginWrapper)
+    $el.view.add($el.loginWrapper);
     
     // Registration
     gb.Views.get('register').self.setVisible(true);
     this.elements.registerWrapper.add(gb.Views.get('register').self);
     $el.view.add(this.elements.registerWrapper);
+    
     gb.Views.get('register').setOnBackCallback(function(){
       $self.hideRegistration();
     });
+    
     gb.Views.get('register').setOnRegisterCallback(function(){
       if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
       else GB.Windows.show('complete-registration');
@@ -64,21 +67,31 @@ gb.Windows.add('login', Window.extend({
         type: 'click'
       , target: $el.buttons.facebook
       , action: function (e) {
-          console.log('clicked facebook login');
+          gb.utils.debug('clicked facebook login');
           if ($self.loggingIn) return;
+          
+          $self.showLoader();
           Titanium.Facebook.authorize();
+          
           // Start checking to see if we're logged in yet
           // Titaniums fb login event does not always fire
           $self.checkingFbLogin = true;
-          if ($self.fbLoginCheck) clearInterval($self.fbLoginCheck);
+          
+          if ($self.fbLoginCheck) 
+            clearInterval($self.fbLoginCheck);
+          
           fbCurrTime = 0;
+          
           $self.fbLoginCheck = setInterval(function(){
-            if (Ti.Facebook.getLoggedIn()){
+            if (Ti.Facebook.getLoggedIn()) {
+              $self.hideLoader();
               clearInterval($self.fbLoginCheck);
               $self.checkingFbLogin = false;
               $self.facebookLogin();
             }
+            
             fbCurrTime += 200;
+            
             if (fbCurrTime >= fbTimeout) clearInterval($self.fbLoginCheck);
           }, 200);  
         }
@@ -89,28 +102,55 @@ gb.Windows.add('login', Window.extend({
       , action: function (e) {
           if ($self.loggingIn) return;
           $self.showLoader();
-          if (gb.config.debug) console.log('[login] attempting to authenticate user.');
+          if (gb.config.debug) 
+            gb.utils.debug('[login] attempting to authenticate user.');
           
+          // Logging in
           $self.loggingIn = true;
           
+          // Trim and grab values
           gb.consumer.email = gb.utils.trim($el.inputs.email.getValue());
           gb.consumer.password = gb.utils.trim($el.inputs.password.getValue());
+          
+          // Set password to empty
           $el.inputs.password.setValue("");
           
           gb.consumer.auth(function(error, consumer) {
             $self.loggingIn = false;
             $self.hideLoader();
+            
             if (error || !consumer) {
               if (error) alert(error);
               else if (!consumer) alert('Error checking account details!');
               return;
-            } else if (consumer) gb.consumer = consumer;
-            
+            } else if (consumer) 
+              gb.consumer = consumer;
+              
+            $self.showLoader('Logged In.. Please wait...');
             if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
             else GB.Windows.show('complete-registration');
+            $self.hideLoader();
           });
         }
       }
+    , "emailOnClick": {
+        type: 'click'
+      , target: $el.inputs.email
+      , action: function (e) {
+          if (Ti.Android) 
+            $el.inputs.email.softKeyboardOnFocus = Ti.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS,
+            $el.inputs.email.focus();
+        }
+    }
+    , "passwordOnClick": {
+        type: 'click'
+      , target: $el.inputs.password
+      , action: function (e) {
+          if (Ti.Android) 
+            $el.inputs.password.softKeyboardOnFocus = Ti.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS,
+            $el.inputs.password.focus();
+        }
+    }
     , "emailOnReturn": {
         type: 'return'
       , target: $el.inputs.email
@@ -121,14 +161,14 @@ gb.Windows.add('login', Window.extend({
       }
     , "passwordOnReturn": {
         type: 'return'
-      , target: $el.inputs.email
+      , target: $el.inputs.password
       , action: function (e) {
           $el.loginWrapper.scrollTo(0, 0);
         }
       }
     , "passwordOnBlur": {
         type: 'blur'
-      , target: $el.inputs.email
+      , target: $el.inputs.password
       , action: function (e) {
           $el.loginWrapper.scrollTo(0, 0);
         }
@@ -178,40 +218,43 @@ gb.Windows.add('login', Window.extend({
   },
   
   facebookLogin: function() {
-    if (gb.consumer.isAuthenticated() || !Ti.Facebook.getLoggedIn()) return;
-    this.loggingIn = true;
-    console.log('signing in with facebook.');
+    if (gb.consumer.isAuthenticated() || !Ti.Facebook.getLoggedIn()) 
+      return;
     
     var $this = this;
+    this.showLoader();
+    this.loggingIn = true;
+    gb.utils.debug('Attempting to login via facebook');
+    
     gb.consumer.facebookAuth(function(error, consumer) {
       $this.loggingIn = false;
-      console.log(error);
-      console.log(consumer);
       
       if (error) {
+        $this.hideLoader();
         Titanium.Facebook.logout();
         alert(error); return;
       } else if (consumer) {
         gb.consumer = consumer;
       }
       
+      $this.hideLoader();
       if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
       else GB.Windows.show('complete-registration');
     });
   },
   
   showRegistration: function () {
+    this.elements.registerWrapper.show();
     this.elements.registerWrapper.setZIndex(3);
   },
   
   hideRegistration: function () {
-    this.elements.registerWrapper.setZIndex(1);
+    gb.utils.debug('Hiding registration');
+    this.elements.registerWrapper.hide();
+    this.elements.registerWrapper.setZIndex(0);
   },
   
   onAndroid: function () {
     var $el = this.elements;
-    
-    $el.inputs.email.setSoftKeyboardOnFocus(Titanium.UI.Android.SOFT_KEYBOARD_HIDE_ON_FOCUS);
-    $el.inputs.password.setSoftKeyboardOnFocus(Titanium.UI.Android.SOFT_KEYBOARD_HIDE_ON_FOCUS);
   }
 }));

@@ -1,9 +1,10 @@
 GB.Windows.add('main', Window.extend({
   debug: true,
-  // animated: true,
+  initial: 'qrcode',
   callback: null,
   location: null,
-  initial: 'qrcode',
+  swiping: false,
+  animated: true,
   
   images: {
     qrcode: {
@@ -22,7 +23,6 @@ GB.Windows.add('main', Window.extend({
 
   Constructor: function () {
     var $this, $el, $window;
-    this.animated = true;
     
     // Store window
     this.window = gb.style.get('main.self');
@@ -35,8 +35,8 @@ GB.Windows.add('main', Window.extend({
       },
       
       header: {
-        background: $ui.createImageView(gb.style.get('main.header.background')),
-        logo: $ui.createImageView(gb.style.get('main.header.logo')),
+        background: gb.style.get('main.header.background'),
+        logo: gb.style.get('main.header.logo'),
   
         buttons: {
           sidebar: $ui.createImageView(gb.style.get('main.header.buttons.sidebar')),
@@ -52,14 +52,27 @@ GB.Windows.add('main', Window.extend({
     
     // Store Events
     this.events = {
-      "sidebar": {
-        type: 'click'
-      , target: this.elements.header.buttons.sidebar
-      , action: function(e) {
+      sidebar: {
+        type: 'click',
+        target: this.elements.header.buttons.sidebar,
+        action: function(e) {
+          if (e.source && e.source.custom) return (e.source.custom = false);
           $this.toggleSidebar.apply($this);
         }
-      }
-    , 'qrcode': {
+      },
+      
+      // Deprecated until we can get scrollView to scroll correctly with this set.
+      // swipe: {
+        // type: 'swipe',
+        // target: this.window,
+        // action: function (e) {
+          // if (e.direction === 'up' || e.direction === 'down') return true;
+          // if (e.direction === 'right' && $this.animated) $this.toggleSidebar.apply($this)
+          // else if (e.direction === 'left' && !$this.animated) $this.toggleSidebar.apply($this);
+        // }
+      // },
+      
+      qrcode: {
         type: 'click',
         target: this.elements.header.buttons.qrcode,
         action: function (e) {
@@ -69,6 +82,19 @@ GB.Windows.add('main', Window.extend({
           GB.Views.get('sidebar').active = 'qrcode';
           $this.showPage('qrcode');
           $this.toggleQRCode();
+        }
+      },
+      
+      physicalBack: {
+        target: this.window,
+        type: 'android:back',
+        action: function (e) {
+          if ($this.callback) { 
+            $this.toggleBack.apply($this);
+            return false;
+          } else if (!$this.animated) {
+            $this.toggleSidebar.apply($this);
+          }
         }
       }
     };
@@ -86,10 +112,11 @@ GB.Windows.add('main', Window.extend({
     this.elements.views.holder.sidebar = GB.Views.get('sidebar');
     
     // Attach Header
+    this.elements.header.background.add(this.elements.header.buttons.sidebar);
+    this.elements.header.background.add(this.elements.header.logo);
+    this.elements.header.background.add(this.elements.header.buttons.qrcode);
+    
     this.elements.views.main.add(this.elements.header.background);
-    this.elements.views.main.add(this.elements.header.logo);
-    this.elements.views.main.add(this.elements.header.buttons.sidebar);
-    this.elements.views.main.add(this.elements.header.buttons.qrcode);
     
     // Loader
     this.initializeLoader();
@@ -97,6 +124,7 @@ GB.Windows.add('main', Window.extend({
     // Add views to scrollable view
     GB.Views.get('sidebar').self.setVisible(true);
     GB.Views.get('sidebar').parent = this;
+    
     this.elements.views.holder.add(this.elements.views.holder.sidebar.self);
     this.elements.views.holder.add(this.elements.views.main);
 
@@ -232,12 +260,29 @@ GB.Windows.add('main', Window.extend({
     this[(this.animated ? 'open' : 'close') + 'Sidebar']();
   },
   
+  handleSideclick: function (e) {
+   var $this = this, $main = this.elements.views.main;
+    if (this.animated) {
+      $main.removeEventListener('touchend', function (e) { return $this.handleSideclick.apply($this, [ e ]); });
+      return;
+    }
+    
+    e.source.custom = true;
+    this.toggleSidebar();
+    return false;
+  },
+  
   openSidebar: function () {
     if (!this.animated) return;
     this.animated = false;
+    
+    var $this = this, $main = this.elements.views.main;
+    $main.addEventListener('touchend', function (e) { return $this.handleSideclick.apply($this, [ e ]); });
+    
     this.elements.header.buttons.sidebar.setImage(
       this.images.sidebar.active 
     );
+    
     this.elements.views.main.animate(
       gb.style.get('main.animations.right')
     );
@@ -246,9 +291,14 @@ GB.Windows.add('main', Window.extend({
   closeSidebar: function () {
     if (this.animated) return;
     this.animated = true;
+    
+    var $this = this, $main = this.elements.views.main;
+    $main.removeEventListener('touchend', function (e) { return $this.handleSideclick.apply($this, [ e ]); });
+    
     this.elements.header.buttons.sidebar.setImage(
       this.images.sidebar.inactive 
     );
+    
     this.elements.views.main.animate(
       gb.style.get('main.animations.left')
     );

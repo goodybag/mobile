@@ -336,6 +336,7 @@ if(!GB.Models)
       }
   
       row.addEventListener('click', function (e) {
+        if (e.source && e.source.custom) return (e.source.custom = false);
         callback.apply($self, [ e ]);
       });
   
@@ -360,7 +361,8 @@ if(!GB.Models)
         title: this.data.name,
         subtitle: this.getAddress(),
         animate: true,
-        pincolor: Ti.Map.ANNOTATION_RED,
+        image: '/images/marker.png',
+        rightButton: '/images/right.png',
         myid: i
       });
       

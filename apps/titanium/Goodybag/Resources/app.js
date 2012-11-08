@@ -5,6 +5,13 @@ var gb = {}
 ,   $dp = Titanium.Platform.displayCaps
 ,   $prop = Titanium.App.Properties;
 
+// Check orientation for android
+if (Ti.Platform.osname == 'android'){
+  Ti.Gesture.addEventListener('orientationchange', function(e) {
+    Ti.Android.currentActivity.setRequestedOrientation(Ti.Android.SCREEN_ORIENTATION_PORTRAIT);
+  });
+}
+
 var moment = require('lib/core/moment');
 // var keychain = require('com.obscure.keychain');
 var Ligature = require('lib/core/components/iconic/iconic').iconic({ font: 'LigatureSymbols' });
@@ -35,7 +42,8 @@ gb.files = {
     'profile',
     'set-screen-name',
     'enter-tapin-id',
-    'settings'
+    'settings',
+    'stream'
   ],
   
   "core/components": [
@@ -46,7 +54,7 @@ gb.files = {
     'infini-scroll',
     'activity',
     'stream-button',
-    'pull-to-refresh/pull-to-refresh',
+    'pull-to-refresh/ptr',
     // 'charity-view',
     'button',
     'validate',
@@ -105,10 +113,11 @@ Titanium.include('/lib/views/main.js');
 gb.consumer.validate(function (consumer) {
   if (consumer !== null && typeof consumer !== "undefined") {
     gb.consumer = consumer;
-    GB.Windows.show(gb.consumer.hasCompletedRegistration() ? 
-      'main' : 'complete-registration'
-    );
-    gb.consumer.renew();
+    gb.consumer.renew(function () {
+      GB.Windows.show(gb.consumer.hasCompletedRegistration() ? 
+        'main' : 'complete-registration'
+      );
+    });
   } else {
     gb.consumer.logout();
     GB.Windows.show('login');
@@ -117,10 +126,16 @@ gb.consumer.validate(function (consumer) {
 
 // Check for updates when we return to the app
 Ti.App.addEventListener('resume', function () {
+  gb.consumer.renew();
+  
   gb.consumer.validate(function (consumer) {
-    if (consumer !== null && typeof consumer !== "undefined") {
+    if (consumer && consumer !== null && typeof consumer !== "undefined") {
       gb.utils.updateAvailable(function (error, updateAvailable) {
-        GB.Views.get('sidebar')[(updateAvailable ? 'show' : 'hide') + 'Update']();
+        console.log('------------------');
+        console.log(error);
+        console.log(updateAvailable);
+        console.log('------------------');
+        GB.Views.get('sidebar')[(updateAvailable && !error ? 'show' : 'hide') + 'Update']();
       });
     }
   });

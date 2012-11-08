@@ -204,10 +204,10 @@
                 gb.validate(fieldName, value, function(errors){
                   if (errors.length > 0){
                     indicator.setColor(gb.ui.color.salmon);
-                    indicator.setShadowColor(gb.ui.color.salmonDark);
+                    (!Ti.Android) && indicator.setShadowColor(gb.ui.color.salmonDark);
                   }else{
                     indicator.setColor(gb.ui.color.green);
-                    indicator.setShadowColor(gb.ui.color.greenDark);
+                    (!Ti.Android) && indicator.setShadowColor(gb.ui.color.greenDark);
                   }
                 });
               }

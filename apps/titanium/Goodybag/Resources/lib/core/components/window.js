@@ -15,6 +15,7 @@
   
   Windows.instantiate = function (name) {
     gb.utils.debug("Instantiating Window: " + name);
+    gb.utils.debug("Instianated? " + this.instantiated[name]);
     if (this.instantiated[name]) return;
     this.instantiated[name] = new this.windows[name]();
     this.instantiated[name].window.visible = false;
@@ -127,8 +128,6 @@ var Window = new Class(gb.utils.extend({
   
   hide: function () {
     gb.utils.debug('[' + this.windowName + '] Attempting to hide window.', this.debug);
-    console.log("#################################");
-    console.log(this.onHide);
     var $this = this;
     if (typeof this.onHide != 'undefined' && this.created) this.onHide();
     if (this.created) this.window.hide()

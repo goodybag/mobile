@@ -192,12 +192,9 @@ gb.utils = function (global) {
    * 
    * @param {Object} data to be converted.
    */
-  this.paramParser = function(data){
+  this.paramParser = function (data) {
     var params = "", i = 0;
-    for (var key in data){
-      params += ((i === 0) ? "?" : "&") + key + "=" + data[key];
-      i++;
-    }
+    for (var key in data) params += ((i === 0) ? "?" : "&") + key + "=" + data[key], i++;
     return params;
   };
 
@@ -218,10 +215,7 @@ gb.utils = function (global) {
    * @return {String}      platform specific image path.
    */
   this.getImage = function (path) {
-    path = (Ti.Android ? '/images/' : '') + path;
-    this.debug('[gb.utils.getImage] ' + path);
-  
-    return path;
+    return (Ti.Android ? '/images/' : '') + path;
   }
   
   /**
@@ -607,6 +601,26 @@ gb.utils = function (global) {
     gb.api.version.get(function(error, data){
       callback(error, data.version > gb.config.version)
     });
+  };
+  
+  this.determineRes = function () {
+    if (Ti.Android) {
+      if (Ti.Platform.displayCaps.dpi <= 120) return 'ldpi';
+      if (Ti.Platform.displayCaps.dpi > 120 && Ti.Platform.displayCaps.dpi <= 160) return 'mdpi';
+      if (Ti.Platform.displayCaps.dpi > 160 && Ti.Platform.displayCaps.dpi <= 240) return 'hdpi';
+      else return 'xhdpi';
+    } else if (!Ti.Android && Ti.Platform.displayCaps.density == 'high') 
+      return 'retina';
+    
+    return false;
+  }
+  
+  this.px2dp = function (px) {
+    return (px / (Ti.Platform.displayCaps.dpi / 160));
+  };
+  
+  this.dp2px = function (dp) {
+    return (dp * (Ti.Platform.displayCaps.dpi / 160));
   };
   
   return this;

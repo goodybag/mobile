@@ -3,7 +3,9 @@ GB.Views.add('settings', {
   Constructor: function(){
     
     var $this = this;
-    this.self = $ui.createScrollView(gb.style.get('settings.base common.grayPage.base common.scrollView'));
+    this.self = $ui.createScrollView(gb.style.get(
+      'settings.base common.grayPage.base common.scrollView'
+    ));
     
     this.views = {
       "base": this.self
@@ -25,7 +27,7 @@ GB.Views.add('settings', {
             
           , "setting:avatar": {
               "base": gb.style.get('settings.setting:avatar.base settings.setting.base', {
-                events: { click: function(){ $this.editAvatar() } }
+                events: { click: function(e){ $this.editAvatar(e) } }
               })
             , "field":      gb.style.get('settings.setting.field settings.setting:avatar.field')
             , "go":         gb.style.get('common.go settings.setting.right')
@@ -34,7 +36,7 @@ GB.Views.add('settings', {
             
           , "setting:name": {
               "base": gb.style.get('settings.setting.base settings.setting:name.base', {
-                events: { click: function(){ $this.editField('name') } }
+                events: { click: function(e){ $this.editField.apply($this, ['name',e]) } }
               })
               
             , "field":      gb.style.get('settings.setting.field settings.setting:name.field')
@@ -54,7 +56,7 @@ GB.Views.add('settings', {
             
           , "setting:email": {
               "base": gb.style.get('settings.setting.base settings.setting:email.base', {
-                events: { click: function(){ $this.editField('email') } }
+                events: { click: function(e){ $this.editField.apply($this, ['email', e]) } }
               })
               
             , "field":      gb.style.get('settings.setting.field settings.setting:email.field')
@@ -64,7 +66,7 @@ GB.Views.add('settings', {
             
           , "setting:barcodeId": {
               "base": gb.style.get('settings.setting.base settings.setting:barcodeId.base', {
-                events: { click: function(){ $this.editField('barcodeId') } }
+                events: { click: function(e){ $this.editField.apply($this, ['barcodeId', e]) } }
               })
               
             , "field":      gb.style.get('settings.setting.field settings.setting:barcodeId.field', { text: "Tap-In ID" })
@@ -74,7 +76,7 @@ GB.Views.add('settings', {
             
           , "setting:password": {
               "base": gb.style.get('settings.setting.base settings.setting:password.base', {
-                events: { click: function(){ $this.editField('password') } }
+                events: { click: function(e){ $this.editField.apply($this, ['password', e]) } }
               })
               
             , "field":      gb.style.get('settings.setting.field settings.setting:password.field', { text: "Password" })
@@ -112,6 +114,7 @@ GB.Views.add('settings', {
         type: 'click'
       , target: this.views.pageWrapper.facebookBtn
       , action: function(e){
+          if (e.source && e.source.custom) return (e.source.custom = false);
           Ti.Facebook.logout();
           Ti.Facebook.authorize();
         }
@@ -142,8 +145,6 @@ GB.Views.add('settings', {
   }
   
 , onShow: function(){
-    console.log(gb.consumer);
-    // Remove Facebook if we don't need it
     if (gb.consumer.data.facebook) this.views.pageWrapper.base.remove(this.views.pageWrapper.facebookBtn);  
     else this.delegateEvents();
     this._displayUserData();
@@ -153,7 +154,8 @@ GB.Views.add('settings', {
     this.settings['setting:' + name].field.setText(value);
   }
   
-, editField: function(field){
+, editField: function(field, e){
+    if (e.source && e.source.custom) return (e.source.custom = false);
     GB.Views.get('edit-setting').setField(field);
     GB.Windows.get('main').showPage('edit-setting');
   }
@@ -162,7 +164,8 @@ GB.Views.add('settings', {
     this.destroyEvents();
   }
   
-, editAvatar: function(){
+, editAvatar: function(e){
+    if (e.source && e.source.custom) return (e.source.custom = false);
     var avatar = this.settings['setting:avatar'].field;
     Ti.Media.openPhotoGallery({
       allowEditing: true

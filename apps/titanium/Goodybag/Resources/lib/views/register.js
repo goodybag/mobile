@@ -20,24 +20,32 @@
   };
   
   GB.Views.add('register', {
-    self: Titanium.UI.createScrollView(gb.utils.extend(
-      gb.style.get('common.scrollView')
-    , gb.style.get('register.self')
-    )),
+    self: Titanium.UI.createScrollView(gb.style.get('common.scrollView register.self')),
     
     Constructor: function () {
       var $this = this;
       
-      this.onBackCallback = function(){};
-      this.onRegisterCallback = function(){};
+      this.onBackCallback = function () {};
+      this.onRegisterCallback = function () {};
       
       this.backBtn = new GB.Button('Back', gb.utils.extend(
-        { width: 80 }
-      , gb.style.get('common.bluePage.buttons.gray')));
+        { width: 80 }, 
+        gb.style.get('common.bluePage.buttons.gray'))
+      );
+      
       this.registerBtn = new GB.Button('Register');
+      
+      // Keyboard Workaround, click on screen to hide keyboard.
+      this.self.addEventListener('click', function(e) {
+          if (!/(TextField|TextArea)/.test(e.source.toString())) {
+               Ti.UI.Android.hideSoftKeyboard();
+          }
+      });
+      
       this.backBtn.addEventListener('click', function(e){
         $this.triggerOnBack(e);
       });
+      
       this.registerBtn.addEventListener('click', function(e){
         $this.register(e);
       });
@@ -47,21 +55,15 @@
         
       , "wrapper": {
           "base": $ui.createView(gb.style.get('register.wrapper'))
-        
-        /*, "header": $ui.createLabel(gb.utils.extend(
-            { text: "Register" }
-          , gb.style.get('register.header')
-          ))*/
           
         , "fields": {
-            "base": $ui.createView(gb.style.get('register.fields'))
-            
+            "base":             $ui.createView(gb.style.get('register.fields'))
           , "firstName":        $this.fieldFactory('firstName',       'First Name')
           , "lastName":         $this.fieldFactory('lastName',        'Last Name')
           , "screenName":       $this.fieldFactory('screenName',      'Screen Name')
           , "email":            $this.fieldFactory('email',           'Email Address')
           , "password":         $this.fieldFactory('password',        'Password', true)
-          , "passwordConfirm":  $this.fieldFactory('passwordConfirm', 'One More Time', true)
+          , "passwordConfirm":  $this.fieldFactory('passwordConfirm', 'One More Time', true, true)
           }
           
         , "nav": {
@@ -78,16 +80,33 @@
         }
       };
       
+      this.e = {
+        windowClick: {
+          target: this.self,
+          event: 'click',
+          callback: function(e) {
+            if (!/(TextField|TextArea)/.test(e.source.toString())) {
+              Ti.UI.Android.hideSoftKeyboard();
+            }
+          }
+        }
+      };
+      
       gb.utils.compoundViews(this.views);
     },
     
-    onShow: function (context) {
-      
+    onShow: function (context) { 
+      for (var i in this.e) this.e[i].target.addEventListener(this.e[i].event, this.e[i].callback);
     },
     
-    fieldFactory: function (field, text, isPassword){
+    onHide: function (context) {
+      for (var i in this.e) this.e[i].target.removeEventListener(this.e[i].event, this.e[i].callback);
+    },
+    
+    fieldFactory: function (field, text, isPassword, last){
       var $this = this, pw = isPassword ? gb.style.get('register.field.password') : {};
-      return {
+      
+      var fields = {
         "base": $ui.createView(gb.style.get('register.field.wrapper'))
       , "input": $ui.createTextField(gb.utils.extend({
           hintText: text
@@ -105,8 +124,10 @@
         , pw
         ))
       , "indicator": $ui.createView(gb.style.get('register.field.indicator.base'))
-      , "separator": $ui.createView(gb.style.get('register.field.separator'))
-      }
+      };
+    
+      if (!last) fields.separator = $ui.createView(gb.style.get('register.field.separator'));
+      return fields;
     },
     
     setOnBackCallback: function (callback) {
@@ -128,8 +149,12 @@
     register: function () {
       GB.Windows.get('login').showLoader();
       var $this = this, data = this.getFormData();
-      this.validate(data, function(errors){
-        if (errors.length > 0) return $this.reportErrors(errors);
+      this.validate(data, function (errors) {
+        if (errors.length > 0) {
+          GB.Windows.get('login').hideLoader();
+          return $this.reportErrors(errors);
+        }
+        
         gb.consumer.register(data, function(error, consumer){
           GB.Windows.get('login').hideLoader();
           if (error) return alert(error.message);
@@ -142,14 +167,17 @@
     
     validate: function (data, callback) {
       var errors = [];
+      
       for (var key in data){
         this.validateOne(key, data[key], function(_errors){
           if (_errors.length > 0) errors = errors.concat(_errors);
         });
       }
+      
       if (data.password !== data.passwordConfirm){
         errors.push({ field: 'password', message: 'Passwords do not match' });
       }
+      
       callback(errors);
     },
     
@@ -159,9 +187,11 @@
     
     reportErrors: function (errors) {
       var msg = "";
+      
       for (var i = errors.length - 1; i >= 0; i--){
         msg += errors[i].message + ((i > 0) ? "\n\n" : "") 
       }
+      
       alert(msg);
     },
     

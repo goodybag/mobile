@@ -7,11 +7,7 @@
     /**
      * Options for the base view (ScrollView)
      */
-    this.viewOptions = {
-      layout: "vertical"
-    , width: $ui.FILL
-    , height: $ui.FILL
-    };
+    this.viewOptions = gb.style.get('common.infini');
 
     /**
      * Options for InfiniScroll
@@ -23,7 +19,7 @@
     this.options = {
       onNewHeight: function(height, myInfiniScroll){}
     , onBottom: function(myInfiniScroll){}
-    , triggerAt:   '90%'
+    , triggerAt: '90%'
     , refresher: false
     };
 
@@ -31,11 +27,9 @@
     for (var key in options) this.options[key] = options[key];
     this.view = $ui.createScrollView(this.viewOptions);
     this.wrapper = this.getNewWrapper();
+    
     if (this.options.refresher){
-      this.refresher = new GB.PullToRefresh(this.view, {
-        onLoad: this.options.onLoad
-      })
-      this.view.add(this.refresher.views.base);
+      this.ptr = new gb.ptr(this.view, this.options.onLoad);
     }
     this.view.add(this.wrapper);
     this.scrollEndTriggered = false;
@@ -77,18 +71,18 @@
      * Proxy Methods
      */
     add: function (view) {
-      console.log("[InfiniScroll] - Adding", view);
+      // gb.utils.debug("[InfiniScroll] - Adding", view);
+      
       if (!this.checkingHeight){
         this.startHeightCheck();
       }
+      
       if (Object.prototype.toString.call(view)[8] === "A"){
         var intermediate = $ui.createView({ width: $ui.FILL, height: $ui.SIZE, layout: 'vertical' });
-        for (var i = 0; i < view.length; i++){
-          intermediate.add(view[i]);
-        }
+        for (var i = 0; i < view.length; i++) intermediate.add(view[i]);
         this.wrapper.add(intermediate);
-      }else{
-        console.log("################# ADDD ", view);
+      } else {
+        // gb.utils.debug("################# ADDD ", view);
         this.wrapper.add(view);
       }
     },
@@ -141,13 +135,18 @@
     },
     
     startHeightCheck: function(){
-      console.log("[InfiniScroll] - Start checking height");
+      gb.utils.debug("[InfiniScroll] - Start checking height");
       this.checkingHeight = true;
+      
       var $this = this, checkInterval = setInterval(function(){
         var newHeight = $this.wrapper.getSize().height;
-        console.log("[InfiniScroll] - Checking Height", newHeight, $this.height);
+        gb.utils.debug("[InfiniScroll] - Checking Height", newHeight, $this.height);
         if (newHeight !== $this.height){
           $this.height = newHeight;
+          clearInterval(checkInterval);
+          $this.checkingHeight = false;
+          $this.triggerNewHeight();
+        } else {
           clearInterval(checkInterval);
           $this.checkingHeight = false;
           $this.triggerNewHeight();
@@ -156,15 +155,15 @@
     },
     
     clearChildren: function(){
-      console.log("clearing children", this.wrapper);
-      console.log("[InfiniScroll] - Children", this.view.children.length);
+      gb.utils.debug("clearing children", this.wrapper);
+      gb.utils.debug("[InfiniScroll] - Children", this.view.children.length);
       this.view.remove(this.wrapper);
-      console.log("[InfiniScroll] - Children", this.view.children.length);
-      console.log("[InfiniScroll] - Wrapper Children", this.wrapper.children.length);
+      gb.utils.debug("[InfiniScroll] - Children", this.view.children.length);
+      gb.utils.debug("[InfiniScroll] - Wrapper Children", this.wrapper.children.length);
       this.wrapper = this.getNewWrapper();
-      console.log("[InfiniScroll] - Wrapper Children", this.wrapper.children.length);
+      gb.utils.debug("[InfiniScroll] - Wrapper Children", this.wrapper.children.length);
       this.view.add(this.wrapper);
-      console.log("[InfiniScroll] - Children", this.view.children.length);
+      gb.utils.debug("[InfiniScroll] - Children", this.view.children.length);
       this.height = 0;
     },
     
@@ -182,21 +181,25 @@
      * @private
      */
     _onScroll: function (e) {
-      if (this.clearingChildren) return;
-      if (this.scrollEndTriggered) return;
-      // In case there was some scrolling while the handler was being removed
-      if (this.isCalculatingHeight()) return;
-      var trigger = this.triggerAt - this.view.size.height;
-      if (trigger <= 0) return;
-      if (e.y >= trigger) {
-        console.log(e.y, this.triggerAt, this.view.size.height);
-        this.scrollEndTriggered = true;
-        this.removeEvents()
-        console.log("############TRIGGERING SCROLL TO END#############");
-        this.triggerScrollEnd(e.y);
-      } 
+      if (!this.clearingChildren) {
+        if (!this.scrollEndTriggered) {
+          if (!this.isCalculatingHeight()) {
+            var trigger = this.triggerAt - this.view.size.height;
+            if (!(trigger <= 0)) {
+              if (e.y >= trigger) {
+                gb.utils.debug(e.y, this.triggerAt, this.view.size.height);
+                this.scrollEndTriggered = true;
+                this.removeEvents();
+                gb.utils.debug("############TRIGGERING SCROLL TO END#############");
+                this.triggerScrollEnd(e.y);
+              }
+            }
+          }
+        }
+      }
     }
   };
+  
   GB.Views.InfiniScroll = constructor;
   exports = constructor;
 })();

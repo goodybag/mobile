@@ -35,19 +35,25 @@ GB.Views.add('sidebar', {
   Constructor: function () { 
     var $el = this.elements, $self = this.self, $this = this;
     
-    $el.header.background.addEventListener('click', function (e) {
+    function profile (e) {
       $this.clearActive();
       $this.setActive('profile');
-    });
+    }
     
-    $self.add($el.header.background);
-    $self.add($el.header.avatar.background);
-    $self.add($el.header.avatar.image);
-    $self.add($el.header.username);
-    $self.add($el.bank.background);
+    $el.header.background.addEventListener('click', profile);
+    $el.header.username.addEventListener('click', profile);
+    $el.header.avatar.image.addEventListener('click', profile);
+    
+    $el.header.avatar.background.add($el.header.avatar.image);
+    $el.header.background.add($el.header.avatar.background);
+    $el.header.background.add($el.header.username);
     
     // Bank Slots
-    for (var slot in $el.bank.slots) $self.add($el.bank.slots[slot]);
+    for (var slot in $el.bank.slots) 
+      $el.bank.background.add($el.bank.slots[slot]);
+    
+    $self.add($el.header.background);
+    $self.add($el.bank.background);
     
     // Side-bar items
     [ 'nearby', 'activity', 'settings', 'update' ].forEach(function (item) {
@@ -62,7 +68,7 @@ GB.Views.add('sidebar', {
         $this.setActive(item);
       };
       
-      if (item === 'update'){
+      if (item === 'update') {
         fn = function () {
           Ti.Platform.openURL(gb.config.appStoreUrl);
         };
@@ -73,7 +79,8 @@ GB.Views.add('sidebar', {
     });
     
     // Hide the update button until we need it
-    $el.list.update.hide(); 
+    $el.list.update.hide();
+    $el.list.update.setVisible(false);
     
     $self.add($el.list.view);
       

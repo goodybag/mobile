@@ -68,12 +68,12 @@ GB.Views.add('nearby', {
   onShow: function (context) {
     var $this = this, $el = this.elements, locations, location;
     
-    console.log('If place change to nearby');
+    gb.utils.debug('If place change to nearby');
     if (this.location == 'Place') this.location = 'Nearby';
     
-    console.log('Build menu if it does not exist');
+    gb.utils.debug('Build menu if it does not exist');
     if($el.menu.base.children.length < 1) {
-      console.log('add click event to menu buttons');
+      gb.utils.debug('add click event to menu buttons');
       $el.menu.nearby.addEventListener('click', function () { 
         if ($el.places) $el.places.visible = true; else $this.showNearby(); 
         if ($el.map) $el.map.visible = false;
@@ -87,11 +87,12 @@ GB.Views.add('nearby', {
         $el.menu.nearby.deactivate();
         $el.menu.map.activate();
       });
-      console.log('create spacer');
+      
+      gb.utils.debug('create spacer');
       $el.menu.base.add($ui.createView({ width: $ui.FILL, height: '6dp'}));
-      console.log('add nearby button');
+      gb.utils.debug('add nearby button');
       $el.menu.base.add($el.menu.nearby.base);
-      console.log('add map button');
+      gb.utils.debug('add map button');
       $el.menu.base.add($el.menu.map.base);
     }
     
@@ -119,11 +120,14 @@ GB.Views.add('nearby', {
       } else {
         // Loader Start
         gb.utils.debug('[Nearby] Checking loader');
-        if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
+        if (!this.loading) 
+          GB.Windows.get('main').showLoader(), 
+          this.loading = true;
         
         gb.utils.debug('[Nearby] Fetching Data');
         $this.fetch(function (error, results) {
           var i, model, locations; $this.models = {}; $this.locations = [];
+          
           gb.utils.debug('[Nearby] Checking loaded data');
           function mem (param) {  
              if (!$this.memcache) $this.memcache = {};
@@ -133,6 +137,7 @@ GB.Views.add('nearby', {
              if (!$this.memcache[store]) $this.memcache[store] = $this.compareLocations.apply($this, param);
              return $this.memcache[store];
           }
+          
           gb.utils.debug('[Nearby] Checking loaded data');
           if(results && results.data) {
             for (i = 0; i < results.data.length; i++) {
@@ -140,6 +145,7 @@ GB.Views.add('nearby', {
               $this.models[results.data[i]._id] = new GB.Models.Place(results.data[i]);
             }
           }
+          
           gb.utils.debug('[Nearby] Iterate through locations and add them');
           for (i in $this.models) {
             locations = $this.models[i].getLocations();
@@ -147,6 +153,7 @@ GB.Views.add('nearby', {
               $this.locations.push(locations[x]);
             }
           }
+          
           gb.utils.debug('[Nearby] Sort added locations');
           $this.locations.sort(function (a, b) {
             return mem([a, b]);
@@ -163,10 +170,35 @@ GB.Views.add('nearby', {
     });
   },
   
+  /**
+   * Called when view is hidden.
+   */
+  onHide: function () {
+    var $this = this, $el = this.elements;
+    ($el.map) && ($el.holder.remove($el.map), $el.map = null);
+    ($el.places.view) && ($el.holder.remove($el.places.view), $el.places.view = null);
+    
+    if ($el.place) {
+      (!Ti.Android && $el.place.close) && $el.place.close();
+      ($el.place) && $this.self.remove($el.place);
+      $el.place = null;
+    }
+  },
+  
+  /**
+   * Basic existence check for place models.
+   */
   exists: function (id) {
     return !!this.models[id];
   },
   
+  /**
+   * Show Nearby Places in order by location and distance.
+   * 
+   * Creates infi-scroll and calls against #onScroll to 
+   * become the mediator for adding elements to our scroll
+   * object.
+   */
   showNearby: function () {
     var $this = this;
     var $el = this.elements;
@@ -177,7 +209,7 @@ GB.Views.add('nearby', {
     this.page = 0;
     
     // Setup Infiniscroll
-    console.log('setting up infiniscroll');
+    gb.utils.debug('setting up infiniscroll');
     $el.places = new gb.Views.InfiniScroll(gb.style.get('nearby.places'), {
       triggerAt: '82%',
       onScrollToEnd: function () {
@@ -187,15 +219,18 @@ GB.Views.add('nearby', {
       name: "Places"
     });
     
-    console.log('activating nearby button');
+    gb.utils.debug('activating nearby button');
     $el.menu.nearby.activate();
     $el.menu.map.deactivate();
     
-    console.log('set scrolling to true and location to nearby');
+    gb.utils.debug('set scrolling to true and location to nearby');
     this.onScroll(true);
     this.location = 'Nearby';
   },
   
+  /**
+   * 
+   */
   onScroll: function (initial) {
     var $this = this, start = (this.page === 0) ? 0 : (30 * this.page), end =  30 * (this.page + 1);
     var middleman = $ui.createView({ width: $ui.FILL, height: $ui.SIZE, layout: 'vertical' });
@@ -207,9 +242,10 @@ GB.Views.add('nearby', {
       if (end - $this.locations.length > 30) return;
       else end -= $this.locations.length;
     for (i = start; i < end; i++) {
-      middleman.add($this.locations[i].toRow(i%2, function (e) {
-        $this.onPlaceClick.apply($this, [ this ]); 
-      }));
+      if ($this.locations[i] && $this.locations[i].toRow)
+        middleman.add($this.locations[i].toRow(i%2, function (e) {
+          $this.onPlaceClick.apply($this, [ this ]); 
+        }));
     }
     
     this.elements.places.add(middleman);
@@ -223,23 +259,18 @@ GB.Views.add('nearby', {
    * Creates and displays a single location page.
    */
   showPlace: function (place, location) {
+    var $this = this, $el = this.elements, url = null, uri = null, area, elements;
+    
     // Loader Start
     if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
     
-    
-    var $this = this
-    ,   $el = this.elements;
-    
     if (typeof place == 'string') place = this.models[place];
     if ($el.place) $this.self.remove($el.place), $el.place.close(), $el.place = null;
-    
     $el.place = $ui[Ti.Android ? 'createView' : 'createWindow']();
-    // var back  = new GB.StreamButton('Back');
-    var url   = null;
     
     // Styles
-    var area = "nearby.location";
-    var elements = {
+    area = "nearby.location";
+    elements = {
       base: $el.place,
       
       holder: {
@@ -317,19 +348,19 @@ GB.Views.add('nearby', {
       
       // Back
       GB.Windows.get('main').toggleBack(function () {
-        
         GB.Windows.get('main').showLoader();
         
         // Clear Place
         $el.place.setVisible(false);
         $this.self.remove($el.place);
-        $el.place.close();
+        ($el.place && !Ti.Android) && $el.place.close();
         $el.place = null;
         $el.menu.base.setVisible(true);
         
         // Set Holder up
         $el.holder.setVisible(true);
         
+        // Hide the loader
         GB.Windows.get('main').hideLoader();
       });
     
@@ -344,7 +375,10 @@ GB.Views.add('nearby', {
     
     // Remove unnecessary things
     if (place.parent.getUrl()) url = place.parent.getUrl().replace('http://','').toLowerCase();
-    if (url) if (url[url.length-1] == '/') url = url.substr(0, url.length-1);
+    if (url) {
+      if (url[url.length-1] == '/') url = url.substr(0, url.length-1);
+      if (url.length > 24) url = url.substr(0, 24) + '...';
+    }
     
     // Setup Text
     elements.holder.header.right.name.setText(place.parent.getName());
@@ -376,7 +410,7 @@ GB.Views.add('nearby', {
       var goodies = gb.style.get(area + '.goodies.base');
       
       if (data == null) {
-        console.log('adding no goodies text');
+        gb.utils.debug('adding no goodies text');
         
         goodies.add(gb.style.get(area + '.goodies.err', {
           text: 'None Available'
@@ -422,6 +456,9 @@ GB.Views.add('nearby', {
     });
   },
   
+  /**
+   * 
+   */
   showMap: function () {
     var $this = this
     ,   $el = this.elements
@@ -435,8 +472,8 @@ GB.Views.add('nearby', {
       region: {
         latitude: $this.position.lat,
         longitude: $this.position.lon,
-        latitudeDelta: .07,
-        longitudeDelta: .07
+        latitudeDelta: .12,
+        longitudeDelta: .12
       },
       animate: true,
       regionFit: true,
@@ -448,33 +485,18 @@ GB.Views.add('nearby', {
       
       if (anno) {
         annotations.push(anno);
-      
-        (function (idx) {
-          $el.map.addEventListener('click', function (evt) {
-            if (evt.annotation.myid == idx && evt.clicksource == 'rightButton')
-              $this.onPlaceClick($this.locations[idx]);
-          });
-        })(i);
       } else continue;
     };
+    
+    $el.map.addEventListener('click', function (evt) {
+      if (evt.clicksource == 'rightButton' || evt.clicksource == 'rightPane')
+        $this.onPlaceClick($this.locations[evt.annotation.myid]);
+    });
     
     $el.map.setAnnotations(annotations);
     $el.holder.add($el.map);
     $el.menu.nearby.deactivate();
     $el.menu.map.activate();
-  },
-  
-  onHide: function () {
-    var $this = this, $el = this.elements;
-    
-    ($el.map) && ($el.holder.remove($el.map), $el.map = null);
-    ($el.places.view) && ($el.holder.remove($el.places.view), $el.places.view = null);
-    
-    if ($el.place) {
-      (!Ti.Android) && $el.place.close();
-      ($el.place) && $this.self.remove($el.place);
-      $el.place = null;
-    }
   },
   
   /**
@@ -489,6 +511,9 @@ GB.Views.add('nearby', {
     this.showPlace(place);
   },
   
+  /**
+   * 
+   */
   createModal: function (url) {
     if (typeof url === 'undefined') return;
     var modal = $ui.createWindow();

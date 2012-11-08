@@ -5,6 +5,10 @@ gb.style = {
   iphone:  {},
   retina:  {},
   android: {},
+  xhdpi:   {},
+  hdpi:    {},
+  mdpi:    {},
+  ldpi:    {},
   web:     {},
   
   /**
@@ -66,6 +70,8 @@ gb.style = {
   
       if (platform == 'retina') 
         orig = merger('iphone', style, orig || {});
+      else if (platform == 'xhdpi' || platform == 'hdpi' || platform == 'mdpi' || platform == 'ldpi')
+        orig = merger('android', style, orig || {});
         
       if (!orig || orig == undefined) 
         return null;
@@ -88,13 +94,20 @@ gb.style = {
         
         [ 'top', 'left', 'right', 'bottom', 'height', 'width' ].forEach(function (type) {
           if (dest[type] && typeof dest[type] !== 'string' && !dest['locked']) 
-            dest[type] = dest[type] + 'dp';
+            dest[type] += 'dp';
           else if (dest[type] && dest[type] === 'platform' && !dest['locked'])
             if (type == 'width') 
               dest[type] = $dp.platformWidth;
             else if (type == 'height') 
               dest[type] = $dp.platformHeight;
         });
+        
+        if (dest.font)
+          if (dest.font.fontSize && typeof dest.font.fontSize !== 'string')
+            dest.font.fontSize += 'dp';
+          else if (!dest.font.fontFamily || dest.font.fontFamily)
+            if (Ti.Android) dest.font.fontFamily = 'DroidSans';
+            else dest.font.fontFamily = 'HelveticaNeue';
       } else if (dest.nomagic) 
         delete dest.nomagic;
     }
@@ -120,11 +133,13 @@ gb.style = {
   
   type: function () {
     return (
-      (gb.isAndroid) ? 'android' :
+      (gb.isAndroid) ? (
+        (gb.utils.determineRes()) ? gb.utils.determineRes() : 'android'
+      ) :
       (gb.isIOS) ? (
-        (gb.isRetina) ? 
-        'retina' : 'iphone' 
-      ) : 'web'
+        (gb.utils.determineRes()) ? gb.utils.determineRes() : 'iphone' 
+      ) : 
+      'web'
     );
   }
 };

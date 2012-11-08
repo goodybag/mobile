@@ -316,7 +316,7 @@ if(!GB.Models)
     /**
      * Renew the current user session and update the current user object model.
      */
-    renew: function () {
+    renew: function (callback) {
       var self = this, $dataMethod = this.data.authMethod;
       gb.utils.debug('[User] Renewing Session');
       
@@ -327,7 +327,7 @@ if(!GB.Models)
         // }, true);
       // } else {
         // if (!gb.key) gb.key = keychain.createKeychainItem('goodybag');
-//         
+      //         
         // if (gb.key && gb.key.account && gb.key.valueData) {
           // this.auth(function (error, consumer) {
             // if (error) gb.utils.warn(error);
@@ -350,8 +350,13 @@ if(!GB.Models)
           gb.utils.debug('[User] Obtained new session data');
           cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
           
-          console.log(this.getResponseHeader('Set-Cookie'));
-          console.log(cookie.get('connect.sid'));
+          if (typeof cookie === 'undefined') {
+            self.logout();
+            return GB.Windows.show('login');
+          }
+          
+          gb.utils.debug(this.getResponseHeader('Set-Cookie'));
+          gb.utils.debug(cookie.get('connect.sid'));
   
           // Update session and consumer
           self._setSession(cookie.get('connect.sid'));
@@ -361,6 +366,8 @@ if(!GB.Models)
           
           // Clean Garbage.
           cookie = null;
+          
+          if (callback) callback();
         }
       });
     },
@@ -377,14 +384,18 @@ if(!GB.Models)
         $fb.logout();
         
       var consumer = $file.getFile($file.applicationDataDirectory, "consumer");
-      var cookie = $file.getFile($file.applicationDataDirectory, "cooks");
-      
       if (consumer.exists()) consumer.deleteFile();
-      if (cookie.exists()) cookie.deleteFile();
-      if (this.avatar.s85 && this.avatar.s85.exists()) this.avatar.s85.deleteFile();
-      if (this.avatar.s128 && this.avatar.s128.exists()) this.avatar.s128.deleteFile();
+      consumer = null;
       
-      consumer = cookie = null;
+      
+      var cookie = $file.getFile($file.applicationDataDirectory, "cooks");
+      if (cookie.exists()) cookie.deleteFile();
+      cookie = null;
+      
+      if (this.avatar.s85 && this.avatar.s85.exists()) 
+        this.avatar.s85.deleteFile(), this.avatar.s85 = null;
+      if (this.avatar.s128 && this.avatar.s128.exists()) 
+        this.avatar.s128.deleteFile(), this.avatar.s128 = null;
 
       this.authenticated = false;
       
@@ -677,9 +688,9 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setBarcodeId, { barcodeId: id }, function(error, data){
-        if (error && !data) return gb.handleError(error), console.log(error), callback(error);
+        if (error && !data) return gb.handleError(error), gb.utils.debug(error), callback(error);
         data = JSON.parse(data);
-        if (data.error) return gb.handleError(data.error), console.log(data.error), callback(data.error);
+        if (data.error) return gb.handleError(data.error), gb.utils.debug(data.error), callback(data.error);
         $this.data.barcodeId = id;
         $this._setConsumer($this);
         callback(null, data.data);
@@ -694,7 +705,7 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setPassword, { password: password, newPassword: newPassword }, function(error, data){
-        if (error) return gb.handleError(error), console.log(error);
+        if (error) return gb.handleError(error), gb.utils.debug(error);
         data = JSON.parse(data);
         if (data.error) gb.handleError(data.error);
         callback(data.error);
@@ -709,7 +720,7 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.get(gb.config.api.createBarcodeId, function(error, data){
-        if (error) return gb.handleError(error), console.log(error);
+        if (error) return gb.handleError(error), gb.utils.debug(error);
         data = JSON.parse(data);
         if (data.error) return gb.handleError(data.error), callback(data.error);
         $this.data.barcodeId = data.data.barcodeId;
@@ -766,7 +777,7 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setName, values, function(error, data){
-        if (error) return gb.handleError(error), console.log(error);
+        if (error) return gb.handleError(error), gb.utils.debug(error);
         data = JSON.parse(data);
         if (data.error) return gb.handleError(error), callback(data.error);
         $this._setConsumer($this);
@@ -784,7 +795,7 @@ if(!GB.Models)
       var $this = this;
       callback || (callback = function(){});
       $http.post(gb.config.api.setEmail, { email: email }, function(error, data){
-        if (error) return gb.handleError(error), console.log(error);
+        if (error) return gb.handleError(error), gb.utils.debug(error);
         data = JSON.parse(data);
         if (data.error) return gb.handleError(error), callback(data.error);
         $this._setConsumer($this);
@@ -818,7 +829,7 @@ if(!GB.Models)
       };
       // Write file once we know the server got it
       $http.post.generic(gb.config.transloadit.upload_url, options, function(error, response){
-        if (error) return gb.handleError(error), console.log(error);
+        if (error) return gb.handleError(error), gb.utils.debug(error);
         // Just callback when the initial request is done
         response = JSON.parse(response);
         

@@ -95,9 +95,9 @@ Views.show = function (name, context) {
   if (!this.instantiated[name]) this.instantiated[name] = new this.views[name]();
   this.current = name;
   if (typeof this.instantiated[name].onShow != 'undefined') this.instantiated[name].onShow(context);
-  gb.utils.debug("showing " + name);
+  gb.utils.debug("[View] showing " + name);
   this.instantiated[name].self.show();
-  gb.utils.debug("showed " + name);
+  gb.utils.debug("[View] showed " + name);
   
   if (typeof this.instantiated[name].afterShow != 'undefined' && gb.isIOS) this.instantiated[name].afterShow(context);
 };

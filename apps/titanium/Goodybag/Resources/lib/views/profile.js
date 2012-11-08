@@ -67,6 +67,7 @@ gb.Views.add('profile', {
   Constructor: function () {
     var $this = this, $self = this.self, $el = this.elements;
     var merged = gb.utils.compoundViews($el.holder);
+    
     $self.add(merged);
     this.createHeader();
     this.createPlaces();
