@@ -5,11 +5,86 @@ Logfile initialized
 [DEBUG] Waiting for device to be ready ...
 [TRACE] adb devices returned 1 devices/emulators
 [DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.012377 seconds on emulator to get ready
+[DEBUG] waited 0.011720 seconds on emulator to get ready
 [DEBUG] com.goodybag.consumers.mobile.iphone installed? False
 [INFO] Copying CommonJS modules...
 [INFO] Copying project resources..
-[TRACE] COPYING MODIFIED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/settings.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/settings.js
+[INFO] Detected change in tiapp.xml, or assets deleted. Forcing full re-build...
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/android/Default.png => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/Default.png
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/marker.png => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/images/marker.png
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/android/marker.png => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/marker.png
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/app.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/app.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/fontawesome-webfont.ttf => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/fontawesome-webfont.ttf
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/FontAwesome.ttf => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/FontAwesome.ttf
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/fonts/FontAwesome.ttf => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/fonts/FontAwesome.ttf
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/fonts/LigatureSymbols.ttf => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/fonts/LigatureSymbols.ttf
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/aes.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/aes.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/api.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/api.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/activity-old.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/activity-old.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/activity.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/activity.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/button.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/button.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/charity-details-view.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/charity-details-view.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/charity-view.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/charity-view.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/class.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/class.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/error-handler.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/error-handler.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/events.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/events.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/iconic/fonts/LigatureSymbols.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/iconic/fonts/LigatureSymbols.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/iconic/iconic.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/iconic/iconic.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/infini-scroll.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/infini-scroll.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/island.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/island.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/periodic-refresh.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/periodic-refresh.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/pull-to-refresh/images/white-arrow.png => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/pull-to-refresh/images/white-arrow.png
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/pull-to-refresh/ptr.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/pull-to-refresh/ptr.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/pull-to-refresh/pull-to-refresh.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/pull-to-refresh/pull-to-refresh.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/qrcode.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/qrcode.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/stream-button.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/stream-button.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/validate.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/validate.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/view.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/view.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/wav.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/wav.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/window-loader.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/window-loader.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/components/window.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/components/window.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/config.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/config.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/moment.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/moment.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/style.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/style.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/ui.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/ui.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/core/utils.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/core/utils.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/models/activity.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/models/activity.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/models/charity.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/models/charity.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/models/place.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/models/place.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/models/test.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/models/test.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/models/user.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/models/user.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/common.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/common.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/enter-tapin-id.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/enter-tapin-id.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/login.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/login.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/main.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/main.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/nearby.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/nearby.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/profile.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/profile.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/qrcode.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/qrcode.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/register.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/register.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/set-screen-name.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/set-screen-name.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/settings.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/settings.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/sidebar.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/sidebar.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/stream.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/stream.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/styles/welcome.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/styles/welcome.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/activity.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/activity.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/charities.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/charities.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/complete-registration.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/complete-registration.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/edit-setting.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/edit-setting.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/email-change-request.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/email-change-request.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/enter-tapin-id.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/enter-tapin-id.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/login.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/login.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/main.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/main.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/nearby.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/nearby.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/profile.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/profile.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/qrcode.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/qrcode.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/register.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/register.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/set-screen-name.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/set-screen-name.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/settings.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/settings.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/sidebar.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/sidebar.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/stream-no-data.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/stream-no-data.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/stream.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/stream.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/lib/views/welcome.js => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/lib/views/welcome.js
+[TRACE] COPYING CREATED FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/LigatureSymbols.ttf => /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/LigatureSymbols.ttf
 [TRACE] Generating Java Classes
 [DEBUG] Processing Android resource drawables
 [TRACE] COPYING FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-hdpi/avatar.png => /goodybag/mobile/apps/titanium/Goodybag/build/android/res/drawable-hdpi/avatar_4a301072de.png
@@ -166,15 +241,17 @@ Logfile initialized
 [TRACE] COPYING FILE: /goodybag/mobile/apps/titanium/Goodybag/Resources/android/images/res-mdpi/screens/stream/buttons/Activity.default.png => /goodybag/mobile/apps/titanium/Goodybag/build/android/res/drawable-mdpi/screens_stream_buttons_activity_default_bd4ad9b566.png
 [DEBUG] found special platform files dir = /goodybag/mobile/apps/titanium/Goodybag/platform/android
 [INFO] Copying platform-specific files ...
+[DEBUG] app stylesheet => /goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/ApplicationStylesheet.java
 [DEBUG] generating theme.xml
 [DEBUG] found splash screen at /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/assets/Resources/default.png
 [INFO] Detected custom ApplicationManifest.xml -- no Titanium version migration supported
 [TRACE] Writing out AndroidManifest.xml
+[DEBUG] adding /goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/ApplicationStylesheet.java to javac build list
 [DEBUG] adding /goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/GoodybagActivity.java to javac build list
 [DEBUG] adding /goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/GoodybagAppInfo.java to javac build list
 [DEBUG] adding /goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/GoodybagApplication.java to javac build list
 [DEBUG] adding /goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/R.java to javac build list
-[DEBUG] Building Java Sources: "/goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/GoodybagActivity.java" "/goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/GoodybagAppInfo.java" "/goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/GoodybagApplication.java" "/goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/R.java"
+[DEBUG] Building Java Sources: "/goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/ApplicationStylesheet.java" "/goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/GoodybagActivity.java" "/goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/GoodybagAppInfo.java" "/goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/GoodybagApplication.java" "/goodybag/mobile/apps/titanium/Goodybag/build/android/gen/com/goodybag/consumers/mobile/iphone/R.java"
 [INFO] Compiling Android Resources... This could take some time
 [DEBUG] Android classes.dex built
 [DEBUG] creating unsigned apk: /goodybag/mobile/apps/titanium/Goodybag/build/android/bin/app-unsigned.apk
@@ -450,6 +527,6 @@ Logfile initialized
 [DEBUG] Waiting for device to be ready ...
 [TRACE] adb devices returned 1 devices/emulators
 [DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.011406 seconds on emulator to get ready
+[DEBUG] waited 0.012004 seconds on emulator to get ready
 [INFO] Installing application on device
 [INFO] Application installed. Launch from drawer on Home Screen

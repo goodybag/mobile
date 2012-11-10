@@ -1,7 +1,7 @@
 (function ($dp, $ui, $color, $font, $base, $iphone, $android, $retina, $xhdpi, $hdpi, $mdpi, $ldpi) {
   $base.register = {
     "self": {
-      height: $ui.FILL,
+      height: 'platform',
       backgroundImage: 'screens/login/background.png'
     },
     

@@ -207,9 +207,7 @@ GB.Views.add('stream', {
     
     // Manage no activity screens, data management, and destruction.
     if (state.hasData && this.noActivityShown) 
-      this.hideNoActivity();
-    else if (state.hasData && !this.destroyed)
-      return;
+      this.hideNoActivity(), this.scrollWrapper.show();
     
     // Show Loader
     GB.Windows.get('main').showLoader();
