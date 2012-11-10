@@ -1,8 +1,7 @@
 GB.Views.add('settings', {
-  
   Constructor: function(){
-    
     var $this = this;
+    
     this.self = $ui.createScrollView(gb.style.get(
       'settings.base common.grayPage.base common.scrollView'
     ));

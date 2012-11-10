@@ -177,7 +177,6 @@ gb.Windows.add('login', Window.extend({
       , target: $el.buttons.register
       , action: function (e) {
           $self.showRegistration();
-          Ti.Facebook.fireEvent('login');
         }
       }
     }; // End events
