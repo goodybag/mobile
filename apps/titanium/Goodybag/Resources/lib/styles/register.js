@@ -23,10 +23,12 @@
         fontSize: 20,
         fontWeight: "bold"
       },
+      
       shadowOffset: {
         x: 0,
         y: 1
       },
+      
       shadowColor: '#63a5cf'
     },
     
@@ -129,7 +131,7 @@
       }
     };
     
-    $hdpi.register = {
+    $hdpi.register = $xhdpi.register = {
       self: { width: gb.utils.px2dp($dp.platformWidth) },
       seperator: { top: 60 }
     };

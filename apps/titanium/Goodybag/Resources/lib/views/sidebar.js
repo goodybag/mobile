@@ -98,16 +98,16 @@ GB.Views.add('sidebar', {
     $el.header.username.setText($user.getUsername());
     
     if (parseInt($user.data.funds.donated) > 0) {
-      for (var i = 7; i > 2; i--) {
+      for (var i = 7; i > 1; i--) {
         if (i == 5) continue;
         list.push(i < 10 ? "0" + i : "" + i);
       }
-      console.log($user.data.funds.donated.toString());
+      
       donated = $user.data.funds.donated.toString().split("");
       donated.reverse();
+      
       for(var i = 0; i < donated.length; i++) {
         item = list[i];
-        console.log(item);
         $el.bank.slots[item].text = donated[i];
         $el.bank.slots[item].visible = true;
         item == "04" && ($el.bank.slots['05'].visible = true);

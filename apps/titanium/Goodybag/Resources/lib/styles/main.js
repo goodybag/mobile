@@ -3,8 +3,6 @@
     self: {
       top: 0,
       title: 'Main',
-      fullscreen: false,
-      navBarHidden: true,
       backgroundImage: 'background.png',
       backgroundColor: 'white',
       build: { type: 'Window' }
@@ -110,6 +108,25 @@
         buttons: {
           sidebar: { top: 3 },
           qrcode: { top: 3 }
+        }
+      },
+      
+      animations: {
+        right: {
+          left: $dp.platformWidth - 60
+        }
+      }
+    };
+    
+    $xhdpi.main = {
+      self: { width: 'platform' },
+      
+      header: {
+        background: { width: 'platform', height: 54 },
+        logo: { height: '75px', top: 6 },
+        buttons: {
+          sidebar: { top: 8 },
+          qrcode: { top: 8 }
         }
       },
       

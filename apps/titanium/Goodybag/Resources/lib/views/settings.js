@@ -187,9 +187,10 @@ GB.Views.add('settings', {
   }
   
 , onSignOut: function(){
-    gb.consumer.logout();
-    if (gb.consumer.data.facebook) Ti.Facebook.logout();
+    GB.Views.get('sidebar').clearActive();
     GB.Windows.show('login');
+    if (gb.consumer.authenticated) gb.consumer.logout();
+    if (gb.consumer.authenticated && gb.consumer.data.facebook) Ti.Facebook.logout();
   }
   
 , delegateEvents: function () {

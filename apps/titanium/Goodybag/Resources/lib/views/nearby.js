@@ -265,7 +265,8 @@ GB.Views.add('nearby', {
     if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
     
     if (typeof place == 'string') place = this.models[place];
-    if ($el.place) $this.self.remove($el.place), $el.place.close(), $el.place = null;
+    if ($el.place) $this.self.remove($el.place), $el.place = null;
+    if ($el.place && $el.place.close) $el.place.close();
     $el.place = $ui[Ti.Android ? 'createView' : 'createWindow']();
     
     // Styles

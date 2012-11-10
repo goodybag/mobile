@@ -53,6 +53,24 @@
       width: '75%'
     }
   };
+  
+  $xhdpi.stream = {
+    avatar: {
+      width: 50,
+      height: 50,
+      top: 10,
+      bottom: 10
+    },
+    text: {
+      left: 60,
+      top: 15,
+      bottom: 20,
+      width: '75%',
+      font: {
+        fontSize: '16dp'
+      }
+    }
+  };
 })(
   Ti.Platform.displayCaps, Ti.UI, gb.ui.color, gb.ui.font,
   gb.style.base, gb.style.iphone, gb.style.android,

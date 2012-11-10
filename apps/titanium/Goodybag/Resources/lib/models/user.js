@@ -119,7 +119,7 @@ if(!GB.Models)
         if (consumer.error) return callback(consumer.error.message);
         
         // We actually encountered invalid server response, tell the user that?
-        if (consumer.data == null) return callback('Invalid login credentials!'); 
+        if (consumer.data == null) return callback('Invalid login credentials!');
         
         gb.utils.debug('[User] No consumer errors, attempting to parse cookies and setup files.');
         
@@ -381,7 +381,7 @@ if(!GB.Models)
      */
     logout: function (callback) {
       if (this.data.authMethod == GB.Models.User.Methods.FACEBOOK)
-        $fb.logout();
+        Titanium.Facebook.logout();
         
       var consumer = $file.getFile($file.applicationDataDirectory, "consumer");
       if (consumer.exists()) consumer.deleteFile();
@@ -403,6 +403,8 @@ if(!GB.Models)
         if (error) alert(error);
         if (callback) callback();
       });
+      
+      gb.consumer = new GB.Models.User();
       
       return null;
     },
@@ -574,7 +576,16 @@ if(!GB.Models)
      * @return {String}
      */
     getCode: function () {
-      return this.data.barcodeId;
+      var code = this.data.barcodeId;
+      
+      if (typeof code !== 'string')
+        if (code.barcodeId)
+          return code.barcodeId;
+        else return code;
+      else if (code[0] === '{')
+        return JSON.parse(code).barcodeId;
+      
+      return code;
     },
     
     /**
@@ -586,7 +597,7 @@ if(!GB.Models)
     },
     
     getBarcodeID: function () {
-      return this.data.barcodeId;
+      return this.getCode();
     },
   
     /**
@@ -604,7 +615,7 @@ if(!GB.Models)
       if (!this.data.funds) return 0;
       if (!this.data.funds.donated) return 0;
       var donated = parseInt(this.data.funds.donated);
-      return Math.round(donated*100)/100;
+      return 99999; // Math.round(donated*100)/100;
     },
     
     /**
@@ -723,7 +734,7 @@ if(!GB.Models)
         if (error) return gb.handleError(error), gb.utils.debug(error);
         data = JSON.parse(data);
         if (data.error) return gb.handleError(data.error), callback(data.error);
-        $this.data.barcodeId = data.data.barcodeId;
+        $this.data.barcodeId = data.data.barcodeId ? data.data.barcodeId.barcodeId ? data.data.barcodeId.barcodeId : data.data.barcodeId : 'N/A';
         $this._setConsumer($this);
         callback(null, data.data);
       });

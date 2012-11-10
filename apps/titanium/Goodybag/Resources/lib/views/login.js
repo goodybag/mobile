@@ -59,7 +59,7 @@ gb.Windows.add('login', Window.extend({
     this.initializeLoader();
     
     // Time out for checking to see if they logged in to facebook
-    var fbTimeout = 1000 * 10, fbCurrTime;
+    var fbTimeout = 1000 * 360, fbCurrTime;
     
     // Events
     this.events = {
@@ -67,7 +67,6 @@ gb.Windows.add('login', Window.extend({
         type: 'click'
       , target: $el.buttons.facebook
       , action: function (e) {
-          gb.utils.debug('clicked facebook login');
           if ($self.loggingIn) return;
           
           $self.showLoader();
@@ -77,8 +76,7 @@ gb.Windows.add('login', Window.extend({
           // Titaniums fb login event does not always fire
           $self.checkingFbLogin = true;
           
-          if ($self.fbLoginCheck) 
-            clearInterval($self.fbLoginCheck);
+          if ($self.fbLoginCheck) clearInterval($self.fbLoginCheck);
           
           fbCurrTime = 0;
           
@@ -101,9 +99,10 @@ gb.Windows.add('login', Window.extend({
       , target: $el.buttons.submit
       , action: function (e) {
           if ($self.loggingIn) return;
+          
           $self.showLoader();
-          if (gb.config.debug) 
-            gb.utils.debug('[login] attempting to authenticate user.');
+          
+          if (gb.config.debug) gb.utils.debug('[login] attempting to authenticate user.');
           
           // Logging in
           $self.loggingIn = true;
@@ -114,7 +113,7 @@ gb.Windows.add('login', Window.extend({
           
           // Set password to empty
           $el.inputs.password.setValue("");
-          
+
           gb.consumer.auth(function(error, consumer) {
             $self.loggingIn = false;
             $self.hideLoader();
@@ -224,8 +223,8 @@ gb.Windows.add('login', Window.extend({
     var $this = this;
     this.showLoader();
     this.loggingIn = true;
-    gb.utils.debug('Attempting to login via facebook');
     
+    gb.utils.debug('[LOGIN] Attempting to login through Facebook SSO.');
     gb.consumer.facebookAuth(function(error, consumer) {
       $this.loggingIn = false;
       
@@ -233,9 +232,8 @@ gb.Windows.add('login', Window.extend({
         $this.hideLoader();
         Titanium.Facebook.logout();
         alert(error); return;
-      } else if (consumer) {
+      } else if (consumer)
         gb.consumer = consumer;
-      }
       
       $this.hideLoader();
       if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');

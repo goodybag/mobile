@@ -3,8 +3,6 @@
     window: {
       title: 'Login',
       top: 0.1,
-      fullscreen: false,
-      navBarHidden: true,
       backgroundImage: 'background.png',
       build: { type: 'createWindow' }
     },
@@ -18,7 +16,7 @@
     },
   
     loginWrapper: {
-      width: $ui.FILL,
+      width: 'platform',
       height: $ui.FILL,
       showVerticalScrollIndicator: true,
       showHorizontalScrollIndicator: false,
@@ -39,8 +37,8 @@
     },
   
     background: {
-      image: 'screens/login/background.png',
-      build: { type: 'createImageView' }
+      backgroundImage: 'screens/login/background.png',
+      build: { type: 'createView' }
     },
   
     buttons: {
@@ -113,7 +111,7 @@
       }
     };
     
-    $hdpi.login = {
+    $hdpi.login = $xhdpi.login = {
       registerWrapper: {
         width: $ui.SIZE,
         height: $ui.FILL
@@ -122,13 +120,13 @@
       buttons: {
         facebook: {
           top: 160,
-          width: '60%',
+          width: '80%',
           height: $ui.SIZE,
         },
         
         submit: {
           top: 340,
-          width: '60%',
+          width: '80%',
           height: $ui.SIZE,
         },
         
@@ -136,12 +134,51 @@
       },
       
       fields: {
-        base: { left: 130, width: 205 },
+        base: { left: 70, width: 205 },
         email: { top: 240 },
         password: { top: 290 },
         
         background: {
-          width: '60%',
+          width: '80%',
+          height: $ui.SIZE,
+        }
+      }
+    };
+    
+    $xhdpi.login = {
+      background: {
+        width: 'platform',
+        height: 'platform'
+      },
+      
+      registerWrapper: {
+        width: $ui.SIZE,
+        height: $ui.FILL
+      },
+      
+      buttons: {
+        facebook: {
+          top: 160,
+          width: '70%',
+          height: $ui.SIZE,
+        },
+        
+        submit: {
+          top: 340,
+          width: '70%',
+          height: $ui.SIZE,
+        },
+        
+        register: { top: 420 }
+      },
+      
+      fields: {
+        base: { left: 90, width: 205 },
+        email: { top: 228 },
+        password: { top: 272 },
+        
+        background: {
+          width: '70%',
           height: $ui.SIZE,
         }
       }

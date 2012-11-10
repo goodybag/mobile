@@ -6,29 +6,30 @@
   };
   
   Windows.add = function (name, window) {
-    gb.utils.debug('Storing Window: ' + name);
-    
+    gb.utils.debug('[WINDOWS] Storing Window: ' + name);
     window.windowName = name;
     this.windows[name] = window;
-    gb.utils.debug('Window stored: ' + name);
+    gb.utils.debug('[WINDOWS] Window stored: ' + name);
   };
   
   Windows.instantiate = function (name) {
-    gb.utils.debug("Instantiating Window: " + name);
-    gb.utils.debug("Instianated? " + this.instantiated[name]);
+    gb.utils.debug("[WINDOWS] Instantiating Window: " + name);
+    gb.utils.debug("[WINDOWS] " + name + " Instianated? " + this.instantiated[name]);
     if (this.instantiated[name]) return;
     this.instantiated[name] = new this.windows[name]();
     this.instantiated[name].window.visible = false;
+    this.instantiated[name].windowName = name;
     
     if (typeof this.instantiated[name].onAndroid != 'undefined' && gb.isAndroid)
       this.instantiated[name].onAndroid();
     else if (typeof this.instantiated[name].onIOS != 'undefined' && gb.isIOS)
       this.instantiated[name].onIOS();
-    gb.utils.debug('Window instantiated: ' + name);
+      
+    gb.utils.debug('[WINDOWS] Instantiated: ' + name);
   };
   
   Windows.get = function (name) {
-    gb.utils.debug('Getting Window: ' + name);
+    gb.utils.debug('[WINDOWS] Getting Window: ' + name);
     if (!this.instantiated[name]) this.instantiate(name);
     return this.instantiated[name];
   };
@@ -40,25 +41,25 @@
   Windows.show = function (name, destroy) {
     if (!name) return;
     if (name === this.current) return;
-    gb.utils.debug('Checking if Window exists: ' + name);
+    
+    gb.utils.debug('[WINDOWS] Checking if Window exists [' + name + ']: ' + this.exists(name));
     if (!this.exists(name)) return;
-    gb.utils.debug('Showing Window: ' + name);
-
+    
+    gb.utils.debug('[WINDOWS] Showing Window: ' + name);
     if (!this.instantiated[name]) this.instantiate(name);
     if (this.current && !this.instantiated[this.current].isHidden()) this.hide(this.current);
     
     this.instantiated[name].show();
     this.current = name;
-    gb.utils.debug('Window shown: ' + name);
+    gb.utils.debug('[WINDOWS] Window shown: ' + name);
   };
   
   Windows.hide = function (name, close) {
     if (!name) return;
     if (!this.exists(name)) return;
-    gb.utils.debug('Hiding Window: ' + name);
-
+    gb.utils.debug('[Windows] Hiding Window: ' + name);
     this.instantiated[name].hide();
-    gb.utils.debug('Window hidden: ' + name);
+    gb.utils.debug('[Windows] Window hidden: ' + name);
   };
   
   Windows.destroy = function (name) {
@@ -70,6 +71,7 @@
     delete this.instantiated[name];
     this.windows[name] = null;
     delete this.windows[name];
+    this.current = null;
   };
   
   GB.Windows = Windows;
@@ -119,9 +121,7 @@ var Window = new Class(gb.utils.extend({
       this.created = true;
     }
     
-    if (typeof this.onShow != 'undefined')
-      this.onShow();
-    
+    if (typeof this.onShow != 'undefined') this.onShow();
     this.window.show();
     this.hidden = false;
   },
@@ -129,9 +129,15 @@ var Window = new Class(gb.utils.extend({
   hide: function () {
     gb.utils.debug('[' + this.windowName + '] Attempting to hide window.', this.debug);
     var $this = this;
-    if (typeof this.onHide != 'undefined' && this.created) this.onHide();
-    if (this.created) this.window.hide()
-    this.hidden = true;
+    
+    if (this.created && !this.hidden) {
+      gb.utils.debug('['+ this.windowName + '] Hiding current windows window.');
+      
+      this.hidden = true;
+      
+      if (typeof this.onHide !== 'undefined') this.onHide();
+      this.window.hide();
+    }
   },
   
   isHidden: function () {

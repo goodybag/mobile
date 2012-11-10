@@ -31,7 +31,7 @@ gb.ui.color.base = gb.ui.color.gray;
 
 gb.ui.font = {
   base: {
-    fontSize: 14
+    fontSize: '14dp'
   , fontWeight: "normal"
   }
 };

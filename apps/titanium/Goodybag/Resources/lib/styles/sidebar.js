@@ -317,6 +317,56 @@
       }
     }
   };
+  
+  $xhdpi.sidebar = {
+    self: {
+      right: -gb.utils.px2dp($dp.platformWidth)
+    },
+    
+    header: {
+      background: {
+        width: 'platform',
+        height: 54,
+        left: 0
+      },
+      
+      avatar: {
+        background: {
+          height: 46.7,
+          width: 46.7
+        },
+        image: {
+          top: .7,
+          left: .7,
+          width: 45,
+          height: 45
+        }
+      }
+    },
+    
+    bank: {
+      background: {
+        width: 'platform',
+        height: 45,
+        top: 54,
+        left: 0
+      },
+      
+      slots: {
+        base: {
+          top: 3
+        },
+        
+        one:    { left: 17 },
+        two:    { left: 56 },
+        three:  { left: 100 },
+        four:   { left: 143 },
+        five:   { left: 190 },
+        six:    { left: 228 },
+        seven:  { left: 268 }
+      }
+    }
+  };
 })(
   Ti.Platform.displayCaps, Ti.UI, gb.ui.color, gb.ui.font,
   gb.style.base, gb.style.iphone, gb.style.android,

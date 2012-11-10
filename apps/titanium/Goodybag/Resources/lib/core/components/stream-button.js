@@ -3,7 +3,7 @@
   
   var constructor = function(text, options){
     this.options = {
-      width: '150dp'
+      width: gb.utils.determineRes() === 'xhdpi' ? '170dp' : '150dp'
     , height: '33dp'
     , left: '7dp'
     , inactiveState: {

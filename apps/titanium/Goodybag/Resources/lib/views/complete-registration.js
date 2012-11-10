@@ -1,5 +1,5 @@
 GB.Windows.add('complete-registration', Window.extend({
-  window: $ui.createWindow(gb.style.get('main.self')),
+  window: gb.style.get('main.self'),
   
   Constructor: function () {
     var $this = this;
@@ -15,14 +15,8 @@ GB.Windows.add('complete-registration', Window.extend({
     , "main": {
         "base":   $ui.createView(gb.style.get('main.views.main'))
 
-      , "header": $ui.createImageView(gb.style.get('main.header.background'))
-      , "logo":   $ui.createImageView(gb.style.get('main.header.logo'))
-      
-        // Attached page views
-      // , "charities": GB.Views.get('charities').self
-      // , "welcome": GB.Views.get('welcome').self
-      // , "set-screen-name": GB.Views.get('set-screen-name').self
-      // , "enter-tapin-id": GB.Views.get('enter-tapin-id').self
+      , "header": gb.style.get('main.header.background')
+      , "logo":   gb.style.get('main.header.logo')
       }
     };
     

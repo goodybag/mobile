@@ -19,7 +19,7 @@ gb.config = function (global, fb, storage) {
   this.development = false;
   
   // Facebook
-  Titanium.Facebook.forceDialogAuth = false;
+  Titanium.Facebook.setForceDialogAuth(false);
   Titanium.Facebook.appid = '152282721508707';
   Titanium.Facebook.permissions = [
     'email',

@@ -277,11 +277,9 @@
         var
           barcodeId = currentFields['field:barcodeId'].input.getValue()
         , errors    = gb.validate('barcodeId', barcodeId)
-        ; 
+        ;
         if (errors.length > 0) return this.reportErrors(errors);
-        gb.consumer.setBarcodeId(barcodeId, function(error){
-          if (error) return alert(error);
-        });
+        gb.consumer.setBarcodeId(barcodeId, function(error){});
       break;
       case 'password':
         var
@@ -292,9 +290,7 @@
         ;
         if (newPassword !== confirmPassword) errors.push('Passwords do not match');
         if (errors.length > 0) return this.reportErrors(errors);
-        gb.consumer.setPassword(password, newPassword, function(error){
-          if (error) return alert(error);
-        });
+        gb.consumer.setPassword(password, newPassword, function(error){ });
       break;
       default: break;
     }
@@ -303,6 +299,7 @@
   }
   
   , reportErrors: function(errors){
+      console.log('reporting');
       if (typeof errors === "string") return alert(errors);
       var msg = "";
       for (var i = errors.length - 1, error; i >= 0; i--){

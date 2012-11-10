@@ -1364,7 +1364,6 @@ var qrcode = function() {
   // gifImage (B/W)
   //---------------------------------------------------------------------
   var gifImage = function(width, height) {
-
     var _width = width;
     var _height = height;
     var _data = new Array(width * height);
@@ -1641,14 +1640,10 @@ var QRCode = (function(global) {
     self.qr.addData(options.text);
     self.qr.make();
 
-    if (!options) {
-      options = {};
-    }
-
-    var width = options.width || null;
-    var height = options.height || null;
+    if (!options) options = {};
+    var width = parseInt(options.width) || null;
+    var height = parseInt(options.height) || null;
     var margin = options.margin || 10;
-
     var cellSize;
 
     if (width === null && height === null) {
@@ -1658,20 +1653,22 @@ var QRCode = (function(global) {
         margin = cellSize * 4;
       }
     } else if (width >= height) {
-      cellSize = parseInt((width - margin * 2) / self.qr.getModuleCount(), 10);
+      cellSize = parseInt(width / self.qr.getModuleCount(), 10);
     } else if (width < height) {
-      cellSize = parseInt((height - margin * 2) / self.qr.getModuleCount(), 10);
+      cellSize = parseInt(height / self.qr.getModuleCount(), 10);
     }
-
-    var imgTag = self.qr.createImgTag(cellSize, margin);
+  
+    var imgTag = self.qr.createImgTag(
+      parseInt(width / self.qr.getModuleCount(), 10), 
+      parseInt(height / self.qr.getModuleCount(), 10)
+    );
+    
     options.image = Ti.Utils.base64decode(imgTag.split(',')[1].split('"')[0]);
 
     if (width === null && height === null) {
       options.width = imgTag.match(/width=\"([0-9]+)\"/)[1];
       options.height = imgTag.match(/height=\"([0-9]+)\"/)[1];
     }
-
-    options.image = Ti.Utils.base64decode(self.qr.createImgTag(cellSize, margin).split(',')[1].split('"')[0]);
 
     return Ti.UI.createImageView(options);
   };

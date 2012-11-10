@@ -5,6 +5,8 @@ GB.Windows.add('main', Window.extend({
   location: null,
   swiping: false,
   animated: true,
+  closeOnExit: true,
+  window: gb.style.get('main.self'),
   
   images: {
     qrcode: {
@@ -23,9 +25,6 @@ GB.Windows.add('main', Window.extend({
 
   Constructor: function () {
     var $this, $el, $window;
-    
-    // Store window
-    this.window = gb.style.get('main.self');
     
     // Store Elements
     this.elements = {
@@ -61,17 +60,6 @@ GB.Windows.add('main', Window.extend({
         }
       },
       
-      // Deprecated until we can get scrollView to scroll correctly with this set.
-      // swipe: {
-        // type: 'swipe',
-        // target: this.window,
-        // action: function (e) {
-          // if (e.direction === 'up' || e.direction === 'down') return true;
-          // if (e.direction === 'right' && $this.animated) $this.toggleSidebar.apply($this)
-          // else if (e.direction === 'left' && !$this.animated) $this.toggleSidebar.apply($this);
-        // }
-      // },
-      
       qrcode: {
         type: 'click',
         target: this.elements.header.buttons.qrcode,
@@ -100,9 +88,9 @@ GB.Windows.add('main', Window.extend({
     };
     
     // Event for Geolocation (Can't be in handler above)
-    if(Titanium.Geolocation.locationServicesEnabled)
+    if (Titanium.Geolocation.locationServicesEnabled)
       Titanium.Geolocation.addEventListener('location', gb.consumer._setGeolocation);
-    else alert('GPS is disabled, nearby places will not work correctly!');
+    else alert('GPS Disabled, Nearby places will be off.');
 
     // Force orientation
     $window.orientationModes = [ Ti.UI.PORTRAIT ];
@@ -139,12 +127,9 @@ GB.Windows.add('main', Window.extend({
     this.shownPages = [];
     
     // Refresh stream data in the background
-    this.streamGlobalRefresher = new GB.PeriodicRefresher(
-      function(callback){
+    this.streamGlobalRefresher = new GB.PeriodicRefresher(function (callback) {
         gb.api.stream.global({ offset: 0, limit: 30 }, callback);
-      }
-    , gb.api.store.stream
-    , gb.config.autoRefreshTime
+      }, gb.api.store.stream, gb.config.autoRefreshTime
     );
     
     return this;
@@ -155,11 +140,12 @@ GB.Windows.add('main', Window.extend({
       this.showLoader();
       this.streamGlobalRefresher.stop();
     }
+    
     if (view === "nearby") this.showLoader();
     this.elements.views.main.startLayout();
     
     if (this.location) {
-      gb.utils.debug('attempting to remove view ' + this.location);
+      gb.utils.debug('[MAIN] Attempting to remove view: ' + this.location);
       this.elements.views.main.remove(GB.Views.get(this.location).self)
       GB.Views.hide(this.location);
     }
@@ -172,9 +158,10 @@ GB.Windows.add('main', Window.extend({
   },
   
   onHide: function () {
+    gb.utils.debug('[MAIN] Stoping Global Refresher');
     this.streamGlobalRefresher.stop();
-    GB.Views.hide(this.location);
-    // Reset active sidebar item so it doesn't bail out early when we invoke setActive in main's onShow
+    
+    gb.utils.debug('[MAIN] Clearing active sidebar element');
     GB.Views.get('sidebar').active = null;
   },
 
@@ -197,10 +184,14 @@ GB.Windows.add('main', Window.extend({
    * Delegate cleanup measures upon this window being hidden.
    */
   onDestroy: function () {
-    gb.utils.debug("calling onDestroy on main");
+    gb.utils.debug("[MAIN] Destroying registered events.");
     this.destroyEvents();
+    
+    gb.utils.debug("[MAIN] Nulling out elements");
     this.elements = null;
     delete this.elements;
+    
+    gb.utils.debug("[MAIN] Destroying shown pages.");
     for (var i = this.shownPages.length - 1; i >= 0; i--){
       GB.Views.destroy(this.shownPages[i]);
     }

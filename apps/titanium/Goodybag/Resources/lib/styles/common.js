@@ -5,7 +5,7 @@
       layout: 'vertical',
       showVerticalScrollIndicator: true
     },
-   
+    
     "go": {
       build: {
         type: "createLabel"
@@ -158,7 +158,7 @@
         color: $color.white,
         textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
         font: {
-          fontSize: $font.base.fontSize + 4,
+          fontSize: 18,
           fontWeight: "bold"
         },
         build: {
@@ -183,7 +183,7 @@
         },
         shadowColor: '#fff',
         font: {
-          fontSize: $font.base.fontSize + 4,
+          fontSize: 18,
           fontWeight: "bold"
         }
       },
@@ -208,7 +208,7 @@
           height: $ui.SIZE,
           color: $color.grayDarker,
           font: {
-            fontSize: $font.base.fontSize + 4,
+            fontSize: 14,
             fontWeight: "bold"
           }
         },
@@ -218,7 +218,7 @@
           height: $ui.SIZE,
           color: $color.grayDark,
           font: {
-            fontSize: $font.base.fontSize + 2,
+            fontSize: 16,
             fontWeight: "bold"
           }
         },
@@ -228,7 +228,7 @@
           height: $ui.SIZE,
           color: $color.grayDark,
           font: {
-            fontSize: $font.base.fontSize
+            fontSize: 14
           }
         },
         
@@ -271,7 +271,7 @@
           autocorrect: false,
           color: $color.grayDark,
           font: {
-            fontSize: $font.base.fontSize
+            fontSize: 14
           }
         },
         
@@ -288,7 +288,7 @@
           autocorrect: false,
           color: $color.grayDark,
           font: {
-            fontSize: $font.base.fontSize
+            fontSize: 14
           }
         },
         
@@ -993,7 +993,7 @@
         top: '54dp'
       }
     }
-  }
+  };
 })(
   Ti.Platform.displayCaps, Ti.UI, gb.ui.color, gb.ui.font,
   gb.style.base, gb.style.iphone, gb.style.android,
