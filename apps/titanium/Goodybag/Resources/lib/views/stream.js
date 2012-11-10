@@ -174,9 +174,7 @@ GB.Views.add('stream', {
     this.current = "global";
     
     if (state.hasData && this.noActivityShown) 
-      this.hideNoActivity();
-    else if (state.hasData && !this.destroyed)
-      return;
+      this.hideNoActivity(), this.scrollWrapper.show();
     
     gb.utils.debug("[STREAM] Adding items to GLOBAL view.");
     

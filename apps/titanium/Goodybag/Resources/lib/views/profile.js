@@ -117,10 +117,10 @@ gb.Views.add('profile', {
     var $this = this, $self = this.self, $el = this.elements, $user = gb.consumer;
     var $holder = $el.holder, $locations = $el.holder.locations;
     $holder.title.header.setText('My Top Places:');
-    $holder.title.subHeader.setText('by tapins');
     
     $user.getLocationsByTapins(function (data) {
-      if (!data.length) return;
+      if (!data || !data.length) return $holder.title.subHeader.setText('No tapins yet!');
+      else $holder.title.subHeader.setText('by tapins');
       
       for (var i = 0; i < data.length; i++) {
         if (!data[i].name) continue;

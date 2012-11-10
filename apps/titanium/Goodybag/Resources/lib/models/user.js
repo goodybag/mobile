@@ -578,12 +578,13 @@ if(!GB.Models)
     getCode: function () {
       var code = this.data.barcodeId;
       
-      if (typeof code !== 'string')
-        if (code.barcodeId)
-          return code.barcodeId;
-        else return code;
-      else if (code[0] === '{')
-        return JSON.parse(code).barcodeId;
+      if (code)
+        if (typeof code !== 'string')
+          if (code.barcodeId)
+            return code.barcodeId;
+          else return code;
+        else if (code[0] === '{')
+          return JSON.parse(code).barcodeId;
       
       return code;
     },

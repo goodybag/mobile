@@ -264,6 +264,7 @@ GB.Views.add('nearby', {
     // Loader Start
     if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
     
+    // Create Place with checks
     if (typeof place == 'string') place = this.models[place];
     if ($el.place) $this.self.remove($el.place), $el.place = null;
     if ($el.place && $el.place.close) $el.place.close();
@@ -341,29 +342,34 @@ GB.Views.add('nearby', {
     }; gb.utils.compoundViews(elements);
     
     // Showing function
-    function show () {
+    function show (p) {
+      if (!p) return;
       $el.holder.setVisible(false);
       $el.menu.base.setVisible(false);
-      $el.place.show();
-      $this.self.add($el.place);
+      if (p && p.show) p.show();
+      if (p) $this.self.add(p);
       
       // Back
-      GB.Windows.get('main').toggleBack(function () {
-        GB.Windows.get('main').showLoader();
-        
-        // Clear Place
-        $el.place.setVisible(false);
-        $this.self.remove($el.place);
-        ($el.place && !Ti.Android) && $el.place.close();
-        $el.place = null;
-        $el.menu.base.setVisible(true);
-        
-        // Set Holder up
-        $el.holder.setVisible(true);
-        
-        // Hide the loader
-        GB.Windows.get('main').hideLoader();
-      });
+      (function (p) {
+        GB.Windows.get('main').toggleBack(function () {
+          GB.Windows.get('main').showLoader();
+          
+          // Clear Place
+          if (p) p.setVisible(false);
+          if (p) $this.self.remove(p);
+          if (p && p.close) p.close();
+          if (p ) p = null;
+          
+          // Show the menu
+          $el.menu.base.setVisible(true);
+          
+          // Set Holder up
+          $el.holder.setVisible(true);
+          
+          // Hide the loader
+          GB.Windows.get('main').hideLoader();
+        });
+      }(p));
     
       // Loader End
       if ($this.loading) GB.Windows.get('main').hideLoader(), $this.loading = false;
@@ -418,7 +424,7 @@ GB.Views.add('nearby', {
         }));
         
         elements.holder.base.add(goodies);
-        show();
+        show($el.place);
         return;
       }
       
@@ -453,7 +459,7 @@ GB.Views.add('nearby', {
       }
       
       elements.holder.base.add(goodies);
-      show();
+      show($el.place);
     });
   },
   
