@@ -103,7 +103,7 @@ gb.Views.add('profile', {
         $holder.tapins.base.visible = false;
       } else {
         $holder.tapins.base.visible = true;
-        $holder.tapins.inner.one.setText('Total Tapins:');
+        $holder.tapins.inner.one.setText('Total Tap-Ins:');
         $holder.tapins.inner.two.setText(data);
       }
     });
@@ -119,8 +119,8 @@ gb.Views.add('profile', {
     $holder.title.header.setText('My Top Places:');
     
     $user.getLocationsByTapins(function (data) {
-      if (!data || !data.length) return $holder.title.subHeader.setText('No tapins yet!');
-      else $holder.title.subHeader.setText('by tapins');
+      if (!data || !data.length) return $holder.title.subHeader.setText('No Tap-Ins yet!');
+      else $holder.title.subHeader.setText('by Tap-Ins');
       
       for (var i = 0; i < data.length; i++) {
         if (!data[i].name) continue;

@@ -5,7 +5,7 @@ Logfile initialized
 [DEBUG] Waiting for device to be ready ...
 [TRACE] adb devices returned 1 devices/emulators
 [DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.011720 seconds on emulator to get ready
+[DEBUG] waited 0.011845 seconds on emulator to get ready
 [DEBUG] com.goodybag.consumers.mobile.iphone installed? False
 [INFO] Copying CommonJS modules...
 [INFO] Copying project resources..
@@ -527,6 +527,6 @@ Logfile initialized
 [DEBUG] Waiting for device to be ready ...
 [TRACE] adb devices returned 1 devices/emulators
 [DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.012004 seconds on emulator to get ready
+[DEBUG] waited 0.011880 seconds on emulator to get ready
 [INFO] Installing application on device
 [INFO] Application installed. Launch from drawer on Home Screen

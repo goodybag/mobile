@@ -37,7 +37,7 @@ if(!GB.Models)
           sentence += " answered the poll question: " + attributes.data.poll.question;
           break;
         case "btTapped":
-          sentence += " tapped in at " + attributes.where.org.name + " and raised " + attributes.data.donationAmount + "\u00A2 for ";
+          sentence += " tapped-in at " + attributes.where.org.name + " and raised " + attributes.data.donationAmount + "\u00A2 for ";
           sentence += (attributes.data.charity) ? attributes.data.charity.name : "charity"; 
           break;
         case "fundsDonated":

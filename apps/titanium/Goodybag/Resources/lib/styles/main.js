@@ -106,8 +106,8 @@
         background: { width: 'platform', height: 54 },
         logo: { height: '64px' },
         buttons: {
-          sidebar: { top: 3 },
-          qrcode: { top: 3 }
+          sidebar: { height: '70%', top: 6 },
+          qrcode: { height: '70%', top: 6 }
         }
       },
       
