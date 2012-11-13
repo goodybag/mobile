@@ -11,19 +11,19 @@
     this.offset = 0;
     this.messages = {
       inactive: 'Pull down to refresh',
-      pulling: 'Release to refresh',
+      pulling: 'Release to refresh, or click here to reload!',
       active: 'Refreshing'
     };
     
     // Merge options
     options = {
-      xhdpi: 80,
-      hdpi: 70,
-      mdpi: 60,
-      ldpi: 60,
-      android: 60,
-      iphone: 60,
-      retina: 60,
+      xhdpi:    80,
+      hdpi:     70,
+      mdpi:     60,
+      ldpi:     60,
+      android:  60,
+      iphone:   60,
+      retina:   60,
       height: '60dp',
       width: $ui.FILL,
       backgroundColor: 'white',
@@ -57,18 +57,24 @@
     }, 100);
     
     // Event Listeners
+    this._onRefresh = function () {
+      $this.pulling = false;
+      $this.active = false;
+      $this.attachment.phrase.setText($this.messages.inactive);
+      $this.view.scrollTo(0, $this.total);
+    };
+    
+    this._onClick = function (e) {
+      $this.pulling = false;
+      $this.active = true;
+      $this.attachment.phrase.setText($this.messages.active);
+      $this.view.removeEventListener('click', $this._onClick);
+      $this.callback($this._onRefresh);
+    };
+    
     this._onTouchEnd = function (e) {
       if ($this.pulling && !$this.active && $this.offset <= ($this.total/5)) {
-        $this.pulling = false;
-        $this.active = true;
-        $this.attachment.phrase.setText($this.messages.active);
-        
-        $this.callback(function () {
-          $this.pulling = false;
-          $this.active = false;
-          $this.attachment.phrase.setText($this.messages.inactive);
-          $this.view.scrollTo(0, $this.total);
-        });
+        $this._onClick();
       }
     };
     
@@ -78,17 +84,12 @@
       if (!$this.pulling && $this.offset <= ($this.total/2)) {
         $this.pulling = true;
         $this.attachment.phrase.setText($this.messages.pulling);
+        $this.view.addEventListener('click', $this._onClick);
       } else if ($this.pulling && !$this.active && $this.offset <= ($this.total/5)) {
         $this.pulling = false;
         $this.active = true;
         $this.attachment.phrase.setText($this.messages.active);
-        
-        $this.callback(function () {
-          $this.pulling = false;
-          $this.active = false;
-          $this.attachment.phrase.setText($this.messages.inactive);
-          $this.view.scrollTo(0, $this.total);
-        });
+        $this._onClick();
       }
     };
     
@@ -97,6 +98,7 @@
       $this.view.remove($this.attachment);
       $this.view.removeEventListener('touchend', this._onTouchEnd);
       $this.view.removeEventListener('scroll', this._onScroll);
+      $this.view.removeEventListener('click', this._onClick);
     };
     
     this.view.addEventListener('touchend', this._onTouchEnd);

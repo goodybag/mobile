@@ -50,7 +50,10 @@
       left: 60,
       top: 15,
       bottom: 20,
-      width: '75%'
+      width: '75%',
+      font: {
+        fontSize: '16dp'
+      }
     }
   };
   
