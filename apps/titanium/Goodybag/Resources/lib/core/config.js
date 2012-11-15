@@ -44,7 +44,7 @@ gb.config = function (global, fb, storage) {
   
   // Api Domain
   var domain = (this.development ? 'local' : 'www') + '.goodybag.com';
-      // var domain = '192.168.1.5';
+  // var domain = '192.168.1.6' + ':3001';
       
   // Api URLS
   this.api = {};

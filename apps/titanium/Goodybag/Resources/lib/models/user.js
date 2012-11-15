@@ -166,14 +166,14 @@ if(!GB.Models)
       
       gb.utils.debug('[User] Attempting to register.');
       
-      $http.post(gb.config.api.register, user, function(error, json){
+      $http.post(gb.config.api.register, user, function (error, json) {
         if (!error && !json) return callback('Invalid server response...');
         if (error) return callback(JSON.parse(error).message);
         if (typeof json == 'undefined' || !json) return callback();
         
         var consumer = JSON.parse(json);
         
-        gb.utils.debug('[User] Got back the data object.');
+        gb.utils.debug('[User] Got back the data object:' + json);
         
         if (consumer.error) return gb.handleError(error), callback(consumer.error);
         
@@ -301,6 +301,7 @@ if(!GB.Models)
         this.data = JSON.parse(consumerPt);
         this.authenticated = true;
         this.session = new gb.utils.parsers.cookie.storage();
+        gb.utils.debug(this.session);
         this.session.set('connect.sid', cooksPt);
         this._setAvatar();
   
@@ -319,21 +320,6 @@ if(!GB.Models)
     renew: function (callback) {
       var self = this, $dataMethod = this.data.authMethod;
       gb.utils.debug('[User] Renewing Session');
-      
-      // // Reauthenticate the user.
-      // if ($dataMethod === GB.Models.User.Methods.FACEBOOK) {
-        // this.facebookAuth(function (error, consumer) {
-          // if (error) gb.utils.warn(error);
-        // }, true);
-      // } else {
-        // if (!gb.key) gb.key = keychain.createKeychainItem('goodybag');
-      //         
-        // if (gb.key && gb.key.account && gb.key.valueData) {
-          // this.auth(function (error, consumer) {
-            // if (error) gb.utils.warn(error);
-          // }, gb.key.account, gb.key.valueData, true);
-        // }
-      // }
       
       $http.get.sessioned(gb.config.api.consumer.self, this.session, function (error, results) {
         if (error) {

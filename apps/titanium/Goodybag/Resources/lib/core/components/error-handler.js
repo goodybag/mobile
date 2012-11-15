@@ -1,4 +1,5 @@
 gb.handleError = function(error){
+  if (!error || error.name) return gb.utils.debug(error);
   // Either they messed up logging in or their sessino went bad
   if (error.name === "authenticationError"){
     // If their session went bad

@@ -2,7 +2,8 @@
   $base.register = {
     "self": {
       height: 'platform',
-      backgroundImage: 'screens/login/background.png'
+      backgroundImage: 'screens/login/background.png',
+      backgroundColor: '#267eba'
     },
     
     "wrapper": {

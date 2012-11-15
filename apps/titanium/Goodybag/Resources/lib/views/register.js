@@ -24,7 +24,7 @@
     
     Constructor: function () {
       var $this = this;
-      
+      this.i = 0;
       this.onBackCallback = function () {};
       this.onRegisterCallback = function () {};
       
@@ -111,7 +111,12 @@
       , "input": $ui.createTextField(gb.utils.extend({
           hintText: text
         , events: {
-            blur: function(e){
+            focus: (function (i) {return function (e) {
+              $this.views.wrapper.fields.base.setTop(10 - (15 * i) + 'dp');
+            }}($this.i)),
+            
+            blur: function (e) {
+              $this.views.wrapper.fields.base.top = 10 + 'dp';
               $this.validateOne(field, e.source.getValue(), function(errors){
                 $this.views.wrapper.fields[field].indicator.setBackgroundImage(
                   gb.style.get('register.field.indicator.' + ((errors.length > 0) ? 'red' : 'green')).backgroundImage
@@ -125,7 +130,9 @@
         ))
       , "indicator": $ui.createView(gb.style.get('register.field.indicator.base'))
       };
-    
+      
+      $this.i++;
+      
       if (!last) fields.separator = $ui.createView(gb.style.get('register.field.separator'));
       return fields;
     },

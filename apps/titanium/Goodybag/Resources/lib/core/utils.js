@@ -93,7 +93,7 @@ gb.utils = function (global) {
       callback.apply(this, [ e.error ]);
     }
     
-    client.timeout = 5000;
+    client.timeout = 10000;
     client.open('POST', url);
     client.setRequestHeader('content-type', 'application/json');
     client.send(options ? JSON.stringify(options) : '');
