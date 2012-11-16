@@ -49,7 +49,7 @@ GB.Windows.add('complete-registration', Window.extend({
   },
   
   showPage: function (view) {
-    if (this.location) {
+    if (this.location !== view) {
       gb.utils.debug('attempting to remove view ' + this.location);
       this.views.main.base.remove(GB.Views.get(this.location).self)
       GB.Views.hide(this.location);
