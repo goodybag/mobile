@@ -102,9 +102,6 @@ GB.Views.add('settings', {
     
     this.settings = this.views.pageWrapper.island.fill;
     
-    // this.settings['setting:password'].edit.btn.addEventListener('click', function(){ $this.editField('password') });
-    
-    
     // Facebook stuff
     // Right now, it's only facebook stuff on here so I'm using that to my advantage in onShow
     // Bad but it works

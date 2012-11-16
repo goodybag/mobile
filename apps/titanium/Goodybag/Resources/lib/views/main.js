@@ -146,7 +146,7 @@ GB.Windows.add('main', Window.extend({
     
     if (this.location) {
       gb.utils.debug('[MAIN] Attempting to remove view: ' + this.location);
-      this.elements.views.main.remove(GB.Views.get(this.location).self)
+      this.elements.views.main.remove(GB.Views.get(this.location).self);
       GB.Views.hide(this.location);
     }
     
@@ -154,7 +154,9 @@ GB.Windows.add('main', Window.extend({
     GB.Views.show(view);
     this.elements.views.main.add(GB.Views.get(view).self);
     this.elements.views.main.finishLayout();
-    if (this.shownPages.indexOf(view) === -1) this.shownPages.push(view);
+    
+    if (this.shownPages.indexOf(view) === -1 && !view === 'settings') 
+      this.shownPages.push(view);
   },
   
   onHide: function () {
@@ -192,7 +194,7 @@ GB.Windows.add('main', Window.extend({
     delete this.elements;
     
     gb.utils.debug("[MAIN] Destroying shown pages.");
-    for (var i = this.shownPages.length - 1; i >= 0; i--){
+    for (var i = this.shownPages.length - 1; i >= 0; i--) {
       GB.Views.destroy(this.shownPages[i]);
     }
   },
