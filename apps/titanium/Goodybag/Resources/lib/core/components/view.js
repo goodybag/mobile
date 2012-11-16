@@ -45,16 +45,9 @@ var Views = {
  * @type {Method}
  */
 Views.add = function (name, view) {
-  // if (typeof view.extended === 'undefined') {
-    // view.viewName = name;
-    // view = View.extend(view);
-  // }
-  // gb.utils.debug("instantiating " + name);
-  // gb.utils.debug("instantiated " + name);
+  if (!name && !view) return;
   view.Constructor.prototype = view;
   this.views[name] = view.Constructor;
-  // gb.utils.debug("hiding " + name);
-  // this.views[name].self.hide();
 };
 
 /**
@@ -66,6 +59,7 @@ Views.add = function (name, view) {
  * @type {Method}
  */
 Views.get = function (name) {
+  if (!name) return;
   if (!this.instantiated[name]) return (this.instantiated[name] = new this.views[name]());
   return this.instantiated[name];
 };
@@ -78,7 +72,8 @@ Views.get = function (name) {
  * @type {Method}
  */
 Views.exists = function (name) {
-  return (this.instantiated[name]) ? true : false;
+  if (!name) return false;
+  else return (this.instantiated[name]) ? true : false;
 };
 
 /**
