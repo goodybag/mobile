@@ -37,10 +37,14 @@ GB.Windows.add('complete-registration', Window.extend({
       this.flashWelcomeScreen();
     }
     
-    var onComplete = function(){ gb.utils.debug("ON COMPLETE SHOWING NEXT"); $this.showNextScreen(); };
-    // GB.Views.get('charities').setOnComplete(onComplete);
+    var onComplete = function () { 
+      gb.utils.debug("ON COMPLETE SHOWING NEXT"); 
+      $this.showNextScreen(); 
+    };
+    
     GB.Views.get('set-screen-name').setOnComplete(onComplete);
     GB.Views.get('enter-tapin-id').setOnComplete(onComplete);
+    
     this.showNextScreen();
   },
   
@@ -50,7 +54,8 @@ GB.Windows.add('complete-registration', Window.extend({
       this.views.main.base.remove(GB.Views.get(this.location).self)
       GB.Views.hide(this.location);
     }
-    gb.utils.debug("[Complete Registration] - Showing " + view)
+    
+    gb.utils.debug("[Complete Registration] - Showing " + view);
     this.location = view;
     GB.Views.show(view);
     this.views.main.base.add(GB.Views.get(view).self);
@@ -59,13 +64,13 @@ GB.Windows.add('complete-registration', Window.extend({
   showNextScreen: function () {
     // Facebook regs don't set their screen name like email regs
     gb.utils.debug("[Complete Registration] - Checking for Set Screen Name");
-    if (!gb.consumer.hasSetScreenName())  return this.showPage('set-screen-name');
-    // Show Charity if necessary
-    // gb.utils.debug("[Complete Registration] - Checking for Set Charities");
-    // if (!gb.consumer.hasCharity())        return this.showPage('charities');
+    if (!gb.consumer.hasSetScreenName())
+      return this.showPage('set-screen-name');
+
     // Show QR Code
     gb.utils.debug("[Complete Registration] - Checking for Set TapIn ID");
-    if (!gb.consumer.getBarcodeID())      return this.showPage('enter-tapin-id');
+    if (!gb.consumer.getBarcodeID())
+      return this.showPage('enter-tapin-id');
     
     // Else we're done with registration Show Main Window
     gb.utils.debug("[Complete Registration] - Complete showing main");
@@ -78,7 +83,7 @@ GB.Windows.add('complete-registration', Window.extend({
   flashWelcomeScreen: function (time) {
     var $this = this;
     this.showWelcomeScreen();
-    setTimeout(function(){
+    setTimeout(function () {
       $this.hideWelcomeScreen();
     }, time || 3000);
   },

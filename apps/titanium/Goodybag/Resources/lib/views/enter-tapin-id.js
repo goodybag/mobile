@@ -8,9 +8,8 @@
       var $this = this;
       
       this.window = GB.Windows.get('complete-registration');
-            
       this.hasCalledOnComplete = false;
-      this.onComplete = function(){};
+      this.onComplete = function () {};
       this.completeBtn = new GB.Button('Complete');
       
       this.views = {
@@ -118,9 +117,9 @@
   , generateTapinId: function(){
       var $this = this;
       this.window.showLoader();
-      gb.consumer.createBarcodeId(function(error, id){
+      gb.consumer.createBarcodeId(function (error, id) {
         $this.window.hideLoader();
-        if (error) return alert(error);
+        if (error) return gb.handleError(error);
         $this.triggerOnComplete();
       });
     }
@@ -128,9 +127,9 @@
   , submitTapinId: function(){
       this.window.showLoader();
       var value = this.tapinIdInput.getValue(), $this = this;
-      gb.consumer.setBarcodeId(value, function(error){
+      gb.consumer.setBarcodeId(value, function (error) {
         $this.window.hideLoader();
-        if (error) return;
+        if (error) return gb.handleError(error);
         $this.triggerOnComplete();
       });
     }

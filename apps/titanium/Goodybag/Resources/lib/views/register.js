@@ -162,7 +162,7 @@
           return $this.reportErrors(errors);
         }
         
-        gb.consumer.register(data, function(error, consumer){
+        gb.consumer.register(data, function (error, consumer) {
           GB.Windows.get('login').hideLoader();
           if (error) return alert(error.message);
           $this.clearFormData();
