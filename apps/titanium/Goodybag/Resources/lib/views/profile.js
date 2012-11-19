@@ -32,17 +32,6 @@ gb.Views.add('profile', {
         }
       },
       
-      // charity: {
-        // base: gb.style.get('profile.header.sub.base'),
-        // inner: {
-          // base: gb.style.get('profile.header.sub.inner'),
-          // one: gb.style.get('profile.header.sub.one profile.header.sub.padding'),
-          // two: gb.style.get('profile.header.sub.two profile.header.sub.padding', {
-            // color: gb.ui.color.pink
-          // })
-        // }
-      // },
-      
       tapins: {
         base: gb.style.get('profile.header.sub.base'),
         inner: {
@@ -66,11 +55,9 @@ gb.Views.add('profile', {
   
   Constructor: function () {
     var $this = this, $self = this.self, $el = this.elements;
-    var merged = gb.utils.compoundViews($el.holder);
+    $this.merged = gb.utils.compoundViews($el.holder);
     
     $self.add(merged);
-    this.createHeader();
-    this.createPlaces();
   },
   
   createHeader: function () {
@@ -84,7 +71,7 @@ gb.Views.add('profile', {
     if (date) {
       $header.right.joined.setText('Member Since: ' + 
         date.getMonth() + ' / ' + 
-        date.getDay()  + ' / ' + 
+        date.getDate()  + ' / ' + 
         date.getFullYear()
       );
     }
@@ -112,6 +99,14 @@ gb.Views.add('profile', {
       $header.left.image.setImage(image);
     });
   },
+  
+  onShow: function () {
+    $el.holder.locations.base = gb.style.get('profile.locations.base');
+    this.createHeader();
+    this.createPlaces();
+  },
+  
+  onHide: function () { },
   
   createPlaces: function () {
     var $this = this, $self = this.self, $el = this.elements, $user = gb.consumer;
