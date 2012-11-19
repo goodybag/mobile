@@ -602,7 +602,7 @@ if(!GB.Models)
       if (!this.data.funds) return 0;
       if (!this.data.funds.donated) return 0;
       var donated = parseInt(this.data.funds.donated);
-      return 99999; // Math.round(donated*100)/100;
+      return Math.round(donated*100)/100;
     },
     
     /**
