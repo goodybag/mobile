@@ -263,7 +263,8 @@ GB.Views.add('nearby', {
     var $this = this, $el = this.elements, url = null, uri = null, area, elements;
     
     // Loader Start
-    if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true;
+    if (this.showingPlace || this.placeShown && !this.showPatience) return GB.Windows.get('main').showLoader('Please wait...'), this.showPatience = true;
+    if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true, this.showingPlace = true;
     
     // Create Place with checks
     if (typeof place == 'string') place = this.models[place];
@@ -349,6 +350,8 @@ GB.Views.add('nearby', {
       $el.menu.base.setVisible(false);
       if (p && p.show) p.show();
       if (p) $this.self.add(p);
+      $this.placeShown = true;
+      $this.showingPlace = false;
       
       // Back
       (function (p) {
@@ -359,7 +362,12 @@ GB.Views.add('nearby', {
           if (p) p.setVisible(false);
           if (p) $this.self.remove(p);
           if (p && p.close) p.close();
-          if (p ) p = null;
+          if (p) p = null;
+          
+          // clear out our patience
+          $this.placeShown = false;
+          $this.showingPlace = false;
+          $this.showPatience = false;
           
           // Show the menu
           $el.menu.base.setVisible(true);
@@ -373,7 +381,7 @@ GB.Views.add('nearby', {
       }(p));
     
       // Loader End
-      if ($this.loading) GB.Windows.get('main').hideLoader(), $this.loading = false;
+      if ($this.loading || $this.showPatience) GB.Windows.get('main').hideLoader(), $this.loading = false, $this.showPatience = false;
     }
     
     // URL Click Event

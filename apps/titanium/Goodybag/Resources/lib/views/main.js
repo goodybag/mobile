@@ -217,9 +217,7 @@ GB.Windows.add('main', Window.extend({
   
   toggleBack: function (callback) {
     var $this = this;
-    if (this.stillToggling) return;
-    else this.stillToggling = true;
-    
+    if (this.stillTogglingBack) return; else this.stillTogglingBack = true;
     if (typeof callback != 'undefined') {
       this.callback = {};
       this.callback.back = function (e) { $this.toggleBack.apply($this); };
@@ -227,25 +225,21 @@ GB.Windows.add('main', Window.extend({
       this.elements.header.buttons.sidebar.removeEventListener('click', this.events.sidebar.action);
       this.elements.header.buttons.sidebar.addEventListener('click', this.callback.back);
       this.elements.header.buttons.sidebar.setImage(this.images.back.inactive);
-      this.stillToggling = false;
+      this.stillTogglingBack = false;
       return;
     } else if (!this.callback) {
       this.elements.header.buttons.sidebar.setImage(this.images.sidebar[((!this.animated) ? '' : 'in') + 'active']);
       this.elements.header.buttons.sidebar.addEventListener('click', this.events.sidebar.action);
     } else {
       this.elements.header.buttons.sidebar.setImage(this.images.back.active);
-      if (typeof this.callback.main != 'undefined') this.callback.main();
-      
-      this.elements.header.buttons.sidebar.setImage(
-        this.images.sidebar[((!this.animated) ? '' : 'in') + 'active'] 
-      );
-      
+      if (typeof this.callback.main !== 'undefined') this.callback.main();
+      this.elements.header.buttons.sidebar.setImage(this.images.sidebar[((!this.animated) ? '' : 'in') + 'active']);
       this.elements.header.buttons.sidebar.removeEventListener('click', this.callback.back);
       this.elements.header.buttons.sidebar.addEventListener('click', this.events.sidebar.action);
       this.callback = null;
     }
     
-    this.stillToggling = false;
+    this.stillTogglingBack = false;
   },
   
   /**
@@ -253,8 +247,7 @@ GB.Windows.add('main', Window.extend({
    */
   toggleSidebar: function () {
     var $this = this;
-    if (this.stillToggling) return;
-    else this.stillToggling = true;
+    if (this.stillToggling || this.stillTogglingBack) return; else this.stillToggling = true;
     this[(this.animated ? 'open' : 'close') + 'Sidebar'](function () {
       $this.stillToggling = false;
     });
