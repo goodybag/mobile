@@ -203,14 +203,22 @@ GB.Windows.add('main', Window.extend({
    * Toggle QRCode Button State
    */
   toggleQRCode: function (e) {
-    this.elements.header.buttons.qrcode.setImage(
-      this.images.qrcode[((this.location == 'qrcode') ? '' : 'in') + 'active'] 
-    );
+    if (this.location === 'qrcode') { 
+      if (GB.Views.get('sidebar').active !== 'qrcode') GB.Views.get('sidebar').active = 'qrcode', this.elements.header.buttons.qrcode.setImage(
+        this.images.qrcode.active
+      );
+      
+      return;
+    }
+    
+    this.elements.header.buttons.qrcode.setImage(this.images.qrcode[((this.location == 'qrcode') ? '' : 'in') + 'active']);
     if (this.location === "qrcode") GB.Views.get('sidebar').active = "qrcode";
   },
   
   toggleBack: function (callback) {
     var $this = this;
+    if (this.stillToggling) return;
+    else this.stillToggling = true;
     
     if (typeof callback != 'undefined') {
       this.callback = {};
@@ -218,22 +226,14 @@ GB.Windows.add('main', Window.extend({
       this.callback.main = callback;
       this.elements.header.buttons.sidebar.removeEventListener('click', this.events.sidebar.action);
       this.elements.header.buttons.sidebar.addEventListener('click', this.callback.back);
-      this.elements.header.buttons.sidebar.setImage(
-        this.images.back.inactive
-      );
-      
+      this.elements.header.buttons.sidebar.setImage(this.images.back.inactive);
+      this.stillToggling = false;
       return;
     } else if (!this.callback) {
-      this.elements.header.buttons.sidebar.setImage(
-        this.images.sidebar[((!this.animated) ? '' : 'in') + 'active'] 
-      );
-      
+      this.elements.header.buttons.sidebar.setImage(this.images.sidebar[((!this.animated) ? '' : 'in') + 'active']);
       this.elements.header.buttons.sidebar.addEventListener('click', this.events.sidebar.action);
     } else {
-      this.elements.header.buttons.sidebar.setImage(
-        this.images.back.active  
-      );
-      
+      this.elements.header.buttons.sidebar.setImage(this.images.back.active);
       if (typeof this.callback.main != 'undefined') this.callback.main();
       
       this.elements.header.buttons.sidebar.setImage(
@@ -244,56 +244,47 @@ GB.Windows.add('main', Window.extend({
       this.elements.header.buttons.sidebar.addEventListener('click', this.events.sidebar.action);
       this.callback = null;
     }
+    
+    this.stillToggling = false;
   },
   
   /**
    * Toggle sidebar state and slide main screen in and out.
    */
-  toggleSidebar: function (same) {
-    this[(this.animated ? 'open' : 'close') + 'Sidebar']();
+  toggleSidebar: function () {
+    var $this = this;
+    if (this.stillToggling) return;
+    else this.stillToggling = true;
+    this[(this.animated ? 'open' : 'close') + 'Sidebar'](function () {
+      $this.stillToggling = false;
+    });
   },
   
   handleSideclick: function (e) {
    var $this = this, $main = this.elements.views.main;
-    if (this.animated) {
-      $main.removeEventListener('touchend', function (e) { return $this.handleSideclick.apply($this, [ e ]); });
-      return;
-    }
-    
+    if (this.animated) return $main.removeEventListener('touchend', function (e) { return $this.handleSideclick.apply($this, [ e ]); });
     e.source.custom = true;
     this.toggleSidebar();
     return false;
   },
   
-  openSidebar: function () {
+  openSidebar: function (callback) {
     if (!this.animated) return;
-    this.animated = false;
-    
     var $this = this, $main = this.elements.views.main;
     $main.addEventListener('touchend', function (e) { return $this.handleSideclick.apply($this, [ e ]); });
-    
-    this.elements.header.buttons.sidebar.setImage(
-      this.images.sidebar.active 
-    );
-    
-    this.elements.views.main.animate(
-      gb.style.get('main.animations.right')
-    );
+    this.elements.header.buttons.sidebar.setImage(this.images.sidebar.active );
+    this.elements.views.main.animate(gb.style.get('main.animations.right'), function () {
+      $this.animated = false; if (callback) callback();
+    });
   },
   
-  closeSidebar: function () {
+  closeSidebar: function (callback) {
     if (this.animated) return;
-    this.animated = true;
-    
     var $this = this, $main = this.elements.views.main;
     $main.removeEventListener('touchend', function (e) { return $this.handleSideclick.apply($this, [ e ]); });
-    
-    this.elements.header.buttons.sidebar.setImage(
-      this.images.sidebar.inactive 
-    );
-    
-    this.elements.views.main.animate(
-      gb.style.get('main.animations.left')
-    );
+    this.elements.header.buttons.sidebar.setImage(this.images.sidebar.inactive);
+    this.elements.views.main.animate(gb.style.get('main.animations.left'), function () {
+      $this.animated = true; if (callback) callback();
+    });
   }
 }));

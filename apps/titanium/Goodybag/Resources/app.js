@@ -137,6 +137,8 @@ Ti.App.addEventListener('resume', function () {
         console.log('------------------');
         GB.Views.get('sidebar')[(updateAvailable && !error ? 'show' : 'hide') + 'Update']();
       });
+      
+      GB.Views.get('sidebar').setDetails(consumer);
     }
   });
 });

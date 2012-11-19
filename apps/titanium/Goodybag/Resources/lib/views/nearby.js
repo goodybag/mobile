@@ -212,9 +212,9 @@ GB.Views.add('nearby', {
     gb.utils.debug('setting up infiniscroll');
     $el.places = new gb.Views.InfiniScroll(gb.style.get('nearby.places'), {
       triggerAt: '82%',
-      onScrollToEnd: function () {
+      onScrollToEnd: function (y, self, callback) {
         $this.page++;
-        $this.onScroll.apply($this);
+        $this.onScroll.apply($this, [ null, callback ]);
       },
       name: "Places"
     });
@@ -231,7 +231,7 @@ GB.Views.add('nearby', {
   /**
    * 
    */
-  onScroll: function (initial) {
+  onScroll: function (initial, callback) {
     var $this = this, start = (this.page === 0) ? 0 : (30 * this.page), end =  30 * (this.page + 1);
     var middleman = $ui.createView({ width: $ui.FILL, height: $ui.SIZE, layout: 'vertical' });
     
@@ -253,6 +253,7 @@ GB.Views.add('nearby', {
     
     // Loader End
     if (this.loading) GB.Windows.get('main').hideLoader(), this.loading = false;
+    if (typeof callback === 'function') callback();
   },
   
   /**

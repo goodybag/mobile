@@ -85,9 +85,9 @@ GB.Views.add('stream', {
         height: $ui.SIZE
       }, {
         triggerAt: '82%'
-      , onScrollToEnd: function(){
+      , onScrollToEnd: function (y, self, callback) {
           gb.utils.debug("GLOBAl scroll to end");
-          self.onScrollToEnd(false);
+          self.onScrollToEnd(false, callback);
         }
       , onNewHeight: this.newHeightCurry
       , name: "Global Scroll"
@@ -105,9 +105,9 @@ GB.Views.add('stream', {
         backgroundColor: '#ddd'
       }, {
         triggerAt: '82%'
-      , onScrollToEnd: function(){
+      , onScrollToEnd: function (y, self, callback) {
           gb.utils.debug("MY scroll to end");
-          self.onScrollToEnd(true);
+          self.onScrollToEnd(true, callback);
         }
       , onNewHeight: this.newHeightCurry
       , name: "My Scroll"
@@ -228,7 +228,7 @@ GB.Views.add('stream', {
     });
   },
   
-  showItems: function (scroller, data) {
+  showItems: function (scroller, data, callback) {
     var intermediate = $ui.createView({ 
       width: $ui.FILL, 
       height: $ui.SIZE, 
@@ -260,16 +260,17 @@ GB.Views.add('stream', {
     }
     
     GB.Windows.get('main').hideLoader();
+    if (typeof callback === 'function') callback();
   },
   
-  onScrollToEnd: function (fetchMe) {
+  onScrollToEnd: function (fetchMe, callback) {
     GB.Windows.get('main').showLoader();
     gb.utils.debug("[STREAM] Scrolled to end of view, fetching new items.")
     var $this = this, $state = this.states[fetchMe ? 'my' : 'global'];
     this.fetchStream(fetchMe, $state.limit, $state.limit * $state.page++, function (error, data) {
-      if (error) return gb.utils.debug(error);
-      if ($this && $state) $this.showItems($state, data);
-      else return gb.utils.debug('[STREAM] Could not load due to state && this being undefined');
+      if (error) return gb.utils.debug(error), callback();
+      if ($this && $state) $this.showItems($state, data, callback);
+      else return gb.utils.debug('[STREAM] Could not load due to state && this being undefined'), callback();
     });
   },
   

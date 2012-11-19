@@ -31,6 +31,7 @@
     if (this.options.refresher){
       this.ptr = new gb.ptr(this.view, this.options.onLoad);
     }
+    
     this.view.add(this.wrapper);
     this.scrollEndTriggered = false;
     this.postLayoutAdded = false;
@@ -112,17 +113,17 @@
      * Also re-attaches the onscroll event
      */
     triggerNewHeight: function (silent) {
-      this.triggerAt = (this.triggerIsPercentage)
-                     ? parseInt(this.height * this.triggerRatio)
-                     : this.height - this.options.triggerAt;
+      this.triggerAt = (this.triggerIsPercentage) ? parseInt(this.height * this.triggerRatio) : this.height - this.options.triggerAt;
       this.calculatingHeight = false;
-      this.scrollEndTriggered = false;
       this.addEvents();
       if (!silent) this.options.onNewHeight(this.height, this);
     },
 
     triggerScrollEnd: function (scrollY) {
-      this.options.onScrollToEnd(scrollY, this);
+      var $this = this;
+      this.options.onScrollToEnd(scrollY, this, function () {
+        $this.scrollEndTriggered = false;
+      });
     },
 
     /**
