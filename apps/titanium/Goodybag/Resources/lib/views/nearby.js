@@ -266,6 +266,9 @@ GB.Views.add('nearby', {
     if (this.showingPlace || this.placeShown && !this.showPatience) return GB.Windows.get('main').showLoader('Please wait...'), this.showPatience = true;
     if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true, this.showingPlace = true;
     
+    // Prevent someone from going to sidebar while loading this.
+    GB.Views.get('main').stillToggling = true;
+    
     // Create Place with checks
     if (typeof place == 'string') place = this.models[place];
     if ($el.place) $this.self.remove($el.place), $el.place = null;
@@ -382,6 +385,7 @@ GB.Views.add('nearby', {
     
       // Loader End
       if ($this.loading || $this.showPatience) GB.Windows.get('main').hideLoader(), $this.loading = false, $this.showPatience = false;
+      GB.Views.get('main').stillToggling = false;
     }
     
     // URL Click Event
