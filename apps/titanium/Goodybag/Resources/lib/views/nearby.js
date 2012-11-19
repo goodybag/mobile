@@ -267,7 +267,7 @@ GB.Views.add('nearby', {
     if (!this.loading) GB.Windows.get('main').showLoader(), this.loading = true, this.showingPlace = true;
     
     // Prevent someone from going to sidebar while loading this.
-    GB.Views.get('main').stillToggling = true;
+    GB.Windows.get('main').stillToggling = true;
     
     // Create Place with checks
     if (typeof place == 'string') place = this.models[place];
@@ -385,7 +385,7 @@ GB.Views.add('nearby', {
     
       // Loader End
       if ($this.loading || $this.showPatience) GB.Windows.get('main').hideLoader(), $this.loading = false, $this.showPatience = false;
-      GB.Views.get('main').stillToggling = false;
+      GB.Windows.get('main').stillToggling = false;
     }
     
     // URL Click Event
