@@ -211,7 +211,7 @@ GB.Windows.add('main', Window.extend({
       return;
     }
     
-    this.elements.header.buttons.qrcode.setImage(this.images.qrcode[((this.location == 'qrcode') ? '' : 'in') + 'active']);
+    this.elements.header.buttons.qrcode.setImage(this.images.qrcode[((this.location === 'qrcode') ? '' : 'in') + 'active']);
     if (this.location === "qrcode") GB.Views.get('sidebar').active = "qrcode";
   },
   

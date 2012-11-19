@@ -85,7 +85,7 @@ GB.Views.add('stream', {
         height: $ui.SIZE
       }, {
         triggerAt: '82%'
-      , onScrollToEnd: function (y, self, callback) {
+      , onScrollToEnd: function (y, s, callback) {
           gb.utils.debug("GLOBAl scroll to end");
           self.onScrollToEnd(false, callback);
         }
@@ -105,7 +105,7 @@ GB.Views.add('stream', {
         backgroundColor: '#ddd'
       }, {
         triggerAt: '82%'
-      , onScrollToEnd: function (y, self, callback) {
+      , onScrollToEnd: function (y, s, callback) {
           gb.utils.debug("MY scroll to end");
           self.onScrollToEnd(true, callback);
         }
