@@ -118,13 +118,14 @@ GB.Views.add('settings', {
     , "connectWithFacebokAuth": {
         type: 'login'
       , target: Ti.Facebook
-      , action: function(e){
+      , action: function (e) {
           GB.Windows.get('main').showLoader();
           gb.api.consumer.facebookConnect(Ti.Facebook.getAccessToken(), function(error, data){
-            if (error){
-              gb.utils.error(error);
+            if (error) {
+              gb.utils.error(JSON.stringify(error));
               return GB.Windows.get('main').hideLoader();
             }
+            
             // Remove facebook stuff from settings
             $this.destroyEvents();
             $this.views.pageWrapper.base.remove($this.views.pageWrapper.facebookBtn);
@@ -140,9 +141,13 @@ GB.Views.add('settings', {
     };
   }
   
-, onShow: function(){
+, onShow: function () {
     if (gb.consumer.data.facebook) this.views.pageWrapper.base.remove(this.views.pageWrapper.facebookBtn);  
-    else this.delegateEvents();
+    else {
+      this.views.pageWrapper.base.add(this.views.pageWrapper.facebookBtn);
+      this.delegateEvents();
+    }
+    
     this._displayUserData();
   }
   
@@ -183,6 +188,7 @@ GB.Views.add('settings', {
   }
   
 , onSignOut: function(){
+    this.onHide();
     GB.Views.get('sidebar').clearActive();
     GB.Windows.show('login');
     if (gb.consumer.authenticated) gb.consumer.logout();

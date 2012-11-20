@@ -192,8 +192,8 @@ if(!GB.Models)
         gb.utils.debug('[User] Creating consumer file with encrypted data.');
         
         // Store Consumer
-        consumer.data.authMethod = GB.Models.User.Methods.EMAIL;
-        self.data.authMethod = GB.Models.User.Methods.EMAIL;
+        consumer.data.authMethod = GB.Models.User.Methods.EMAIL || 1;
+        self.data.authMethod = GB.Models.User.Methods.EMAIL || 1;
         self._setConsumer(consumer);
         
         // Setup Avatars
@@ -235,10 +235,10 @@ if(!GB.Models)
       gb.utils.debug('[FB Auth] Sending Request');
       
       $http.post(gb.config.api.facebookAuth, {
-        accessToken: $fb.getAccessToken()
+        accessToken: Titanium.Facebook.getAccessToken()
       }, function (error, json) {
         if (!error && !json) return callback('Invalid server response...');
-        if (error) return callback('Error occurred during facebook connection.');
+        if (error) return gb.utils.debug(JSON.stringify(error)), callback('Error occurred during facebook connection.');
         if (typeof json == 'undefined' || !json) return callback('Error during authentication, try again.');
         
         var consumer = JSON.parse(json);
@@ -256,8 +256,8 @@ if(!GB.Models)
         self.authenticated = true;
         
         // Store Consumer
-        consumer.data.authMethod = GB.Models.User.Methods.FACEBOOK;
-        self.data.authMethod = GB.Models.User.Methods.FACEBOOK;
+        consumer.data.authMethod = GB.Models.User.Methods.FACEBOOK || 2;
+        self.data.authMethod = GB.Models.User.Methods.FACEBOOK || 2;
         self._setConsumer(consumer);
         
         // Setup Avatars
@@ -301,7 +301,6 @@ if(!GB.Models)
         this.data = JSON.parse(consumerPt);
         this.authenticated = true;
         this.session = new gb.utils.parsers.cookie.storage();
-        gb.utils.debug(this.session);
         this.session.set('connect.sid', cooksPt);
         this._setAvatar();
   
@@ -321,6 +320,7 @@ if(!GB.Models)
       var self = this, $dataMethod = this.data.authMethod;
       gb.utils.debug('[User] Renewing Session');
       
+      if (!this.authenticated) return gb.utils.debug('[User] No need to renew session, not authenticated.');
       $http.get.sessioned(gb.config.api.consumer.self, this.session, function (error, results) {
         if (error) {
           gb.utils.warn('[User] Session Error: ' + error);
@@ -332,10 +332,8 @@ if(!GB.Models)
           
           gb.utils.debug('[User] Obtained new session data');
           cookie = gb.utils.parsers.cookie.parser(this.getResponseHeader('Set-Cookie'));
-          
           if (typeof cookie === 'undefined') {
-            self.logout();
-            return GB.Windows.show('login');
+            self.logout(); return GB.Windows.show('login');
           }
           
           gb.utils.debug(this.getResponseHeader('Set-Cookie'));
@@ -363,7 +361,7 @@ if(!GB.Models)
      * @return {Null}
      */
     logout: function (callback) {
-      if (this.data.authMethod == GB.Models.User.Methods.FACEBOOK)
+      if (this.data.authMethod === (GB.Models.User.Methods.FACEBOOK || 2))
         Titanium.Facebook.logout();
         
       var consumer = $file.getFile($file.applicationDataDirectory, "consumer");
@@ -649,7 +647,7 @@ if(!GB.Models)
      * @return {Boolean}
      */
     usedEmail: function () {
-      return this.data.authMethod === GB.Models.User.Methods.EMAIL;
+      return this.data.authMethod === 1;
     },
   
     /**
@@ -657,7 +655,7 @@ if(!GB.Models)
      * @return {Boolean}
      */
     usedFacebook: function () {
-      return this.data.authMethod === GB.Models.User.Methods.FACEBOOK;
+      return this.data.authMethod === 2;
     },
     
     /**

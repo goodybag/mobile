@@ -39,8 +39,7 @@
   };
   
   Windows.show = function (name, destroy) {
-    if (!name) return;
-    if (name === this.current) return;
+    if (!name || name === this.current) return;
     
     gb.utils.debug('[WINDOWS] Checking if Window exists [' + name + ']: ' + this.exists(name));
     if (!this.exists(name)) return;
@@ -55,10 +54,10 @@
   };
   
   Windows.hide = function (name, close) {
-    if (!name) return;
-    if (!this.exists(name)) return;
+    if (!name || !this.exists(name)) return;
     gb.utils.debug('[Windows] Hiding Window: ' + name);
     this.instantiated[name].hide();
+    this.current = null;
     gb.utils.debug('[Windows] Window hidden: ' + name);
   };
   

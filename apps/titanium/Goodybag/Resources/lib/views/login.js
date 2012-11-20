@@ -58,32 +58,31 @@ gb.Windows.add('login', Window.extend({
     // Loader
     this.initializeLoader();
     
-    // Time out for checking to see if they logged in to facebook
-    var fbTimeout = 1000 * 360, fbCurrTime;
-    
     // Events
     this.events = {
       "facebookLoginClick": {
         type: 'click'
       , target: $el.buttons.facebook
       , action: function (e) {
-          if ($self.loggingIn) return;
+          if ($self.loggingIn || Titanium.Facebook.getAccessToken()) return;
           $self.showLoader();
           $self.checkingFbLogin = true;
-          
-          Titanium.Facebook.addEventListener('login', function (e) {
-            gb.utils.debug('Facebook results: ' + JSON.stringify(e));
-            
-            if (e.success) {
-              $self.facebookLogin();
-            }
-            
-            $self.loggingIn = false;
-            $self.checkingFbLogin = false;
-            $self.hideLoader();
-          });
-          
           Titanium.Facebook.authorize();
+        }
+      }
+    , "facebookLoginEvent": {
+        type: 'login'
+      , target: Titanium.Facebook
+      , action: function (e) {
+          if ($self.called) return;
+          if (e.success) {
+            $self.facebookLogin();
+          } else Titanium.Facebook.logout();
+          
+          $self.called = true;
+          $self.loggingIn = false;
+          $self.checkingFbLogin = false;
+          $self.hideLoader();
         }
       }
     , "emailLoginClick": {
@@ -184,13 +183,15 @@ gb.Windows.add('login', Window.extend({
     this.window.orientationModes = [ Ti.UI.PORTRAIT ];
     
     this.onShow = function () {
-      $self.delegateEvents();
+      if ($self.destroyedEvents || typeof $self.destroyedEvents === 'undefined') 
+        $self.delegateEvents(), $self.destroyedEvents = false;
     };
     
     this.onHide = function () {
       $self.elements.inputs.email.blur();
       $self.elements.inputs.password.blur();
       $self.destroyEvents();
+      $self.destroyedEvents = true;
     };
     
     this.onDestroy = function () {
@@ -208,27 +209,25 @@ gb.Windows.add('login', Window.extend({
   },
   
   facebookLogin: function() {
-    if (!Titanium.Facebook.getAccessToken()) return $this.loggingIn = false;
-    var $this = this;
-    
-    this.showLoader();
-    this.loggingIn = true;
+    if (this.loggingIn) return;
+    if (this.checkingFbLogin && !Titanium.Facebook.getAccessToken()) return Titanium.Facebook.logout(), this.logginIn = false, this.checkingFbLogin = false, this.called = false;
+    var $this = this; this.showLoader(); this.loggingIn = true;
     
     gb.utils.debug('[LOGIN] Attempting to login through Facebook SSO.');
-    
     gb.consumer.facebookAuth(function(error, consumer) {
-      $this.loggingIn = false;
-      
       if (error) {
-        $this.hideLoader();
         Titanium.Facebook.logout();
-        alert(error); return;
-      } else if (consumer)
+        alert(error);
+      } else if (consumer) {
         gb.consumer = consumer;
+        if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
+        else GB.Windows.show('complete-registration');
+      }
       
+      $this.loggingIn = false;
+      $this.called = false;
+      $this.checkingFbLogin = false;
       $this.hideLoader();
-      if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
-      else GB.Windows.show('complete-registration');
     }, true);
   },
   

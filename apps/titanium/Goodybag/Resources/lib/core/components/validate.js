@@ -39,7 +39,6 @@
         var verdict = gb.utils.checkQRCode(value, true);
         if (value.error){
           errors.push({ field: key, message: value.error });
-          break;
         }
       break;
       case 'password': case 'passwordConfirm': 

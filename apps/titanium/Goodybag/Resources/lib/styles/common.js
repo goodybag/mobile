@@ -725,6 +725,21 @@
         }
       },
       
+      "header2": {
+        width: $ui.FILL,
+        height: $ui.SIZE,
+        textAlign: "center",
+        color: $color.white,
+        shadowOffset: {
+          x: 0,
+          y: -1
+        },
+        shadowColor: $color.blueDark,
+        font: {
+          fontSize: 28
+        }
+      },
+      
       "fieldset": {
         width: $ui.FILL,
         height: $ui.SIZE,

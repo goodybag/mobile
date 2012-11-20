@@ -38,7 +38,7 @@
               , "header:already": $ui.createLabel(gb.utils.extend(
                   { text: "Already have a QR Code?" }
                 , gb.style.get('enterTapinId.header:already')
-                , gb.style.get('common.grayPage.island.header1')
+                , gb.style.get('common.grayPage.island.header2')
                 ))
                 
               , "header:enter": $ui.createLabel(gb.utils.extend(
@@ -93,7 +93,7 @@
             
           , "header:makeOne": $ui.createLabel(gb.utils.extend(
               { text: "Don't have one yet?" }
-            , gb.style.get('common.grayPage.header1')
+            , gb.style.get('common.grayPage.header2')
             ))
             
           , "btnWrapper": {

@@ -140,8 +140,9 @@ GB.Views.add('stream', {
   
   onShow: function () {
     var curr = this.current = this.current || 'global';
+    if (!this.user) this.user = gb.consumer.getEmail() + gb.consumer.getUsername();
     if (!this.scrollWrapper) this.scrollWrapper = gb.style.get('stream.holder');
-    if (this.states[this.current].hasData) return GB.Windows.get('main').hideLoader();
+    if (this.states[this.current].hasData && this.user === (gb.consumer.getEmail() + gb.consumer.getUsername())) return GB.Windows.get('main').hideLoader();
     this.loaderShowing = true;
     this["show" + curr[0].toUpperCase() + curr.substring(1) + "View"]();
     var $this = this;
@@ -156,6 +157,7 @@ GB.Views.add('stream', {
   
   hideNoActivity: function(){
     if (!this.noActivityShown) return;
+    if (this.scrollWrapper) this.scrollWrapper.show();
     this.self.remove(this.noActivity.base);
     this.noActivityShown = false;
   },
@@ -204,6 +206,10 @@ GB.Views.add('stream', {
     // Hide global view
     this.states.global.view.hide(), state.view.show();
     this.current = "my";
+    
+    // Check Status of user
+    if (this.current === 'my' && this.user != (gb.consumer.getEmail() + gb.consumer.getUsername()))
+      state.view.clearChildren(), this.user = (gb.consumer.getEmail() + gb.consumer.getUsername()), state.hasData = false;
     
     // Manage no activity screens, data management, and destruction.
     if (state.hasData && this.noActivityShown) 
