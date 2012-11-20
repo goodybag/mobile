@@ -36,9 +36,9 @@
           errors.push({ field: key, message: "Invalid email address" });
       break;
       case 'barcodeId':
-        // I really don't know what's valid :/
-        if (value.length < 5 || value.length > 13){
-          errors.push({ field: key, message: "Invalid Tap-In ID" });
+        var verdict = gb.utils.checkQRCode(value, true);
+        if (value.error){
+          errors.push({ field: key, message: value.error });
           break;
         }
       break;

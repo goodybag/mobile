@@ -125,20 +125,20 @@ gb.consumer.validate(function (consumer) {
 });
 
 // Check for updates when we return to the app
-Ti.App.addEventListener('resume', function () {
-  gb.consumer.renew();
+(Ti.Android ? Ti.Android.currentActivity : Ti.App).addEventListener('resume', function () {
+  gb.consumer.renew(function (consumer) {
+    if (consumer) gb.consumer = consumer, (GB.Views && GB.Views.exists('sidebar') && GB.Views.get('sidebar').setDetails(consumer));  
+  });
   
   gb.consumer.validate(function (consumer) {
     if (consumer && consumer !== null && typeof consumer !== "undefined") {
       gb.utils.updateAvailable(function (error, updateAvailable) {
-        console.log('------------------');
-        console.log(error);
-        console.log(updateAvailable);
-        console.log('------------------');
-        GB.Views.get('sidebar')[(updateAvailable && !error ? 'show' : 'hide') + 'Update']();
+        gb.utils.debug('------------------');
+        gb.utils.debug(error);
+        gb.utils.debug(updateAvailable);
+        gb.utils.debug('------------------');
+        if (GB.Views && GB.Views.exists('sidebar')) GB.Views.get('sidebar')[(updateAvailable && !error ? 'show' : 'hide') + 'Update']();
       });
-      
-      GB.Views.get('sidebar').setDetails(consumer);
     }
   });
 });

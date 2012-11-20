@@ -324,10 +324,7 @@ if(!GB.Models)
       $http.get.sessioned(gb.config.api.consumer.self, this.session, function (error, results) {
         if (error) {
           gb.utils.warn('[User] Session Error: ' + error);
-          
           gb.handleError(error)
-          
-          // Logout and show login screen:
           self.logout();
           GB.Windows.show('login');
         } else {
@@ -353,7 +350,7 @@ if(!GB.Models)
           // Clean Garbage.
           cookie = null;
           
-          if (callback) callback();
+          if (callback) callback(self);
         }
       });
     },
@@ -384,6 +381,7 @@ if(!GB.Models)
         this.avatar.s128.deleteFile(), this.avatar.s128 = null;
 
       this.authenticated = false;
+      this.data = null;
       
       $http.get(gb.config.api.logout, function(error){
         if (error) alert(error);
@@ -888,11 +886,8 @@ if(!GB.Models)
       if (sessionId == null) return;
       
       if (this.session) {
-        if (this.session.get('connect.sid') == sessionId)
-          return;
-        else {
-          this.session.set('connect.sid', sessionId);
-        }
+        if (this.session.get('connect.sid') === sessionId) return;
+        else this.session.set('connect.sid', sessionId);
       } else {
         this.session = new gb.utils.parsers.cookie.storage();
         this.session.set('connect.sid', sessionId);
@@ -922,16 +917,15 @@ if(!GB.Models)
      * @private
      */
     _setConsumer: function (obj) {
+      gb.utils.debug('Got Response from server about consumer: ' + JSON.stringify(obj));
       if (obj === null || obj.data === null) return;
       
-      var consumer = $file.getFile($file.applicationDataDirectory, "consumer");
-  
       this.data = obj.data;
+      
+      var consumer = $file.getFile($file.applicationDataDirectory, "consumer");
       if (consumer.write(sjcl.encrypt(gb.config.secret, JSON.stringify(this.data))) === false) {
         gb.utils.debug('Could not write to consumer file.');
-      }
-      
-      consumer = null;
+      } consumer = null;
       
       return;
     },

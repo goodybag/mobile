@@ -56,7 +56,7 @@ gb.config = function (global, fb, storage) {
   this.api.facebookAuth       = 'http://' + domain + '/api/consumers/fblogin';
   this.api.facebookConnect    = 'http://' + domain + '/api/consumers/facebook';
   this.api.participating      = 'http://' + domain + '/api/consumers/participatingBusinesses?limit=';
-  this.api.consumer.self      = 'http://' + domain + '/api/consumers/session';
+  this.api.consumer.self      = 'http://' + domain + '/api/consumers/session?update=1';
   this.api.consumer.profile   = 'http://' + domain + '/api/consumers/self';
   this.api.consumer.locations = 'http://' + domain + '/api/consumers/locationsByTapins';
   this.api.consumer.count     = 'http://' + domain + '/api/consumers/self/tapinCount';

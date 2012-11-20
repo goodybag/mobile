@@ -145,7 +145,7 @@ gb.utils = function (global) {
     var client = Titanium.Network.createHTTPClient();
     
     client.onload = function () {
-      callback.apply(this, [ null, this.responseText]);
+      callback.apply(this, [ null, this.responseText ]);
     }
     
     client.onerror = function (e) {
@@ -622,6 +622,37 @@ gb.utils = function (global) {
   this.dp2px = function (dp) {
     return (dp * (Ti.Platform.displayCaps.dpi / 160));
   };
+  
+  this.checkQRCode = function (value, o) {
+    // Handle error and data, if o == true, return object, otherwise error / value
+    function e (type, error, value) { return type ? {error:error, data:value} : error || value; }
+    
+    var prior = value.length;
+  
+    // Remove all characters except alphanumeric and dash.
+    value = value.replace(/[^a-z0-9\-]/gi, '');
+        
+    // Check Code.
+    if (prior != value.length) return e(o, 'QR-Code must be alphanumeric + dash only.');
+    if (value.length < 9 || value.length > 11) return e(o, 'QR-Code must be 9-10 digits in length.');
+    
+    if (value.indexOf('-') === -1) {
+      if (value.length === 11) return e(o,'QR-Code must be 9-10 digits in length excluding dash.');
+      if (value.length === 10) value = value.substr(0, 7) + '-' + value.substr(-3);
+      if (value.length === 9) value = value.substr(0, 6) + '-' + value.substr(-3);
+    } else if (value.split('-').length-1 > 1) 
+      return e(o, 'QR-Code should only have a single dash.');
+        
+    var expr = value.split('-');
+    if (expr[0].length < 6 || expr[0].length > 7) return e(o, 'QR-Code section before dash must be 6-7 characters in length.');
+    if (expr[1].length !== 3) return e(o, 'QR-Code section after dash must be 3 characters in length.');
+        
+    // Make sure it's uppercase.
+    value = value.toUpperCase();
+  
+    // Otherwise return value or boolean
+    return e(o, null, value);
+  }
   
   return this;
 }(

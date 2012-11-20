@@ -68,30 +68,22 @@ gb.Windows.add('login', Window.extend({
       , target: $el.buttons.facebook
       , action: function (e) {
           if ($self.loggingIn) return;
-          
           $self.showLoader();
-          Titanium.Facebook.authorize();
-          
-          // Start checking to see if we're logged in yet
-          // Titaniums fb login event does not always fire
           $self.checkingFbLogin = true;
           
-          if ($self.fbLoginCheck) clearInterval($self.fbLoginCheck);
-          
-          fbCurrTime = 0;
-          
-          $self.fbLoginCheck = setInterval(function(){
-            if (Ti.Facebook.getLoggedIn()) {
-              $self.hideLoader();
-              clearInterval($self.fbLoginCheck);
-              $self.checkingFbLogin = false;
+          Titanium.Facebook.addEventListener('login', function (e) {
+            gb.utils.debug('Facebook results: ' + JSON.stringify(e));
+            
+            if (e.success) {
               $self.facebookLogin();
             }
             
-            fbCurrTime += 200;
-            
-            if (fbCurrTime >= fbTimeout) clearInterval($self.fbLoginCheck);
-          }, 200);  
+            $self.loggingIn = false;
+            $self.checkingFbLogin = false;
+            $self.hideLoader();
+          });
+          
+          Titanium.Facebook.authorize();
         }
       }
     , "emailLoginClick": {
@@ -216,14 +208,14 @@ gb.Windows.add('login', Window.extend({
   },
   
   facebookLogin: function() {
-    if (gb.consumer.isAuthenticated() || !Ti.Facebook.getLoggedIn()) 
-      return;
-    
+    if (!Titanium.Facebook.getAccessToken()) return $this.loggingIn = false;
     var $this = this;
+    
     this.showLoader();
     this.loggingIn = true;
     
     gb.utils.debug('[LOGIN] Attempting to login through Facebook SSO.');
+    
     gb.consumer.facebookAuth(function(error, consumer) {
       $this.loggingIn = false;
       
@@ -237,7 +229,7 @@ gb.Windows.add('login', Window.extend({
       $this.hideLoader();
       if (gb.consumer.hasCompletedRegistration()) GB.Windows.show('main');
       else GB.Windows.show('complete-registration');
-    });
+    }, true);
   },
   
   showRegistration: function () {

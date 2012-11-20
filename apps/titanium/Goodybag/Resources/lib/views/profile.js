@@ -56,8 +56,7 @@ gb.Views.add('profile', {
   Constructor: function () {
     var $this = this, $self = this.self, $el = this.elements;
     $this.merged = gb.utils.compoundViews($el.holder);
-    
-    $self.add(merged);
+    $self.add($this.merged);
   },
   
   createHeader: function () {
@@ -101,12 +100,17 @@ gb.Views.add('profile', {
   },
   
   onShow: function () {
+    var $el = this.elements;
     $el.holder.locations.base = gb.style.get('profile.locations.base');
+    $el.holder.base.add($el.holder.locations.base);
     this.createHeader();
     this.createPlaces();
   },
   
-  onHide: function () { },
+  onHide: function () {
+    var $el = this.elements;
+    $el.holder.base.remove($el.holder.locations.base);
+  },
   
   createPlaces: function () {
     var $this = this, $self = this.self, $el = this.elements, $user = gb.consumer;

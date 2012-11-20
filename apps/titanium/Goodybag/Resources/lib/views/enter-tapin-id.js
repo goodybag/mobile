@@ -126,8 +126,9 @@
     
   , submitTapinId: function(){
       this.window.showLoader();
-      var value = this.tapinIdInput.getValue(), $this = this;
-      gb.consumer.setBarcodeId(value, function (error) {
+      var value = gb.utils.checkQRCode(this.tapinIdInput.getValue(), true), $this = this;
+      if (value.error) return alert(value.error);
+      gb.consumer.setBarcodeId(value.data, function (error) {
         $this.window.hideLoader();
         if (error) return gb.handleError(error);
         $this.triggerOnComplete();
