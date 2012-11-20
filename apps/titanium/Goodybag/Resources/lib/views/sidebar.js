@@ -95,35 +95,38 @@ GB.Views.add('sidebar', {
   setDetails: function ($user) {
     var $self = this.self, $el = this.elements, list = [], donated, amt, item;
     
-    $el.header.username.setText($user.getUsername());
-    amt = parseInt($user.data.funds.donated);
-    if (amt > 0) {
-      for (var i = 7; i > 1; i--) {
-        if (i == 5) continue;
-        list.push(i < 10 ? "0" + i : "" + i);
+    if ($user.getUsername) $el.header.username.setText($user.getUsername());
+    if ($user.data && $user.data.funds && typeof $user.data.funds.donated !== 'undefined') {
+      amt = parseInt($user.data.funds.donated);
+      
+      if (amt > 0) {
+        for (var i = 7; i > 1; i--) {
+          if (i == 5) continue;
+          list.push(i < 10 ? "0" + i : "" + i);
+        }
+        
+        if (amt < 100)
+          if (amt < 10) amt = "00" + amt;
+          else amt = "0" + amt;
+        
+        donated = amt.toString().split("");
+        donated.reverse();
+        
+        for(var i = 0; i < donated.length; i++) {
+          item = list[i];
+          $el.bank.slots[item].text = donated[i];
+          $el.bank.slots[item].visible = true;
+          item == "04" && ($el.bank.slots['05'].visible = true);
+        }
+      } else {
+        $el.bank.slots["04"].visible = true;
+        $el.bank.slots["05"].visible = true;
+        $el.bank.slots["06"].visible = true;
+        $el.bank.slots["07"].visible = true;
+        $el.bank.slots["07"].text = "0";
+        $el.bank.slots["06"].text = "0";
+        $el.bank.slots["04"].text = "0";
       }
-      
-      if (amt < 100)
-        if (amt < 10) amt = "00" + amt;
-        else amt = "0" + amt;
-      
-      donated = amt.toString().split("");
-      donated.reverse();
-      
-      for(var i = 0; i < donated.length; i++) {
-        item = list[i];
-        $el.bank.slots[item].text = donated[i];
-        $el.bank.slots[item].visible = true;
-        item == "04" && ($el.bank.slots['05'].visible = true);
-      }
-    } else {
-      $el.bank.slots["04"].visible = true;
-      $el.bank.slots["05"].visible = true;
-      $el.bank.slots["06"].visible = true;
-      $el.bank.slots["07"].visible = true;
-      $el.bank.slots["07"].text = "0";
-      $el.bank.slots["06"].text = "0";
-      $el.bank.slots["04"].text = "0";
     }
     
     this.setAvatar();

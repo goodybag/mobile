@@ -64,10 +64,8 @@ GB.Windows.add('main', Window.extend({
         type: 'click',
         target: this.elements.header.buttons.qrcode,
         action: function (e) {
-          if ($this.location == 'qrcode') return;
+          if ($this.location === 'qrcode') return;
           if ($this.callback) $this.toggleBack();
-          GB.Views.get('sidebar').clearActive();
-          GB.Views.get('sidebar').active = 'qrcode';
           $this.showPage('qrcode');
           $this.toggleQRCode();
         }
@@ -203,16 +201,10 @@ GB.Windows.add('main', Window.extend({
    * Toggle QRCode Button State
    */
   toggleQRCode: function (e) {
-    if (this.location === 'qrcode') { 
-      if (GB.Views.get('sidebar').active !== 'qrcode') GB.Views.get('sidebar').active = 'qrcode', this.elements.header.buttons.qrcode.setImage(
-        this.images.qrcode.active
-      );
-      
-      return;
-    }
-    
     this.elements.header.buttons.qrcode.setImage(this.images.qrcode[((this.location === 'qrcode') ? '' : 'in') + 'active']);
-    if (this.location === "qrcode") GB.Views.get('sidebar').active = "qrcode";
+    if (this.location === "qrcode" && GB.Views.exists('sidebar')) 
+      GB.Views.get('sidebar').clearActive(),
+      GB.Views.get('sidebar').active = 'qrcode';
   },
   
   toggleBack: function (callback) {
