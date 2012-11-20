@@ -153,7 +153,7 @@ GB.Windows.add('main', Window.extend({
     this.elements.views.main.add(GB.Views.get(view).self);
     this.elements.views.main.finishLayout();
     
-    if (this.shownPages.indexOf(view) === -1 && !view === 'settings') 
+    if (this.shownPages.indexOf(view) === -1 && view !== 'settings') 
       this.shownPages.push(view);
   },
   
