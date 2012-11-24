@@ -142,7 +142,8 @@ GB.Views.add('settings', {
   }
   
 , onShow: function () {
-    if (gb.consumer.data.facebook) this.views.pageWrapper.base.remove(this.views.pageWrapper.facebookBtn);  
+    if (gb.consumer.data.facebook || gb.consumer.usedFacebook()) 
+      this.views.pageWrapper.base.remove(this.views.pageWrapper.facebookBtn);  
     else {
       this.views.pageWrapper.base.add(this.views.pageWrapper.facebookBtn);
       this.delegateEvents();
